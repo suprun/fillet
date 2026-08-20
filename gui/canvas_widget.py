@@ -256,11 +256,12 @@ class FilletCanvasWidget(QFrame):
             self.btn_link.setIcon(self._get_rotated_icon("mActionUnlink.svg", 90, 32))
             self.btn_link.setToolTip(self.tr("Відстані роздільні (d1 ≠ d2)"))
 
-    def _on_radio_mode_toggled(self, checked: bool):
+    def _on_radio_mode_toggled(self):
         mode = self.MODE_FILLET if self.radio_fillet.isChecked() else self.MODE_CHAMFER
         self._update_mode_visibility(mode)
         self.modeChanged.emit(mode)
         self.parametersChanged.emit()
+        self.focus_primary_input()
 
     def _update_mode_visibility(self, mode: str):
         is_fillet = mode == self.MODE_FILLET
@@ -324,6 +325,7 @@ class FilletCanvasWidget(QFrame):
         self.reposition_to_default()
         self.show()
         self.raise_()
+        self.focus_primary_input()
 
     # --- Properties & Methods ---
     @property
@@ -371,7 +373,7 @@ class FilletCanvasWidget(QFrame):
 
     @property
     def distance2(self) -> float:
-        return self.spin_dist2.value() if not self.btn_link.isChecked() else self.spin_dist1.value()
+        return self.spin_dist1.value() if self.btn_link.isChecked() else self.spin_dist2.value()
 
     def set_distance2(self, val: float, block_signals: bool = False):
         if block_signals:
@@ -398,12 +400,13 @@ class FilletCanvasWidget(QFrame):
 
     def focus_primary_input(self):
         """Focuses and selects text in the active primary input box."""
-        if self.mode == self.MODE_FILLET:
-            self.spin_radius.setFocus()
-            self.spin_radius.selectAll()
+        spin = self.spin_radius if self.mode == self.MODE_FILLET else self.spin_dist1
+        spin.setFocus()
+        if hasattr(spin, "lineEdit") and spin.lineEdit():
+            spin.lineEdit().setFocus()
+            spin.lineEdit().selectAll()
         else:
-            self.spin_dist1.setFocus()
-            self.spin_dist1.selectAll()
+            spin.selectAll()
 
     def toggle_active_lock(self):
         """Toggles lock on the primary parameter."""
