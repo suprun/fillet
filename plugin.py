@@ -86,9 +86,14 @@ class FilletPlugin:
         self.action.setToolTip(self.tr("Інструмент для створення скруглень (Fillet) та фасок (Chamfer)"))
         self.action.triggered.connect(self.toggle_tool)
 
-        # Add to Advanced Digitizing toolbar and Vector menu
-        if self.iface.advancedDigitizeToolBar():
-            self.iface.advancedDigitizeToolBar().addAction(self.action)
+        # Add to Advanced Digitizing toolbar (inserted as 13th button, index 12) and Vector menu
+        adv_tb = self.iface.advancedDigitizeToolBar()
+        if adv_tb:
+            actions = adv_tb.actions()
+            if len(actions) >= 13:
+                adv_tb.insertAction(actions[12], self.action)
+            else:
+                adv_tb.addAction(self.action)
         else:
             self.iface.addVectorToolBarIcon(self.action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.action)

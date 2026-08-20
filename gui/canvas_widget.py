@@ -9,7 +9,7 @@ from typing import Optional
 
 from qgis.gui import QgsDoubleSpinBox, QgsMapCanvas, QgsSpinBox
 from qgis.PyQt.QtCore import QEvent, QPoint, QSize, Qt, pyqtSignal
-from qgis.PyQt.QtGui import QColor, QFont, QIcon, QPixmap, QTransform
+from qgis.PyQt.QtGui import QColor, QCursor, QFont, QIcon, QPixmap, QTransform
 from qgis.PyQt.QtWidgets import (
     QButtonGroup,
     QFrame,
@@ -229,6 +229,22 @@ class FilletCanvasWidget(QFrame):
             self.spin_dist1.lineEdit().returnPressed.connect(self.commitRequested.emit)
         if hasattr(self.spin_dist2, "lineEdit") and self.spin_dist2.lineEdit():
             self.spin_dist2.lineEdit().returnPressed.connect(self.commitRequested.emit)
+        # Standard cursors over panel and child controls
+        self.setCursor(QCursor(Qt.ArrowCursor))
+        for spin in (self.spin_radius, self.spin_segments, self.spin_dist1, self.spin_dist2):
+            spin.setCursor(QCursor(Qt.IBeamCursor))
+            if hasattr(spin, "lineEdit") and spin.lineEdit():
+                spin.lineEdit().setCursor(QCursor(Qt.IBeamCursor))
+        for btn in (
+            self.radio_fillet,
+            self.radio_chamfer,
+            self.btn_lock_radius,
+            self.btn_lock_segments,
+            self.btn_lock_dist1,
+            self.btn_lock_dist2,
+            self.btn_link,
+        ):
+            btn.setCursor(QCursor(Qt.PointingHandCursor))
 
     def _apply_style(self):
         self.setFrameShape(QFrame.StyledPanel)

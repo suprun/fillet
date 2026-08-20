@@ -160,40 +160,48 @@ class FilletMapTool(QgsMapToolEdit):
                 layer_point = self.toLayerCoordinates(layer, map_point)
                 dist = GeometryEngine.distance(self.current_match.point, layer_point)
                 if dist > 0.000001:
-                    rounded_dist = round(dist, 4 if dist < 1.0 else 3)
+                    p_prev, v, p_next = GeometryEngine.get_adjacent_points(
+                        self.current_match.geometry,
+                        self.current_match.part_idx,
+                        self.current_match.ring_idx,
+                        self.current_match.vertex_idx,
+                    )
                     if self.widget.mode == FilletCanvasWidget.MODE_FILLET:
+                        if p_prev and v and p_next:
+                            max_r = GeometryEngine.max_fillet_radius(p_prev, v, p_next)
+                            if max_r > 0:
+                                dist = min(dist, max_r * 0.9999)
+                        rounded_dist = round(dist, 4 if dist < 1.0 else 3)
                         if not self.widget.is_radius_locked:
                             self.widget.set_radius(rounded_dist, block_signals=True)
                     else:
-                        if self.widget.is_linked:
-                            if not self.widget.is_dist1_locked:
-                                self.widget.set_distance1(rounded_dist, block_signals=True)
-                        else:
-                            # Independent chamfer distances: project mouse vector onto edges
-                            p_prev, v, p_next = GeometryEngine.get_adjacent_points(
-                                self.current_match.geometry,
-                                self.current_match.part_idx,
-                                self.current_match.ring_idx,
-                                self.current_match.vertex_idx,
-                            )
-                            if p_prev and v and p_next:
-                                u1x, u1y, len1 = GeometryEngine.normalize_vector(p_prev.x() - v.x(), p_prev.y() - v.y())
-                                u2x, u2y, len2 = GeometryEngine.normalize_vector(p_next.x() - v.x(), p_next.y() - v.y())
+                        if p_prev and v and p_next:
+                            u1x, u1y, len1 = GeometryEngine.normalize_vector(p_prev.x() - v.x(), p_prev.y() - v.y())
+                            u2x, u2y, len2 = GeometryEngine.normalize_vector(p_next.x() - v.x(), p_next.y() - v.y())
+                            if self.widget.is_linked:
+                                # Isosceles chamfer: strictly bounded by shorter edge
+                                max_d = min(len1, len2) * 0.9999
+                                dist = min(dist, max_d)
+                                rounded_dist = round(dist, 4 if dist < 1.0 else 3)
+                                if not self.widget.is_dist1_locked:
+                                    self.widget.set_distance1(rounded_dist, block_signals=True)
+                            else:
                                 wx = layer_point.x() - v.x()
                                 wy = layer_point.y() - v.y()
                                 proj1 = wx * u1x + wy * u1y
                                 proj2 = wx * u2x + wy * u2y
-                                d1 = max(0.001, abs(proj1))
-                                d2 = max(0.001, abs(proj2))
+                                d1 = min(len1 * 0.9999, max(0.001, abs(proj1)))
+                                d2 = min(len2 * 0.9999, max(0.001, abs(proj2)))
                                 if not self.widget.is_dist1_locked:
                                     self.widget.set_distance1(round(d1, 4 if d1 < 1.0 else 3), block_signals=True)
                                 if not self.widget.is_dist2_locked:
                                     self.widget.set_distance2(round(d2, 4 if d2 < 1.0 else 3), block_signals=True)
-                            else:
-                                if not self.widget.is_dist1_locked:
-                                    self.widget.set_distance1(rounded_dist, block_signals=True)
-                                if not self.widget.is_dist2_locked:
-                                    self.widget.set_distance2(rounded_dist, block_signals=True)
+                        else:
+                            rounded_dist = round(dist, 4 if dist < 1.0 else 3)
+                            if not self.widget.is_dist1_locked:
+                                self.widget.set_distance1(rounded_dist, block_signals=True)
+                            if not self.widget.is_dist2_locked:
+                                self.widget.set_distance2(rounded_dist, block_signals=True)
             self._update_preview()
 
     def canvasPressEvent(self, event: QgsMapMouseEvent):
@@ -216,6 +224,9 @@ class FilletMapTool(QgsMapToolEdit):
                     else:
                         self.state = self.STATE_ADJUSTING
                         self._update_preview()
+                        # Maintain focus on numeric stepper after first click
+                        if isinstance(self.widget, FilletCanvasWidget):
+                            self.widget.focus_primary_input()
 
             elif self.state == self.STATE_ADJUSTING:
                 # Second click commits the modification (Two-step CAD workflow)

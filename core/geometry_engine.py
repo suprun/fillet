@@ -142,10 +142,17 @@ class GeometryEngine:
             return False, None, None
 
         # Clamp distances to maximum possible if they exceed segment lengths
-        if dist1 > len1:
-            dist1 = len1 * 0.9999
-        if dist2 > len2:
-            dist2 = len2 * 0.9999
+        if abs(dist1 - dist2) < 1e-6:
+            # Isosceles chamfer: strictly equal and bounded by shorter edge
+            max_d = min(len1, len2) * 0.9999
+            if dist1 > max_d:
+                dist1 = max_d
+                dist2 = max_d
+        else:
+            if dist1 > len1:
+                dist1 = len1 * 0.9999
+            if dist2 > len2:
+                dist2 = len2 * 0.9999
 
         c1 = QgsPoint(v.x() + dist1 * u1x, v.y() + dist1 * u1y)
         c2 = QgsPoint(v.x() + dist2 * u2x, v.y() + dist2 * u2y)

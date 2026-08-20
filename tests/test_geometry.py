@@ -122,6 +122,21 @@ class TestGeometryEngine(unittest.TestCase):
         self.assertIsNotNone(new_geom)
         self.assertTrue(new_geom.isGeosValid())
 
+    def test_isosceles_chamfer_bounded_by_shorter_edge(self):
+        """Test that equal-distance chamfer is strictly capped by the shorter edge."""
+        # Edge 1 is length 3, Edge 2 is length 10
+        p_prev = QgsPoint(0, 3)
+        v = QgsPoint(0, 0)
+        p_next = QgsPoint(10, 0)
+
+        # Requesting dist1 = dist2 = 8.0, should be capped at min(3, 10) * 0.9999 ~ 2.9997
+        success, c1, c2 = GeometryEngine.compute_chamfer_points(p_prev, v, p_next, 8.0, 8.0)
+        self.assertTrue(success)
+        self.assertAlmostEqual(c1.y(), 3.0 * 0.9999, places=3)
+        self.assertAlmostEqual(c2.x(), 3.0 * 0.9999, places=3)
+        # Both distances must remain equal (isosceles)
+        self.assertAlmostEqual(c1.y(), c2.x(), places=4)
+
 
 if __name__ == "__main__":
     app = QgsApplication([], False)
