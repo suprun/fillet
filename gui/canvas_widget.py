@@ -401,6 +401,13 @@ class FilletCanvasWidget(QFrame):
         if block_signals:
             self.spin_dist1.blockSignals(False)
 
+        if self.btn_link.isChecked():
+            if block_signals:
+                self.spin_dist2.blockSignals(True)
+            self.spin_dist2.setValue(val)
+            if block_signals:
+                self.spin_dist2.blockSignals(False)
+
     @property
     def distance2(self) -> float:
         return self.spin_dist2.value() if not self.btn_link.isChecked() else self.spin_dist1.value()
@@ -411,6 +418,13 @@ class FilletCanvasWidget(QFrame):
         self.spin_dist2.setValue(val)
         if block_signals:
             self.spin_dist2.blockSignals(False)
+
+        if self.btn_link.isChecked():
+            if block_signals:
+                self.spin_dist1.blockSignals(True)
+            self.spin_dist1.setValue(val)
+            if block_signals:
+                self.spin_dist1.blockSignals(False)
 
     @property
     def is_radius_locked(self) -> bool:

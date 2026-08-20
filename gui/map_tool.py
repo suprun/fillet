@@ -112,7 +112,10 @@ class FilletMapTool(QgsMapToolEdit):
             if self.widget.mode == FilletCanvasWidget.MODE_FILLET:
                 return self.widget.is_radius_locked
             else:
-                return self.widget.is_dist1_locked
+                if self.widget.is_linked:
+                    return self.widget.is_dist1_locked
+                else:
+                    return self.widget.is_dist1_locked and self.widget.is_dist2_locked
         return True
 
     def canvasMoveEvent(self, event: QgsMapMouseEvent):
@@ -128,20 +131,36 @@ class FilletMapTool(QgsMapToolEdit):
             if match:
                 self.current_match = match
                 self._show_vertex_marker(match.point)
-                self._update_preview()
+                # Show preview only if parameter is locked, otherwise wait for first click
+                if self._is_current_parameter_locked():
+                    self._update_preview()
+                else:
+                    self.preview_rubberband.reset()
+                    self.tangent_rubberband.reset()
+                    self.preview_geom = None
             else:
                 self._clear_preview()
 
         elif self.state == self.STATE_ADJUSTING:
             if self.current_match:
-                # Dynamic radius/distance from cursor distance
-                if not self._is_current_parameter_locked() and isinstance(self.widget, FilletCanvasWidget):
+                if isinstance(self.widget, FilletCanvasWidget):
                     dist = GeometryEngine.distance(self.current_match.point, map_point)
                     if dist > 0.0001:
                         if self.widget.mode == FilletCanvasWidget.MODE_FILLET:
-                            self.widget.set_radius(round(dist, 3), block_signals=True)
+                            if not self.widget.is_radius_locked:
+                                self.widget.set_radius(round(dist, 3), block_signals=True)
                         else:
-                            self.widget.set_distance1(round(dist, 3), block_signals=True)
+                            if self.widget.is_linked:
+                                if not self.widget.is_dist1_locked:
+                                    self.widget.set_distance1(round(dist, 3), block_signals=True)
+                            else:
+                                if not self.widget.is_dist1_locked and not self.widget.is_dist2_locked:
+                                    self.widget.set_distance1(round(dist, 3), block_signals=True)
+                                    self.widget.set_distance2(round(dist, 3), block_signals=True)
+                                elif not self.widget.is_dist1_locked:
+                                    self.widget.set_distance1(round(dist, 3), block_signals=True)
+                                elif not self.widget.is_dist2_locked:
+                                    self.widget.set_distance2(round(dist, 3), block_signals=True)
                 self._update_preview()
 
     def canvasPressEvent(self, event: QgsMapMouseEvent):
@@ -156,13 +175,14 @@ class FilletMapTool(QgsMapToolEdit):
                 if match:
                     self.current_match = match
                     self._show_vertex_marker(match.point)
-                    self._update_preview()
 
                     # If parameters are locked, single click can commit directly
                     if self._is_current_parameter_locked():
+                        self._update_preview()
                         self._commit_change()
                     else:
                         self.state = self.STATE_ADJUSTING
+                        self._update_preview()
 
             elif self.state == self.STATE_ADJUSTING:
                 # Second click commits the modification (Two-step CAD workflow)
