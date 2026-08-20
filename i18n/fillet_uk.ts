@@ -118,11 +118,11 @@
         <name>FilletCanvasWidget</name>
         <message>
             <source>Fillet</source>
-            <translation>Fillet</translation>
+            <translation>Скруглення</translation>
         </message>
         <message>
             <source>Chamfer</source>
-            <translation>Chamfer</translation>
+            <translation>Фаска</translation>
         </message>
         <message>
             <source>Radius</source>

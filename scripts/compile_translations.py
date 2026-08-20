@@ -1153,7 +1153,7 @@ STRINGS = {
     "FilletCanvasWidget": {
         "Fillet": {
             "en": "Fillet",
-            "uk": "Fillet",
+            "uk": "Скруглення",
             "de": "Fillet",
             "fr": "Fillet",
             "es": "Fillet",
@@ -1195,7 +1195,7 @@ STRINGS = {
         },
         "Chamfer": {
             "en": "Chamfer",
-            "uk": "Chamfer",
+            "uk": "Фаска",
             "de": "Chamfer",
             "fr": "Chamfer",
             "es": "Chamfer",
