@@ -1,0 +1,155 @@
+# -*- coding: utf-8 -*-
+"""
+Settings and parameter panel for Fillet & Chamfer tool.
+Supports Qt5 and Qt6 across QGIS 3.16 to 4+.
+"""
+
+from qgis.PyQt.QtCore import Qt, pyqtSignal
+from qgis.PyQt.QtWidgets import (
+    QButtonGroup,
+    QCheckBox,
+    QDoubleSpinBox,
+    QFormLayout,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QRadioButton,
+    QSpinBox,
+    QVBoxLayout,
+    QWidget,
+)
+
+
+class FilletSettingsWidget(QWidget):
+    """Floating or dockable settings widget for Fillet & Chamfer parameters."""
+
+    parametersChanged = pyqtSignal()
+    applyToSelectedRequested = pyqtSignal()
+
+    MODE_FILLET = "fillet"
+    MODE_CHAMFER = "chamfer"
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle(self.tr("Параметри Fillet / Chamfer"))
+        self._init_ui()
+
+    def _init_ui(self):
+        main_layout = QVBoxLayout(self)
+        main_layout.setContentsMargins(6, 6, 6, 6)
+        main_layout.setSpacing(8)
+
+        # Mode selection group
+        mode_group = QGroupBox(self.tr("Режим операції"), self)
+        mode_layout = QHBoxLayout(mode_group)
+
+        self.radio_fillet = QRadioButton(self.tr("Скруглення (Fillet)"), mode_group)
+        self.radio_chamfer = QRadioButton(self.tr("Фаска (Chamfer)"), mode_group)
+        self.radio_fillet.setChecked(True)
+
+        self.btn_group_mode = QButtonGroup(self)
+        self.btn_group_mode.addButton(self.radio_fillet)
+        self.btn_group_mode.addButton(self.radio_chamfer)
+
+        mode_layout.addWidget(self.radio_fillet)
+        mode_layout.addWidget(self.radio_chamfer)
+        main_layout.addWidget(mode_group)
+
+        # Fillet parameters
+        self.group_fillet = QGroupBox(self.tr("Параметри скруглення"), self)
+        fillet_layout = QFormLayout(self.group_fillet)
+
+        self.spin_radius = QDoubleSpinBox(self.group_fillet)
+        self.spin_radius.setRange(0.0001, 9999999.0)
+        self.spin_radius.setValue(5.0)
+        self.spin_radius.setDecimals(3)
+        self.spin_radius.setSingleStep(1.0)
+        self.spin_radius.setSuffix(" " + self.tr("од."))
+        fillet_layout.addRow(self.tr("Радіус (R):"), self.spin_radius)
+
+        self.spin_segments = QSpinBox(self.group_fillet)
+        self.spin_segments.setRange(2, 64)
+        self.spin_segments.setValue(12)
+        fillet_layout.addRow(self.tr("Кількість сегментів дуги:"), self.spin_segments)
+
+        main_layout.addWidget(self.group_fillet)
+
+        # Chamfer parameters
+        self.group_chamfer = QGroupBox(self.tr("Параметри фаски"), self)
+        chamfer_layout = QFormLayout(self.group_chamfer)
+
+        self.spin_dist1 = QDoubleSpinBox(self.group_chamfer)
+        self.spin_dist1.setRange(0.0001, 9999999.0)
+        self.spin_dist1.setValue(5.0)
+        self.spin_dist1.setDecimals(3)
+        self.spin_dist1.setSingleStep(1.0)
+        self.spin_dist1.setSuffix(" " + self.tr("од."))
+        chamfer_layout.addRow(self.tr("Відстань 1 (d1):"), self.spin_dist1)
+
+        self.spin_dist2 = QDoubleSpinBox(self.group_chamfer)
+        self.spin_dist2.setRange(0.0001, 9999999.0)
+        self.spin_dist2.setValue(5.0)
+        self.spin_dist2.setDecimals(3)
+        self.spin_dist2.setSingleStep(1.0)
+        self.spin_dist2.setSuffix(" " + self.tr("од."))
+        chamfer_layout.addRow(self.tr("Відстань 2 (d2):"), self.spin_dist2)
+
+        self.chk_equal_dist = QCheckBox(self.tr("Однакові відстані (d1 = d2)"), self.group_chamfer)
+        self.chk_equal_dist.setChecked(True)
+        self.spin_dist2.setEnabled(False)
+        chamfer_layout.addRow("", self.chk_equal_dist)
+
+        main_layout.addWidget(self.group_chamfer)
+        self.group_chamfer.setVisible(False)
+
+        # Batch apply button
+        self.btn_apply_selected = QPushButton(self.tr("Застосувати до виділених об'єктів"), self)
+        self.btn_apply_selected.setToolTip(self.tr("Застосувати скруглення або фаску до всіх вершин виділених об'єктів"))
+        main_layout.addWidget(self.btn_apply_selected)
+
+        # Connections
+        self.radio_fillet.toggled.connect(self._on_mode_changed)
+        self.chk_equal_dist.toggled.connect(self._on_equal_dist_toggled)
+        self.spin_dist1.valueChanged.connect(self._on_dist1_changed)
+
+        self.spin_radius.valueChanged.connect(self.parametersChanged)
+        self.spin_segments.valueChanged.connect(self.parametersChanged)
+        self.spin_dist1.valueChanged.connect(self.parametersChanged)
+        self.spin_dist2.valueChanged.connect(self.parametersChanged)
+        self.btn_apply_selected.clicked.connect(self.applyToSelectedRequested)
+
+    def _on_mode_changed(self, is_fillet: bool):
+        self.group_fillet.setVisible(is_fillet)
+        self.group_chamfer.setVisible(not is_fillet)
+        self.parametersChanged.emit()
+
+    def _on_equal_dist_toggled(self, checked: bool):
+        self.spin_dist2.setEnabled(not checked)
+        if checked:
+            self.spin_dist2.setValue(self.spin_dist1.value())
+        self.parametersChanged.emit()
+
+    def _on_dist1_changed(self, val: float):
+        if self.chk_equal_dist.isChecked():
+            self.spin_dist2.setValue(val)
+
+    @property
+    def mode(self) -> str:
+        return self.MODE_FILLET if self.radio_fillet.isChecked() else self.MODE_CHAMFER
+
+    @property
+    def radius(self) -> float:
+        return self.spin_radius.value()
+
+    @property
+    def segments_count(self) -> int:
+        return self.spin_segments.value()
+
+    @property
+    def distance1(self) -> float:
+        return self.spin_dist1.value()
+
+    @property
+    def distance2(self) -> float:
+        return self.spin_dist2.value() if not self.chk_equal_dist.isChecked() else self.spin_dist1.value()

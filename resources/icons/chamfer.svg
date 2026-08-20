@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+  <!-- Chamfer Icon -->
+  <path d="M 3 21 L 3 11 L 11 3 L 21 3" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 3 11 L 3 3 L 11 3" fill="none" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="2 2" stroke-linecap="round"/>
+  <circle cx="3" cy="21" r="1.5" fill="#1E293B"/>
+  <circle cx="21" cy="3" r="1.5" fill="#1E293B"/>
+  <circle cx="3" cy="11" r="1.5" fill="#059669"/>
+  <circle cx="11" cy="3" r="1.5" fill="#059669"/>
+</svg>

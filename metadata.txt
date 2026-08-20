@@ -1,0 +1,14 @@
+[general]
+name=Fillet / Chamfer Tool
+qgisMinimumVersion=3.16
+qgisMaximumVersion=3.99
+description=Interactive Fillet (corner rounding) and Chamfer (corner beveling) editing tool for QGIS.
+about=Interactive CAD-like tool for rounding (fillet) and beveling (chamfer) vertices and segments in QGIS polylines and polygons.
+version=0.1.0.13
+author=Antigravity
+email=antigravity@example.com
+repository=https://github.com/example/fillet
+tracker=https://github.com/example/fillet/issues
+tags=cad, editing, fillet, chamfer, geometry, digitizing, curve
+experimental=False
+deprecated=False
