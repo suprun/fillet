@@ -291,7 +291,8 @@ class FilletMapTool(QgsMapToolEdit):
                 match.part_idx,
                 match.ring_idx,
                 match.vertex_idx,
-                radius=radius,
+                is_fillet=True,
+                val1=radius,
             )
         else:
             dist1 = self.widget.distance1
@@ -305,13 +306,14 @@ class FilletMapTool(QgsMapToolEdit):
                 dist2=dist2,
             )
             # Tangent points for chamfer
-            t1, t2 = GeometryEngine.compute_chamfer_tangent_points_for_vertex(
+            t1, t2 = GeometryEngine.compute_tangent_points_for_vertex(
                 match.geometry,
                 match.part_idx,
                 match.ring_idx,
                 match.vertex_idx,
-                dist1=dist1,
-                dist2=dist2,
+                is_fillet=False,
+                val1=dist1,
+                val2=dist2,
             )
 
         # 1. Update geometry rubberband (transformed to map coordinates)
@@ -321,8 +323,18 @@ class FilletMapTool(QgsMapToolEdit):
         if new_geom and not new_geom.isEmpty():
             map_geom = self.toMapCoordinates(layer, new_geom)
             self.preview_geom = new_geom
-            self.preview_rubberband.setColor(stroke_color)
-            self.preview_rubberband.setFillColor(fill_color)
+            if layer.geometryType() == QgsWkbTypes.PolygonGeometry:
+                self.preview_rubberband.reset(QgsWkbTypes.PolygonGeometry)
+                self.preview_rubberband.setFillColor(fill_color)
+                self.preview_rubberband.setStrokeColor(stroke_color)
+                self.preview_rubberband.setWidth(4)
+            else:
+                self.preview_rubberband.reset(QgsWkbTypes.LineGeometry)
+                self.preview_rubberband.setFillColor(QColor(0, 0, 0, 0))
+                self.preview_rubberband.setColor(stroke_color)
+                self.preview_rubberband.setWidth(4)
+
+            self.preview_rubberband.setLineStyle(Qt.DashLine)
             self.preview_rubberband.setToGeometry(map_geom, layer)
             self.preview_rubberband.show()
         else:
