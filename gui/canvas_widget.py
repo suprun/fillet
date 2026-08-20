@@ -56,8 +56,9 @@ class FilletCanvasWidget(QFrame):
             icon = QgsApplication.getThemeIcon(name)
             if not icon.isNull():
                 return icon
-        except Exception:
-            pass
+        except (ImportError, AttributeError, RuntimeError):
+            # Fallback to local icons
+            pass  # nosec B110
 
         path = os.path.join(self._icons_dir, name)
         if os.path.exists(path):

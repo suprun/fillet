@@ -204,8 +204,9 @@ class GeometryEngine:
             ls = circ.curveToLine()
             if ls and ls.numPoints() > 0:
                 return [ls.pointN(i) for i in range(ls.numPoints())]
-        except Exception:
-            pass
+        except (AttributeError, RuntimeError, TypeError):
+            # Fallback to manual arc calculation below
+            pass  # nosec B110
 
         # Fallback calculation
         ax, ay = p1.x(), p1.y()
@@ -264,8 +265,9 @@ class GeometryEngine:
                 res = QgsGeometryUtils.filletVertex(curve, vertex_index, radius, 0 if use_true_curve else segments_count)
                 if res is not None:
                     return res
-            except Exception:
-                pass
+            except (AttributeError, RuntimeError, TypeError):
+                # Fallback to custom geometry engine below
+                pass  # nosec B110
 
         num_vertices = curve.numPoints() if hasattr(curve, "numPoints") else 0
         if num_vertices < 3:
@@ -335,8 +337,9 @@ class GeometryEngine:
                 res = QgsGeometryUtils.chamferVertex(curve, vertex_index, dist1, dist2)
                 if res is not None:
                     return res
-            except Exception:
-                pass
+            except (AttributeError, RuntimeError, TypeError):
+                # Fallback to custom geometry engine below
+                pass  # nosec B110
 
         num_vertices = curve.numPoints() if hasattr(curve, "numPoints") else 0
         if num_vertices < 3:

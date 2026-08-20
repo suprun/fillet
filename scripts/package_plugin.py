@@ -7,7 +7,7 @@ import os
 import zipfile
 
 IGNORED_EXTENSIONS = {".pyc", ".pyo", ".pyd", ".zip", ".log", ".swp", ".swo"}
-IGNORED_DIRS = {"__pycache__", ".git", ".idea", ".vscode", ".venv", "venv", "dist", "build", "repo", "tests", "scratch"}
+IGNORED_DIRS = {"__pycache__", ".git", ".idea", ".vscode", ".venv", "venv", "dist", "build", "repo", "tests", "scratch", "scripts"}
 
 
 def package_plugin():

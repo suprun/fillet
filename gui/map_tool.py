@@ -92,13 +92,13 @@ class FilletMapTool(QgsMapToolEdit):
         self.deactivate()
         try:
             self.widget.parametersChanged.disconnect(self._update_preview)
-        except Exception:
-            pass
+        except (TypeError, RuntimeError):
+            pass  # nosec B110
         if hasattr(self.widget, "commitRequested"):
             try:
                 self.widget.commitRequested.disconnect(self._commit_change)
-            except Exception:
-                pass
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
 
         if hasattr(self, "snap_indicator") and self.snap_indicator:
             self.snap_indicator.setVisible(False)

@@ -130,19 +130,19 @@ class FilletPlugin:
         # 1. Disconnect global signals
         try:
             self.iface.currentLayerChanged.disconnect(self.update_action_state)
-        except Exception:
-            pass
+        except (TypeError, RuntimeError):
+            pass  # nosec B110
         try:
             self.canvas.mapToolSet.disconnect(self.on_map_tool_changed)
-        except Exception:
-            pass
+        except (TypeError, RuntimeError):
+            pass  # nosec B110
 
         # 2. Clean up action
         if self.action:
             try:
                 self.action.triggered.disconnect(self.toggle_tool)
-            except Exception:
-                pass
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
             if self.iface.advancedDigitizeToolBar():
                 self.iface.advancedDigitizeToolBar().removeAction(self.action)
             self.iface.removeVectorToolBarIcon(self.action)
@@ -166,8 +166,8 @@ class FilletPlugin:
         if self.canvas_widget:
             try:
                 self.canvas.removeEventFilter(self.canvas_widget)
-            except Exception:
-                pass
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
             self.canvas_widget.hide()
             self.canvas_widget.setParent(None)
             self.canvas_widget.deleteLater()
@@ -177,8 +177,8 @@ class FilletPlugin:
         if self.settings_widget:
             try:
                 self.settings_widget.applyToSelectedRequested.disconnect(self.apply_to_selected_features)
-            except Exception:
-                pass
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
             self.settings_widget.setParent(None)
             self.settings_widget.deleteLater()
             self.settings_widget = None
