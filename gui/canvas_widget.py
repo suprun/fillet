@@ -3,7 +3,7 @@ from typing import Optional
 
 from qgis.core import QgsSettings
 from qgis.gui import QgsDoubleSpinBox, QgsMapCanvas, QgsSpinBox
-from qgis.PyQt.QtCore import QEvent, QPoint, QSize, Qt, pyqtSignal
+from qgis.PyQt.QtCore import QEvent, QPoint, QSize, Qt, QTimer, pyqtSignal
 from qgis.PyQt.QtGui import QColor, QCursor, QFont, QIcon, QPixmap, QTransform
 from qgis.PyQt.QtWidgets import (
     QButtonGroup,
@@ -248,8 +248,10 @@ class FilletCanvasWidget(QFrame):
         self.setCursor(QCursor(Qt.ArrowCursor))
         for spin in (self.spin_radius, self.spin_segments, self.spin_dist1, self.spin_dist2):
             spin.setCursor(QCursor(Qt.ArrowCursor))
+            spin.installEventFilter(self)
             if hasattr(spin, "lineEdit") and spin.lineEdit():
                 spin.lineEdit().setCursor(QCursor(Qt.IBeamCursor))
+                spin.lineEdit().installEventFilter(self)
             for child in spin.findChildren(QWidget):
                 if child != spin.lineEdit():
                     child.setCursor(QCursor(Qt.ArrowCursor))
@@ -386,7 +388,23 @@ class FilletCanvasWidget(QFrame):
     def eventFilter(self, obj, event):
         if obj == self.canvas and event.type() == QEvent.Resize:
             self.reposition_to_default()
+        elif event.type() == QEvent.FocusIn:
+            for spin in (self.spin_radius, self.spin_segments, self.spin_dist1, self.spin_dist2):
+                if obj == spin or (hasattr(spin, "lineEdit") and obj == spin.lineEdit()):
+                    QTimer.singleShot(0, lambda s=spin: self._select_all_spin(s))
         return super().eventFilter(obj, event)
+
+    def _select_all_spin(self, spin):
+        """Selects the entire text in a numeric stepper."""
+        if hasattr(spin, "lineEdit") and spin.lineEdit():
+            spin.lineEdit().selectAll()
+        else:
+            spin.selectAll()
+
+    def _select_if_focused(self, spin):
+        """Keeps text fully selected if the spinbox currently has keyboard/tab focus."""
+        if spin.hasFocus() or (hasattr(spin, "lineEdit") and spin.lineEdit() and spin.lineEdit().hasFocus()):
+            self._select_all_spin(spin)
 
     def reposition_to_default(self):
         """Positions the widget firmly at top-right corner of the map canvas without margin."""
@@ -424,6 +442,7 @@ class FilletCanvasWidget(QFrame):
         if block_signals:
             self.spin_radius.blockSignals(True)
         self.spin_radius.setValue(val)
+        self._select_if_focused(self.spin_radius)
         if block_signals:
             self.spin_radius.blockSignals(False)
 
@@ -441,8 +460,10 @@ class FilletCanvasWidget(QFrame):
             if self.btn_link.isChecked():
                 self.spin_dist2.blockSignals(True)
         self.spin_dist1.setValue(val)
+        self._select_if_focused(self.spin_dist1)
         if self.btn_link.isChecked():
             self.spin_dist2.setValue(val)
+            self._select_if_focused(self.spin_dist2)
         if block_signals:
             self.spin_dist1.blockSignals(False)
             if self.btn_link.isChecked():
@@ -456,6 +477,7 @@ class FilletCanvasWidget(QFrame):
         if block_signals:
             self.spin_dist2.blockSignals(True)
         self.spin_dist2.setValue(val)
+        self._select_if_focused(self.spin_dist2)
         if block_signals:
             self.spin_dist2.blockSignals(False)
 

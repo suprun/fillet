@@ -1,7 +1,7 @@
 import os
 
 from qgis.core import QgsSettings
-from qgis.PyQt.QtCore import QSize, Qt, pyqtSignal
+from qgis.PyQt.QtCore import QEvent, QSize, Qt, QTimer, pyqtSignal
 from qgis.PyQt.QtGui import QCursor, QIcon, QPixmap, QTransform
 from qgis.PyQt.QtWidgets import (
     QButtonGroup,
@@ -176,8 +176,10 @@ class FilletSettingsWidget(QWidget):
         # Spinbox cursors: arrow over buttons, I-beam only on lineEdit
         for spin in (self.spin_radius, self.spin_segments, self.spin_dist1, self.spin_dist2):
             spin.setCursor(QCursor(Qt.ArrowCursor))
+            spin.installEventFilter(self)
             if hasattr(spin, "lineEdit") and spin.lineEdit():
                 spin.lineEdit().setCursor(QCursor(Qt.IBeamCursor))
+                spin.lineEdit().installEventFilter(self)
             for child in spin.findChildren(QWidget):
                 if child != spin.lineEdit():
                     child.setCursor(QCursor(Qt.ArrowCursor))
@@ -200,6 +202,20 @@ class FilletSettingsWidget(QWidget):
 
         # Load persisted settings from user profile
         self._load_settings()
+
+    def eventFilter(self, obj, event):
+        if event.type() == QEvent.FocusIn:
+            for spin in (self.spin_radius, self.spin_segments, self.spin_dist1, self.spin_dist2):
+                if obj == spin or (hasattr(spin, "lineEdit") and obj == spin.lineEdit()):
+                    QTimer.singleShot(0, lambda s=spin: self._select_all_spin(s))
+        return super().eventFilter(obj, event)
+
+    def _select_all_spin(self, spin):
+        """Selects the entire text in a numeric stepper."""
+        if hasattr(spin, "lineEdit") and spin.lineEdit():
+            spin.lineEdit().selectAll()
+        else:
+            spin.selectAll()
 
     def _load_settings(self):
         self._is_loading = True
