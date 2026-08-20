@@ -321,7 +321,6 @@ class FilletMapTool(QgsMapToolEdit):
         fill_color = QColor(255, 165, 0, 45)
 
         if new_geom and not new_geom.isEmpty():
-            map_geom = self.toMapCoordinates(layer, new_geom)
             self.preview_geom = new_geom
             if layer.geometryType() == QgsWkbTypes.PolygonGeometry:
                 self.preview_rubberband.reset(QgsWkbTypes.PolygonGeometry)
@@ -335,7 +334,7 @@ class FilletMapTool(QgsMapToolEdit):
                 self.preview_rubberband.setWidth(4)
 
             self.preview_rubberband.setLineStyle(Qt.DashLine)
-            self.preview_rubberband.setToGeometry(map_geom, layer)
+            self.preview_rubberband.setToGeometry(new_geom, layer)
             self.preview_rubberband.show()
         else:
             self.preview_geom = None
