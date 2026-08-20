@@ -1,10 +1,6 @@
-# -*- coding: utf-8 -*-
-"""
-Settings and parameter panel for Fillet & Chamfer tool.
-Supports Qt5 and Qt6 across QGIS 3.16 to 4+.
-"""
-
+import os
 from qgis.PyQt.QtCore import Qt, pyqtSignal
+from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import (
     QButtonGroup,
     QCheckBox,
@@ -12,7 +8,6 @@ from qgis.PyQt.QtWidgets import (
     QFormLayout,
     QGroupBox,
     QHBoxLayout,
-    QLabel,
     QPushButton,
     QRadioButton,
     QSpinBox,
@@ -32,21 +27,35 @@ class FilletSettingsWidget(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        self._icons_dir = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "resources", "icons"
+        )
         self.setWindowTitle(self.tr("Параметри Fillet / Chamfer"))
         self._init_ui()
 
+    def _get_icon(self, name: str) -> QIcon:
+        path = os.path.join(self._icons_dir, name)
+        if os.path.exists(path):
+            return QIcon(path)
+        return QIcon()
+
     def _init_ui(self):
         main_layout = QVBoxLayout(self)
-        main_layout.setContentsMargins(6, 6, 6, 6)
+        main_layout.setContentsMargins(8, 8, 8, 8)
         main_layout.setSpacing(8)
 
         # Mode selection group
         mode_group = QGroupBox(self.tr("Режим операції"), self)
         mode_layout = QHBoxLayout(mode_group)
+        mode_layout.setContentsMargins(8, 8, 8, 8)
+        mode_layout.setSpacing(12)
 
         self.radio_fillet = QRadioButton(self.tr("Скруглення (Fillet)"), mode_group)
-        self.radio_chamfer = QRadioButton(self.tr("Фаска (Chamfer)"), mode_group)
+        self.radio_fillet.setIcon(self._get_icon("fillet.svg"))
         self.radio_fillet.setChecked(True)
+
+        self.radio_chamfer = QRadioButton(self.tr("Фаска (Chamfer)"), mode_group)
+        self.radio_chamfer.setIcon(self._get_icon("chamfer.svg"))
 
         self.btn_group_mode = QButtonGroup(self)
         self.btn_group_mode.addButton(self.radio_fillet)
@@ -54,22 +63,27 @@ class FilletSettingsWidget(QWidget):
 
         mode_layout.addWidget(self.radio_fillet)
         mode_layout.addWidget(self.radio_chamfer)
+        mode_layout.addStretch()
         main_layout.addWidget(mode_group)
 
         # Fillet parameters
         self.group_fillet = QGroupBox(self.tr("Параметри скруглення"), self)
         fillet_layout = QFormLayout(self.group_fillet)
+        fillet_layout.setContentsMargins(8, 8, 8, 8)
+        fillet_layout.setSpacing(6)
 
         self.spin_radius = QDoubleSpinBox(self.group_fillet)
         self.spin_radius.setRange(0.0001, 9999999.0)
         self.spin_radius.setValue(5.0)
         self.spin_radius.setDecimals(3)
         self.spin_radius.setSingleStep(1.0)
+        self.spin_radius.setMaximumWidth(160)
         fillet_layout.addRow(self.tr("Радіус (R):"), self.spin_radius)
 
         self.spin_segments = QSpinBox(self.group_fillet)
         self.spin_segments.setRange(2, 64)
         self.spin_segments.setValue(12)
+        self.spin_segments.setMaximumWidth(160)
         fillet_layout.addRow(self.tr("Кількість сегментів дуги:"), self.spin_segments)
 
         main_layout.addWidget(self.group_fillet)
@@ -77,12 +91,15 @@ class FilletSettingsWidget(QWidget):
         # Chamfer parameters
         self.group_chamfer = QGroupBox(self.tr("Параметри фаски"), self)
         chamfer_layout = QFormLayout(self.group_chamfer)
+        chamfer_layout.setContentsMargins(8, 8, 8, 8)
+        chamfer_layout.setSpacing(6)
 
         self.spin_dist1 = QDoubleSpinBox(self.group_chamfer)
         self.spin_dist1.setRange(0.0001, 9999999.0)
         self.spin_dist1.setValue(5.0)
         self.spin_dist1.setDecimals(3)
         self.spin_dist1.setSingleStep(1.0)
+        self.spin_dist1.setMaximumWidth(160)
         chamfer_layout.addRow(self.tr("Відстань 1 (d1):"), self.spin_dist1)
 
         self.spin_dist2 = QDoubleSpinBox(self.group_chamfer)
@@ -90,6 +107,7 @@ class FilletSettingsWidget(QWidget):
         self.spin_dist2.setValue(5.0)
         self.spin_dist2.setDecimals(3)
         self.spin_dist2.setSingleStep(1.0)
+        self.spin_dist2.setMaximumWidth(160)
         chamfer_layout.addRow(self.tr("Відстань 2 (d2):"), self.spin_dist2)
 
         self.chk_equal_dist = QCheckBox(self.tr("Однакові відстані (d1 = d2)"), self.group_chamfer)
@@ -104,6 +122,9 @@ class FilletSettingsWidget(QWidget):
         self.btn_apply_selected = QPushButton(self.tr("Застосувати до виділених об'єктів"), self)
         self.btn_apply_selected.setToolTip(self.tr("Застосувати скруглення або фаску до всіх вершин виділених об'єктів"))
         main_layout.addWidget(self.btn_apply_selected)
+
+        # Push everything to the top so it doesn't stretch vertically
+        main_layout.addStretch(1)
 
         # Connections
         self.radio_fillet.toggled.connect(self._on_mode_changed)

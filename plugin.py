@@ -112,11 +112,6 @@ class FilletPlugin:
         self.dock_widget.visibilityChanged.connect(self.on_dock_visibility_changed)
 
         adv_tb = self.iface.advancedDigitizeToolBar()
-        if adv_tb:
-            adv_tb.addAction(self.batch_action)
-        else:
-            self.iface.addVectorToolBarIcon(self.batch_action)
-        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.batch_action)
 
         # 3. Create interactive MapTool ONLY in QGIS 3.x (native in QGIS 4.0+)
         if not self.is_qgis_4():
@@ -127,8 +122,8 @@ class FilletPlugin:
             # Create map tool with on-canvas widget
             self.map_tool = FilletMapTool(self.canvas, self.canvas_widget)
 
-            # Create action
-            icon_path = os.path.join(self.plugin_dir, "resources", "icons", "fillet.svg")
+            # Create action using official QGIS 4 icon
+            icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionChamferFillet.svg")
             self.action = QAction(
                 QIcon(icon_path),
                 self.tr("Інструмент Fillet / Chamfer"),
@@ -151,6 +146,42 @@ class FilletPlugin:
             self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.action)
 
             self.canvas.mapToolSet.connect(self.on_map_tool_changed)
+
+        # 4. Insert batch_action on toolbar right after fillet/chamfer action
+        if adv_tb:
+            if self.action:
+                actions_now = adv_tb.actions()
+                try:
+                    idx = actions_now.index(self.action)
+                    if idx + 1 < len(actions_now):
+                        adv_tb.insertAction(actions_now[idx + 1], self.batch_action)
+                    else:
+                        adv_tb.addAction(self.batch_action)
+                except ValueError:
+                    adv_tb.addAction(self.batch_action)
+            else:
+                # In QGIS 4.x, insert after native fillet action if found
+                native_action = None
+                for act in adv_tb.actions():
+                    name_lower = act.objectName().lower()
+                    if "chamfer" in name_lower or "fillet" in name_lower:
+                        native_action = act
+                        break
+                if native_action:
+                    actions_now = adv_tb.actions()
+                    try:
+                        idx = actions_now.index(native_action)
+                        if idx + 1 < len(actions_now):
+                            adv_tb.insertAction(actions_now[idx + 1], self.batch_action)
+                        else:
+                            adv_tb.addAction(self.batch_action)
+                    except ValueError:
+                        adv_tb.addAction(self.batch_action)
+                else:
+                    adv_tb.addAction(self.batch_action)
+        else:
+            self.iface.addVectorToolBarIcon(self.batch_action)
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.batch_action)
 
         # Track layer changes
         self.iface.currentLayerChanged.connect(self.update_action_state)
