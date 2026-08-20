@@ -26,6 +26,7 @@ from qgis.gui import (
 )
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtGui import QColor, QCursor
+from qgis.PyQt.QtWidgets import QApplication
 
 try:
     from ..core.geometry_engine import GeometryEngine
@@ -386,10 +387,23 @@ class FilletMapTool(QgsMapToolEdit):
             event.accept()
 
         elif key == Qt.Key_Tab:
-            # Tab focuses primary input in HUD widget
+            # When Tab is pressed, if focus is not on the HUD panel, jump to primary numeric stepper
             if isinstance(self.widget, FilletCanvasWidget):
-                self.widget.focus_primary_input()
-                event.accept()
+                focused_widget = QApplication.focusWidget()
+                is_on_panel = False
+                if focused_widget:
+                    w = focused_widget
+                    while w is not None:
+                        if w == self.widget:
+                            is_on_panel = True
+                            break
+                        w = w.parent()
+                if not is_on_panel:
+                    self.widget.focus_primary_input()
+                    event.accept()
+                    return
+                else:
+                    super().keyPressEvent(event)
 
         elif key == Qt.Key_Space:
             # Space toggles lock

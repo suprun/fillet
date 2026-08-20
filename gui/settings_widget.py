@@ -2,7 +2,7 @@ import os
 
 from qgis.core import QgsSettings
 from qgis.PyQt.QtCore import Qt, pyqtSignal
-from qgis.PyQt.QtGui import QIcon
+from qgis.PyQt.QtGui import QCursor, QIcon
 from qgis.PyQt.QtWidgets import (
     QButtonGroup,
     QCheckBox,
@@ -13,6 +13,7 @@ from qgis.PyQt.QtWidgets import (
     QPushButton,
     QRadioButton,
     QSpinBox,
+    QStackedWidget,
     QVBoxLayout,
     QWidget,
 )
@@ -43,13 +44,13 @@ class FilletSettingsWidget(QWidget):
 
     def _init_ui(self):
         main_layout = QVBoxLayout(self)
-        main_layout.setContentsMargins(8, 8, 8, 8)
-        main_layout.setSpacing(8)
+        main_layout.setContentsMargins(6, 6, 6, 6)
+        main_layout.setSpacing(6)
 
         # Mode selection group
         mode_group = QGroupBox(self.tr("Режим операції"), self)
         mode_layout = QHBoxLayout(mode_group)
-        mode_layout.setContentsMargins(8, 8, 8, 8)
+        mode_layout.setContentsMargins(6, 6, 6, 6)
         mode_layout.setSpacing(12)
 
         self.radio_fillet = QRadioButton(self.tr("Скруглення (Fillet)"), mode_group)
@@ -68,10 +69,13 @@ class FilletSettingsWidget(QWidget):
         mode_layout.addStretch()
         main_layout.addWidget(mode_group)
 
-        # Fillet parameters
+        # Stacked container for parameters
+        self.stacked_params = QStackedWidget(self)
+
+        # Fillet parameters page
         self.group_fillet = QGroupBox(self.tr("Параметри скруглення"), self)
         fillet_layout = QFormLayout(self.group_fillet)
-        fillet_layout.setContentsMargins(8, 8, 8, 8)
+        fillet_layout.setContentsMargins(6, 6, 6, 6)
         fillet_layout.setSpacing(6)
 
         self.spin_radius = QDoubleSpinBox(self.group_fillet)
@@ -88,12 +92,12 @@ class FilletSettingsWidget(QWidget):
         self.spin_segments.setMaximumWidth(160)
         fillet_layout.addRow(self.tr("Кількість сегментів дуги:"), self.spin_segments)
 
-        main_layout.addWidget(self.group_fillet)
+        self.stacked_params.addWidget(self.group_fillet)
 
-        # Chamfer parameters
+        # Chamfer parameters page
         self.group_chamfer = QGroupBox(self.tr("Параметри фаски"), self)
         chamfer_layout = QFormLayout(self.group_chamfer)
-        chamfer_layout.setContentsMargins(8, 8, 8, 8)
+        chamfer_layout.setContentsMargins(6, 6, 6, 6)
         chamfer_layout.setSpacing(6)
 
         self.spin_dist1 = QDoubleSpinBox(self.group_chamfer)
@@ -117,16 +121,22 @@ class FilletSettingsWidget(QWidget):
         self.spin_dist2.setEnabled(False)
         chamfer_layout.addRow("", self.chk_equal_dist)
 
-        main_layout.addWidget(self.group_chamfer)
-        self.group_chamfer.setVisible(False)
+        self.stacked_params.addWidget(self.group_chamfer)
+        main_layout.addWidget(self.stacked_params)
 
         # Batch apply button
         self.btn_apply_selected = QPushButton(self.tr("Застосувати до виділених об'єктів"), self)
         self.btn_apply_selected.setToolTip(self.tr("Застосувати скруглення або фаску до всіх вершин виділених об'єктів"))
         main_layout.addWidget(self.btn_apply_selected)
 
-        # Push everything to the top so it doesn't stretch vertically
-        main_layout.addStretch(1)
+        # Spinbox cursors: arrow over buttons, I-beam only on lineEdit
+        for spin in (self.spin_radius, self.spin_segments, self.spin_dist1, self.spin_dist2):
+            spin.setCursor(QCursor(Qt.ArrowCursor))
+            if hasattr(spin, "lineEdit") and spin.lineEdit():
+                spin.lineEdit().setCursor(QCursor(Qt.IBeamCursor))
+            for child in spin.findChildren(QWidget):
+                if child != spin.lineEdit():
+                    child.setCursor(QCursor(Qt.ArrowCursor))
 
         # Connections
         self.radio_fillet.toggled.connect(self._on_mode_changed)
@@ -162,8 +172,7 @@ class FilletSettingsWidget(QWidget):
             self.spin_dist2.setValue(float(s.value("plugins/fillet/batch_dist2", 5.0)))
             self.chk_equal_dist.setChecked(s.value("plugins/fillet/batch_equal_dist", True, type=bool))
 
-            self.group_fillet.setVisible(self.mode == self.MODE_FILLET)
-            self.group_chamfer.setVisible(self.mode != self.MODE_FILLET)
+            self.stacked_params.setCurrentIndex(0 if self.mode == self.MODE_FILLET else 1)
             self.spin_dist2.setEnabled(not self.chk_equal_dist.isChecked())
         finally:
             self._is_loading = False
@@ -180,8 +189,7 @@ class FilletSettingsWidget(QWidget):
         s.setValue("plugins/fillet/batch_equal_dist", self.chk_equal_dist.isChecked())
 
     def _on_mode_changed(self, is_fillet: bool):
-        self.group_fillet.setVisible(is_fillet)
-        self.group_chamfer.setVisible(not is_fillet)
+        self.stacked_params.setCurrentIndex(0 if is_fillet else 1)
         self._save_settings()
         self.parametersChanged.emit()
 

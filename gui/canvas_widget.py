@@ -14,6 +14,7 @@ from qgis.PyQt.QtWidgets import (
     QLabel,
     QRadioButton,
     QSizePolicy,
+    QStackedWidget,
     QToolButton,
     QVBoxLayout,
     QWidget,
@@ -41,34 +42,30 @@ class FilletCanvasWidget(QFrame):
 
         self._init_ui()
         self._apply_style()
-
-        # Listen to canvas resize
         self.canvas.installEventFilter(self)
 
     def _get_icon(self, name: str) -> QIcon:
-        try:
-            from qgis.core import QgsApplication
-            icon = QgsApplication.getThemeIcon(name)
-            if not icon.isNull():
-                return icon
-        except (ImportError, AttributeError, RuntimeError):
-            # Fallback to local icons
-            pass  # nosec B110
-
         path = os.path.join(self._icons_dir, name)
         if os.path.exists(path):
             return QIcon(path)
         return QIcon()
 
-    def _get_rotated_icon(self, name: str, angle: float = 90.0, size: int = 32) -> QIcon:
-        """Returns the theme icon rotated by given degrees."""
-        icon = self._get_icon(name)
-        if icon.isNull():
-            return QIcon()
-        pix = icon.pixmap(size, size)
-        transform = QTransform().rotate(angle)
-        rotated_pix = pix.transformed(transform, Qt.SmoothTransformation)
-        return QIcon(rotated_pix)
+    def _get_rotated_icon(self, name: str, angle: float, target_size: int = 32) -> QIcon:
+        path = os.path.join(self._icons_dir, name)
+        if os.path.exists(path):
+            pm = QPixmap(path)
+            if not pm.isNull():
+                if pm.width() < target_size or pm.height() < target_size:
+                    pm = pm.scaled(
+                        target_size,
+                        target_size,
+                        Qt.KeepAspectRatio,
+                        Qt.SmoothTransformation,
+                    )
+                transform = QTransform().rotate(angle)
+                rotated_pm = pm.transformed(transform, Qt.SmoothTransformation)
+                return QIcon(rotated_pm)
+        return QIcon()
 
     def _init_ui(self):
         self.setWindowFlags(Qt.SubWindow | Qt.FramelessWindowHint)
@@ -76,10 +73,10 @@ class FilletCanvasWidget(QFrame):
         self.setMinimumWidth(235)
 
         main_layout = QVBoxLayout(self)
-        main_layout.setContentsMargins(8, 6, 8, 6)
-        main_layout.setSpacing(6)
+        main_layout.setContentsMargins(6, 6, 6, 6)
+        main_layout.setSpacing(4)
 
-        # Operation selection with horizontal radio buttons & icons
+        # Mode selection row
         mode_layout = QHBoxLayout()
         mode_layout.setContentsMargins(0, 0, 0, 0)
         mode_layout.setSpacing(12)
@@ -101,24 +98,27 @@ class FilletCanvasWidget(QFrame):
 
         main_layout.addLayout(mode_layout)
 
-        # Grid for controls
-        self.grid = QGridLayout()
-        self.grid.setHorizontalSpacing(6)
-        self.grid.setVerticalSpacing(4)
-        self.grid.setContentsMargins(0, 0, 0, 0)
-        self.grid.setColumnMinimumWidth(0, 95)
+        # Stacked container for mode-specific controls
+        self.stacked_controls = QStackedWidget(self)
 
-        # --- FILLET CONTROLS ---
+        # --- 1. FILLET SUB-WIDGET ---
+        self.widget_fillet = QWidget(self)
+        grid_fillet = QGridLayout(self.widget_fillet)
+        grid_fillet.setHorizontalSpacing(6)
+        grid_fillet.setVerticalSpacing(4)
+        grid_fillet.setContentsMargins(0, 0, 0, 0)
+        grid_fillet.setColumnMinimumWidth(0, 95)
+
         # Row 0: Radius
-        self.lbl_radius = QLabel(self.tr("Radius"), self)
-        self.spin_radius = QgsDoubleSpinBox(self)
+        self.lbl_radius = QLabel(self.tr("Radius"), self.widget_fillet)
+        self.spin_radius = QgsDoubleSpinBox(self.widget_fillet)
         self.spin_radius.setRange(0.001, 9999999.0)
         self.spin_radius.setValue(5.0)
         self.spin_radius.setDecimals(3)
         self.spin_radius.setSingleStep(1.0)
         self.spin_radius.setShowClearButton(True)
 
-        self.btn_lock_radius = QToolButton(self)
+        self.btn_lock_radius = QToolButton(self.widget_fillet)
         self.btn_lock_radius.setCheckable(True)
         self.btn_lock_radius.setChecked(True)
         self.btn_lock_radius.setAutoRaise(True)
@@ -126,39 +126,48 @@ class FilletCanvasWidget(QFrame):
         self._update_lock_icon(self.btn_lock_radius)
         self.btn_lock_radius.toggled.connect(lambda: self._update_lock_icon(self.btn_lock_radius))
 
-        self.grid.addWidget(self.lbl_radius, 0, 0, Qt.AlignLeft | Qt.AlignVCenter)
-        self.grid.addWidget(self.spin_radius, 0, 1)
-        self.grid.addWidget(self.btn_lock_radius, 0, 2)
+        grid_fillet.addWidget(self.lbl_radius, 0, 0, Qt.AlignLeft | Qt.AlignVCenter)
+        grid_fillet.addWidget(self.spin_radius, 0, 1)
+        grid_fillet.addWidget(self.btn_lock_radius, 0, 2)
 
         # Row 1: Fillet segments
-        self.lbl_segments = QLabel(self.tr("Fillet segments"), self)
-        self.spin_segments = QgsSpinBox(self)
+        self.lbl_segments = QLabel(self.tr("Fillet segments"), self.widget_fillet)
+        self.spin_segments = QgsSpinBox(self.widget_fillet)
         self.spin_segments.setRange(2, 64)
         self.spin_segments.setValue(20)
         self.spin_segments.setShowClearButton(True)
 
-        self.btn_lock_segments = QToolButton(self)
+        self.btn_lock_segments = QToolButton(self.widget_fillet)
         self.btn_lock_segments.setCheckable(True)
         self.btn_lock_segments.setChecked(True)
         self.btn_lock_segments.setEnabled(False)
         self.btn_lock_segments.setAutoRaise(True)
         self._update_lock_icon(self.btn_lock_segments)
 
-        self.grid.addWidget(self.lbl_segments, 1, 0, Qt.AlignLeft | Qt.AlignVCenter)
-        self.grid.addWidget(self.spin_segments, 1, 1)
-        self.grid.addWidget(self.btn_lock_segments, 1, 2)
+        grid_fillet.addWidget(self.lbl_segments, 1, 0, Qt.AlignLeft | Qt.AlignVCenter)
+        grid_fillet.addWidget(self.spin_segments, 1, 1)
+        grid_fillet.addWidget(self.btn_lock_segments, 1, 2)
 
-        # --- CHAMFER CONTROLS ---
-        # Row 0 (Chamfer): Distance 1
-        self.lbl_dist1 = QLabel(self.tr("Distance 1"), self)
-        self.spin_dist1 = QgsDoubleSpinBox(self)
+        self.stacked_controls.addWidget(self.widget_fillet)
+
+        # --- 2. CHAMFER SUB-WIDGET ---
+        self.widget_chamfer = QWidget(self)
+        grid_chamfer = QGridLayout(self.widget_chamfer)
+        grid_chamfer.setHorizontalSpacing(6)
+        grid_chamfer.setVerticalSpacing(4)
+        grid_chamfer.setContentsMargins(0, 0, 0, 0)
+        grid_chamfer.setColumnMinimumWidth(0, 95)
+
+        # Row 0: Distance 1
+        self.lbl_dist1 = QLabel(self.tr("Distance 1"), self.widget_chamfer)
+        self.spin_dist1 = QgsDoubleSpinBox(self.widget_chamfer)
         self.spin_dist1.setRange(0.001, 9999999.0)
         self.spin_dist1.setValue(5.0)
         self.spin_dist1.setDecimals(3)
         self.spin_dist1.setSingleStep(1.0)
         self.spin_dist1.setShowClearButton(True)
 
-        self.btn_lock_dist1 = QToolButton(self)
+        self.btn_lock_dist1 = QToolButton(self.widget_chamfer)
         self.btn_lock_dist1.setCheckable(True)
         self.btn_lock_dist1.setChecked(True)
         self.btn_lock_dist1.setAutoRaise(True)
@@ -166,13 +175,13 @@ class FilletCanvasWidget(QFrame):
         self._update_lock_icon(self.btn_lock_dist1)
         self.btn_lock_dist1.toggled.connect(self._on_lock_dist1_toggled)
 
-        self.grid.addWidget(self.lbl_dist1, 0, 0, Qt.AlignLeft | Qt.AlignVCenter)
-        self.grid.addWidget(self.spin_dist1, 0, 1)
-        self.grid.addWidget(self.btn_lock_dist1, 0, 2)
+        grid_chamfer.addWidget(self.lbl_dist1, 0, 0, Qt.AlignLeft | Qt.AlignVCenter)
+        grid_chamfer.addWidget(self.spin_dist1, 0, 1)
+        grid_chamfer.addWidget(self.btn_lock_dist1, 0, 2)
 
-        # Row 1 (Chamfer): Distance 2
-        self.lbl_dist2 = QLabel(self.tr("Distance 2"), self)
-        self.spin_dist2 = QgsDoubleSpinBox(self)
+        # Row 1: Distance 2
+        self.lbl_dist2 = QLabel(self.tr("Distance 2"), self.widget_chamfer)
+        self.spin_dist2 = QgsDoubleSpinBox(self.widget_chamfer)
         self.spin_dist2.setRange(0.001, 9999999.0)
         self.spin_dist2.setValue(5.0)
         self.spin_dist2.setDecimals(3)
@@ -180,7 +189,7 @@ class FilletCanvasWidget(QFrame):
         self.spin_dist2.setShowClearButton(True)
         self.spin_dist2.setEnabled(False)
 
-        self.btn_lock_dist2 = QToolButton(self)
+        self.btn_lock_dist2 = QToolButton(self.widget_chamfer)
         self.btn_lock_dist2.setCheckable(True)
         self.btn_lock_dist2.setChecked(True)
         self.btn_lock_dist2.setEnabled(False)
@@ -189,12 +198,12 @@ class FilletCanvasWidget(QFrame):
         self._update_lock_icon(self.btn_lock_dist2)
         self.btn_lock_dist2.toggled.connect(lambda: self._update_lock_icon(self.btn_lock_dist2))
 
-        self.grid.addWidget(self.lbl_dist2, 1, 0, Qt.AlignLeft | Qt.AlignVCenter)
-        self.grid.addWidget(self.spin_dist2, 1, 1)
-        self.grid.addWidget(self.btn_lock_dist2, 1, 2)
+        grid_chamfer.addWidget(self.lbl_dist2, 1, 0, Qt.AlignLeft | Qt.AlignVCenter)
+        grid_chamfer.addWidget(self.spin_dist2, 1, 1)
+        grid_chamfer.addWidget(self.btn_lock_dist2, 1, 2)
 
-        # Tall narrow Link button spanning across Distance 1 and Distance 2 rows (rotated 90 degrees, 2x enlarged icon)
-        self.btn_link = QToolButton(self)
+        # Tall narrow Link button spanning across Distance 1 and Distance 2 rows (rotated 90 degrees)
+        self.btn_link = QToolButton(self.widget_chamfer)
         self.btn_link.setCheckable(True)
         self.btn_link.setChecked(True)
         self.btn_link.setAutoRaise(True)
@@ -204,9 +213,10 @@ class FilletCanvasWidget(QFrame):
         self._update_link_icon()
         self.btn_link.toggled.connect(self._on_link_toggled)
 
-        self.grid.addWidget(self.btn_link, 0, 3, 2, 1)
+        grid_chamfer.addWidget(self.btn_link, 0, 3, 2, 1)
 
-        main_layout.addLayout(self.grid)
+        self.stacked_controls.addWidget(self.widget_chamfer)
+        main_layout.addWidget(self.stacked_controls)
 
         # Initial visibility & load persisted settings from user profile
         self._update_mode_visibility(self.MODE_FILLET)
@@ -233,12 +243,16 @@ class FilletCanvasWidget(QFrame):
             self.spin_dist1.lineEdit().returnPressed.connect(self.commitRequested.emit)
         if hasattr(self.spin_dist2, "lineEdit") and self.spin_dist2.lineEdit():
             self.spin_dist2.lineEdit().returnPressed.connect(self.commitRequested.emit)
-        # Standard cursors over panel and child controls
+
+        # Standard arrow cursor over panel, buttons, and spinboxes; I-beam ONLY on text lineEdit
         self.setCursor(QCursor(Qt.ArrowCursor))
         for spin in (self.spin_radius, self.spin_segments, self.spin_dist1, self.spin_dist2):
-            spin.setCursor(QCursor(Qt.IBeamCursor))
+            spin.setCursor(QCursor(Qt.ArrowCursor))
             if hasattr(spin, "lineEdit") and spin.lineEdit():
                 spin.lineEdit().setCursor(QCursor(Qt.IBeamCursor))
+            for child in spin.findChildren(QWidget):
+                if child != spin.lineEdit():
+                    child.setCursor(QCursor(Qt.ArrowCursor))
         for btn in (
             self.radio_fillet,
             self.radio_chamfer,
@@ -328,25 +342,23 @@ class FilletCanvasWidget(QFrame):
 
     def _update_mode_visibility(self, mode: str):
         is_fillet = mode == self.MODE_FILLET
-
-        # Fillet elements
-        self.lbl_radius.setVisible(is_fillet)
-        self.spin_radius.setVisible(is_fillet)
-        self.btn_lock_radius.setVisible(is_fillet)
-        self.lbl_segments.setVisible(is_fillet)
-        self.spin_segments.setVisible(is_fillet)
-        self.btn_lock_segments.setVisible(is_fillet)
-
-        # Chamfer elements
-        self.lbl_dist1.setVisible(not is_fillet)
-        self.spin_dist1.setVisible(not is_fillet)
-        self.btn_lock_dist1.setVisible(not is_fillet)
-        self.lbl_dist2.setVisible(not is_fillet)
-        self.spin_dist2.setVisible(not is_fillet)
-        self.btn_lock_dist2.setVisible(not is_fillet)
-        self.btn_link.setVisible(not is_fillet)
-
+        self.stacked_controls.setCurrentIndex(0 if is_fillet else 1)
+        self._update_tab_order(is_fillet)
         self.reposition_to_default()
+
+    def _update_tab_order(self, is_fillet: bool):
+        if is_fillet:
+            QWidget.setTabOrder(self.spin_radius, self.spin_segments)
+            QWidget.setTabOrder(self.spin_segments, self.btn_lock_radius)
+            QWidget.setTabOrder(self.btn_lock_radius, self.radio_fillet)
+            QWidget.setTabOrder(self.radio_fillet, self.radio_chamfer)
+        else:
+            QWidget.setTabOrder(self.spin_dist1, self.spin_dist2)
+            QWidget.setTabOrder(self.spin_dist2, self.btn_link)
+            QWidget.setTabOrder(self.btn_link, self.btn_lock_dist1)
+            QWidget.setTabOrder(self.btn_lock_dist1, self.btn_lock_dist2)
+            QWidget.setTabOrder(self.btn_lock_dist2, self.radio_fillet)
+            QWidget.setTabOrder(self.radio_fillet, self.radio_chamfer)
 
     def _on_link_toggled(self, checked: bool):
         self._update_link_icon()
@@ -378,6 +390,8 @@ class FilletCanvasWidget(QFrame):
 
     def reposition_to_default(self):
         """Positions the widget firmly at top-right corner of the map canvas without margin."""
+        self.adjustSize()
+        self.resize(self.minimumSizeHint())
         self.adjustSize()
         x = max(0, self.canvas.width() - self.width())
         y = 0
