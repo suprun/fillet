@@ -270,12 +270,13 @@ class FilletMapTool(QgsMapToolEdit):
 
     def _show_vertex_marker(self, layer: QgsVectorLayer, match: VertexMatch):
         """Displays the native QGIS system snapping indicator on vertex."""
+        map_point = self.toMapCoordinates(layer, match.point)
         loc_match = QgsPointLocator.Match(
             QgsPointLocator.Vertex,
             layer,
             match.fid,
             0.0,
-            match.point,
+            map_point,
             match.vertex_idx,
         )
         self.snap_indicator.setMatch(loc_match)
