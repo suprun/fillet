@@ -302,7 +302,9 @@ class FilletCanvasWidget(QFrame):
 
     def _on_dist1_changed(self, val: float):
         if self.btn_link.isChecked():
+            self.spin_dist2.blockSignals(True)
             self.spin_dist2.setValue(val)
+            self.spin_dist2.blockSignals(False)
         self.parametersChanged.emit()
 
     # --- Mouse Dragging Support ---
@@ -397,15 +399,14 @@ class FilletCanvasWidget(QFrame):
     def set_distance1(self, val: float, block_signals: bool = False):
         if block_signals:
             self.spin_dist1.blockSignals(True)
+            if self.btn_link.isChecked():
+                self.spin_dist2.blockSignals(True)
         self.spin_dist1.setValue(val)
+        if self.btn_link.isChecked():
+            self.spin_dist2.setValue(val)
         if block_signals:
             self.spin_dist1.blockSignals(False)
-
-        if self.btn_link.isChecked():
-            if block_signals:
-                self.spin_dist2.blockSignals(True)
-            self.spin_dist2.setValue(val)
-            if block_signals:
+            if self.btn_link.isChecked():
                 self.spin_dist2.blockSignals(False)
 
     @property
@@ -418,13 +419,6 @@ class FilletCanvasWidget(QFrame):
         self.spin_dist2.setValue(val)
         if block_signals:
             self.spin_dist2.blockSignals(False)
-
-        if self.btn_link.isChecked():
-            if block_signals:
-                self.spin_dist1.blockSignals(True)
-            self.spin_dist1.setValue(val)
-            if block_signals:
-                self.spin_dist1.blockSignals(False)
 
     @property
     def is_radius_locked(self) -> bool:

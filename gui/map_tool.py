@@ -131,37 +131,32 @@ class FilletMapTool(QgsMapToolEdit):
             if match:
                 self.current_match = match
                 self._show_vertex_marker(match.point)
-                # Show preview only if parameter is locked, otherwise wait for first click
+                # If parameter is locked, show preview; if unlocked, only show snap marker until clicked
                 if self._is_current_parameter_locked():
                     self._update_preview()
                 else:
                     self.preview_rubberband.reset()
                     self.tangent_rubberband.reset()
-                    self.preview_geom = None
             else:
                 self._clear_preview()
 
         elif self.state == self.STATE_ADJUSTING:
-            if self.current_match:
-                if isinstance(self.widget, FilletCanvasWidget):
-                    dist = GeometryEngine.distance(self.current_match.point, map_point)
-                    if dist > 0.0001:
-                        if self.widget.mode == FilletCanvasWidget.MODE_FILLET:
-                            if not self.widget.is_radius_locked:
-                                self.widget.set_radius(round(dist, 3), block_signals=True)
+            if self.current_match and isinstance(self.widget, FilletCanvasWidget):
+                dist = GeometryEngine.distance(self.current_match.point, map_point)
+                if dist > 0.0001:
+                    if self.widget.mode == FilletCanvasWidget.MODE_FILLET:
+                        if not self.widget.is_radius_locked:
+                            self.widget.set_radius(round(dist, 3), block_signals=True)
+                    else:
+                        if self.widget.is_linked:
+                            if not self.widget.is_dist1_locked:
+                                self.widget.set_distance1(round(dist, 3), block_signals=True)
                         else:
-                            if self.widget.is_linked:
-                                if not self.widget.is_dist1_locked:
-                                    self.widget.set_distance1(round(dist, 3), block_signals=True)
-                            else:
-                                if not self.widget.is_dist1_locked and not self.widget.is_dist2_locked:
-                                    self.widget.set_distance1(round(dist, 3), block_signals=True)
-                                    self.widget.set_distance2(round(dist, 3), block_signals=True)
-                                elif not self.widget.is_dist1_locked:
-                                    self.widget.set_distance1(round(dist, 3), block_signals=True)
-                                elif not self.widget.is_dist2_locked:
-                                    self.widget.set_distance2(round(dist, 3), block_signals=True)
-                self._update_preview()
+                            if not self.widget.is_dist1_locked:
+                                self.widget.set_distance1(round(dist, 3), block_signals=True)
+                            elif not self.widget.is_dist2_locked:
+                                self.widget.set_distance2(round(dist, 3), block_signals=True)
+            self._update_preview()
 
     def canvasPressEvent(self, event: QgsMapMouseEvent):
         if event.button() == Qt.LeftButton:
