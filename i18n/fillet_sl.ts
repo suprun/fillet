@@ -7,6 +7,10 @@
             <translation>Zaokrožitev / Posneti rob (Paketno)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Plošča za paketno zaokrožitev in posnetje robov izbranih elementov</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Orodje za zaokrožitev / posneti rob</translation>
         </message>

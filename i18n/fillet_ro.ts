@@ -7,6 +7,10 @@
             <translation>Racordare / Teșire (În lot)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Panou de racordare și teșire în lot pentru entitățile selectate</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Instrument Racordare / Teșire</translation>
         </message>

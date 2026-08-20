@@ -7,6 +7,10 @@
             <translation>Arrodoniment / Xamfrà (Per lots)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Panell d'arrodoniment i xamfrà per lots per a les entitats seleccionades</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Eina d'arrodoniment / xamfrà</translation>
         </message>

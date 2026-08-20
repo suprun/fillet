@@ -7,6 +7,10 @@
             <translation>Ümardamine / Faasimine (Pakktöötlus)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Valitud objektide partiiümardamise ja faasimise paneel</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Ümardamise / faasimise tööriist</translation>
         </message>

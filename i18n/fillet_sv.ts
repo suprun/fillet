@@ -7,6 +7,10 @@
             <translation>Avrunda / Fasa (Batchbearbetning)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Panel för batchavrundning och fasning för markerade objekt</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Verktyg för avrundning / fasning</translation>
         </message>

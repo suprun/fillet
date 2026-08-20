@@ -7,6 +7,10 @@
             <translation>تسطيح / شطب (مجموعة)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>لوحة التسطيح والشطب المجمعة للعناصر المحددة</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>أداة التسطيح / الشطب</translation>
         </message>

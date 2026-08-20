@@ -7,6 +7,10 @@
             <translation>Fillet / Chamfer (Batchverwerking)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Paneel voor batch-afronding en afschuining voor geselecteerde objecten</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Fillet / Chamfer Gereedschap</translation>
         </message>

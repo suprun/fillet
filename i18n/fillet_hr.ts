@@ -7,6 +7,10 @@
             <translation>Zaobljenje / Zakošenje (Skupno)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Ploča za skupno zaobljenje i zakošenje odabranih objekata</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Alat za zaobljenje / zakošenje</translation>
         </message>

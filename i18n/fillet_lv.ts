@@ -7,6 +7,10 @@
             <translation>Noapaļošana / Nolīdzināšana (Partija)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Partijas noapaļošanas un nolīdzināšanas panelis atlasītajiem objektiem</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Noapaļošanas / nolīdzināšanas rīks</translation>
         </message>

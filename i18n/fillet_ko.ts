@@ -7,6 +7,10 @@
             <translation>필렛 / 챔퍼 (배치 처리)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>선택한 객체용 배치 필렛 및 챔퍼 패널</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>필렛 / 챔퍼 도구</translation>
         </message>

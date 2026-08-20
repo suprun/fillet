@@ -7,6 +7,10 @@
             <translation>フィレット / 面取り (バッチ処理)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>選択地物のバッチフィレット・面取りパネル</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>フィレット / 面取りツール</translation>
         </message>

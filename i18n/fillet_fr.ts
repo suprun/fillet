@@ -7,6 +7,10 @@
             <translation>Fillet / Chamfer (Traitement par lot)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Panneau de traitement par lot pour congés (fillet) et chanfreins des entités sélectionnées</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Outil Fillet / Chamfer</translation>
         </message>

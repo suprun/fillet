@@ -7,6 +7,10 @@
             <translation>Fillet / Chamfer (Tumpak)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Panel fillet dan chamfer batch untuk fitur terpilih</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Alat Fillet / Chamfer</translation>
         </message>

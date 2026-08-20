@@ -7,6 +7,10 @@
             <translation>Yuvarlat / Pah Kır (Toplu)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Seçili detaylar için toplu yuvarlatma ve pah kırma paneli</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Yuvarlat / Pah Kır Aracı</translation>
         </message>

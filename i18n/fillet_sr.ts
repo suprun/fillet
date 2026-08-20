@@ -7,6 +7,10 @@
             <translation>Заобљење / Закошење (Пакетна обрада)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Панел за пакетно заобљење и закошење за изабране објекте</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Алат за заобљење / закошење</translation>
         </message>

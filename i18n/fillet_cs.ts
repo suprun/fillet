@@ -7,6 +7,10 @@
             <translation>Zaoblení / Zkosení (Dávkově)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Panel dávkového zaoblení a zkosení pro vybrané prvky</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Nástroj Zaoblení / Zkosení</translation>
         </message>

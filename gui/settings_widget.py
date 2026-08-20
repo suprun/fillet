@@ -65,7 +65,6 @@ class FilletSettingsWidget(QWidget):
         self.spin_radius.setValue(5.0)
         self.spin_radius.setDecimals(3)
         self.spin_radius.setSingleStep(1.0)
-        self.spin_radius.setSuffix(" " + self.tr("од."))
         fillet_layout.addRow(self.tr("Радіус (R):"), self.spin_radius)
 
         self.spin_segments = QSpinBox(self.group_fillet)
@@ -84,7 +83,6 @@ class FilletSettingsWidget(QWidget):
         self.spin_dist1.setValue(5.0)
         self.spin_dist1.setDecimals(3)
         self.spin_dist1.setSingleStep(1.0)
-        self.spin_dist1.setSuffix(" " + self.tr("од."))
         chamfer_layout.addRow(self.tr("Відстань 1 (d1):"), self.spin_dist1)
 
         self.spin_dist2 = QDoubleSpinBox(self.group_chamfer)
@@ -92,7 +90,6 @@ class FilletSettingsWidget(QWidget):
         self.spin_dist2.setValue(5.0)
         self.spin_dist2.setDecimals(3)
         self.spin_dist2.setSingleStep(1.0)
-        self.spin_dist2.setSuffix(" " + self.tr("од."))
         chamfer_layout.addRow(self.tr("Відстань 2 (d2):"), self.spin_dist2)
 
         self.chk_equal_dist = QCheckBox(self.tr("Однакові відстані (d1 = d2)"), self.group_chamfer)

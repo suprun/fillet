@@ -7,6 +7,10 @@
             <translation>Fillet / Chamfer (Elaborazione batch)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Pannello raccordi e smussi batch per le geometrie selezionate</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Strumento Fillet / Chamfer</translation>
         </message>

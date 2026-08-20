@@ -7,6 +7,10 @@
             <translation>Pyöristys / Viiste (Eräajo)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Eräajopyöristys- ja viistepaneeli valituille kohteille</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Pyöristys / Viiste -työkalu</translation>
         </message>

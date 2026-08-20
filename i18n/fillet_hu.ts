@@ -7,6 +7,10 @@
             <translation>Lekerekítés / Letörés (Kötegelt)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Kötegelt lekerekítés és letörés panel a kijelölt elemekhez</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Lekerekítés / Letörés eszköz</translation>
         </message>

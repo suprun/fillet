@@ -7,6 +7,10 @@
             <translation>Fillet / Chamfer (Пакетна обробка)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Інструмент Fillet / Chamfer</translation>
         </message>

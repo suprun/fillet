@@ -7,6 +7,10 @@
             <translation>Arredondamento / Chafrán (Por lotes)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Panel de arredondamento e chafrán por lotes para os elementos seleccionados</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Ferramenta de arredondamento / chafrán</translation>
         </message>

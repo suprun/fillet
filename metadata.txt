@@ -1,16 +1,16 @@
 [general]
-name=Fillet / Chamfer Tool for QGIS 3.x
+name=Fillet / Chamfer Tool for QGIS 3.x & Batch for 3.x and 4.x
 qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
-description=Interactive Fillet and Chamfer editing tool like in QGIS 4, compatible with QGIS 3.16–3.99.
-about=Brings the native QGIS 4.0 interactive Fillet (corner rounding) and Chamfer (corner beveling) CAD digitizing tool to QGIS 3.x (3.16–3.99). Features real-time on-canvas CAD HUD widget, mouse hover preview, vertex snapping, segment locks, and batch processing for selected vector features.
-version=0.1.0.27
+description=Interactive Fillet & Chamfer tool for QGIS 3.x and Batch corner processing for QGIS 3.x & 4.x.
+about=Provides interactive CAD-like Fillet (corner rounding) and Chamfer (corner beveling) digitizing for QGIS 3.x, plus an instant Batch Processing panel for selected vector features in both QGIS 3.x and QGIS 4.x.
+version=0.1.0.28
 author=suprun
 email=suprun.serhiy+qgis@gmail.com
 homepage=https://github.com/suprun/fillet
 repository=https://github.com/suprun/fillet
 tracker=https://github.com/suprun/fillet/issues
-tags=cad, editing, fillet, chamfer, geometry, digitizing, curve
+tags=cad, editing, fillet, chamfer, geometry, digitizing, curve, batch, qgis4
 icon=icon.png
 experimental=False
 deprecated=False

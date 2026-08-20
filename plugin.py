@@ -44,10 +44,19 @@ class FilletPlugin:
         self._init_translator()
 
         self.action: Optional[QAction] = None
+        self.batch_action: Optional[QAction] = None
         self.map_tool: Optional[FilletMapTool] = None
         self.canvas_widget: Optional[FilletCanvasWidget] = None
         self.dock_widget: Optional[QDockWidget] = None
         self.settings_widget: Optional[FilletSettingsWidget] = None
+
+    @staticmethod
+    def is_qgis_4() -> bool:
+        if hasattr(Qgis, "QGIS_VERSION_INT"):
+            return Qgis.QGIS_VERSION_INT >= 40000
+        if hasattr(Qgis, "versionInt"):
+            return Qgis.versionInt() >= 40000
+        return False
 
     def _init_translator(self):
         locale_name = QgsSettings().value("locale/userLocale", "")
@@ -78,11 +87,7 @@ class FilletPlugin:
                 old_dock.setParent(None)
                 old_dock.deleteLater()
 
-        # 1. Create on-canvas CAD HUD widget
-        self.canvas_widget = FilletCanvasWidget(self.canvas)
-        self.canvas_widget.hide()
-
-        # 2. Create settings widget for batch operations dock
+        # 1. Create settings widget for batch operations dock
         self.settings_widget = FilletSettingsWidget()
         self.dock_widget = QDockWidget(self.tr("Fillet / Chamfer (Пакетна обробка)"), self.iface.mainWindow())
         self.dock_widget.setObjectName("FilletChamferDockWidget")
@@ -93,36 +98,62 @@ class FilletPlugin:
         # Connect batch apply
         self.settings_widget.applyToSelectedRequested.connect(self.apply_to_selected_features)
 
-        # 3. Create map tool with on-canvas widget
-        self.map_tool = FilletMapTool(self.canvas, self.canvas_widget)
-
-        # 4. Create action
-        icon_path = os.path.join(self.plugin_dir, "resources", "icons", "fillet.svg")
-        self.action = QAction(
-            QIcon(icon_path),
-            self.tr("Інструмент Fillet / Chamfer"),
+        # 2. Create batch toggle action (for QGIS 3.x and QGIS 4.x)
+        batch_icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionChamferFilletBatch.svg")
+        self.batch_action = QAction(
+            QIcon(batch_icon_path),
+            self.tr("Fillet / Chamfer (Пакетна обробка)"),
             self.iface.mainWindow(),
         )
-        self.action.setCheckable(True)
-        self.action.setObjectName("actionFilletChamfer")
-        self.action.setToolTip(self.tr("Інструмент для створення скруглень (Fillet) та фасок (Chamfer)"))
-        self.action.triggered.connect(self.toggle_tool)
+        self.batch_action.setCheckable(True)
+        self.batch_action.setObjectName("actionFilletChamferBatch")
+        self.batch_action.setToolTip(self.tr("Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів"))
+        self.batch_action.triggered.connect(self.toggle_batch_panel)
+        self.dock_widget.visibilityChanged.connect(self.on_dock_visibility_changed)
 
-        # Add to Advanced Digitizing toolbar (inserted as 13th button, index 12) and Vector menu
         adv_tb = self.iface.advancedDigitizeToolBar()
         if adv_tb:
-            actions = adv_tb.actions()
-            if len(actions) >= 13:
-                adv_tb.insertAction(actions[12], self.action)
-            else:
-                adv_tb.addAction(self.action)
+            adv_tb.addAction(self.batch_action)
         else:
-            self.iface.addVectorToolBarIcon(self.action)
-        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.action)
+            self.iface.addVectorToolBarIcon(self.batch_action)
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.batch_action)
+
+        # 3. Create interactive MapTool ONLY in QGIS 3.x (native in QGIS 4.0+)
+        if not self.is_qgis_4():
+            # Create on-canvas CAD HUD widget
+            self.canvas_widget = FilletCanvasWidget(self.canvas)
+            self.canvas_widget.hide()
+
+            # Create map tool with on-canvas widget
+            self.map_tool = FilletMapTool(self.canvas, self.canvas_widget)
+
+            # Create action
+            icon_path = os.path.join(self.plugin_dir, "resources", "icons", "fillet.svg")
+            self.action = QAction(
+                QIcon(icon_path),
+                self.tr("Інструмент Fillet / Chamfer"),
+                self.iface.mainWindow(),
+            )
+            self.action.setCheckable(True)
+            self.action.setObjectName("actionFilletChamfer")
+            self.action.setToolTip(self.tr("Інструмент для створення скруглень (Fillet) та фасок (Chamfer)"))
+            self.action.triggered.connect(self.toggle_tool)
+
+            # Add to Advanced Digitizing toolbar (inserted as 13th button, index 12) and Vector menu
+            if adv_tb:
+                actions = adv_tb.actions()
+                if len(actions) >= 13:
+                    adv_tb.insertAction(actions[12], self.action)
+                else:
+                    adv_tb.addAction(self.action)
+            else:
+                self.iface.addVectorToolBarIcon(self.action)
+            self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.action)
+
+            self.canvas.mapToolSet.connect(self.on_map_tool_changed)
 
         # Track layer changes
         self.iface.currentLayerChanged.connect(self.update_action_state)
-        self.canvas.mapToolSet.connect(self.on_map_tool_changed)
 
         self.update_action_state()
 
@@ -132,12 +163,13 @@ class FilletPlugin:
             self.iface.currentLayerChanged.disconnect(self.update_action_state)
         except (TypeError, RuntimeError):
             pass  # nosec B110
-        try:
-            self.canvas.mapToolSet.disconnect(self.on_map_tool_changed)
-        except (TypeError, RuntimeError):
-            pass  # nosec B110
+        if not self.is_qgis_4():
+            try:
+                self.canvas.mapToolSet.disconnect(self.on_map_tool_changed)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
 
-        # 2. Clean up action
+        # 2. Clean up interactive action
         if self.action:
             try:
                 self.action.triggered.disconnect(self.toggle_tool)
@@ -151,7 +183,21 @@ class FilletPlugin:
             self.action.deleteLater()
             self.action = None
 
-        # 3. Clean up map tool
+        # 3. Clean up batch action
+        if self.batch_action:
+            try:
+                self.batch_action.triggered.disconnect(self.toggle_batch_panel)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            if self.iface.advancedDigitizeToolBar():
+                self.iface.advancedDigitizeToolBar().removeAction(self.batch_action)
+            self.iface.removeVectorToolBarIcon(self.batch_action)
+            self.iface.removePluginVectorMenu(self.tr("Fillet & Chamfer"), self.batch_action)
+            self.batch_action.setParent(None)
+            self.batch_action.deleteLater()
+            self.batch_action = None
+
+        # 4. Clean up map tool
         if self.map_tool:
             if self.canvas.mapTool() == self.map_tool:
                 self.canvas.unsetMapTool(self.map_tool)
@@ -162,7 +208,7 @@ class FilletPlugin:
             self.map_tool.deleteLater()
             self.map_tool = None
 
-        # 4. Clean up canvas widget
+        # 5. Clean up canvas widget
         if self.canvas_widget:
             try:
                 self.canvas.removeEventFilter(self.canvas_widget)
@@ -173,7 +219,7 @@ class FilletPlugin:
             self.canvas_widget.deleteLater()
             self.canvas_widget = None
 
-        # 5. Clean up settings widget and dock widget
+        # 6. Clean up settings widget and dock widget
         if self.settings_widget:
             try:
                 self.settings_widget.applyToSelectedRequested.disconnect(self.apply_to_selected_features)
@@ -184,6 +230,10 @@ class FilletPlugin:
             self.settings_widget = None
 
         if self.dock_widget:
+            try:
+                self.dock_widget.visibilityChanged.disconnect(self.on_dock_visibility_changed)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
             self.iface.removeDockWidget(self.dock_widget)
             self.dock_widget.setParent(None)
             self.dock_widget.deleteLater()
@@ -197,7 +247,7 @@ class FilletPlugin:
                 old_dock.setParent(None)
                 old_dock.deleteLater()
 
-        # 6. Remove translator
+        # 7. Remove translator
         if self.translator:
             QCoreApplication.removeTranslator(self.translator)
             self.translator = None
@@ -209,6 +259,14 @@ class FilletPlugin:
         else:
             if self.canvas.mapTool() == self.map_tool:
                 self.canvas.unsetMapTool(self.map_tool)
+
+    def toggle_batch_panel(self, checked: bool):
+        if self.dock_widget:
+            self.dock_widget.setVisible(checked)
+
+    def on_dock_visibility_changed(self, visible: bool):
+        if self.batch_action and self.batch_action.isChecked() != visible:
+            self.batch_action.setChecked(visible)
 
     def on_map_tool_changed(self, tool):
         if self.action:
@@ -226,6 +284,8 @@ class FilletPlugin:
 
         if self.action:
             self.action.setEnabled(enabled)
+        if self.batch_action:
+            self.batch_action.setEnabled(enabled)
 
     def apply_to_selected_features(self):
         """Batch apply fillet or chamfer to all corners of selected features."""

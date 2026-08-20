@@ -7,6 +7,10 @@
             <translation>Fillet / Chamfer (Processamento em lote)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Painel de concordância e chanfro em lote para feições selecionadas</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Ferramenta Fillet / Chamfer</translation>
         </message>

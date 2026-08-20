@@ -7,6 +7,10 @@
             <translation>Закръгляване / Фаска (Пакетна обработка)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Панел за пакетно закръгляване и фаска за избраните обекти</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Инструмент Закръгляване / Фаска</translation>
         </message>

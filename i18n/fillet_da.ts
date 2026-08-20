@@ -7,6 +7,10 @@
             <translation>Afrunding / Affasning (Batchbehandling)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Panel til batchafrunding og -affasning af valgte elementer</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Afrundings- / affasningsværktøj</translation>
         </message>

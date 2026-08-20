@@ -7,6 +7,10 @@
             <translation>Užapvalinimas / Nusklembimas (Paketinis)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Pasirinktų objektų paketinis užapvalinimo ir nusklembimo skydelis</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Užapvalinimo / nusklembimo įrankis</translation>
         </message>

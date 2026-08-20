@@ -7,6 +7,10 @@
             <translation>फिलेट / चैम्फर (बैच)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>चयनित सुविधाओं के लिए बैच फिलेट और चैम्फर पैनल</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>फिलेट / चैम्फर टूल</translation>
         </message>

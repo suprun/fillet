@@ -7,6 +7,10 @@
             <translation>Bo tròn / Vát góc (Hàng loạt)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Bảng bo tròn và vát góc hàng loạt cho các đối tượng đã chọn</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Công cụ Bo tròn / Vát góc</translation>
         </message>

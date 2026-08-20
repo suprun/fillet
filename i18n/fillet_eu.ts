@@ -7,6 +7,10 @@
             <translation>Biribiltzea / Xaflaketa (Multzoka)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Hautatutako elementuetarako multzokako biribiltze eta xaflaketa panela</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Biribiltze / xaflaketa tresna</translation>
         </message>

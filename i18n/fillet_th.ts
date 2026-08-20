@@ -7,6 +7,10 @@
             <translation>ลบมุมมน / ลบมุมเหลี่ยม (แบบกลุ่ม)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>แผงลบมุมมนและลบมุมเหลี่ยมแบบกลุ่มสำหรับฟีเจอร์ที่เลือก</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>เครื่องมือลบมุมมน / ลบมุมเหลี่ยม</translation>
         </message>

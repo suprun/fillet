@@ -7,6 +7,10 @@
             <translation>Fillet / Chamfer (Przetwarzanie wsadowe)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Panel wsadowego zaokrąglania i fazowania dla zaznaczonych obiektów</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Narzędzie Fillet / Chamfer</translation>
         </message>

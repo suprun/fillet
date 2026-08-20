@@ -7,6 +7,10 @@
             <translation>Fillet / Chamfer (Stapelverarbeitung)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Panel für Stapel-Abrundung (Fillet) und Fase (Chamfer) für ausgewählte Objekte</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Fillet / Chamfer Werkzeug</translation>
         </message>

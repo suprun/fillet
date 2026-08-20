@@ -7,6 +7,10 @@
             <translation>圓角 / 倒角 (批次處理)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>選取圖徵的批次圓角與倒角面板</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>圓角 / 倒角工具</translation>
         </message>

@@ -7,6 +7,10 @@
             <translation>Fillet / Chamfer (Por lotes)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Panel de empalme y chaflán por lotes para las entidades seleccionadas</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Herramienta Fillet / Chamfer</translation>
         </message>

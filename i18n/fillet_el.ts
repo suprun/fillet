@@ -7,6 +7,10 @@
             <translation>Στρογγυλοποίηση / Λοξότμηση (Μαζική επεξεργασία)</translation>
         </message>
         <message>
+            <source>Панель пакетного скруглення (Fillet) та фаски (Chamfer) для виділених об'єктів</source>
+            <translation>Πίνακας μαζικής στρογγυλοποίησης και λοξότμησης για επιλεγμένα στοιχεία</translation>
+        </message>
+        <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Εργαλείο Στρογγυλοποίησης / Λοξότμησης</translation>
         </message>
