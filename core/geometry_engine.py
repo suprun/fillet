@@ -142,7 +142,7 @@ class GeometryEngine:
             return False, None, None
 
         # Clamp distances to maximum possible if they exceed segment lengths
-        if abs(dist1 - dist2) < 1e-6:
+        if abs(dist1 - dist2) < 1e-11:
             # Isosceles chamfer: strictly equal and bounded by shorter edge
             max_d = min(len1, len2) * 0.9999
             if dist1 > max_d:

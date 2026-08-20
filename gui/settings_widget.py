@@ -1,6 +1,7 @@
 import os
+from typing import Optional
 
-from qgis.core import QgsSettings
+from qgis.core import QgsCoordinateReferenceSystem, QgsSettings
 from qgis.PyQt.QtCore import QEvent, QSize, Qt, QTimer, pyqtSignal
 from qgis.PyQt.QtGui import QCursor, QIcon, QPixmap, QTransform
 from qgis.PyQt.QtWidgets import (
@@ -301,3 +302,29 @@ class FilletSettingsWidget(QWidget):
     @property
     def distance2(self) -> float:
         return self.spin_dist1.value() if self.btn_link.isChecked() else self.spin_dist2.value()
+
+    def adapt_to_crs(self, crs: Optional[QgsCoordinateReferenceSystem] = None):
+        """Adapts spinbox decimals, range, and step to geographic or projected CRS."""
+        is_geo = crs.isGeographic() if crs and crs.isValid() else False
+        if is_geo:
+            decimals = 6
+            step = 0.00005
+            min_val = 0.000001
+            max_val = 180.0
+            for spin in (self.spin_radius, self.spin_dist1, self.spin_dist2):
+                spin.setDecimals(decimals)
+                spin.setRange(min_val, max_val)
+                spin.setSingleStep(step)
+                if spin.value() >= 0.5:
+                    spin.setValue(0.0001)
+        else:
+            decimals = 3
+            step = 1.0
+            min_val = 0.0001
+            max_val = 9999999.0
+            for spin in (self.spin_radius, self.spin_dist1, self.spin_dist2):
+                spin.setDecimals(decimals)
+                spin.setRange(min_val, max_val)
+                spin.setSingleStep(step)
+                if spin.value() < 0.0001:
+                    spin.setValue(5.0)

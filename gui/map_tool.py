@@ -75,6 +75,9 @@ class FilletMapTool(QgsMapToolEdit):
 
     def activate(self):
         super().activate()
+        layer = self.current_vector_layer()
+        if layer and hasattr(self.widget, "adapt_to_crs"):
+            self.widget.adapt_to_crs(layer.crs())
         self.state = self.STATE_HOVER
         self._clear_preview()
         if isinstance(self.widget, FilletCanvasWidget):
@@ -180,6 +183,10 @@ class FilletMapTool(QgsMapToolEdit):
         if not self.current_match or not isinstance(self.widget, FilletCanvasWidget):
             return
 
+        is_geo = layer.crs().isGeographic() if layer and layer.crs().isValid() else False
+        min_limit = 1e-6 if is_geo else 0.0001
+        min_clamp = 1e-6 if is_geo else 0.001
+
         layer_point = self.toLayerCoordinates(layer, map_point)
         dist = GeometryEngine.distance(self.current_match.point, layer_point)
         p_prev, v, p_next = GeometryEngine.get_adjacent_points(
@@ -194,7 +201,7 @@ class FilletMapTool(QgsMapToolEdit):
                 max_r = GeometryEngine.max_fillet_radius(p_prev, v, p_next)
                 if max_r > 0:
                     dist = min(dist, max_r * 0.9999)
-            rounded_dist = max(0.0001, round(dist, 4 if dist < 1.0 else 3))
+            rounded_dist = max(min_limit, round(dist, 6 if is_geo else (4 if dist < 1.0 else 3)))
             if not self.widget.is_radius_locked:
                 self.widget.set_radius(rounded_dist, block_signals=True)
         else:
@@ -205,7 +212,7 @@ class FilletMapTool(QgsMapToolEdit):
                     # Isosceles chamfer: strictly bounded by shorter edge
                     max_d = min(len1, len2) * 0.9999
                     dist = min(dist, max_d)
-                    rounded_dist = max(0.0001, round(dist, 4 if dist < 1.0 else 3))
+                    rounded_dist = max(min_limit, round(dist, 6 if is_geo else (4 if dist < 1.0 else 3)))
                     if not self.widget.is_dist1_locked:
                         self.widget.set_distance1(rounded_dist, block_signals=True)
                 else:
@@ -213,14 +220,14 @@ class FilletMapTool(QgsMapToolEdit):
                     wy = layer_point.y() - v.y()
                     proj1 = wx * u1x + wy * u1y
                     proj2 = wx * u2x + wy * u2y
-                    d1 = min(len1 * 0.9999, max(0.001, abs(proj1)))
-                    d2 = min(len2 * 0.9999, max(0.001, abs(proj2)))
+                    d1 = min(len1 * 0.9999, max(min_clamp, abs(proj1)))
+                    d2 = min(len2 * 0.9999, max(min_clamp, abs(proj2)))
                     if not self.widget.is_dist1_locked:
-                        self.widget.set_distance1(round(d1, 4 if d1 < 1.0 else 3), block_signals=True)
+                        self.widget.set_distance1(round(d1, 6 if is_geo else (4 if d1 < 1.0 else 3)), block_signals=True)
                     if not self.widget.is_dist2_locked:
-                        self.widget.set_distance2(round(d2, 4 if d2 < 1.0 else 3), block_signals=True)
+                        self.widget.set_distance2(round(d2, 6 if is_geo else (4 if d2 < 1.0 else 3)), block_signals=True)
             else:
-                rounded_dist = max(0.0001, round(dist, 4 if dist < 1.0 else 3))
+                rounded_dist = max(min_limit, round(dist, 6 if is_geo else (4 if dist < 1.0 else 3)))
                 if not self.widget.is_dist1_locked:
                     self.widget.set_distance1(rounded_dist, block_signals=True)
                 if not self.widget.is_dist2_locked:

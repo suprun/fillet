@@ -312,6 +312,10 @@ class FilletPlugin:
         if isinstance(layer, QgsVectorLayer):
             if layer.geometryType() in (QgsWkbTypes.LineGeometry, QgsWkbTypes.PolygonGeometry):
                 enabled = True
+                if self.settings_widget and hasattr(self.settings_widget, "adapt_to_crs"):
+                    self.settings_widget.adapt_to_crs(layer.crs())
+                if self.canvas_widget and hasattr(self.canvas_widget, "adapt_to_crs"):
+                    self.canvas_widget.adapt_to_crs(layer.crs())
 
         if self.action:
             self.action.setEnabled(enabled)

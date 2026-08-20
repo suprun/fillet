@@ -4,7 +4,7 @@ Tests for settings persistence across sessions in FilletCanvasWidget and FilletS
 """
 
 import unittest
-from qgis.core import QgsSettings
+from qgis.core import QgsCoordinateReferenceSystem, QgsSettings
 from qgis.gui import QgsMapCanvas
 from qgis.testing import start_app
 
@@ -67,6 +67,9 @@ class TestSettingsPersistence(unittest.TestCase):
         self.assertAlmostEqual(sw2.distance1, 25.5, places=2)
         self.assertAlmostEqual(sw2.distance2, 12.3, places=2)
         self.assertFalse(sw2.btn_link.isChecked())
+        self.assertAlmostEqual(sw2.radius, 7.5, places=2)
+        self.assertEqual(sw2.segments_count, 16)
+
     def test_mode_switching_value_transfer(self):
         # Canvas widget transfer
         cw = FilletCanvasWidget(self.canvas)
@@ -91,6 +94,28 @@ class TestSettingsPersistence(unittest.TestCase):
         sw.spin_dist1.setValue(45.0)
         sw.radio_fillet.setChecked(True)
         self.assertAlmostEqual(sw.spin_radius.value(), 45.0, places=2)
+
+    def test_crs_adaptation(self):
+        # Geographic CRS (degrees)
+        geo_crs = QgsCoordinateReferenceSystem("EPSG:4326")
+        # Projected CRS (meters)
+        proj_crs = QgsCoordinateReferenceSystem("EPSG:3857")
+
+        cw = FilletCanvasWidget(self.canvas)
+        cw.adapt_to_crs(geo_crs)
+        self.assertEqual(cw.spin_radius.decimals(), 6)
+        self.assertAlmostEqual(cw.spin_radius.minimum(), 0.000001, places=6)
+
+        cw.adapt_to_crs(proj_crs)
+        self.assertEqual(cw.spin_radius.decimals(), 3)
+        self.assertAlmostEqual(cw.spin_radius.minimum(), 0.001, places=3)
+
+        sw = FilletSettingsWidget()
+        sw.adapt_to_crs(geo_crs)
+        self.assertEqual(sw.spin_dist1.decimals(), 6)
+
+        sw.adapt_to_crs(proj_crs)
+        self.assertEqual(sw.spin_dist1.decimals(), 3)
 
 
 if __name__ == "__main__":

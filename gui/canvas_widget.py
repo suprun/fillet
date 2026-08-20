@@ -1,7 +1,7 @@
 import os
 from typing import Optional
 
-from qgis.core import QgsSettings
+from qgis.core import QgsCoordinateReferenceSystem, QgsSettings
 from qgis.gui import QgsDoubleSpinBox, QgsMapCanvas, QgsSpinBox
 from qgis.PyQt.QtCore import QEvent, QPoint, QSize, Qt, QTimer, pyqtSignal
 from qgis.PyQt.QtGui import QColor, QCursor, QFont, QIcon, QPixmap, QTransform
@@ -437,10 +437,45 @@ class FilletCanvasWidget(QFrame):
 
     def show_on_canvas(self):
         """Shows the widget on canvas and repositions to the top-right corner."""
+        self.adapt_to_crs()
         self.reposition_to_default()
         self.show()
         self.raise_()
         self.focus_primary_input()
+
+    def adapt_to_crs(self, crs: Optional[QgsCoordinateReferenceSystem] = None):
+        """Adapts spinbox decimals, range, and step to geographic or projected CRS."""
+        if crs is None and self.canvas:
+            layer = self.canvas.currentLayer()
+            if layer:
+                crs = layer.crs()
+            else:
+                crs = self.canvas.mapSettings().destinationCrs()
+
+        is_geo = crs.isGeographic() if crs and crs.isValid() else False
+
+        if is_geo:
+            decimals = 6
+            step = 0.00005
+            min_val = 0.000001
+            max_val = 180.0
+            for spin in (self.spin_radius, self.spin_dist1, self.spin_dist2):
+                spin.setDecimals(decimals)
+                spin.setRange(min_val, max_val)
+                spin.setSingleStep(step)
+                if spin.value() >= 0.5:
+                    spin.setValue(0.0001)
+        else:
+            decimals = 3
+            step = 1.0
+            min_val = 0.001
+            max_val = 9999999.0
+            for spin in (self.spin_radius, self.spin_dist1, self.spin_dist2):
+                spin.setDecimals(decimals)
+                spin.setRange(min_val, max_val)
+                spin.setSingleStep(step)
+                if spin.value() < 0.001:
+                    spin.setValue(5.0)
 
     # --- Properties & Methods ---
     @property

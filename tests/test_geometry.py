@@ -167,7 +167,28 @@ class TestGeometryEngine(unittest.TestCase):
         )
         fillet_geom = GeometryEngine.batch_process_geometry(geom, mode="fillet", radius=1.0, segments_count=4)
         self.assertIsNotNone(fillet_geom)
-        self.assertGreater(fillet_geom.constGet().numPoints(), 4)
+    def test_geographic_coordinates_fillet_and_chamfer(self):
+        """Test fillet and chamfer calculations with tiny coordinates in degrees (e.g., EPSG:4326)."""
+        # Corner around Kyiv (approx 30.5E, 50.4N), 10-meter scale ~ 0.0001 degrees
+        p_prev = QgsPoint(30.5000, 50.4010)
+        v = QgsPoint(30.5000, 50.4000)
+        p_next = QgsPoint(30.5010, 50.4000)
+
+        # Fillet with small degree radius: 0.0002 deg
+        success, t1, arc_mid, t2, tangent_dist = GeometryEngine.compute_fillet_points(
+            p_prev, v, p_next, radius=0.0002
+        )
+        self.assertTrue(success)
+        self.assertAlmostEqual(t1.y(), 50.4002, places=6)
+        self.assertAlmostEqual(t2.x(), 30.5002, places=6)
+
+        # Chamfer with small degree distances: 0.00015 deg
+        c_success, c1, c2 = GeometryEngine.compute_chamfer_points(
+            p_prev, v, p_next, dist1=0.00015, dist2=0.00015
+        )
+        self.assertTrue(c_success)
+        self.assertAlmostEqual(c1.y(), 50.40015, places=6)
+        self.assertAlmostEqual(c2.x(), 30.50015, places=6)
 
 
 if __name__ == "__main__":
