@@ -56,21 +56,28 @@ class FilletCanvasWidget(QFrame):
         if os.path.exists(path):
             pm = QPixmap(path)
             if not pm.isNull():
+                aspect = getattr(Qt.AspectRatioMode, "KeepAspectRatio", getattr(Qt, "KeepAspectRatio", 1))
+                smooth = getattr(Qt.TransformationMode, "SmoothTransformation", getattr(Qt, "SmoothTransformation", 1))
                 if pm.width() < target_size or pm.height() < target_size:
                     pm = pm.scaled(
                         target_size,
                         target_size,
-                        Qt.KeepAspectRatio,
-                        Qt.SmoothTransformation,
+                        aspect,
+                        smooth,
                     )
                 transform = QTransform().rotate(angle)
-                rotated_pm = pm.transformed(transform, Qt.SmoothTransformation)
+                rotated_pm = pm.transformed(transform, smooth)
                 return QIcon(rotated_pm)
         return QIcon()
 
     def _init_ui(self):
-        self.setWindowFlags(Qt.SubWindow | Qt.FramelessWindowHint)
-        self.setAttribute(Qt.WA_ShowWithoutActivating, True)
+        sub_window = getattr(Qt.WindowType, "SubWindow", getattr(Qt, "SubWindow", 0))
+        frameless = getattr(Qt.WindowType, "FramelessWindowHint", getattr(Qt, "FramelessWindowHint", 0))
+        if sub_window or frameless:
+            self.setWindowFlags(sub_window | frameless)
+        wa_show = getattr(Qt.WidgetAttribute, "WA_ShowWithoutActivating", getattr(Qt, "WA_ShowWithoutActivating", None))
+        if wa_show is not None:
+            self.setAttribute(wa_show, True)
         self.setMinimumWidth(235)
 
         main_layout = QVBoxLayout(self)
@@ -127,7 +134,7 @@ class FilletCanvasWidget(QFrame):
         self._update_lock_icon(self.btn_lock_radius)
         self.btn_lock_radius.toggled.connect(lambda: self._update_lock_icon(self.btn_lock_radius))
 
-        grid_fillet.addWidget(self.lbl_radius, 0, 0, Qt.AlignLeft | Qt.AlignVCenter)
+        grid_fillet.addWidget(self.lbl_radius, 0, 0)
         grid_fillet.addWidget(self.spin_radius, 0, 1)
         grid_fillet.addWidget(self.btn_lock_radius, 0, 2)
 
@@ -145,7 +152,7 @@ class FilletCanvasWidget(QFrame):
         self.btn_lock_segments.setAutoRaise(True)
         self._update_lock_icon(self.btn_lock_segments)
 
-        grid_fillet.addWidget(self.lbl_segments, 1, 0, Qt.AlignLeft | Qt.AlignVCenter)
+        grid_fillet.addWidget(self.lbl_segments, 1, 0)
         grid_fillet.addWidget(self.spin_segments, 1, 1)
         grid_fillet.addWidget(self.btn_lock_segments, 1, 2)
 
@@ -176,7 +183,7 @@ class FilletCanvasWidget(QFrame):
         self._update_lock_icon(self.btn_lock_dist1)
         self.btn_lock_dist1.toggled.connect(self._on_lock_dist1_toggled)
 
-        grid_chamfer.addWidget(self.lbl_dist1, 0, 0, Qt.AlignLeft | Qt.AlignVCenter)
+        grid_chamfer.addWidget(self.lbl_dist1, 0, 0)
         grid_chamfer.addWidget(self.spin_dist1, 0, 1)
         grid_chamfer.addWidget(self.btn_lock_dist1, 0, 2)
 
@@ -199,7 +206,7 @@ class FilletCanvasWidget(QFrame):
         self._update_lock_icon(self.btn_lock_dist2)
         self.btn_lock_dist2.toggled.connect(lambda: self._update_lock_icon(self.btn_lock_dist2))
 
-        grid_chamfer.addWidget(self.lbl_dist2, 1, 0, Qt.AlignLeft | Qt.AlignVCenter)
+        grid_chamfer.addWidget(self.lbl_dist2, 1, 0)
         grid_chamfer.addWidget(self.spin_dist2, 1, 1)
         grid_chamfer.addWidget(self.btn_lock_dist2, 1, 2)
 
@@ -246,16 +253,21 @@ class FilletCanvasWidget(QFrame):
             self.spin_dist2.lineEdit().returnPressed.connect(self.commitRequested.emit)
 
         # Standard arrow cursor over panel, buttons, and spinboxes; I-beam ONLY on text lineEdit
-        self.setCursor(QCursor(Qt.ArrowCursor))
+        arrow_cursor = getattr(Qt.CursorShape, "ArrowCursor", getattr(Qt, "ArrowCursor", None))
+        ibeam_cursor = getattr(Qt.CursorShape, "IBeamCursor", getattr(Qt, "IBeamCursor", None))
+        if arrow_cursor is not None:
+            self.setCursor(QCursor(arrow_cursor))
         for spin in (self.spin_radius, self.spin_segments, self.spin_dist1, self.spin_dist2):
-            spin.setCursor(QCursor(Qt.ArrowCursor))
+            if arrow_cursor is not None:
+                spin.setCursor(QCursor(arrow_cursor))
             spin.installEventFilter(self)
             if hasattr(spin, "lineEdit") and spin.lineEdit():
-                spin.lineEdit().setCursor(QCursor(Qt.IBeamCursor))
+                if ibeam_cursor is not None:
+                    spin.lineEdit().setCursor(QCursor(ibeam_cursor))
                 spin.lineEdit().installEventFilter(self)
             for child in spin.findChildren(QWidget):
-                if child != spin.lineEdit():
-                    child.setCursor(QCursor(Qt.ArrowCursor))
+                if child != spin.lineEdit() and arrow_cursor is not None:
+                    child.setCursor(QCursor(arrow_cursor))
         for btn in (
             self.radio_fillet,
             self.radio_chamfer,

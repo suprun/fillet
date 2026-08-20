@@ -92,7 +92,8 @@ class FilletPlugin:
         self.dock_widget = QDockWidget(self.tr("Fillet / Chamfer (Пакетна обробка)"), self.iface.mainWindow())
         self.dock_widget.setObjectName("FilletChamferDockWidget")
         self.dock_widget.setWidget(self.settings_widget)
-        self.iface.addDockWidget(Qt.RightDockWidgetArea, self.dock_widget)
+        right_dock = getattr(Qt.DockWidgetArea, "RightDockWidgetArea", getattr(Qt, "RightDockWidgetArea", None))
+        self.iface.addDockWidget(right_dock, self.dock_widget)
         self.dock_widget.hide()
 
         # Connect batch apply

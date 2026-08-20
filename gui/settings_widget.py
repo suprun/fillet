@@ -50,15 +50,17 @@ class FilletSettingsWidget(QWidget):
         if os.path.exists(path):
             pm = QPixmap(path)
             if not pm.isNull():
+                aspect = getattr(Qt.AspectRatioMode, "KeepAspectRatio", getattr(Qt, "KeepAspectRatio", 1))
+                smooth = getattr(Qt.TransformationMode, "SmoothTransformation", getattr(Qt, "SmoothTransformation", 1))
                 if pm.width() < target_size or pm.height() < target_size:
                     pm = pm.scaled(
                         target_size,
                         target_size,
-                        Qt.KeepAspectRatio,
-                        Qt.SmoothTransformation,
+                        aspect,
+                        smooth,
                     )
                 transform = QTransform().rotate(angle)
-                rotated_pm = pm.transformed(transform, Qt.SmoothTransformation)
+                rotated_pm = pm.transformed(transform, smooth)
                 return QIcon(rotated_pm)
         return QIcon()
 
@@ -74,7 +76,6 @@ class FilletSettingsWidget(QWidget):
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(6, 6, 6, 6)
         main_layout.setSpacing(6)
-        main_layout.setAlignment(Qt.AlignTop)
 
         # Mode selection group
         mode_group = QGroupBox(self.tr("Режим операції"), self)
@@ -180,16 +181,21 @@ class FilletSettingsWidget(QWidget):
         main_layout.addStretch()
 
         # Spinbox cursors: arrow over buttons, I-beam only on lineEdit
+        arrow_cursor = getattr(Qt.CursorShape, "ArrowCursor", getattr(Qt, "ArrowCursor", None))
+        ibeam_cursor = getattr(Qt.CursorShape, "IBeamCursor", getattr(Qt, "IBeamCursor", None))
         for spin in (self.spin_radius, self.spin_segments, self.spin_dist1, self.spin_dist2):
-            spin.setCursor(QCursor(Qt.ArrowCursor))
+            if arrow_cursor is not None:
+                spin.setCursor(QCursor(arrow_cursor))
             spin.installEventFilter(self)
             if hasattr(spin, "lineEdit") and spin.lineEdit():
-                spin.lineEdit().setCursor(QCursor(Qt.IBeamCursor))
+                if ibeam_cursor is not None:
+                    spin.lineEdit().setCursor(QCursor(ibeam_cursor))
                 spin.lineEdit().installEventFilter(self)
             for child in spin.findChildren(QWidget):
-                if child != spin.lineEdit():
-                    child.setCursor(QCursor(Qt.ArrowCursor))
-        self.btn_link.setCursor(QCursor(Qt.ArrowCursor))
+                if child != spin.lineEdit() and arrow_cursor is not None:
+                    child.setCursor(QCursor(arrow_cursor))
+        if arrow_cursor is not None:
+            self.btn_link.setCursor(QCursor(arrow_cursor))
 
         # Connections
         self.radio_fillet.toggled.connect(self._on_mode_changed)
