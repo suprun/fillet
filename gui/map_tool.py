@@ -155,10 +155,31 @@ class FilletMapTool(QgsMapToolEdit):
                             if not self.widget.is_dist1_locked:
                                 self.widget.set_distance1(rounded_dist, block_signals=True)
                         else:
-                            if not self.widget.is_dist1_locked:
-                                self.widget.set_distance1(rounded_dist, block_signals=True)
-                            elif not self.widget.is_dist2_locked:
-                                self.widget.set_distance2(rounded_dist, block_signals=True)
+                            # Independent chamfer distances: project mouse vector onto edges
+                            p_prev, v, p_next = GeometryEngine.get_adjacent_points(
+                                self.current_match.geometry,
+                                self.current_match.part_idx,
+                                self.current_match.ring_idx,
+                                self.current_match.vertex_idx,
+                            )
+                            if p_prev and v and p_next:
+                                u1x, u1y, len1 = GeometryEngine.normalize_vector(p_prev.x() - v.x(), p_prev.y() - v.y())
+                                u2x, u2y, len2 = GeometryEngine.normalize_vector(p_next.x() - v.x(), p_next.y() - v.y())
+                                wx = layer_point.x() - v.x()
+                                wy = layer_point.y() - v.y()
+                                proj1 = wx * u1x + wy * u1y
+                                proj2 = wx * u2x + wy * u2y
+                                d1 = proj1 if proj1 > 0 else dist
+                                d2 = proj2 if proj2 > 0 else dist
+                                if not self.widget.is_dist1_locked:
+                                    self.widget.set_distance1(round(d1, 4 if d1 < 1.0 else 3), block_signals=True)
+                                if not self.widget.is_dist2_locked:
+                                    self.widget.set_distance2(round(d2, 4 if d2 < 1.0 else 3), block_signals=True)
+                            else:
+                                if not self.widget.is_dist1_locked:
+                                    self.widget.set_distance1(rounded_dist, block_signals=True)
+                                if not self.widget.is_dist2_locked:
+                                    self.widget.set_distance2(rounded_dist, block_signals=True)
             self._update_preview()
 
     def canvasPressEvent(self, event: QgsMapMouseEvent):

@@ -168,7 +168,7 @@ class FilletCanvasWidget(QFrame):
         self.btn_lock_dist1.setAutoRaise(True)
         self.btn_lock_dist1.setToolTip(self.tr("Блокувати / розблокувати відстань 1"))
         self._update_lock_icon(self.btn_lock_dist1)
-        self.btn_lock_dist1.toggled.connect(lambda: self._update_lock_icon(self.btn_lock_dist1))
+        self.btn_lock_dist1.toggled.connect(self._on_lock_dist1_toggled)
 
         self.grid.addWidget(self.lbl_dist1, 0, 0, Qt.AlignLeft | Qt.AlignVCenter)
         self.grid.addWidget(self.spin_dist1, 0, 1)
@@ -298,7 +298,15 @@ class FilletCanvasWidget(QFrame):
         self.btn_lock_dist2.setEnabled(not checked)
         if checked:
             self.spin_dist2.setValue(self.spin_dist1.value())
+            self.btn_lock_dist2.setChecked(self.btn_lock_dist1.isChecked())
+        else:
+            self.btn_lock_dist2.setChecked(False)
         self.parametersChanged.emit()
+
+    def _on_lock_dist1_toggled(self, checked: bool):
+        self._update_lock_icon(self.btn_lock_dist1)
+        if self.btn_link.isChecked():
+            self.btn_lock_dist2.setChecked(checked)
 
     def _on_dist1_changed(self, val: float):
         if self.btn_link.isChecked():

@@ -89,11 +89,11 @@ class GeometryEngine:
 
         tangent_dist = radius / tan_half
 
-        # Max allowed tangent distance
+        # Max allowed tangent distance - clamp to maximum possible if requested radius is too large
         max_dist = min(len1, len2)
-        if tangent_dist > max_dist + epsilon:
-            # Radius is too large for the existing segments
-            return False, None, None, None, tangent_dist
+        if tangent_dist > max_dist:
+            tangent_dist = max_dist * 0.9999
+            radius = tangent_dist * tan_half
 
         # Tangent points
         t1 = QgsPoint(v.x() + tangent_dist * u1x, v.y() + tangent_dist * u1y)
@@ -141,8 +141,11 @@ class GeometryEngine:
         if len1 < epsilon or len2 < epsilon:
             return False, None, None
 
-        if dist1 > len1 + epsilon or dist2 > len2 + epsilon:
-            return False, None, None
+        # Clamp distances to maximum possible if they exceed segment lengths
+        if dist1 > len1:
+            dist1 = len1 * 0.9999
+        if dist2 > len2:
+            dist2 = len2 * 0.9999
 
         c1 = QgsPoint(v.x() + dist1 * u1x, v.y() + dist1 * u1y)
         c2 = QgsPoint(v.x() + dist2 * u2x, v.y() + dist2 * u2y)
@@ -668,3 +671,46 @@ class GeometryEngine:
                 return QgsPointXY(c1.x(), c1.y()), QgsPointXY(c2.x(), c2.y())
 
         return None, None
+
+    @classmethod
+    def get_adjacent_points(
+        cls,
+        geom: QgsGeometry,
+        part_idx: int,
+        ring_idx: int,
+        vertex_idx: int,
+    ) -> Tuple[Optional[QgsPointXY], Optional[QgsPointXY], Optional[QgsPointXY]]:
+        """
+        Returns (p_prev, v, p_next) for the specified vertex.
+        """
+        curve = cls.get_vertex_curve(geom, part_idx, ring_idx)
+        if not curve:
+            return None, None, None
+        num_vertices = curve.numPoints() if hasattr(curve, "numPoints") else 0
+        if num_vertices < 3:
+            return None, None, None
+
+        is_closed = curve.isClosed() if hasattr(curve, "isClosed") else False
+        if is_closed:
+            effective_count = num_vertices - 1 if (curve.pointN(0) == curve.pointN(num_vertices - 1)) else num_vertices
+            if effective_count < 3:
+                return None, None, None
+            idx_curr = vertex_idx % effective_count
+            idx_prev = (idx_curr - 1) % effective_count
+            idx_next = (idx_curr + 1) % effective_count
+        else:
+            if vertex_idx <= 0 or vertex_idx >= num_vertices - 1:
+                return None, None, None
+            idx_curr = vertex_idx
+            idx_prev = vertex_idx - 1
+            idx_next = vertex_idx + 1
+
+        p_prev = curve.pointN(idx_prev)
+        v = curve.pointN(idx_curr)
+        p_next = curve.pointN(idx_next)
+
+        return (
+            QgsPointXY(p_prev.x(), p_prev.y()),
+            QgsPointXY(v.x(), v.y()),
+            QgsPointXY(p_next.x(), p_next.y()),
+        )
