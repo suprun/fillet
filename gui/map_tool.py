@@ -2,7 +2,7 @@
 """
 Map tool for interactive Fillet & Chamfer editing in QGIS.
 Supports on-canvas CAD HUD widget, two-step CAD interaction model (QGIS 4.0 style),
-CRS-aware snapping square marker, tangent touch points visualization,
+native QgsSnapIndicator system snapping, tangent touch points visualization,
 live preview with polygon transparency, and full keyboard navigation (Tab, Enter, Escape, Space).
 """
 
@@ -11,6 +11,7 @@ from typing import Optional, Union
 from qgis.core import (
     Qgis,
     QgsGeometry,
+    QgsPointLocator,
     QgsPointXY,
     QgsSettings,
     QgsVectorLayer,
@@ -21,6 +22,7 @@ from qgis.gui import (
     QgsMapMouseEvent,
     QgsMapToolEdit,
     QgsRubberBand,
+    QgsSnapIndicator,
 )
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtGui import QColor, QCursor
@@ -50,12 +52,8 @@ class FilletMapTool(QgsMapToolEdit):
         self.current_match: Optional[VertexMatch] = None
         self.preview_geom: Optional[QgsGeometry] = None
 
-        # 1. System snapping square marker on vertex (rendered in map canvas CRS)
-        self.marker_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.PointGeometry)
-        self.marker_rubberband.setIcon(QgsRubberBand.ICON_BOX)
-        self.marker_rubberband.setIconSize(12)
-        self.marker_rubberband.setWidth(2)
-        self.marker_rubberband.setColor(self._get_snap_color())
+        # 1. Native QGIS system snapping indicator (100% native styling and snapping engine integration)
+        self.snap_indicator = QgsSnapIndicator(self.canvas)
 
         # 2. Tangent / touch point markers (T1, T2 rendered in map canvas CRS)
         self.tangent_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.PointGeometry)
@@ -73,19 +71,6 @@ class FilletMapTool(QgsMapToolEdit):
         self.widget.parametersChanged.connect(self._update_preview)
         if hasattr(self.widget, "commitRequested"):
             self.widget.commitRequested.connect(self._commit_change)
-
-    def _get_snap_color(self) -> QColor:
-        """Reads the system snapping color from QGIS settings."""
-        try:
-            s = QgsSettings()
-            val = s.value("digitizing/snap_color", QColor(255, 0, 255))
-            if isinstance(val, QColor):
-                return val
-            elif isinstance(val, str):
-                return QColor(val)
-        except Exception:
-            pass
-        return QColor(255, 0, 255)
 
     def activate(self):
         super().activate()
@@ -130,8 +115,8 @@ class FilletMapTool(QgsMapToolEdit):
             match = SnappingHelper.find_vertex_at_position(layer, self.canvas, map_point)
             if match:
                 self.current_match = match
-                self._show_vertex_marker(layer, match.point)
-                # If parameter is locked, show preview; if unlocked, only show snap marker until clicked
+                self._show_vertex_marker(layer, match)
+                # If parameter is locked, show preview; if unlocked, only show snap indicator until clicked
                 if self._is_current_parameter_locked():
                     self._update_preview()
                 else:
@@ -193,7 +178,7 @@ class FilletMapTool(QgsMapToolEdit):
                 match = SnappingHelper.find_vertex_at_position(layer, self.canvas, map_point)
                 if match:
                     self.current_match = match
-                    self._show_vertex_marker(layer, match.point)
+                    self._show_vertex_marker(layer, match)
 
                     # If parameters are locked, single click can commit directly
                     if self._is_current_parameter_locked():
@@ -211,16 +196,18 @@ class FilletMapTool(QgsMapToolEdit):
             # Right click cancels active adjustment or clears preview
             self._cancel_operation()
 
-    def _show_vertex_marker(self, layer: QgsVectorLayer, point: QgsPointXY):
-        """Displays the snapping square marker transformed to map coordinates."""
-        map_pt = self.toMapCoordinates(layer, point)
-        self.marker_rubberband.reset(QgsWkbTypes.PointGeometry)
-        self.marker_rubberband.setIcon(QgsRubberBand.ICON_BOX)
-        self.marker_rubberband.setIconSize(12)
-        self.marker_rubberband.setWidth(2)
-        self.marker_rubberband.setColor(self._get_snap_color())
-        self.marker_rubberband.addPoint(map_pt, True)
-        self.marker_rubberband.show()
+    def _show_vertex_marker(self, layer: QgsVectorLayer, match: VertexMatch):
+        """Displays the native QGIS system snapping indicator on vertex."""
+        loc_match = QgsPointLocator.Match(
+            QgsPointLocator.Vertex,
+            layer,
+            match.fid,
+            0.0,
+            match.point,
+            match.vertex_idx,
+        )
+        self.snap_indicator.setMatch(loc_match)
+        self.snap_indicator.setVisible(True)
 
     def _update_preview(self):
         if not self.current_match or not self.isActive():
@@ -374,7 +361,7 @@ class FilletMapTool(QgsMapToolEdit):
             super().keyPressEvent(event)
 
     def _clear_preview(self):
-        self.marker_rubberband.reset()
+        self.snap_indicator.setVisible(False)
         self.tangent_rubberband.reset()
         self.preview_rubberband.reset()
         self.current_match = None
