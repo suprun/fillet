@@ -74,6 +74,7 @@ class FilletSettingsWidget(QWidget):
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(6, 6, 6, 6)
         main_layout.setSpacing(6)
+        main_layout.setAlignment(Qt.AlignTop)
 
         # Mode selection group
         mode_group = QGroupBox(self.tr("Режим операції"), self)
@@ -99,6 +100,7 @@ class FilletSettingsWidget(QWidget):
 
         # Stacked container for parameters
         self.stacked_params = QStackedWidget(self)
+        self.stacked_params.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
 
         # Fillet parameters page
         self.group_fillet = QGroupBox(self.tr("Параметри скруглення"), self)
@@ -155,14 +157,14 @@ class FilletSettingsWidget(QWidget):
         chamfer_layout.addWidget(lbl_dist2, 1, 0)
         chamfer_layout.addWidget(self.spin_dist2, 1, 1)
 
-        # Tall narrow Link button spanning across Distance 1 and Distance 2 rows (rotated 90 degrees)
+        # Link button spanning across Distance 1 and Distance 2 rows (rotated 90 degrees)
         self.btn_link = QToolButton(self.group_chamfer)
         self.btn_link.setCheckable(True)
         self.btn_link.setChecked(True)
         self.btn_link.setAutoRaise(True)
         self.btn_link.setFixedWidth(28)
         self.btn_link.setIconSize(QSize(24, 24))
-        self.btn_link.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
+        self.btn_link.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
         self._update_link_icon()
         chamfer_layout.addWidget(self.btn_link, 0, 2, 2, 1)
 
@@ -173,6 +175,9 @@ class FilletSettingsWidget(QWidget):
         self.btn_apply_selected = QPushButton(self.tr("Застосувати до виділених об'єктів"), self)
         self.btn_apply_selected.setToolTip(self.tr("Застосувати скруглення або фаску до всіх вершин виділених об'єктів"))
         main_layout.addWidget(self.btn_apply_selected)
+
+        # Bottom stretch to prevent elements stretching vertically
+        main_layout.addStretch()
 
         # Spinbox cursors: arrow over buttons, I-beam only on lineEdit
         for spin in (self.spin_radius, self.spin_segments, self.spin_dist1, self.spin_dist2):
