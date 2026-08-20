@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 Map tool for interactive Fillet & Chamfer editing in QGIS.
-Supports on-canvas CAD HUD widget, dynamic preview with polygon transparency,
-and system-style snapping square marker.
+Supports on-canvas CAD HUD widget, two-step CAD interaction model (QGIS 4.0 style),
+tangent touch points visualization, live preview with polygon transparency,
+and full keyboard navigation (Tab, Enter, Escape, Space).
 """
 
 from typing import Optional, Union
@@ -35,29 +36,43 @@ from .settings_widget import FilletSettingsWidget
 
 
 class FilletMapTool(QgsMapToolEdit):
-    """Interactive Map Tool for filleting and chamfering vertices."""
+    """Interactive Map Tool for filleting and chamfering vertices in QGIS 4.0 CAD style."""
+
+    STATE_HOVER = "hover"
+    STATE_ADJUSTING = "adjusting"
 
     def __init__(self, canvas: QgsMapCanvas, widget: Union[FilletCanvasWidget, FilletSettingsWidget]):
         super().__init__(canvas)
         self.canvas = canvas
         self.widget = widget
+
+        self.state = self.STATE_HOVER
         self.current_match: Optional[VertexMatch] = None
         self.preview_geom: Optional[QgsGeometry] = None
 
-        # System snapping square marker on vertex
+        # 1. System snapping square marker on vertex
         self.marker_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.PointGeometry)
         self.marker_rubberband.setIcon(QgsRubberBand.ICON_BOX)
         self.marker_rubberband.setIconSize(12)
         self.marker_rubberband.setWidth(2)
         self.marker_rubberband.setColor(self._get_snap_color())
 
-        # Geometry preview rubberband (configured dynamically for Polygon / Line)
+        # 2. Tangent / touch point markers (T1, T2)
+        self.tangent_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.PointGeometry)
+        self.tangent_rubberband.setIcon(QgsRubberBand.ICON_CROSS)
+        self.tangent_rubberband.setIconSize(10)
+        self.tangent_rubberband.setWidth(2)
+        self.tangent_rubberband.setColor(QColor(255, 140, 0, 240))
+
+        # 3. Geometry preview rubberband (configured dynamically for Polygon / Line)
         self.preview_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.PolygonGeometry)
         self.preview_rubberband.setWidth(4)
         self.preview_rubberband.setLineStyle(Qt.DashLine)
 
         self.setCursor(QCursor(Qt.CrossCursor))
         self.widget.parametersChanged.connect(self._update_preview)
+        if hasattr(self.widget, "commitRequested"):
+            self.widget.commitRequested.connect(self._commit_change)
 
     def _get_snap_color(self) -> QColor:
         """Reads the system snapping color from QGIS settings."""
@@ -74,19 +89,16 @@ class FilletMapTool(QgsMapToolEdit):
 
     def activate(self):
         super().activate()
-        self.marker_rubberband.reset()
-        self.marker_rubberband.setColor(self._get_snap_color())
-        self.preview_rubberband.reset()
+        self.state = self.STATE_HOVER
+        self._clear_preview()
         if isinstance(self.widget, FilletCanvasWidget):
             self.widget.show_on_canvas()
 
     def deactivate(self):
         if isinstance(self.widget, FilletCanvasWidget):
             self.widget.hide()
-        self.marker_rubberband.reset()
-        self.preview_rubberband.reset()
-        self.current_match = None
-        self.preview_geom = None
+        self.state = self.STATE_HOVER
+        self._clear_preview()
         super().deactivate()
 
     def current_vector_layer(self) -> Optional[QgsVectorLayer]:
@@ -95,6 +107,14 @@ class FilletMapTool(QgsMapToolEdit):
             return layer
         return None
 
+    def _is_current_parameter_locked(self) -> bool:
+        if isinstance(self.widget, FilletCanvasWidget):
+            if self.widget.mode == FilletCanvasWidget.MODE_FILLET:
+                return self.widget.is_radius_locked
+            else:
+                return self.widget.is_dist1_locked
+        return True
+
     def canvasMoveEvent(self, event: QgsMapMouseEvent):
         layer = self.current_vector_layer()
         if not layer:
@@ -102,33 +122,64 @@ class FilletMapTool(QgsMapToolEdit):
             return
 
         map_point = event.mapPoint()
-        match = SnappingHelper.find_vertex_at_position(layer, self.canvas, map_point)
 
-        if match:
-            self.current_match = match
+        if self.state == self.STATE_HOVER:
+            match = SnappingHelper.find_vertex_at_position(layer, self.canvas, map_point)
+            if match:
+                self.current_match = match
+                self._show_vertex_marker(match.point)
+                self._update_preview()
+            else:
+                self._clear_preview()
 
-            # Show system snapping square marker on vertex
-            self.marker_rubberband.reset(QgsWkbTypes.PointGeometry)
-            self.marker_rubberband.setIcon(QgsRubberBand.ICON_BOX)
-            self.marker_rubberband.setIconSize(12)
-            self.marker_rubberband.setWidth(2)
-            self.marker_rubberband.setColor(self._get_snap_color())
-            self.marker_rubberband.addPoint(match.point, True)
-            self.marker_rubberband.show()
+        elif self.state == self.STATE_ADJUSTING:
+            if self.current_match:
+                # Dynamic radius/distance from cursor distance
+                if not self._is_current_parameter_locked() and isinstance(self.widget, FilletCanvasWidget):
+                    dist = GeometryEngine.distance(self.current_match.point, map_point)
+                    if dist > 0.0001:
+                        if self.widget.mode == FilletCanvasWidget.MODE_FILLET:
+                            self.widget.set_radius(round(dist, 3), block_signals=True)
+                        else:
+                            self.widget.set_distance1(round(dist, 3), block_signals=True)
+                self._update_preview()
 
-            # If radius/distance is unlocked, dynamically update value from mouse distance
-            if isinstance(self.widget, FilletCanvasWidget):
-                dist = GeometryEngine.distance(match.point, map_point)
-                if dist > 0.0001:
-                    if self.widget.mode == FilletCanvasWidget.MODE_FILLET and not self.widget.is_radius_locked:
-                        self.widget.set_radius(round(dist, 3), block_signals=True)
-                    elif self.widget.mode == FilletCanvasWidget.MODE_CHAMFER and not self.widget.is_dist1_locked:
-                        self.widget.set_distance1(round(dist, 3), block_signals=True)
+    def canvasPressEvent(self, event: QgsMapMouseEvent):
+        if event.button() == Qt.LeftButton:
+            layer = self.current_vector_layer()
+            if not layer:
+                return
 
-            # Calculate and show preview
-            self._update_preview()
-        else:
-            self._clear_preview()
+            if self.state == self.STATE_HOVER:
+                map_point = event.mapPoint()
+                match = SnappingHelper.find_vertex_at_position(layer, self.canvas, map_point)
+                if match:
+                    self.current_match = match
+                    self._show_vertex_marker(match.point)
+                    self._update_preview()
+
+                    # If parameters are locked, single click can commit directly
+                    if self._is_current_parameter_locked():
+                        self._commit_change()
+                    else:
+                        self.state = self.STATE_ADJUSTING
+
+            elif self.state == self.STATE_ADJUSTING:
+                # Second click commits the modification (Two-step CAD workflow)
+                self._commit_change()
+
+        elif event.button() == Qt.RightButton:
+            # Right click cancels active adjustment or clears preview
+            self._cancel_operation()
+
+    def _show_vertex_marker(self, point: QgsPointXY):
+        self.marker_rubberband.reset(QgsWkbTypes.PointGeometry)
+        self.marker_rubberband.setIcon(QgsRubberBand.ICON_BOX)
+        self.marker_rubberband.setIconSize(12)
+        self.marker_rubberband.setWidth(2)
+        self.marker_rubberband.setColor(self._get_snap_color())
+        self.marker_rubberband.addPoint(point, True)
+        self.marker_rubberband.show()
 
     def _update_preview(self):
         if not self.current_match or not self.isActive():
@@ -139,38 +190,61 @@ class FilletMapTool(QgsMapToolEdit):
         if not layer:
             return
 
-        mode = self.widget.mode
+        is_fillet = (
+            self.widget.mode == FilletCanvasWidget.MODE_FILLET
+            if isinstance(self.widget, FilletCanvasWidget)
+            else True
+        )
 
-        if mode == FilletCanvasWidget.MODE_FILLET:
+        if is_fillet:
+            radius = self.widget.radius
+            segments = self.widget.segments_count
             new_geom = GeometryEngine.apply_fillet_to_geometry(
                 match.geometry,
                 part_idx=match.part_idx,
                 ring_idx=match.ring_idx,
                 vertex_idx=match.vertex_idx,
-                radius=self.widget.radius,
-                segments_count=self.widget.segments_count,
+                radius=radius,
+                segments_count=segments,
             )
+            # Tangent points
+            t1, t2 = GeometryEngine.compute_tangent_points_for_vertex(
+                match.geometry,
+                match.part_idx,
+                match.ring_idx,
+                match.vertex_idx,
+                is_fillet=True,
+                val1=radius,
+            )
+            stroke_color = QColor(37, 99, 235, 230)  # Blue #2563EB
+            fill_color = QColor(37, 99, 235, 65)
         else:
+            dist1 = self.widget.distance1
+            dist2 = self.widget.distance2
             new_geom = GeometryEngine.apply_chamfer_to_geometry(
                 match.geometry,
                 part_idx=match.part_idx,
                 ring_idx=match.ring_idx,
                 vertex_idx=match.vertex_idx,
-                dist1=self.widget.distance1,
-                dist2=self.widget.distance2,
+                dist1=dist1,
+                dist2=dist2,
             )
-
-        if mode == FilletCanvasWidget.MODE_FILLET:
-            stroke_color = QColor(37, 99, 235, 230)  # Blue as in fillet.svg
-            fill_color = QColor(37, 99, 235, 65)
-        else:
-            stroke_color = QColor(5, 150, 105, 230)  # Green #059669 as in chamfer.svg
+            # Tangent points
+            t1, t2 = GeometryEngine.compute_tangent_points_for_vertex(
+                match.geometry,
+                match.part_idx,
+                match.ring_idx,
+                match.vertex_idx,
+                is_fillet=False,
+                val1=dist1,
+                val2=dist2,
+            )
+            stroke_color = QColor(5, 150, 105, 230)  # Green #059669
             fill_color = QColor(5, 150, 105, 65)
 
+        # 1. Update geometry preview
         if new_geom and not new_geom.isEmpty():
             self.preview_geom = new_geom
-
-            # Setup styling based on geometry type (semi-transparent fill for polygons)
             if layer.geometryType() == QgsWkbTypes.PolygonGeometry:
                 self.preview_rubberband.reset(QgsWkbTypes.PolygonGeometry)
                 self.preview_rubberband.setFillColor(fill_color)
@@ -189,39 +263,76 @@ class FilletMapTool(QgsMapToolEdit):
             self.preview_geom = None
             self.preview_rubberband.reset()
 
-    def canvasReleaseEvent(self, event: QgsMapMouseEvent):
-        if event.button() == Qt.LeftButton:
-            layer = self.current_vector_layer()
-            if not layer or not self.current_match or not self.preview_geom:
-                return
+        # 2. Update tangent touch markers
+        if t1 and t2:
+            self.tangent_rubberband.reset(QgsWkbTypes.PointGeometry)
+            self.tangent_rubberband.setColor(stroke_color)
+            self.tangent_rubberband.addPoint(t1, False)
+            self.tangent_rubberband.addPoint(t2, True)
+            self.tangent_rubberband.show()
+        else:
+            self.tangent_rubberband.reset()
 
-            mode_name = (
-                self.tr("Скруглення вершини")
-                if self.widget.mode == FilletCanvasWidget.MODE_FILLET
-                else self.tr("Фаска вершини")
-            )
+    def _commit_change(self):
+        """Applies the current preview geometry modification to the layer."""
+        layer = self.current_vector_layer()
+        if not layer or not self.current_match or not self.preview_geom:
+            return
 
-            layer.beginEditCommand(mode_name)
-            success = layer.changeGeometry(self.current_match.fid, self.preview_geom)
-            if success:
-                layer.endEditCommand()
-                self.canvas.refresh()
-            else:
-                layer.destroyEditCommand()
+        is_fillet = (
+            self.widget.mode == FilletCanvasWidget.MODE_FILLET
+            if isinstance(self.widget, FilletCanvasWidget)
+            else True
+        )
+        mode_name = self.tr("Скруглення вершини") if is_fillet else self.tr("Фаска вершини")
 
-            self._clear_preview()
+        layer.beginEditCommand(mode_name)
+        success = layer.changeGeometry(self.current_match.fid, self.preview_geom)
+        if success:
+            layer.endEditCommand()
+            self.canvas.refresh()
+        else:
+            layer.destroyEditCommand()
 
-        elif event.button() == Qt.RightButton:
-            self._clear_preview()
+        self._clear_preview()
+        self.state = self.STATE_HOVER
+
+    def _cancel_operation(self):
+        """Cancels current operation and returns to hovering state."""
+        self._clear_preview()
+        self.state = self.STATE_HOVER
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Escape:
-            self._clear_preview()
+        key = event.key()
+
+        if key in (Qt.Key_Return, Qt.Key_Enter):
+            # Commit with Enter
+            self._commit_change()
+            event.accept()
+
+        elif key == Qt.Key_Escape:
+            # Cancel with Escape
+            self._cancel_operation()
+            event.accept()
+
+        elif key == Qt.Key_Tab:
+            # Tab focuses primary input in HUD widget
+            if isinstance(self.widget, FilletCanvasWidget):
+                self.widget.focus_primary_input()
+                event.accept()
+
+        elif key == Qt.Key_Space:
+            # Space toggles lock
+            if isinstance(self.widget, FilletCanvasWidget):
+                self.widget.toggle_active_lock()
+                event.accept()
+
         else:
             super().keyPressEvent(event)
 
     def _clear_preview(self):
         self.marker_rubberband.reset()
+        self.tangent_rubberband.reset()
         self.preview_rubberband.reset()
         self.current_match = None
         self.preview_geom = None

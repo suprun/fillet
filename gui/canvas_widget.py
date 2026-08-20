@@ -30,6 +30,7 @@ class FilletCanvasWidget(QFrame):
 
     parametersChanged = pyqtSignal()
     modeChanged = pyqtSignal(str)
+    commitRequested = pyqtSignal()
 
     MODE_FILLET = "fillet"
     MODE_CHAMFER = "chamfer"
@@ -220,6 +221,14 @@ class FilletCanvasWidget(QFrame):
         self.spin_segments.valueChanged.connect(self.parametersChanged)
         self.spin_dist1.valueChanged.connect(self._on_dist1_changed)
         self.spin_dist2.valueChanged.connect(self.parametersChanged)
+
+        # Enter key in spinboxes requests commit
+        if hasattr(self.spin_radius, "lineEdit") and self.spin_radius.lineEdit():
+            self.spin_radius.lineEdit().returnPressed.connect(self.commitRequested.emit)
+        if hasattr(self.spin_dist1, "lineEdit") and self.spin_dist1.lineEdit():
+            self.spin_dist1.lineEdit().returnPressed.connect(self.commitRequested.emit)
+        if hasattr(self.spin_dist2, "lineEdit") and self.spin_dist2.lineEdit():
+            self.spin_dist2.lineEdit().returnPressed.connect(self.commitRequested.emit)
 
     def _apply_style(self):
         self.setFrameShape(QFrame.StyledPanel)
@@ -418,3 +427,19 @@ class FilletCanvasWidget(QFrame):
     @property
     def is_linked(self) -> bool:
         return self.btn_link.isChecked()
+
+    def focus_primary_input(self):
+        """Focuses and selects text in the active primary input box."""
+        if self.mode == self.MODE_FILLET:
+            self.spin_radius.setFocus()
+            self.spin_radius.selectAll()
+        else:
+            self.spin_dist1.setFocus()
+            self.spin_dist1.selectAll()
+
+    def toggle_active_lock(self):
+        """Toggles lock on the primary parameter."""
+        if self.mode == self.MODE_FILLET:
+            self.btn_lock_radius.toggle()
+        else:
+            self.btn_lock_dist1.toggle()

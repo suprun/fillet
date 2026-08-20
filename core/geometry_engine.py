@@ -578,3 +578,93 @@ class GeometryEngine:
                 return QgsGeometry(new_multi)
 
         return None
+
+    @classmethod
+    def get_vertex_curve(
+        cls,
+        geom: QgsGeometry,
+        part_idx: int,
+        ring_idx: int,
+    ) -> Optional[QgsAbstractGeometry]:
+        """Extracts the specific sub-curve (ring or line part) containing the vertex."""
+        if geom.isEmpty() or geom.isNull():
+            return None
+        geom_type = geom.type()
+        is_multi = geom.isMultipart()
+        if geom_type == QgsWkbTypes.LineGeometry:
+            if not is_multi:
+                return geom.constGet()
+            else:
+                multi = geom.constGet()
+                if multi and part_idx < multi.numGeometries():
+                    return multi.geometryN(part_idx)
+        elif geom_type == QgsWkbTypes.PolygonGeometry:
+            if not is_multi:
+                poly = geom.constGet()
+                if poly:
+                    if ring_idx == 0:
+                        return poly.exteriorRing()
+                    elif ring_idx - 1 < poly.numInteriorRings():
+                        return poly.interiorRing(ring_idx - 1)
+            else:
+                multi = geom.constGet()
+                if multi and part_idx < multi.numGeometries():
+                    poly = multi.geometryN(part_idx)
+                    if poly:
+                        if ring_idx == 0:
+                            return poly.exteriorRing()
+                        elif ring_idx - 1 < poly.numInteriorRings():
+                            return poly.interiorRing(ring_idx - 1)
+        return None
+
+    @classmethod
+    def compute_tangent_points_for_vertex(
+        cls,
+        geom: QgsGeometry,
+        part_idx: int,
+        ring_idx: int,
+        vertex_idx: int,
+        is_fillet: bool,
+        val1: float,
+        val2: float = 0.0,
+    ) -> Tuple[Optional[QgsPointXY], Optional[QgsPointXY]]:
+        """
+        Returns (t1, t2) tangent/cut points on adjacent segments for the given vertex.
+        """
+        curve = cls.get_vertex_curve(geom, part_idx, ring_idx)
+        if not curve:
+            return None, None
+        num_vertices = curve.numPoints() if hasattr(curve, "numPoints") else 0
+        if num_vertices < 3:
+            return None, None
+
+        is_closed = curve.isClosed() if hasattr(curve, "isClosed") else False
+        if is_closed:
+            effective_count = num_vertices - 1 if (curve.pointN(0) == curve.pointN(num_vertices - 1)) else num_vertices
+            if effective_count < 3:
+                return None, None
+            idx_curr = vertex_idx % effective_count
+            idx_prev = (idx_curr - 1) % effective_count
+            idx_next = (idx_curr + 1) % effective_count
+        else:
+            if vertex_idx <= 0 or vertex_idx >= num_vertices - 1:
+                return None, None
+            idx_curr = vertex_idx
+            idx_prev = vertex_idx - 1
+            idx_next = vertex_idx + 1
+
+        p_prev = curve.pointN(idx_prev)
+        v = curve.pointN(idx_curr)
+        p_next = curve.pointN(idx_next)
+
+        if is_fillet:
+            success, t1, _, t2, _ = cls.compute_fillet_points(p_prev, v, p_next, val1)
+            if success and t1 and t2:
+                return QgsPointXY(t1.x(), t1.y()), QgsPointXY(t2.x(), t2.y())
+        else:
+            d2 = val2 if val2 > 0 else val1
+            success, c1, c2 = cls.compute_chamfer_points(p_prev, v, p_next, val1, d2)
+            if success and c1 and c2:
+                return QgsPointXY(c1.x(), c1.y()), QgsPointXY(c2.x(), c2.y())
+
+        return None, None
