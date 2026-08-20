@@ -1,12 +1,7 @@
-# -*- coding: utf-8 -*-
-"""
-On-canvas CAD HUD widget for Fillet & Chamfer tool.
-Displays directly inside the map canvas area with native theme styling.
-"""
-
 import os
 from typing import Optional
 
+from qgis.core import QgsSettings
 from qgis.gui import QgsDoubleSpinBox, QgsMapCanvas, QgsSpinBox
 from qgis.PyQt.QtCore import QEvent, QPoint, QSize, Qt, pyqtSignal
 from qgis.PyQt.QtGui import QColor, QCursor, QFont, QIcon, QPixmap, QTransform
@@ -213,8 +208,9 @@ class FilletCanvasWidget(QFrame):
 
         main_layout.addLayout(self.grid)
 
-        # Initial visibility
+        # Initial visibility & load persisted settings from user profile
         self._update_mode_visibility(self.MODE_FILLET)
+        self._load_settings()
 
         # Signal connections
         self.radio_fillet.toggled.connect(self._on_radio_mode_toggled)
@@ -222,6 +218,13 @@ class FilletCanvasWidget(QFrame):
         self.spin_segments.valueChanged.connect(self.parametersChanged)
         self.spin_dist1.valueChanged.connect(self._on_dist1_changed)
         self.spin_dist2.valueChanged.connect(self.parametersChanged)
+
+        # Save settings on any change
+        self.parametersChanged.connect(self._save_settings)
+        self.btn_lock_radius.toggled.connect(lambda _: self._save_settings())
+        self.btn_lock_dist1.toggled.connect(lambda _: self._save_settings())
+        self.btn_lock_dist2.toggled.connect(lambda _: self._save_settings())
+        self.btn_link.toggled.connect(lambda _: self._save_settings())
 
         # Enter key in spinboxes requests commit
         if hasattr(self.spin_radius, "lineEdit") and self.spin_radius.lineEdit():
@@ -272,6 +275,49 @@ class FilletCanvasWidget(QFrame):
         else:
             self.btn_link.setIcon(self._get_rotated_icon("mActionUnlink.svg", 90, 32))
             self.btn_link.setToolTip(self.tr("Відстані роздільні (d1 ≠ d2)"))
+
+    def _load_settings(self):
+        self._is_loading = True
+        try:
+            s = QgsSettings()
+            mode = s.value("plugins/fillet/mode", self.MODE_FILLET, type=str)
+            if mode == self.MODE_CHAMFER:
+                self.radio_chamfer.setChecked(True)
+            else:
+                self.radio_fillet.setChecked(True)
+
+            self.spin_radius.setValue(float(s.value("plugins/fillet/radius", 5.0)))
+            self.btn_lock_radius.setChecked(s.value("plugins/fillet/lock_radius", True, type=bool))
+            self.spin_segments.setValue(int(s.value("plugins/fillet/segments", 20)))
+
+            self.spin_dist1.setValue(float(s.value("plugins/fillet/dist1", 5.0)))
+            self.btn_lock_dist1.setChecked(s.value("plugins/fillet/lock_dist1", True, type=bool))
+            self.spin_dist2.setValue(float(s.value("plugins/fillet/dist2", 5.0)))
+            self.btn_lock_dist2.setChecked(s.value("plugins/fillet/lock_dist2", True, type=bool))
+            self.btn_link.setChecked(s.value("plugins/fillet/link_dist", True, type=bool))
+
+            self._update_link_icon()
+            self._update_lock_icon(self.btn_lock_radius)
+            self._update_lock_icon(self.btn_lock_dist1)
+            self._update_lock_icon(self.btn_lock_dist2)
+            self._update_mode_visibility(self.mode)
+        finally:
+            self._is_loading = False
+
+    def _save_settings(self):
+        if getattr(self, "_is_loading", False):
+            return
+        s = QgsSettings()
+        s.setValue("plugins/fillet/mode", self.mode)
+        s.setValue("plugins/fillet/radius", self.spin_radius.value())
+        s.setValue("plugins/fillet/lock_radius", self.btn_lock_radius.isChecked())
+        s.setValue("plugins/fillet/segments", self.spin_segments.value())
+
+        s.setValue("plugins/fillet/dist1", self.spin_dist1.value())
+        s.setValue("plugins/fillet/lock_dist1", self.btn_lock_dist1.isChecked())
+        s.setValue("plugins/fillet/dist2", self.spin_dist2.value())
+        s.setValue("plugins/fillet/lock_dist2", self.btn_lock_dist2.isChecked())
+        s.setValue("plugins/fillet/link_dist", self.btn_link.isChecked())
 
     def _on_radio_mode_toggled(self):
         mode = self.MODE_FILLET if self.radio_fillet.isChecked() else self.MODE_CHAMFER

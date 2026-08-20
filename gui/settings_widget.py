@@ -1,4 +1,6 @@
 import os
+
+from qgis.core import QgsSettings
 from qgis.PyQt.QtCore import Qt, pyqtSignal
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import (
@@ -137,9 +139,50 @@ class FilletSettingsWidget(QWidget):
         self.spin_dist2.valueChanged.connect(self.parametersChanged)
         self.btn_apply_selected.clicked.connect(self.applyToSelectedRequested)
 
+        # Save settings on any parameter change
+        self.parametersChanged.connect(self._save_settings)
+        self.chk_equal_dist.toggled.connect(lambda _: self._save_settings())
+
+        # Load persisted settings from user profile
+        self._load_settings()
+
+    def _load_settings(self):
+        self._is_loading = True
+        try:
+            s = QgsSettings()
+            mode = s.value("plugins/fillet/batch_mode", self.MODE_FILLET, type=str)
+            if mode == self.MODE_CHAMFER:
+                self.radio_chamfer.setChecked(True)
+            else:
+                self.radio_fillet.setChecked(True)
+
+            self.spin_radius.setValue(float(s.value("plugins/fillet/batch_radius", 5.0)))
+            self.spin_segments.setValue(int(s.value("plugins/fillet/batch_segments", 12)))
+            self.spin_dist1.setValue(float(s.value("plugins/fillet/batch_dist1", 5.0)))
+            self.spin_dist2.setValue(float(s.value("plugins/fillet/batch_dist2", 5.0)))
+            self.chk_equal_dist.setChecked(s.value("plugins/fillet/batch_equal_dist", True, type=bool))
+
+            self.group_fillet.setVisible(self.mode == self.MODE_FILLET)
+            self.group_chamfer.setVisible(self.mode != self.MODE_FILLET)
+            self.spin_dist2.setEnabled(not self.chk_equal_dist.isChecked())
+        finally:
+            self._is_loading = False
+
+    def _save_settings(self):
+        if getattr(self, "_is_loading", False):
+            return
+        s = QgsSettings()
+        s.setValue("plugins/fillet/batch_mode", self.mode)
+        s.setValue("plugins/fillet/batch_radius", self.spin_radius.value())
+        s.setValue("plugins/fillet/batch_segments", self.spin_segments.value())
+        s.setValue("plugins/fillet/batch_dist1", self.spin_dist1.value())
+        s.setValue("plugins/fillet/batch_dist2", self.spin_dist2.value())
+        s.setValue("plugins/fillet/batch_equal_dist", self.chk_equal_dist.isChecked())
+
     def _on_mode_changed(self, is_fillet: bool):
         self.group_fillet.setVisible(is_fillet)
         self.group_chamfer.setVisible(not is_fillet)
+        self._save_settings()
         self.parametersChanged.emit()
 
     def _on_equal_dist_toggled(self, checked: bool):
