@@ -87,6 +87,34 @@ class FilletMapTool(QgsMapToolEdit):
         self._clear_preview()
         super().deactivate()
 
+    def cleanup(self):
+        """Cleans up rubberbands, indicators, and disconnected signals."""
+        self.deactivate()
+        try:
+            self.widget.parametersChanged.disconnect(self._update_preview)
+        except Exception:
+            pass
+        if hasattr(self.widget, "commitRequested"):
+            try:
+                self.widget.commitRequested.disconnect(self._commit_change)
+            except Exception:
+                pass
+
+        if hasattr(self, "snap_indicator") and self.snap_indicator:
+            self.snap_indicator.setVisible(False)
+            del self.snap_indicator
+            self.snap_indicator = None
+
+        if hasattr(self, "tangent_rubberband") and self.tangent_rubberband:
+            self.tangent_rubberband.reset()
+            del self.tangent_rubberband
+            self.tangent_rubberband = None
+
+        if hasattr(self, "preview_rubberband") and self.preview_rubberband:
+            self.preview_rubberband.reset()
+            del self.preview_rubberband
+            self.preview_rubberband = None
+
     def current_vector_layer(self) -> Optional[QgsVectorLayer]:
         layer = self.canvas.currentLayer()
         if isinstance(layer, QgsVectorLayer) and layer.isEditable():

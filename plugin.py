@@ -18,10 +18,16 @@ from qgis.PyQt.QtCore import QCoreApplication, Qt
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QDockWidget
 
-from .core.geometry_engine import GeometryEngine
-from .gui.canvas_widget import FilletCanvasWidget
-from .gui.map_tool import FilletMapTool
-from .gui.settings_widget import FilletSettingsWidget
+try:
+    from .core.geometry_engine import GeometryEngine
+    from .gui.canvas_widget import FilletCanvasWidget
+    from .gui.map_tool import FilletMapTool
+    from .gui.settings_widget import FilletSettingsWidget
+except (ImportError, ValueError):
+    from core.geometry_engine import GeometryEngine
+    from gui.canvas_widget import FilletCanvasWidget
+    from gui.map_tool import FilletMapTool
+    from gui.settings_widget import FilletSettingsWidget
 
 
 class FilletPlugin:
@@ -42,11 +48,19 @@ class FilletPlugin:
         return QCoreApplication.translate("FilletPlugin", message)
 
     def initGui(self):
-        # Create on-canvas CAD HUD widget
+        # 0. Clean up any leftover duplicate dock widgets from previous unloads/reloads
+        main_win = self.iface.mainWindow()
+        if main_win:
+            for old_dock in main_win.findChildren(QDockWidget, "FilletChamferDockWidget"):
+                self.iface.removeDockWidget(old_dock)
+                old_dock.setParent(None)
+                old_dock.deleteLater()
+
+        # 1. Create on-canvas CAD HUD widget
         self.canvas_widget = FilletCanvasWidget(self.canvas)
         self.canvas_widget.hide()
 
-        # Create settings widget for batch operations dock
+        # 2. Create settings widget for batch operations dock
         self.settings_widget = FilletSettingsWidget()
         self.dock_widget = QDockWidget(self.tr("Fillet / Chamfer (Пакетна обробка)"), self.iface.mainWindow())
         self.dock_widget.setObjectName("FilletChamferDockWidget")
@@ -57,10 +71,10 @@ class FilletPlugin:
         # Connect batch apply
         self.settings_widget.applyToSelectedRequested.connect(self.apply_to_selected_features)
 
-        # Create map tool with on-canvas widget
+        # 3. Create map tool with on-canvas widget
         self.map_tool = FilletMapTool(self.canvas, self.canvas_widget)
 
-        # Create action
+        # 4. Create action
         icon_path = os.path.join(self.plugin_dir, "resources", "icons", "fillet.svg")
         self.action = QAction(
             QIcon(icon_path),
@@ -86,29 +100,75 @@ class FilletPlugin:
         self.update_action_state()
 
     def unload(self):
+        # 1. Disconnect global signals
+        try:
+            self.iface.currentLayerChanged.disconnect(self.update_action_state)
+        except Exception:
+            pass
+        try:
+            self.canvas.mapToolSet.disconnect(self.on_map_tool_changed)
+        except Exception:
+            pass
+
+        # 2. Clean up action
         if self.action:
+            try:
+                self.action.triggered.disconnect(self.toggle_tool)
+            except Exception:
+                pass
             if self.iface.advancedDigitizeToolBar():
                 self.iface.advancedDigitizeToolBar().removeAction(self.action)
             self.iface.removeVectorToolBarIcon(self.action)
             self.iface.removePluginVectorMenu(self.tr("Fillet & Chamfer"), self.action)
-            del self.action
+            self.action.setParent(None)
+            self.action.deleteLater()
             self.action = None
 
-        if self.canvas_widget:
-            self.canvas_widget.hide()
-            del self.canvas_widget
-            self.canvas_widget = None
-
-        if self.dock_widget:
-            self.iface.removeDockWidget(self.dock_widget)
-            del self.dock_widget
-            self.dock_widget = None
-
+        # 3. Clean up map tool
         if self.map_tool:
             if self.canvas.mapTool() == self.map_tool:
                 self.canvas.unsetMapTool(self.map_tool)
-            del self.map_tool
+            if hasattr(self.map_tool, "cleanup"):
+                self.map_tool.cleanup()
+            else:
+                self.map_tool.deactivate()
+            self.map_tool.deleteLater()
             self.map_tool = None
+
+        # 4. Clean up canvas widget
+        if self.canvas_widget:
+            try:
+                self.canvas.removeEventFilter(self.canvas_widget)
+            except Exception:
+                pass
+            self.canvas_widget.hide()
+            self.canvas_widget.setParent(None)
+            self.canvas_widget.deleteLater()
+            self.canvas_widget = None
+
+        # 5. Clean up settings widget and dock widget
+        if self.settings_widget:
+            try:
+                self.settings_widget.applyToSelectedRequested.disconnect(self.apply_to_selected_features)
+            except Exception:
+                pass
+            self.settings_widget.setParent(None)
+            self.settings_widget.deleteLater()
+            self.settings_widget = None
+
+        if self.dock_widget:
+            self.iface.removeDockWidget(self.dock_widget)
+            self.dock_widget.setParent(None)
+            self.dock_widget.deleteLater()
+            self.dock_widget = None
+
+        # Purge any remaining duplicate dock widgets
+        main_win = self.iface.mainWindow()
+        if main_win:
+            for old_dock in main_win.findChildren(QDockWidget, "FilletChamferDockWidget"):
+                self.iface.removeDockWidget(old_dock)
+                old_dock.setParent(None)
+                old_dock.deleteLater()
 
     def toggle_tool(self, checked: bool):
         if checked:
