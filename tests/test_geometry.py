@@ -137,6 +137,38 @@ class TestGeometryEngine(unittest.TestCase):
         # Both distances must remain equal (isosceles)
         self.assertAlmostEqual(c1.y(), c2.x(), places=4)
 
+    def test_batch_process_polygon(self):
+        """Test batch applying fillet and chamfer to all vertices of a polygon."""
+        # Square: (0,0) -> (0,10) -> (10,10) -> (10,0) -> (0,0)
+        geom = QgsGeometry.fromPolygonXY(
+            [[QgsPointXY(0, 0), QgsPointXY(0, 10), QgsPointXY(10, 10), QgsPointXY(10, 0), QgsPointXY(0, 0)]]
+        )
+        # Batch fillet
+        fillet_geom = GeometryEngine.batch_process_geometry(geom, mode="fillet", radius=2.0, segments_count=8)
+        self.assertIsNotNone(fillet_geom)
+        self.assertTrue(fillet_geom.isGeosValid())
+        # Polygon should now have significantly more vertices due to 4 filleted corners
+        ext_ring = fillet_geom.constGet().exteriorRing()
+        self.assertGreater(ext_ring.numPoints(), 10)
+
+        # Batch chamfer
+        chamfer_geom = GeometryEngine.batch_process_geometry(geom, mode="chamfer", dist1=2.0, dist2=2.0)
+        self.assertIsNotNone(chamfer_geom)
+        self.assertTrue(chamfer_geom.isGeosValid())
+        # Square (4 corners) -> 8 corners + 1 closure = 9 points
+        chamfer_ring = chamfer_geom.constGet().exteriorRing()
+        self.assertEqual(chamfer_ring.numPoints(), 9)
+
+    def test_batch_process_linestring(self):
+        """Test batch applying fillet to all internal vertices of a linestring."""
+        # Zig-zag line: (0,0) -> (5,10) -> (10,0) -> (15,10)
+        geom = QgsGeometry.fromPolylineXY(
+            [QgsPointXY(0, 0), QgsPointXY(5, 10), QgsPointXY(10, 0), QgsPointXY(15, 10)]
+        )
+        fillet_geom = GeometryEngine.batch_process_geometry(geom, mode="fillet", radius=1.0, segments_count=4)
+        self.assertIsNotNone(fillet_geom)
+        self.assertGreater(fillet_geom.constGet().numPoints(), 4)
+
 
 if __name__ == "__main__":
     app = QgsApplication([], False)

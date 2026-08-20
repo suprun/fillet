@@ -724,3 +724,87 @@ class GeometryEngine:
             QgsPointXY(v.x(), v.y()),
             QgsPointXY(p_next.x(), p_next.y()),
         )
+
+    @classmethod
+    def batch_process_geometry(
+        cls,
+        geom: QgsGeometry,
+        mode: str,
+        radius: float = 0.0,
+        segments_count: int = 8,
+        dist1: float = 0.0,
+        dist2: float = 0.0,
+        use_true_curve: bool = False,
+    ) -> Optional[QgsGeometry]:
+        """
+        Batch applies fillet or chamfer to all corners of all parts and rings in the geometry.
+        """
+        if geom.isEmpty() or geom.isNull():
+            return None
+
+        geom_type = geom.type()
+        is_multi = geom.isMultipart()
+        curr_geom = QgsGeometry(geom)
+
+        if geom_type == QgsWkbTypes.LineGeometry:
+            abstract_geom = curr_geom.constGet()
+            if not abstract_geom:
+                return None
+            num_parts = abstract_geom.numGeometries() if is_multi else 1
+            for part_idx in range(num_parts):
+                curve = cls.get_vertex_curve(curr_geom, part_idx, 0)
+                if not curve:
+                    continue
+                n_pts = curve.numPoints()
+                if n_pts < 3:
+                    continue
+                is_closed = curve.isClosed()
+                start_v = n_pts - 2 if is_closed else n_pts - 2
+                end_v = 0 if is_closed else 1
+                for v_idx in range(start_v, end_v - 1, -1):
+                    if mode == "fillet":
+                        res = cls.apply_fillet_to_geometry(
+                            curr_geom, part_idx, 0, v_idx, radius, segments_count, use_true_curve
+                        )
+                    else:
+                        res = cls.apply_chamfer_to_geometry(
+                            curr_geom, part_idx, 0, v_idx, dist1, dist2
+                        )
+                    if res and not res.isEmpty():
+                        curr_geom = res
+
+        elif geom_type == QgsWkbTypes.PolygonGeometry:
+            abstract_geom = curr_geom.constGet()
+            if not abstract_geom:
+                return None
+            num_parts = abstract_geom.numGeometries() if is_multi else 1
+            for part_idx in range(num_parts):
+                poly = abstract_geom.geometryN(part_idx) if is_multi else abstract_geom
+                if not poly or not hasattr(poly, "numInteriorRings"):
+                    continue
+                num_rings = 1 + poly.numInteriorRings()
+                for ring_idx in range(num_rings):
+                    ring_curve = cls.get_vertex_curve(curr_geom, part_idx, ring_idx)
+                    if not ring_curve:
+                        continue
+                    n_pts = ring_curve.numPoints()
+                    effective_count = (
+                        n_pts - 1
+                        if (n_pts > 1 and ring_curve.pointN(0) == ring_curve.pointN(n_pts - 1))
+                        else n_pts
+                    )
+                    if effective_count < 3:
+                        continue
+                    for v_idx in range(effective_count - 1, -1, -1):
+                        if mode == "fillet":
+                            res = cls.apply_fillet_to_geometry(
+                                curr_geom, part_idx, ring_idx, v_idx, radius, segments_count, use_true_curve
+                            )
+                        else:
+                            res = cls.apply_chamfer_to_geometry(
+                                curr_geom, part_idx, ring_idx, v_idx, dist1, dist2
+                            )
+                        if res and not res.isEmpty():
+                            curr_geom = res
+
+        return curr_geom

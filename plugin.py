@@ -284,21 +284,12 @@ class FilletPlugin:
         d2: float,
     ) -> Optional[QgsGeometry]:
         """Applies fillet/chamfer to all vertices of a geometry."""
-        curr_geom = QgsGeometry(geom)
-        v_count = curr_geom.constGet().numPoints() if curr_geom.constGet() else 0
-        if v_count < 3:
-            return None
-
-        for v_idx in range(v_count - 1, -1, -1):
-            if mode == FilletSettingsWidget.MODE_FILLET:
-                res = GeometryEngine.apply_fillet_to_geometry(
-                    curr_geom, part_idx=0, ring_idx=0, vertex_idx=v_idx, radius=radius, segments_count=segments
-                )
-            else:
-                res = GeometryEngine.apply_chamfer_to_geometry(
-                    curr_geom, part_idx=0, ring_idx=0, vertex_idx=v_idx, dist1=d1, dist2=d2
-                )
-            if res and not res.isEmpty():
-                curr_geom = res
-
-        return curr_geom
+        engine_mode = "fillet" if mode == FilletSettingsWidget.MODE_FILLET else "chamfer"
+        return GeometryEngine.batch_process_geometry(
+            geom=geom,
+            mode=engine_mode,
+            radius=radius,
+            segments_count=segments,
+            dist1=d1,
+            dist2=d2,
+        )
