@@ -24,7 +24,7 @@ from qgis.gui import (
     QgsRubberBand,
     QgsSnapIndicator,
 )
-from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtCore import Qt, QTimer
 from qgis.PyQt.QtGui import QColor, QCursor
 from qgis.PyQt.QtWidgets import QApplication
 
@@ -79,7 +79,8 @@ class FilletMapTool(QgsMapToolEdit):
         self._clear_preview()
         if isinstance(self.widget, FilletCanvasWidget):
             self.widget.show_on_canvas()
-            self.widget.focus_primary_input()
+            QTimer.singleShot(0, self.widget.focus_primary_input)
+            QTimer.singleShot(50, self.widget.focus_primary_input)
 
     def deactivate(self):
         if isinstance(self.widget, FilletCanvasWidget):
@@ -235,7 +236,7 @@ class FilletMapTool(QgsMapToolEdit):
                         self._update_preview()
                         # Maintain focus on numeric stepper after first click
                         if isinstance(self.widget, FilletCanvasWidget):
-                            self.widget.focus_primary_input()
+                            QTimer.singleShot(0, self.widget.focus_primary_input)
 
             elif self.state == self.STATE_ADJUSTING:
                 # Second click commits the modification (Two-step CAD workflow)
@@ -290,11 +291,8 @@ class FilletMapTool(QgsMapToolEdit):
                 match.part_idx,
                 match.ring_idx,
                 match.vertex_idx,
-                is_fillet=True,
-                val1=radius,
+                radius=radius,
             )
-            stroke_color = QColor(37, 99, 235, 230)  # Blue #2563EB
-            fill_color = QColor(37, 99, 235, 65)
         else:
             dist1 = self.widget.distance1
             dist2 = self.widget.distance2
@@ -306,35 +304,26 @@ class FilletMapTool(QgsMapToolEdit):
                 dist1=dist1,
                 dist2=dist2,
             )
-            # Tangent points
-            t1, t2 = GeometryEngine.compute_tangent_points_for_vertex(
+            # Tangent points for chamfer
+            t1, t2 = GeometryEngine.compute_chamfer_tangent_points_for_vertex(
                 match.geometry,
                 match.part_idx,
                 match.ring_idx,
                 match.vertex_idx,
-                is_fillet=False,
-                val1=dist1,
-                val2=dist2,
+                dist1=dist1,
+                dist2=dist2,
             )
-            stroke_color = QColor(5, 150, 105, 230)  # Green #059669
-            fill_color = QColor(5, 150, 105, 65)
 
-        # 1. Update geometry preview
+        # 1. Update geometry rubberband (transformed to map coordinates)
+        stroke_color = QColor(255, 140, 0, 240)
+        fill_color = QColor(255, 165, 0, 45)
+
         if new_geom and not new_geom.isEmpty():
+            map_geom = self.toMapCoordinates(layer, new_geom)
             self.preview_geom = new_geom
-            if layer.geometryType() == QgsWkbTypes.PolygonGeometry:
-                self.preview_rubberband.reset(QgsWkbTypes.PolygonGeometry)
-                self.preview_rubberband.setFillColor(fill_color)
-                self.preview_rubberband.setStrokeColor(stroke_color)
-                self.preview_rubberband.setWidth(4)
-            else:
-                self.preview_rubberband.reset(QgsWkbTypes.LineGeometry)
-                self.preview_rubberband.setFillColor(QColor(0, 0, 0, 0))
-                self.preview_rubberband.setColor(stroke_color)
-                self.preview_rubberband.setWidth(4)
-
-            self.preview_rubberband.setLineStyle(Qt.DashLine)
-            self.preview_rubberband.setToGeometry(new_geom, layer)
+            self.preview_rubberband.setColor(stroke_color)
+            self.preview_rubberband.setFillColor(fill_color)
+            self.preview_rubberband.setToGeometry(map_geom, layer)
             self.preview_rubberband.show()
         else:
             self.preview_geom = None
@@ -383,6 +372,26 @@ class FilletMapTool(QgsMapToolEdit):
 
     def keyPressEvent(self, event):
         key = event.key()
+
+        # If user types digits or math symbols before first click or while hovering, redirect to numeric stepper
+        if event.text() and (event.text().isdigit() or event.text() in ".-+," or key == Qt.Key_Backspace):
+            if isinstance(self.widget, FilletCanvasWidget):
+                focused_widget = QApplication.focusWidget()
+                is_on_panel = False
+                if focused_widget:
+                    w = focused_widget
+                    while w is not None:
+                        if w == self.widget:
+                            is_on_panel = True
+                            break
+                        w = w.parent()
+                if not is_on_panel:
+                    self.widget.focus_primary_input()
+                    focused = QApplication.focusWidget()
+                    if focused:
+                        QApplication.sendEvent(focused, event)
+                    event.accept()
+                    return
 
         if key in (Qt.Key_Return, Qt.Key_Enter):
             # Commit with Enter

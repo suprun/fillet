@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
-  <pyqgis_plugin name="Fillet / Chamfer Tool for QGIS 3.x &amp; Batch Fillet / Chamfer Tool for 3.x and 4.x" version="0.1.0.36" plugin_id="fillet">
+  <pyqgis_plugin name="Fillet / Chamfer Tool for QGIS 3.x &amp; Batch Fillet / Chamfer Tool for 3.x and 4.x" version="0.1.0.37" plugin_id="fillet">
     <description>Interactive Fillet &amp; Chamfer tool for QGIS 3.x and Batch Fillet / Chamfer Tool for QGIS 3.x &amp; 4.x.</description>
     <about>Provides interactive CAD-like Fillet (corner rounding) and Chamfer (corner beveling) digitizing for QGIS 3.x, plus an instant Batch Processing panel for selected vector features in both QGIS 3.x and QGIS 4.x.</about>
-    <version>0.1.0.36</version>
+    <version>0.1.0.37</version>
     <qgis_minimum_version>3.16</qgis_minimum_version>
     <qgis_maximum_version>4.99</qgis_maximum_version>
     <file_name>fillet.zip</file_name>
