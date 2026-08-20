@@ -282,15 +282,7 @@ class FilletCanvasWidget(QFrame):
         self.btn_lock_dist2.setVisible(not is_fillet)
         self.btn_link.setVisible(not is_fillet)
 
-        self.adjustSize()
-
-        # Re-anchor to top-right corner to prevent gap or jumping
-        if not self._user_moved:
-            self.reposition_to_default()
-        else:
-            max_x = max(0, self.canvas.width() - self.width())
-            max_y = max(0, self.canvas.height() - self.height())
-            self.move(min(self.x(), max_x), min(self.y(), max_y))
+        self.reposition_to_default()
 
     def _on_link_toggled(self, checked: bool):
         self._update_link_icon()
@@ -315,61 +307,21 @@ class FilletCanvasWidget(QFrame):
             self.spin_dist2.blockSignals(False)
         self.parametersChanged.emit()
 
-    # --- Mouse Dragging Support ---
-    def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            self._drag_pos = event.globalPos() - self.frameGeometry().topLeft()
-            event.accept()
-        else:
-            super().mousePressEvent(event)
-
-    def mouseMoveEvent(self, event):
-        if self._drag_pos and event.buttons() == Qt.LeftButton:
-            new_pos = event.globalPos() - self._drag_pos
-            # Map to canvas coordinates
-            canvas_top_left = self.canvas.mapToGlobal(QPoint(0, 0))
-            rel_x = new_pos.x() - canvas_top_left.x()
-            rel_y = new_pos.y() - canvas_top_left.y()
-
-            # Bound inside canvas
-            max_x = max(0, self.canvas.width() - self.width())
-            max_y = max(0, self.canvas.height() - self.height())
-            rel_x = max(0, min(rel_x, max_x))
-            rel_y = max(0, min(rel_y, max_y))
-
-            self.move(rel_x, rel_y)
-            self._user_moved = True
-            event.accept()
-        else:
-            super().mouseMoveEvent(event)
-
-    def mouseReleaseEvent(self, event):
-        self._drag_pos = None
-        super().mouseReleaseEvent(event)
-
     def eventFilter(self, obj, event):
         if obj == self.canvas and event.type() == QEvent.Resize:
-            if not self._user_moved:
-                self.reposition_to_default()
-            else:
-                # Keep inside canvas
-                max_x = max(0, self.canvas.width() - self.width())
-                max_y = max(0, self.canvas.height() - self.height())
-                self.move(min(self.x(), max_x), min(self.y(), max_y))
+            self.reposition_to_default()
         return super().eventFilter(obj, event)
 
     def reposition_to_default(self):
-        """Positions the widget at top-right corner of the map canvas without margin."""
+        """Positions the widget firmly at top-right corner of the map canvas without margin."""
         self.adjustSize()
         x = max(0, self.canvas.width() - self.width())
         y = 0
         self.move(x, y)
 
     def show_on_canvas(self):
-        """Shows the widget on canvas and repositions to corner if not moved by user."""
-        self.adjustSize()
-        if not self._user_moved:
-            self.reposition_to_default()
+        """Shows the widget on canvas and repositions to the top-right corner."""
+        self.reposition_to_default()
         self.show()
         self.raise_()
 
