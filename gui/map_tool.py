@@ -2,8 +2,8 @@
 """
 Map tool for interactive Fillet & Chamfer editing in QGIS.
 Supports on-canvas CAD HUD widget, two-step CAD interaction model (QGIS 4.0 style),
-tangent touch points visualization, live preview with polygon transparency,
-and full keyboard navigation (Tab, Enter, Escape, Space).
+CRS-aware snapping square marker, tangent touch points visualization,
+live preview with polygon transparency, and full keyboard navigation (Tab, Enter, Escape, Space).
 """
 
 from typing import Optional, Union
@@ -50,14 +50,14 @@ class FilletMapTool(QgsMapToolEdit):
         self.current_match: Optional[VertexMatch] = None
         self.preview_geom: Optional[QgsGeometry] = None
 
-        # 1. System snapping square marker on vertex
+        # 1. System snapping square marker on vertex (rendered in map canvas CRS)
         self.marker_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.PointGeometry)
         self.marker_rubberband.setIcon(QgsRubberBand.ICON_BOX)
         self.marker_rubberband.setIconSize(12)
         self.marker_rubberband.setWidth(2)
         self.marker_rubberband.setColor(self._get_snap_color())
 
-        # 2. Tangent / touch point markers (T1, T2)
+        # 2. Tangent / touch point markers (T1, T2 rendered in map canvas CRS)
         self.tangent_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.PointGeometry)
         self.tangent_rubberband.setIcon(QgsRubberBand.ICON_CROSS)
         self.tangent_rubberband.setIconSize(10)
@@ -130,7 +130,7 @@ class FilletMapTool(QgsMapToolEdit):
             match = SnappingHelper.find_vertex_at_position(layer, self.canvas, map_point)
             if match:
                 self.current_match = match
-                self._show_vertex_marker(match.point)
+                self._show_vertex_marker(layer, match.point)
                 # If parameter is locked, show preview; if unlocked, only show snap marker until clicked
                 if self._is_current_parameter_locked():
                     self._update_preview()
@@ -142,20 +142,23 @@ class FilletMapTool(QgsMapToolEdit):
 
         elif self.state == self.STATE_ADJUSTING:
             if self.current_match and isinstance(self.widget, FilletCanvasWidget):
-                dist = GeometryEngine.distance(self.current_match.point, map_point)
-                if dist > 0.0001:
+                # Convert mouse point to layer CRS for correct distance calculation
+                layer_point = self.toLayerCoordinates(layer, map_point)
+                dist = GeometryEngine.distance(self.current_match.point, layer_point)
+                if dist > 0.000001:
+                    rounded_dist = round(dist, 4 if dist < 1.0 else 3)
                     if self.widget.mode == FilletCanvasWidget.MODE_FILLET:
                         if not self.widget.is_radius_locked:
-                            self.widget.set_radius(round(dist, 3), block_signals=True)
+                            self.widget.set_radius(rounded_dist, block_signals=True)
                     else:
                         if self.widget.is_linked:
                             if not self.widget.is_dist1_locked:
-                                self.widget.set_distance1(round(dist, 3), block_signals=True)
+                                self.widget.set_distance1(rounded_dist, block_signals=True)
                         else:
                             if not self.widget.is_dist1_locked:
-                                self.widget.set_distance1(round(dist, 3), block_signals=True)
+                                self.widget.set_distance1(rounded_dist, block_signals=True)
                             elif not self.widget.is_dist2_locked:
-                                self.widget.set_distance2(round(dist, 3), block_signals=True)
+                                self.widget.set_distance2(rounded_dist, block_signals=True)
             self._update_preview()
 
     def canvasPressEvent(self, event: QgsMapMouseEvent):
@@ -169,7 +172,7 @@ class FilletMapTool(QgsMapToolEdit):
                 match = SnappingHelper.find_vertex_at_position(layer, self.canvas, map_point)
                 if match:
                     self.current_match = match
-                    self._show_vertex_marker(match.point)
+                    self._show_vertex_marker(layer, match.point)
 
                     # If parameters are locked, single click can commit directly
                     if self._is_current_parameter_locked():
@@ -187,13 +190,15 @@ class FilletMapTool(QgsMapToolEdit):
             # Right click cancels active adjustment or clears preview
             self._cancel_operation()
 
-    def _show_vertex_marker(self, point: QgsPointXY):
+    def _show_vertex_marker(self, layer: QgsVectorLayer, point: QgsPointXY):
+        """Displays the snapping square marker transformed to map coordinates."""
+        map_pt = self.toMapCoordinates(layer, point)
         self.marker_rubberband.reset(QgsWkbTypes.PointGeometry)
         self.marker_rubberband.setIcon(QgsRubberBand.ICON_BOX)
         self.marker_rubberband.setIconSize(12)
         self.marker_rubberband.setWidth(2)
         self.marker_rubberband.setColor(self._get_snap_color())
-        self.marker_rubberband.addPoint(point, True)
+        self.marker_rubberband.addPoint(map_pt, True)
         self.marker_rubberband.show()
 
     def _update_preview(self):
@@ -278,12 +283,14 @@ class FilletMapTool(QgsMapToolEdit):
             self.preview_geom = None
             self.preview_rubberband.reset()
 
-        # 2. Update tangent touch markers
+        # 2. Update tangent touch markers (transformed to map coordinates)
         if t1 and t2:
+            t1_map = self.toMapCoordinates(layer, t1)
+            t2_map = self.toMapCoordinates(layer, t2)
             self.tangent_rubberband.reset(QgsWkbTypes.PointGeometry)
             self.tangent_rubberband.setColor(stroke_color)
-            self.tangent_rubberband.addPoint(t1, False)
-            self.tangent_rubberband.addPoint(t2, True)
+            self.tangent_rubberband.addPoint(t1_map, False)
+            self.tangent_rubberband.addPoint(t2_map, True)
             self.tangent_rubberband.show()
         else:
             self.tangent_rubberband.reset()
