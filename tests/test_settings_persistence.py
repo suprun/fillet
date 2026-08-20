@@ -55,7 +55,7 @@ class TestSettingsPersistence(unittest.TestCase):
         sw1.radio_chamfer.setChecked(True)
         sw1.spin_dist1.setValue(25.5)
         sw1.spin_dist2.setValue(12.3)
-        sw1.chk_equal_dist.setChecked(False)
+        sw1.btn_link.setChecked(False)
         sw1.spin_radius.setValue(7.5)
         sw1.spin_segments.setValue(16)
 
@@ -66,7 +66,7 @@ class TestSettingsPersistence(unittest.TestCase):
         self.assertEqual(sw2.mode, FilletSettingsWidget.MODE_CHAMFER)
         self.assertAlmostEqual(sw2.distance1, 25.5, places=2)
         self.assertAlmostEqual(sw2.distance2, 12.3, places=2)
-        self.assertFalse(sw2.chk_equal_dist.isChecked())
+        self.assertFalse(sw2.btn_link.isChecked())
         self.assertAlmostEqual(sw2.radius, 7.5, places=2)
         self.assertEqual(sw2.segments_count, 16)
 

@@ -1,19 +1,21 @@
 import os
 
 from qgis.core import QgsSettings
-from qgis.PyQt.QtCore import Qt, pyqtSignal
-from qgis.PyQt.QtGui import QCursor, QIcon
+from qgis.PyQt.QtCore import QSize, Qt, pyqtSignal
+from qgis.PyQt.QtGui import QCursor, QIcon, QPixmap, QTransform
 from qgis.PyQt.QtWidgets import (
     QButtonGroup,
-    QCheckBox,
     QDoubleSpinBox,
-    QFormLayout,
+    QGridLayout,
     QGroupBox,
     QHBoxLayout,
+    QLabel,
     QPushButton,
     QRadioButton,
+    QSizePolicy,
     QSpinBox,
     QStackedWidget,
+    QToolButton,
     QVBoxLayout,
     QWidget,
 )
@@ -41,6 +43,31 @@ class FilletSettingsWidget(QWidget):
         if os.path.exists(path):
             return QIcon(path)
         return QIcon()
+
+    def _get_rotated_icon(self, name: str, angle: float, target_size: int = 32) -> QIcon:
+        path = os.path.join(self._icons_dir, name)
+        if os.path.exists(path):
+            pm = QPixmap(path)
+            if not pm.isNull():
+                if pm.width() < target_size or pm.height() < target_size:
+                    pm = pm.scaled(
+                        target_size,
+                        target_size,
+                        Qt.KeepAspectRatio,
+                        Qt.SmoothTransformation,
+                    )
+                transform = QTransform().rotate(angle)
+                rotated_pm = pm.transformed(transform, Qt.SmoothTransformation)
+                return QIcon(rotated_pm)
+        return QIcon()
+
+    def _update_link_icon(self):
+        if self.btn_link.isChecked():
+            self.btn_link.setIcon(self._get_rotated_icon("mActionLink.svg", 90, 32))
+            self.btn_link.setToolTip(self.tr("Відстані зв'язані (d1 = d2)"))
+        else:
+            self.btn_link.setIcon(self._get_rotated_icon("mActionUnlink.svg", 90, 32))
+            self.btn_link.setToolTip(self.tr("Відстані роздільні (d1 ≠ d2)"))
 
     def _init_ui(self):
         main_layout = QVBoxLayout(self)
@@ -74,52 +101,69 @@ class FilletSettingsWidget(QWidget):
 
         # Fillet parameters page
         self.group_fillet = QGroupBox(self.tr("Параметри скруглення"), self)
-        fillet_layout = QFormLayout(self.group_fillet)
+        fillet_layout = QGridLayout(self.group_fillet)
         fillet_layout.setContentsMargins(6, 6, 6, 6)
-        fillet_layout.setSpacing(6)
+        fillet_layout.setHorizontalSpacing(6)
+        fillet_layout.setVerticalSpacing(6)
 
+        lbl_radius = QLabel(self.tr("Радіус (R):"), self.group_fillet)
         self.spin_radius = QDoubleSpinBox(self.group_fillet)
         self.spin_radius.setRange(0.0001, 9999999.0)
         self.spin_radius.setValue(5.0)
         self.spin_radius.setDecimals(3)
         self.spin_radius.setSingleStep(1.0)
         self.spin_radius.setMaximumWidth(160)
-        fillet_layout.addRow(self.tr("Радіус (R):"), self.spin_radius)
+        fillet_layout.addWidget(lbl_radius, 0, 0)
+        fillet_layout.addWidget(self.spin_radius, 0, 1)
 
+        lbl_segments = QLabel(self.tr("Кількість сегментів дуги:"), self.group_fillet)
         self.spin_segments = QSpinBox(self.group_fillet)
         self.spin_segments.setRange(2, 64)
         self.spin_segments.setValue(12)
         self.spin_segments.setMaximumWidth(160)
-        fillet_layout.addRow(self.tr("Кількість сегментів дуги:"), self.spin_segments)
+        fillet_layout.addWidget(lbl_segments, 1, 0)
+        fillet_layout.addWidget(self.spin_segments, 1, 1)
 
         self.stacked_params.addWidget(self.group_fillet)
 
         # Chamfer parameters page
         self.group_chamfer = QGroupBox(self.tr("Параметри фаски"), self)
-        chamfer_layout = QFormLayout(self.group_chamfer)
+        chamfer_layout = QGridLayout(self.group_chamfer)
         chamfer_layout.setContentsMargins(6, 6, 6, 6)
-        chamfer_layout.setSpacing(6)
+        chamfer_layout.setHorizontalSpacing(6)
+        chamfer_layout.setVerticalSpacing(6)
 
+        lbl_dist1 = QLabel(self.tr("Відстань 1 (d1):"), self.group_chamfer)
         self.spin_dist1 = QDoubleSpinBox(self.group_chamfer)
         self.spin_dist1.setRange(0.0001, 9999999.0)
         self.spin_dist1.setValue(5.0)
         self.spin_dist1.setDecimals(3)
         self.spin_dist1.setSingleStep(1.0)
         self.spin_dist1.setMaximumWidth(160)
-        chamfer_layout.addRow(self.tr("Відстань 1 (d1):"), self.spin_dist1)
+        chamfer_layout.addWidget(lbl_dist1, 0, 0)
+        chamfer_layout.addWidget(self.spin_dist1, 0, 1)
 
+        lbl_dist2 = QLabel(self.tr("Відстань 2 (d2):"), self.group_chamfer)
         self.spin_dist2 = QDoubleSpinBox(self.group_chamfer)
         self.spin_dist2.setRange(0.0001, 9999999.0)
         self.spin_dist2.setValue(5.0)
         self.spin_dist2.setDecimals(3)
         self.spin_dist2.setSingleStep(1.0)
         self.spin_dist2.setMaximumWidth(160)
-        chamfer_layout.addRow(self.tr("Відстань 2 (d2):"), self.spin_dist2)
-
-        self.chk_equal_dist = QCheckBox(self.tr("Однакові відстані (d1 = d2)"), self.group_chamfer)
-        self.chk_equal_dist.setChecked(True)
         self.spin_dist2.setEnabled(False)
-        chamfer_layout.addRow("", self.chk_equal_dist)
+        chamfer_layout.addWidget(lbl_dist2, 1, 0)
+        chamfer_layout.addWidget(self.spin_dist2, 1, 1)
+
+        # Tall narrow Link button spanning across Distance 1 and Distance 2 rows (rotated 90 degrees)
+        self.btn_link = QToolButton(self.group_chamfer)
+        self.btn_link.setCheckable(True)
+        self.btn_link.setChecked(True)
+        self.btn_link.setAutoRaise(True)
+        self.btn_link.setFixedWidth(28)
+        self.btn_link.setIconSize(QSize(24, 24))
+        self.btn_link.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
+        self._update_link_icon()
+        chamfer_layout.addWidget(self.btn_link, 0, 2, 2, 1)
 
         self.stacked_params.addWidget(self.group_chamfer)
         main_layout.addWidget(self.stacked_params)
@@ -137,10 +181,11 @@ class FilletSettingsWidget(QWidget):
             for child in spin.findChildren(QWidget):
                 if child != spin.lineEdit():
                     child.setCursor(QCursor(Qt.ArrowCursor))
+        self.btn_link.setCursor(QCursor(Qt.ArrowCursor))
 
         # Connections
         self.radio_fillet.toggled.connect(self._on_mode_changed)
-        self.chk_equal_dist.toggled.connect(self._on_equal_dist_toggled)
+        self.btn_link.toggled.connect(self._on_link_toggled)
         self.spin_dist1.valueChanged.connect(self._on_dist1_changed)
 
         self.spin_radius.valueChanged.connect(self.parametersChanged)
@@ -151,7 +196,7 @@ class FilletSettingsWidget(QWidget):
 
         # Save settings on any parameter change
         self.parametersChanged.connect(self._save_settings)
-        self.chk_equal_dist.toggled.connect(lambda _: self._save_settings())
+        self.btn_link.toggled.connect(lambda _: self._save_settings())
 
         # Load persisted settings from user profile
         self._load_settings()
@@ -170,10 +215,14 @@ class FilletSettingsWidget(QWidget):
             self.spin_segments.setValue(int(s.value("plugins/fillet/batch_segments", 12)))
             self.spin_dist1.setValue(float(s.value("plugins/fillet/batch_dist1", 5.0)))
             self.spin_dist2.setValue(float(s.value("plugins/fillet/batch_dist2", 5.0)))
-            self.chk_equal_dist.setChecked(s.value("plugins/fillet/batch_equal_dist", True, type=bool))
+            
+            # Load link state (support either key)
+            is_linked = s.value("plugins/fillet/batch_equal_dist", True, type=bool)
+            self.btn_link.setChecked(is_linked)
+            self._update_link_icon()
 
             self.stacked_params.setCurrentIndex(0 if self.mode == self.MODE_FILLET else 1)
-            self.spin_dist2.setEnabled(not self.chk_equal_dist.isChecked())
+            self.spin_dist2.setEnabled(not self.btn_link.isChecked())
         finally:
             self._is_loading = False
 
@@ -186,21 +235,23 @@ class FilletSettingsWidget(QWidget):
         s.setValue("plugins/fillet/batch_segments", self.spin_segments.value())
         s.setValue("plugins/fillet/batch_dist1", self.spin_dist1.value())
         s.setValue("plugins/fillet/batch_dist2", self.spin_dist2.value())
-        s.setValue("plugins/fillet/batch_equal_dist", self.chk_equal_dist.isChecked())
+        s.setValue("plugins/fillet/batch_equal_dist", self.btn_link.isChecked())
 
     def _on_mode_changed(self, is_fillet: bool):
         self.stacked_params.setCurrentIndex(0 if is_fillet else 1)
         self._save_settings()
         self.parametersChanged.emit()
 
-    def _on_equal_dist_toggled(self, checked: bool):
+    def _on_link_toggled(self, checked: bool):
+        self._update_link_icon()
         self.spin_dist2.setEnabled(not checked)
         if checked:
             self.spin_dist2.setValue(self.spin_dist1.value())
+        self._save_settings()
         self.parametersChanged.emit()
 
     def _on_dist1_changed(self, val: float):
-        if self.chk_equal_dist.isChecked():
+        if self.btn_link.isChecked():
             self.spin_dist2.setValue(val)
 
     @property
@@ -220,5 +271,9 @@ class FilletSettingsWidget(QWidget):
         return self.spin_dist1.value()
 
     @property
+    def is_linked(self) -> bool:
+        return self.btn_link.isChecked()
+
+    @property
     def distance2(self) -> float:
-        return self.spin_dist2.value() if not self.chk_equal_dist.isChecked() else self.spin_dist1.value()
+        return self.spin_dist1.value() if self.btn_link.isChecked() else self.spin_dist2.value()
