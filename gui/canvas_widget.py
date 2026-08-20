@@ -211,13 +211,17 @@ class FilletCanvasWidget(QFrame):
         grid_chamfer.addWidget(self.btn_lock_dist2, 1, 2)
 
         # Tall narrow Link button spanning across Distance 1 and Distance 2 rows (rotated 90 degrees)
+        policy_fixed = getattr(QSizePolicy.Policy, "Fixed", getattr(QSizePolicy, "Fixed", None))
+        policy_expanding = getattr(QSizePolicy.Policy, "Expanding", getattr(QSizePolicy, "Expanding", None))
+
         self.btn_link = QToolButton(self.widget_chamfer)
         self.btn_link.setCheckable(True)
         self.btn_link.setChecked(True)
         self.btn_link.setAutoRaise(True)
         self.btn_link.setFixedWidth(28)
         self.btn_link.setIconSize(QSize(24, 24))
-        self.btn_link.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
+        if policy_fixed is not None and policy_expanding is not None:
+            self.btn_link.setSizePolicy(policy_fixed, policy_expanding)
         self._update_link_icon()
         self.btn_link.toggled.connect(self._on_link_toggled)
 
@@ -277,11 +281,16 @@ class FilletCanvasWidget(QFrame):
             self.btn_lock_dist2,
             self.btn_link,
         ):
-            btn.setCursor(QCursor(Qt.ArrowCursor))
+            if arrow_cursor is not None:
+                btn.setCursor(QCursor(arrow_cursor))
 
     def _apply_style(self):
-        self.setFrameShape(QFrame.StyledPanel)
-        self.setFrameShadow(QFrame.Raised)
+        shape_panel = getattr(QFrame.Shape, "StyledPanel", getattr(QFrame, "StyledPanel", None))
+        shadow_raised = getattr(QFrame.Shadow, "Raised", getattr(QFrame, "Raised", None))
+        if shape_panel is not None:
+            self.setFrameShape(shape_panel)
+        if shadow_raised is not None:
+            self.setFrameShadow(shadow_raised)
         self.setAutoFillBackground(True)
 
         # Drop shadow effect for floating on canvas
@@ -412,9 +421,11 @@ class FilletCanvasWidget(QFrame):
         self.parametersChanged.emit()
 
     def eventFilter(self, obj, event):
-        if obj == self.canvas and event.type() == QEvent.Resize:
+        evt_resize = getattr(QEvent.Type, "Resize", getattr(QEvent, "Resize", None))
+        evt_focus_in = getattr(QEvent.Type, "FocusIn", getattr(QEvent, "FocusIn", None))
+        if obj == self.canvas and event.type() == evt_resize:
             self.reposition_to_default()
-        elif event.type() == QEvent.FocusIn:
+        elif event.type() == evt_focus_in:
             for spin in (self.spin_radius, self.spin_segments, self.spin_dist1, self.spin_dist2):
                 if obj == spin or (hasattr(spin, "lineEdit") and obj == spin.lineEdit()):
                     self._last_focused_spin = spin

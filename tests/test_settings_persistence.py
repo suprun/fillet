@@ -3,20 +3,32 @@
 Tests for settings persistence across sessions in FilletCanvasWidget and FilletSettingsWidget.
 """
 
+import os
+import sys
 import unittest
-from qgis.core import QgsCoordinateReferenceSystem, QgsSettings
-from qgis.gui import QgsMapCanvas
-from qgis.testing import start_app
 
-start_app()
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from qgis.core import QgsApplication, QgsCoordinateReferenceSystem, QgsSettings
+from qgis.gui import QgsMapCanvas
+
+app = QgsApplication([], False)
+app.initQgis()
 
 from gui.canvas_widget import FilletCanvasWidget
 from gui.settings_widget import FilletSettingsWidget
 
 
 class TestSettingsPersistence(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.canvas = QgsMapCanvas()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.canvas = None
+
     def setUp(self):
-        self.canvas = QgsMapCanvas()
         self.settings = QgsSettings()
         # Clean settings prefix
         self.settings.remove("plugins/fillet")
@@ -119,4 +131,8 @@ class TestSettingsPersistence(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestSettingsPersistence)
+    runner = unittest.TextTestRunner(verbosity=2)
+    result = runner.run(suite)
+    app.exitQgis()
+    sys.exit(0 if result.wasSuccessful() else 1)

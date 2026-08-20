@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 """Test plugin initGui and unload cleanup lifecycle."""
 
+import os
+import sys
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from qgis.core import QgsApplication
 from qgis.gui import QgsMapCanvas
 from qgis.PyQt.QtCore import pyqtSignal, QObject

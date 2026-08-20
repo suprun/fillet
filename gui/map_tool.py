@@ -28,6 +28,18 @@ from qgis.PyQt.QtCore import Qt, QTimer
 from qgis.PyQt.QtGui import QColor, QCursor
 from qgis.PyQt.QtWidgets import QApplication
 
+# Safe cross-version Qt5 / Qt6 constants
+_CrossCursor = getattr(Qt.CursorShape, "CrossCursor", getattr(Qt, "CrossCursor", None))
+_DashLine = getattr(Qt.PenStyle, "DashLine", getattr(Qt, "DashLine", 2))
+_LeftButton = getattr(Qt.MouseButton, "LeftButton", getattr(Qt, "LeftButton", 1))
+_RightButton = getattr(Qt.MouseButton, "RightButton", getattr(Qt, "RightButton", 2))
+_Key_Backspace = getattr(Qt.Key, "Key_Backspace", getattr(Qt, "Key_Backspace", 0x01000003))
+_Key_Return = getattr(Qt.Key, "Key_Return", getattr(Qt, "Key_Return", 0x01000004))
+_Key_Enter = getattr(Qt.Key, "Key_Enter", getattr(Qt, "Key_Enter", 0x01000005))
+_Key_Escape = getattr(Qt.Key, "Key_Escape", getattr(Qt, "Key_Escape", 0x01000000))
+_Key_Tab = getattr(Qt.Key, "Key_Tab", getattr(Qt, "Key_Tab", 0x01000001))
+_Key_Space = getattr(Qt.Key, "Key_Space", getattr(Qt, "Key_Space", 0x20))
+
 try:
     from ..core.geometry_engine import GeometryEngine
     from ..core.snapping_helper import SnappingHelper, VertexMatch
@@ -66,9 +78,11 @@ class FilletMapTool(QgsMapToolEdit):
         # 3. Geometry preview rubberband (configured dynamically for Polygon / Line)
         self.preview_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.PolygonGeometry)
         self.preview_rubberband.setWidth(4)
-        self.preview_rubberband.setLineStyle(Qt.DashLine)
+        if _DashLine is not None:
+            self.preview_rubberband.setLineStyle(_DashLine)
 
-        self.setCursor(QCursor(Qt.CrossCursor))
+        if _CrossCursor is not None:
+            self.setCursor(QCursor(_CrossCursor))
         self.widget.parametersChanged.connect(self._update_preview)
         if hasattr(self.widget, "commitRequested"):
             self.widget.commitRequested.connect(self._commit_change)
@@ -234,7 +248,7 @@ class FilletMapTool(QgsMapToolEdit):
                     self.widget.set_distance2(rounded_dist, block_signals=True)
 
     def canvasPressEvent(self, event: QgsMapMouseEvent):
-        if event.button() == Qt.LeftButton:
+        if event.button() == _LeftButton:
             layer = self.current_vector_layer()
             if not layer:
                 return
@@ -264,7 +278,7 @@ class FilletMapTool(QgsMapToolEdit):
             if isinstance(self.widget, FilletCanvasWidget):
                 QTimer.singleShot(0, self.widget.focus_primary_input)
 
-        elif event.button() == Qt.RightButton:
+        elif event.button() == _RightButton:
             # Right click cancels active adjustment or clears preview
             self._cancel_operation()
 
@@ -308,7 +322,7 @@ class FilletMapTool(QgsMapToolEdit):
                 radius=radius,
                 segments_count=segments,
             )
-            # Tangent points
+            # Tangent points for fillet
             t1, t2 = GeometryEngine.compute_tangent_points_for_vertex(
                 match.geometry,
                 match.part_idx,
@@ -316,6 +330,7 @@ class FilletMapTool(QgsMapToolEdit):
                 match.vertex_idx,
                 is_fillet=True,
                 val1=radius,
+                val2=radius,
             )
         else:
             dist1 = self.widget.distance1
@@ -360,7 +375,8 @@ class FilletMapTool(QgsMapToolEdit):
                 self.preview_rubberband.setColor(stroke_color)
                 self.preview_rubberband.setWidth(4)
 
-            self.preview_rubberband.setLineStyle(Qt.DashLine)
+            if _DashLine is not None:
+                self.preview_rubberband.setLineStyle(_DashLine)
             self.preview_rubberband.setToGeometry(new_geom, layer)
             self.preview_rubberband.show()
         else:
@@ -412,7 +428,7 @@ class FilletMapTool(QgsMapToolEdit):
         key = event.key()
 
         # If user types digits or math symbols before first click or while hovering, redirect to numeric stepper
-        if event.text() and (event.text().isdigit() or event.text() in ".-+," or key == Qt.Key_Backspace):
+        if event.text() and (event.text().isdigit() or event.text() in ".-+," or key == _Key_Backspace):
             if isinstance(self.widget, FilletCanvasWidget):
                 focused_widget = QApplication.focusWidget()
                 is_on_panel = False
@@ -431,17 +447,17 @@ class FilletMapTool(QgsMapToolEdit):
                     event.accept()
                     return
 
-        if key in (Qt.Key_Return, Qt.Key_Enter):
+        if key in (_Key_Return, _Key_Enter):
             # Commit with Enter
             self._commit_change()
             event.accept()
 
-        elif key == Qt.Key_Escape:
+        elif key == _Key_Escape:
             # Cancel with Escape
             self._cancel_operation()
             event.accept()
 
-        elif key == Qt.Key_Tab:
+        elif key == _Key_Tab:
             # When Tab is pressed, if focus is not on the HUD panel, jump to primary numeric stepper
             if isinstance(self.widget, FilletCanvasWidget):
                 focused_widget = QApplication.focusWidget()
@@ -460,7 +476,7 @@ class FilletMapTool(QgsMapToolEdit):
                 else:
                     super().keyPressEvent(event)
 
-        elif key == Qt.Key_Space:
+        elif key == _Key_Space:
             # Space toggles lock
             if isinstance(self.widget, FilletCanvasWidget):
                 self.widget.toggle_active_lock()

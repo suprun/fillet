@@ -4,11 +4,16 @@ Tests for translation files and loading.
 """
 
 import os
+import sys
 import unittest
-from qgis.PyQt.QtCore import QCoreApplication, QTranslator
-from qgis.testing import start_app
 
-start_app()
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from qgis.core import QgsApplication
+from qgis.PyQt.QtCore import QCoreApplication, QTranslator
+
+app = QgsApplication([], False)
+app.initQgis()
 
 from scripts.compile_translations import LANGUAGES, STRINGS
 
@@ -55,4 +60,8 @@ class TestTranslations(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestTranslations)
+    runner = unittest.TextTestRunner(verbosity=2)
+    result = runner.run(suite)
+    app.exitQgis()
+    sys.exit(0 if result.wasSuccessful() else 1)

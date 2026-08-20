@@ -100,8 +100,13 @@ class FilletSettingsWidget(QWidget):
         main_layout.addWidget(mode_group)
 
         # Stacked container for parameters
+        policy_preferred = getattr(QSizePolicy.Policy, "Preferred", getattr(QSizePolicy, "Preferred", None))
+        policy_maximum = getattr(QSizePolicy.Policy, "Maximum", getattr(QSizePolicy, "Maximum", None))
+        policy_fixed = getattr(QSizePolicy.Policy, "Fixed", getattr(QSizePolicy, "Fixed", None))
+
         self.stacked_params = QStackedWidget(self)
-        self.stacked_params.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
+        if policy_preferred is not None and policy_maximum is not None:
+            self.stacked_params.setSizePolicy(policy_preferred, policy_maximum)
 
         # Fillet parameters page
         self.group_fillet = QGroupBox(self.tr("Параметри скруглення"), self)
@@ -165,7 +170,8 @@ class FilletSettingsWidget(QWidget):
         self.btn_link.setAutoRaise(True)
         self.btn_link.setFixedWidth(28)
         self.btn_link.setIconSize(QSize(24, 24))
-        self.btn_link.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
+        if policy_fixed is not None and policy_preferred is not None:
+            self.btn_link.setSizePolicy(policy_fixed, policy_preferred)
         self._update_link_icon()
         chamfer_layout.addWidget(self.btn_link, 0, 2, 2, 1)
 
@@ -216,7 +222,8 @@ class FilletSettingsWidget(QWidget):
         self._load_settings()
 
     def eventFilter(self, obj, event):
-        if event.type() == QEvent.FocusIn:
+        focus_in = getattr(QEvent.Type, "FocusIn", getattr(QEvent, "FocusIn", None))
+        if event.type() == focus_in:
             for spin in (self.spin_radius, self.spin_segments, self.spin_dist1, self.spin_dist2):
                 if obj == spin or (hasattr(spin, "lineEdit") and obj == spin.lineEdit()):
                     QTimer.singleShot(0, lambda s=spin: self._select_all_spin(s))
