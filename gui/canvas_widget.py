@@ -381,6 +381,8 @@ class FilletCanvasWidget(QFrame):
         if checked:
             self.spin_dist2.setValue(self.spin_dist1.value())
             self.btn_lock_dist2.setChecked(self.btn_lock_dist1.isChecked())
+            self._last_focused_spin = self.spin_dist1
+            self.focus_primary_input()
         else:
             self.btn_lock_dist2.setChecked(False)
         self.parametersChanged.emit()
@@ -404,6 +406,9 @@ class FilletCanvasWidget(QFrame):
             for spin in (self.spin_radius, self.spin_segments, self.spin_dist1, self.spin_dist2):
                 if obj == spin or (hasattr(spin, "lineEdit") and obj == spin.lineEdit()):
                     self._last_focused_spin = spin
+                    for other in (self.spin_radius, self.spin_segments, self.spin_dist1, self.spin_dist2):
+                        if other != spin and hasattr(other, "lineEdit") and other.lineEdit():
+                            other.lineEdit().deselect()
                     QTimer.singleShot(0, lambda s=spin: self._select_all_spin(s))
         return super().eventFilter(obj, event)
 
@@ -415,8 +420,11 @@ class FilletCanvasWidget(QFrame):
             spin.selectAll()
 
     def _select_if_focused(self, spin):
-        """Keeps text fully selected during numeric stepper value updates."""
-        self._select_all_spin(spin)
+        """Keeps text fully selected only if this spinbox currently has keyboard focus."""
+        if spin.hasFocus() or (hasattr(spin, "lineEdit") and spin.lineEdit() and spin.lineEdit().hasFocus()):
+            self._select_all_spin(spin)
+        elif hasattr(spin, "lineEdit") and spin.lineEdit():
+            spin.lineEdit().deselect()
 
     def reposition_to_default(self):
         """Positions the widget firmly at top-right corner of the map canvas without margin."""
@@ -517,12 +525,16 @@ class FilletCanvasWidget(QFrame):
                 spin = self.spin_radius
         else:
             spin = getattr(self, "_last_focused_spin", None)
-            if spin not in (self.spin_dist1, self.spin_dist2):
-                spin = self.spin_dist1
-            elif spin == self.spin_dist2 and self.btn_link.isChecked():
+            if self.btn_link.isChecked() or spin not in (self.spin_dist1, self.spin_dist2):
                 spin = self.spin_dist1
 
         self._last_focused_spin = spin
+
+        # Clear selection on all other spinboxes so only the focused one is selected
+        for other in (self.spin_radius, self.spin_segments, self.spin_dist1, self.spin_dist2):
+            if other != spin and hasattr(other, "lineEdit") and other.lineEdit():
+                other.lineEdit().deselect()
+
         spin.setFocus()
         if hasattr(spin, "lineEdit") and spin.lineEdit():
             spin.lineEdit().setFocus()
