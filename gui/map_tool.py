@@ -161,6 +161,20 @@ class FilletMapTool(QgsMapToolEdit):
                 self._update_values_from_point(layer, map_point)
             self._update_preview()
 
+        # Keep focus on the HUD panel's numeric stepper if focus moved away
+        if isinstance(self.widget, FilletCanvasWidget):
+            focused_widget = QApplication.focusWidget()
+            is_on_panel = False
+            if focused_widget:
+                w = focused_widget
+                while w is not None:
+                    if w == self.widget:
+                        is_on_panel = True
+                        break
+                    w = w.parent()
+            if not is_on_panel:
+                self.widget.focus_primary_input()
+
     def _update_values_from_point(self, layer: QgsVectorLayer, map_point: QgsPointXY):
         """Calculates distance/radius from cursor point and updates active parameters in HUD widget."""
         if not self.current_match or not isinstance(self.widget, FilletCanvasWidget):
@@ -234,13 +248,14 @@ class FilletMapTool(QgsMapToolEdit):
                         # Calculate value directly from cursor position at first click
                         self._update_values_from_point(layer, map_point)
                         self._update_preview()
-                        # Maintain focus on numeric stepper after first click
-                        if isinstance(self.widget, FilletCanvasWidget):
-                            QTimer.singleShot(0, self.widget.focus_primary_input)
 
             elif self.state == self.STATE_ADJUSTING:
                 # Second click commits the modification (Two-step CAD workflow)
                 self._commit_change()
+
+            # Always restore focus to the primary numeric stepper after mouse click
+            if isinstance(self.widget, FilletCanvasWidget):
+                QTimer.singleShot(0, self.widget.focus_primary_input)
 
         elif event.button() == Qt.RightButton:
             # Right click cancels active adjustment or clears preview
