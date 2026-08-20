@@ -254,6 +254,14 @@ class FilletSettingsWidget(QWidget):
         s.setValue("plugins/fillet/batch_equal_dist", self.btn_link.isChecked())
 
     def _on_mode_changed(self, is_fillet: bool):
+        if not getattr(self, "_is_loading", False):
+            if is_fillet:
+                self.spin_radius.setValue(self.spin_dist1.value())
+            else:
+                self.spin_dist1.setValue(self.spin_radius.value())
+                if self.btn_link.isChecked():
+                    self.spin_dist2.setValue(self.spin_radius.value())
+
         self.stacked_params.setCurrentIndex(0 if is_fillet else 1)
         self._save_settings()
         self.parametersChanged.emit()

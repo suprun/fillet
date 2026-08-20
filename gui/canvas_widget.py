@@ -336,7 +336,18 @@ class FilletCanvasWidget(QFrame):
         s.setValue("plugins/fillet/link_dist", self.btn_link.isChecked())
 
     def _on_radio_mode_toggled(self):
-        mode = self.MODE_FILLET if self.radio_fillet.isChecked() else self.MODE_CHAMFER
+        is_fillet = self.radio_fillet.isChecked()
+        mode = self.MODE_FILLET if is_fillet else self.MODE_CHAMFER
+
+        # Transfer value between primary inputs (Radius <-> Distance 1)
+        if not getattr(self, "_is_loading", False):
+            if is_fillet:
+                self.spin_radius.setValue(self.spin_dist1.value())
+            else:
+                self.spin_dist1.setValue(self.spin_radius.value())
+                if self.btn_link.isChecked():
+                    self.spin_dist2.setValue(self.spin_radius.value())
+
         self._update_mode_visibility(mode)
         self.modeChanged.emit(mode)
         self.parametersChanged.emit()

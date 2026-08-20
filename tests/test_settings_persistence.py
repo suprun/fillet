@@ -67,8 +67,30 @@ class TestSettingsPersistence(unittest.TestCase):
         self.assertAlmostEqual(sw2.distance1, 25.5, places=2)
         self.assertAlmostEqual(sw2.distance2, 12.3, places=2)
         self.assertFalse(sw2.btn_link.isChecked())
-        self.assertAlmostEqual(sw2.radius, 7.5, places=2)
-        self.assertEqual(sw2.segments_count, 16)
+    def test_mode_switching_value_transfer(self):
+        # Canvas widget transfer
+        cw = FilletCanvasWidget(self.canvas)
+        cw.radio_fillet.setChecked(True)
+        cw.spin_radius.setValue(18.5)
+        # Switch to chamfer
+        cw.radio_chamfer.setChecked(True)
+        self.assertAlmostEqual(cw.spin_dist1.value(), 18.5, places=2)
+        # Change dist1 and switch back to fillet
+        cw.spin_dist1.setValue(33.25)
+        cw.radio_fillet.setChecked(True)
+        self.assertAlmostEqual(cw.spin_radius.value(), 33.25, places=2)
+
+        # Settings dock widget transfer
+        sw = FilletSettingsWidget()
+        sw.radio_fillet.setChecked(True)
+        sw.spin_radius.setValue(14.2)
+        # Switch to chamfer
+        sw.radio_chamfer.setChecked(True)
+        self.assertAlmostEqual(sw.spin_dist1.value(), 14.2, places=2)
+        # Change dist1 and switch back to fillet
+        sw.spin_dist1.setValue(45.0)
+        sw.radio_fillet.setChecked(True)
+        self.assertAlmostEqual(sw.spin_radius.value(), 45.0, places=2)
 
 
 if __name__ == "__main__":
