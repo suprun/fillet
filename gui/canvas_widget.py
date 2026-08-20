@@ -244,7 +244,7 @@ class FilletCanvasWidget(QFrame):
             self.btn_lock_dist2,
             self.btn_link,
         ):
-            btn.setCursor(QCursor(Qt.PointingHandCursor))
+            btn.setCursor(QCursor(Qt.ArrowCursor))
 
     def _apply_style(self):
         self.setFrameShape(QFrame.StyledPanel)

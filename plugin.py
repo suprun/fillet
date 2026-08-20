@@ -10,11 +10,12 @@ from typing import Optional
 from qgis.core import (
     Qgis,
     QgsGeometry,
+    QgsSettings,
     QgsVectorLayer,
     QgsWkbTypes,
 )
 from qgis.gui import QgisInterface
-from qgis.PyQt.QtCore import QCoreApplication, Qt
+from qgis.PyQt.QtCore import QCoreApplication, QLocale, QTranslator, Qt
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QDockWidget
 
@@ -38,11 +39,32 @@ class FilletPlugin:
         self.canvas = self.iface.mapCanvas()
         self.plugin_dir = os.path.dirname(__file__)
 
+        # Initialize translation
+        self.translator: Optional[QTranslator] = None
+        self._init_translator()
+
         self.action: Optional[QAction] = None
         self.map_tool: Optional[FilletMapTool] = None
         self.canvas_widget: Optional[FilletCanvasWidget] = None
         self.dock_widget: Optional[QDockWidget] = None
         self.settings_widget: Optional[FilletSettingsWidget] = None
+
+    def _init_translator(self):
+        locale_name = QgsSettings().value("locale/userLocale", "")
+        if not locale_name:
+            locale_name = QLocale().name()
+
+        candidates = [locale_name, locale_name.replace("-", "_"), locale_name[:2]]
+        i18n_dir = os.path.join(self.plugin_dir, "i18n")
+
+        for cand in candidates:
+            qm_path = os.path.join(i18n_dir, f"fillet_{cand}.qm")
+            if os.path.exists(qm_path):
+                translator = QTranslator()
+                if translator.load(qm_path):
+                    self.translator = translator
+                    QCoreApplication.installTranslator(self.translator)
+                    break
 
     def tr(self, message: str) -> str:
         return QCoreApplication.translate("FilletPlugin", message)
@@ -174,6 +196,11 @@ class FilletPlugin:
                 self.iface.removeDockWidget(old_dock)
                 old_dock.setParent(None)
                 old_dock.deleteLater()
+
+        # 6. Remove translator
+        if self.translator:
+            QCoreApplication.removeTranslator(self.translator)
+            self.translator = None
 
     def toggle_tool(self, checked: bool):
         if checked:
