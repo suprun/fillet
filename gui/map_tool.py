@@ -316,9 +316,13 @@ class FilletMapTool(QgsMapToolEdit):
                 val2=dist2,
             )
 
-        # 1. Update geometry rubberband (transformed to map coordinates)
-        stroke_color = QColor(255, 140, 0, 240)
-        fill_color = QColor(255, 165, 0, 45)
+        # 1. Update geometry rubberband (Blue for Fillet, Green for Chamfer)
+        if is_fillet:
+            stroke_color = QColor(37, 99, 235, 230)  # Blue #2563EB
+            fill_color = QColor(37, 99, 235, 65)
+        else:
+            stroke_color = QColor(5, 150, 105, 230)  # Green #059669
+            fill_color = QColor(5, 150, 105, 65)
 
         if new_geom and not new_geom.isEmpty():
             self.preview_geom = new_geom
