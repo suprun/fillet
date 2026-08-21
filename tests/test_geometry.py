@@ -281,6 +281,46 @@ class TestGeometryEngine(unittest.TestCase):
         ext_ring = restored.constGet().exteriorRing()
         self.assertEqual(ext_ring.numPoints(), 5)
 
+    def test_two_edge_restore_linestring(self):
+        """Test CAD Two-Edge corner restoration on LineString with multi-segment fillet."""
+        orig_line = QgsGeometry.fromPolylineXY([QgsPointXY(0, 20), QgsPointXY(0, 0), QgsPointXY(20, 0)])
+        f_line = GeometryEngine.apply_fillet_to_geometry(orig_line, 0, 0, 1, radius=5.0, segments_count=8)
+        self.assertEqual(len(f_line.asPolyline()), 11)
+
+        # Segment 1 is 0->1, Segment 2 is 9->10 (last segment)
+        last_seg_idx = len(f_line.asPolyline()) - 2
+        res = GeometryEngine.restore_sharp_corner_between_segments(f_line, 0, 0, 0, last_seg_idx)
+        self.assertIsNotNone(res)
+        new_geom, v_sharp = res
+        pts = new_geom.asPolyline()
+        self.assertEqual(len(pts), 3)
+        self.assertAlmostEqual(v_sharp.x(), 0.0, places=5)
+        self.assertAlmostEqual(v_sharp.y(), 0.0, places=5)
+        self.assertAlmostEqual(pts[1].x(), 0.0, places=5)
+        self.assertAlmostEqual(pts[1].y(), 0.0, places=5)
+
+    def test_two_edge_restore_polygon_and_closure(self):
+        """Test CAD Two-Edge corner restoration on Polygon across regular edges and closure vertex."""
+        orig_poly = QgsGeometry.fromPolygonXY(
+            [[QgsPointXY(0, 0), QgsPointXY(0, 20), QgsPointXY(20, 20), QgsPointXY(20, 0), QgsPointXY(0, 0)]]
+        )
+        filleted = GeometryEngine.batch_apply_geometry(orig_poly, mode="fillet", radius=3.0, segments_count=6)
+        
+        # 1. Restore corner (0, 20)
+        res_corner = GeometryEngine.restore_sharp_corner_between_segments(filleted, 0, 0, 0, 7)
+        self.assertIsNotNone(res_corner)
+        geom_c, v_c = res_corner
+        self.assertAlmostEqual(v_c.x(), 0.0, places=5)
+        self.assertAlmostEqual(v_c.y(), 20.0, places=5)
+
+        # 2. Restore wrap-around closure corner (0, 0)
+        f_pts_count = len(filleted.asPolygon()[0])
+        res_wrap = GeometryEngine.restore_sharp_corner_between_segments(filleted, 0, 0, f_pts_count - 8, 0)
+        self.assertIsNotNone(res_wrap)
+        geom_w, v_w = res_wrap
+        self.assertAlmostEqual(v_w.x(), 0.0, places=5)
+        self.assertAlmostEqual(v_w.y(), 0.0, places=5)
+
 
 if __name__ == "__main__":
     app = QgsApplication([], False)

@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Оброблено {} об'єкт(ів).</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>Пакетне відновлення кутів</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>Відновлення кутів</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>Видалити скруглення та фаски, відновивши гострі кути</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>Параметри відновлення кутів</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>Відстані роздільні (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>Restore</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>Крок 1: Клікніть на перше ребро кута</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>Клікніть на вершину для відновлення гострого кута.</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</translation>
         </message>
     </context>
     <context>

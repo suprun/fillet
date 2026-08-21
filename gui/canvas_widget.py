@@ -245,7 +245,7 @@ class FilletCanvasWidget(QFrame):
         layout_restore = QVBoxLayout(self.widget_restore)
         layout_restore.setContentsMargins(4, 4, 4, 4)
         layout_restore.setSpacing(2)
-        self.lbl_restore_info = QLabel(self.tr("Клікніть на дугу або фаску для відновлення гострого кута"), self.widget_restore)
+        self.lbl_restore_info = QLabel(self.tr("Крок 1: Клікніть на перше ребро кута"), self.widget_restore)
         self.lbl_restore_info.setStyleSheet("color: #718096; font-size: 11px; font-style: italic;")
         self.lbl_restore_info.setWordWrap(True)
         layout_restore.addWidget(self.lbl_restore_info)
@@ -433,6 +433,13 @@ class FilletCanvasWidget(QFrame):
         else:
             QWidget.setTabOrder(self.radio_restore, self.radio_fillet)
             QWidget.setTabOrder(self.radio_fillet, self.radio_chamfer)
+
+    def set_restore_step(self, step: int):
+        """Updates the interactive prompt on the restore control sub-widget."""
+        if step == 1:
+            self.lbl_restore_info.setText(self.tr("Крок 1: Клікніть на перше ребро кута"))
+        elif step == 2:
+            self.lbl_restore_info.setText(self.tr("Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)"))
 
     def _on_link_toggled(self, checked: bool):
         self._update_link_icon()

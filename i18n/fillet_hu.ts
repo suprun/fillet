@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>{} elem feldolgozva.</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>Sarkok kötegelt visszaállítása</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Lekerekítés vagy letörés alkalmazása a kijelölt elemek minden töréspontjára</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>Sarkok visszaállítása</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>Lekerekítések és letörések eltávolítása, éles sarkok visszaállítása</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>Sarok-visszaállítási paraméterek</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>Eltávolítja az összes észlelt lekerekítést és letörést, visszaállítva az eredeti éles sarkokat a kijelölt elemek minden töréspontjához.</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>Különálló távolságok (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>Visszaállítás</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>1. lépés: Kattintson a sarok első élére</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>Kattintson egy töréspontra az éles sarok visszaállításához.</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>2. lépés: Kattintson a szomszédos második élre (Jobb gomb a megszakításhoz)</translation>
         </message>
     </context>
     <context>

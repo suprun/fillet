@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Behandlet {} objekter.</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>Gjenopprett hjørner i batch</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Bruk avrunding eller avfasing på alle noder for valgte objekter</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>Gjenopprett hjørner</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>Fjern avrundinger og faser og gjenopprett skarpe hjørner</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>Parametere for gjenoppretting av hjørner</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>Fjerner alle oppdagede avrundinger og faser, og gjenoppretter originale skarpe hjørner for alle noder i valgte objekter.</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>Uavhengige avstander (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>Gjenopprett</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>Trinn 1: Klikk på det første segmentet av hjørnet</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>Klikk på en node for å gjenopprette det skarpe hjørnet.</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>Trinn 2: Klikk på det tilstøtende andre segmentet (Høyreklikk for å avbryte)</translation>
         </message>
     </context>
     <context>

@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>已处理 {} 个要素。</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>批量恢复尖角</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>将圆角或倒角应用到选中要素的所有顶点</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>恢复尖角</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>移除圆角和倒角，恢复尖锐角</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>恢复尖角参数</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>移除所有检测到的圆角和倒角，为所选要素的所有顶点恢复原始尖锐角。</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>距离独立 (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>恢复</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>步骤 1：单击角的第一个边</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>单击顶点以恢复尖锐角。</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>步骤 2：单击相邻的第二个边（右键取消）</translation>
         </message>
     </context>
     <context>

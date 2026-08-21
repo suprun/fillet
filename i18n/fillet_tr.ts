@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>{} detay işlendi.</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>Toplu Köşeleri Geri Yükle</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Seçili detayların tüm düğüm noktalarına yuvarlatma veya pah kırma uygula</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>Köşeleri Geri Yükle</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>Yuvarlatmaları ve pahları kaldırarak keskin köşeleri geri yükleyin</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>Köşe Geri Yükleme Parametreleri</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>Algılanan tüm yuvarlatmaları ve pahları kaldırarak seçili detayların tüm düğüm noktaları için orijinal keskin köşeleri geri yükler.</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>Mesafeler ayrı (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>Geri Yükle</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>Adım 1: Köşenin ilk kenarına tıklayın</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>Keskin köşeyi geri yüklemek için bir düğüm noktasına tıklayın.</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>Adım 2: Bitişik ikinci kenara tıklayın (İptal için sağ tıklayın)</translation>
         </message>
     </context>
     <context>

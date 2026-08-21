@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Töödeldud {} objekti.</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>Nurkade taastamine pakktöötluses</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Rakenda ümardamist või faasimist kõigile valitud objektide tippudele</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>Taasta nurgad</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>Eemalda ümardused ja faasid, taastades teravad nurgad</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>Nurkade taastamise parameetrid</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>Eemaldab kõik tuvastatud ümardused ja faasid, taastades valitud objektide kõigi tippude algsed teravad nurgad.</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>Kaugused eraldi (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>Taasta</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>1. samm: klõpsake nurga esimesel serval</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>Klõpsake tipul terava nurga taastamiseks.</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>2. samm: klõpsake külgneval teisel serval (Tühistamiseks paremklõps)</translation>
         </message>
     </context>
     <context>

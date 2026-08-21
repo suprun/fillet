@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Đã xử lý {} đối tượng.</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>Khôi phục góc hàng loạt</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Áp dụng bo tròn hoặc vát góc cho tất cả đỉnh của đối tượng được chọn</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>Khôi phục góc</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>Xóa bo tròn và vát mép, khôi phục góc nhọn</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>Thông số khôi phục góc</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>Xóa tất cả các góc bo tròn và vát mép được phát hiện, khôi phục các góc nhọn ban đầu cho tất cả các đỉnh của các đối tượng đã chọn.</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>Khoảng cách riêng biệt (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>Khôi phục</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>Bước 1: Nhấp vào cạnh đầu tiên của góc</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>Nhấp vào một đỉnh để khôi phục góc nhọn.</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>Bước 2: Nhấp vào cạnh thứ hai liền kề (Nhấp chuột phải để hủy)</translation>
         </message>
     </context>
     <context>

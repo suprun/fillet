@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Apstrādāti {} objekti.</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>Partijas stūru atjaunošana</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Lietot noapaļošanu vai nolīdzināšanu visām atlasīto objektu virsotnēm</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>Atjaunot stūrus</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>Noņemt noapaļojumus un nolīdzinājumus, atjaunojot asus stūrus</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>Stūru atjaunošanas parametri</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>Noņem visus atklātos noapaļojumus un nolīdzinājumus, atjaunojot sākotnējos asos stūrus visām atlasīto objektu virsotnēm.</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>Attālumi atsevišķi (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>Atjaunot</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>1. solis: noklikšķiniet uz stūra pirmās malas</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>Noklikšķiniet uz virsotnes, lai atjaunotu aso stūri.</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>2. solis: noklikšķiniet uz blakus esošās otrās malas (Labais klikšķis, lai atceltu)</translation>
         </message>
     </context>
     <context>

@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Przetworzono {} obiekt(ów).</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>Wsadowe przywracanie narożników</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Zastosuj zaokrąglenie lub ścięcie do wszystkich wierzchołków zaznaczonych obiektów</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>Przywróć narożniki</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>Usuń zaokrąglenia i fazowania, przywracając ostre narożniki</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>Parametry przywracania narożników</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>Usuwa wszystkie wykryte zaokrąglenia i fazowania, przywracając oryginalne ostre narożniki dla wszystkich wierzchołków zaznaczonych obiektów.</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>Odległości niezależne (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>Przywróć</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>Krok 1: Kliknij pierwszą krawędź narożnika</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>Kliknij wierzchołek, aby przywrócić ostry narożnik.</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>Krok 2: Kliknij sąsiednią drugą krawędź (PPM, aby anulować)</translation>
         </message>
     </context>
     <context>

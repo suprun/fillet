@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Processed {} feature(s).</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>Batch Restore Corners</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Apply fillet or chamfer to all vertices of selected features</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>Restore Corners</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>Remove fillets and chamfers, restoring sharp corners</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>Restore Corner Parameters</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>Removes all detected fillets and chamfers, restoring original sharp corners for all vertices of selected features.</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>Distances unlinked (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>Restore</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>Step 1: Click on the first edge of corner</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>Click on a vertex to restore sharp corner.</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>Step 2: Click on the adjacent second edge (RMB to cancel)</translation>
         </message>
     </context>
     <context>

@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Procesáronse {} entidades.</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>Restaurar esquinas por lotes</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Aplicar arredondamento ou chafrán a todos os vértices das entidades seleccionadas</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>Restaurar esquinas</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>Eliminar arredondamentos e chafráns restaurando esquinas vivas</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>Parámetros de restauración de esquinas</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>Elimina todos os arredondamentos e chafráns detectados, restaurando as esquinas vivas orixinais para todos os vértices das entidades seleccionadas.</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>Distancias separadas (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>Restaurar</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>Paso 1: Prema na primeira aresta da esquina</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>Prema nun vértice para restaurar a esquina viva.</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>Paso 2: Prema na segunda aresta adxacente (Botón dereito para cancelar)</translation>
         </message>
     </context>
     <context>

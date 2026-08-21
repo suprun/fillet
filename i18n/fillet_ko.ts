@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>{} 개 객체를 처리했습니다.</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>배치 모서리 복원</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>선택한 객체의 모든 꼭짓점에 필렛 또는 챔퍼 적용</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>모서리 복원</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>필렛 및 챔퍼를 제거하고 날카로운 모서리 복원</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>모서리 복원 매개변수</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>감지된 모든 필렛 및 챔퍼를 제거하고 선택한 객체의 모든 정점에 대해 원래의 날카로운 모서리를 복원합니다.</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>거리 개별 설정 (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>복원</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>1단계: 모서리의 첫 번째 가장자리를 클릭하세요</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>날카로운 모서리를 복원하려면 정점을 클릭하세요.</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>2단계: 인접한 두 번째 가장자리를 클릭하세요 (취소하려면 마우스 오른쪽 버튼 클릭)</translation>
         </message>
     </context>
     <context>

@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Processado(s) {} elemento(s).</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>Restaurar cantos em lote</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Aplicar concordância ou chanfro a todos os vértices dos elementos selecionados</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>Restaurar cantos</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>Remover concordâncias e chanfros, restaurando cantos vivos</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>Parâmetros de restauração de cantos</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>Remove todas as concordâncias e chanfros detectados, restaurando os cantos vivos originais para todos os vértices dos elementos selecionados.</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>Distâncias separadas (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>Restaurar</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>Passo 1: Clique na primeira aresta do canto</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>Clique em um vértice para restaurar o canto vivo.</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>Passo 2: Clique na segunda aresta adjacente (Botão direito para cancelar)</translation>
         </message>
     </context>
     <context>

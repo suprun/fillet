@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Обработени {} обекта.</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>Пакетно възстановяване на ъгли</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Приложи закръгляване или фаска към всички върхове на избраните обекти</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>Възстановяване на ъгли</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>Премахване на закръгляния и фаски и възстановяване на остри ъгли</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>Параметри за възстановяване на ъгли</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>Премахва всички открити закръгляния и фаски, като възстановява първоначалните остри ъгли за всички върхове на избраните обекти.</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>Разделни разстояния (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>Възстановяване</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>Стъпка 1: Щракнете върху първия ръб на ъгъла</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>Щракнете върху връх, за да възстановите острия ъгъл.</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>Стъпка 2: Щракнете върху съседния втори ръб (Десен бутон за отказ)</translation>
         </message>
     </context>
     <context>

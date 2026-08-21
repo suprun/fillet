@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>{} object(en) verwerkt.</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>Hoeken herstellen in batch</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Afronding of afschuining toepassen op alle hoekpunten van geselecteerde objecten</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>Hoeken herstellen</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>Afrondingen en afschuiningen verwijderen en scherpe hoeken herstellen</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>Parameters voor herstellen van hoeken</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>Verwijdert alle gedetecteerde afrondingen en afschuiningen en herstelt de oorspronkelijke scherpe hoeken voor alle hoekpunten van geselecteerde objecten.</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>Afstanden ontkoppeld (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>Herstellen</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>Stap 1: Klik op de eerste rand van de hoek</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>Klik op een hoekpunt om de scherpe hoek te herstellen.</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>Stap 2: Klik op de aangrenzende tweede rand (RMB om te annuleren)</translation>
         </message>
     </context>
     <context>

@@ -1158,5 +1158,252 @@ class GeometryEngine:
 
         return curr_geom
 
+    @classmethod
+    def restore_sharp_corner_between_segments_in_curve(
+        cls,
+        curve: QgsLineString,
+        seg1_idx: int,
+        seg2_idx: int,
+    ) -> Optional[Tuple[QgsLineString, QgsPoint]]:
+        """
+        Reconstructs sharp corner between seg1 (p[seg1] -> p[seg1+1]) and seg2 (p[seg2] -> p[seg2+1]).
+        Removes all intermediate vertices (the fillet/chamfer curve) between the two segments and inserts V_sharp.
+        """
+        if not curve or curve.numPoints() < 3:
+            return None
+
+        num_pts = curve.numPoints()
+        is_closed = curve.isClosed()
+        effective_count = (
+            num_pts - 1
+            if (is_closed and num_pts > 1 and curve.pointN(0) == curve.pointN(num_pts - 1))
+            else num_pts
+        )
+
+        if seg1_idx == seg2_idx:
+            return None
+
+        def get_pt(idx):
+            return curve.pointN(idx % effective_count if is_closed else idx)
+
+        # In open LineString
+        if not is_closed:
+            a = min(seg1_idx, seg2_idx)
+            b = max(seg1_idx, seg2_idx)
+            if a + 1 > b or b + 1 >= num_pts:
+                return None
+
+            p_a = get_pt(a)
+            p_a1 = get_pt(a + 1)
+            p_b = get_pt(b)
+            p_b1 = get_pt(b + 1)
+
+            # Line 1: p_a -> p_a1. Line 2: p_b1 -> p_b
+            v_sharp = cls.compute_line_intersection(p_a, p_a1, p_b1, p_b)
+            if not v_sharp:
+                return None
+
+            # Build new points: [0..a] + [v_sharp] + [b+1..num_pts-1]
+            new_pts = (
+                [get_pt(i) for i in range(a + 1)]
+                + [v_sharp]
+                + [get_pt(i) for i in range(b + 1, num_pts)]
+            )
+            res = QgsLineString()
+            for pt in new_pts:
+                res.addVertex(pt)
+            return res, v_sharp
+
+        # In closed Polygon / closed LineString
+        candidates = []
+        for s_from, s_to in [(seg1_idx, seg2_idx), (seg2_idx, seg1_idx)]:
+            if s_to >= s_from + 1:
+                removed_count = s_to - s_from
+            else:
+                removed_count = (effective_count - s_from - 1) + s_to + 1
+
+            p_from = get_pt(s_from)
+            p_from1 = get_pt(s_from + 1)
+            p_to = get_pt(s_to)
+            p_to1 = get_pt(s_to + 1)
+
+            v_sharp = cls.compute_line_intersection(p_from, p_from1, p_to1, p_to)
+            if not v_sharp:
+                continue
+
+            vin_x = p_from1.x() - p_from.x()
+            vin_y = p_from1.y() - p_from.y()
+            vout_x = p_to.x() - p_to1.x()
+            vout_y = p_to.y() - p_to1.y()
+
+            dot_in = vin_x * (v_sharp.x() - p_from1.x()) + vin_y * (v_sharp.y() - p_from1.y())
+            dot_out = vout_x * (v_sharp.x() - p_to.x()) + vout_y * (v_sharp.y() - p_to.y())
+
+            # Forward projection check
+            if dot_in > -1e-5 and dot_out > -1e-5:
+                candidates.append((removed_count, s_from, s_to, v_sharp))
+
+        if not candidates:
+            # Fallback: if dot product is slightly negative due to floating tolerance, take any valid intersection
+            for s_from, s_to in [(seg1_idx, seg2_idx), (seg2_idx, seg1_idx)]:
+                if s_to >= s_from + 1:
+                    removed_count = s_to - s_from
+                else:
+                    removed_count = (effective_count - s_from - 1) + s_to + 1
+                p_from = get_pt(s_from)
+                p_from1 = get_pt(s_from + 1)
+                p_to = get_pt(s_to)
+                p_to1 = get_pt(s_to + 1)
+                v_sharp = cls.compute_line_intersection(p_from, p_from1, p_to1, p_to)
+                if v_sharp:
+                    candidates.append((removed_count, s_from, s_to, v_sharp))
+
+        if not candidates:
+            return None
+
+        candidates.sort(key=lambda x: x[0])
+        _, s_from, s_to, v_sharp = candidates[0]
+
+        if s_to >= s_from + 1:
+            preserved_before = [get_pt(i) for i in range(s_from + 1)]
+            preserved_after = [get_pt(i) for i in range(s_to + 1, effective_count)]
+            new_pts = preserved_before + [v_sharp] + preserved_after
+        else:
+            preserved = [get_pt(i) for i in range(s_to + 1, s_from + 1)]
+            new_pts = preserved + [v_sharp]
+
+        if new_pts and (new_pts[0].x() != new_pts[-1].x() or new_pts[0].y() != new_pts[-1].y()):
+            new_pts.append(QgsPoint(new_pts[0].x(), new_pts[0].y()))
+
+        res = QgsLineString()
+        for pt in new_pts:
+            res.addVertex(pt)
+        return res, v_sharp
+
+    @classmethod
+    def restore_sharp_corner_between_segments(
+        cls,
+        geom: QgsGeometry,
+        part_idx: int,
+        ring_idx: int,
+        seg1_idx: int,
+        seg2_idx: int,
+    ) -> Optional[Tuple[QgsGeometry, QgsPoint]]:
+        """
+        Replaces the curve between seg1 and seg2 with a sharp intersection corner V_sharp.
+        Returns (new_geometry, v_sharp) or None.
+        """
+        if geom.isEmpty() or geom.isNull():
+            return None
+
+        geom_type = geom.type()
+        is_multi = geom.isMultipart()
+
+        if geom_type == QgsWkbTypes.LineGeometry:
+            if not is_multi:
+                curve = geom.constGet()
+                if not curve or not isinstance(curve, QgsLineString):
+                    return None
+                res = cls.restore_sharp_corner_between_segments_in_curve(curve, seg1_idx, seg2_idx)
+                if not res:
+                    return None
+                new_curve, v_sharp = res
+                return QgsGeometry(new_curve), v_sharp
+            else:
+                multi = geom.constGet()
+                if not multi or part_idx >= multi.numGeometries():
+                    return None
+                new_multi = QgsMultiLineString()
+                v_sharp_res = None
+                for p in range(multi.numGeometries()):
+                    line = multi.geometryN(p)
+                    if p == part_idx:
+                        res = cls.restore_sharp_corner_between_segments_in_curve(line, seg1_idx, seg2_idx)
+                        if res:
+                            new_line, v_sharp_res = res
+                            new_multi.addGeometry(new_line)
+                        else:
+                            new_multi.addGeometry(line.clone())
+                    else:
+                        new_multi.addGeometry(line.clone())
+                return (QgsGeometry(new_multi), v_sharp_res) if v_sharp_res else None
+
+        elif geom_type == QgsWkbTypes.PolygonGeometry:
+            if not is_multi:
+                poly = geom.constGet()
+                if not poly:
+                    return None
+                new_poly = QgsPolygon()
+                ext_ring = poly.exteriorRing()
+                if ext_ring is None:
+                    return None
+
+                v_sharp_res = None
+                if ring_idx == 0:
+                    res = cls.restore_sharp_corner_between_segments_in_curve(ext_ring, seg1_idx, seg2_idx)
+                    if res:
+                        new_ext, v_sharp_res = res
+                        new_poly.setExteriorRing(new_ext)
+                    else:
+                        new_poly.setExteriorRing(ext_ring.clone())
+                else:
+                    new_poly.setExteriorRing(ext_ring.clone())
+
+                for r in range(poly.numInteriorRings()):
+                    int_ring = poly.interiorRing(r)
+                    if ring_idx == r + 1:
+                        res = cls.restore_sharp_corner_between_segments_in_curve(int_ring, seg1_idx, seg2_idx)
+                        if res:
+                            new_int, v_sharp_res = res
+                            new_poly.addInteriorRing(new_int)
+                        else:
+                            new_poly.addInteriorRing(int_ring.clone())
+                    else:
+                        new_poly.addInteriorRing(int_ring.clone())
+
+                return (QgsGeometry(new_poly), v_sharp_res) if v_sharp_res else None
+            else:
+                multi = geom.constGet()
+                if not multi or part_idx >= multi.numGeometries():
+                    return None
+                new_multi = QgsMultiPolygon()
+                v_sharp_res = None
+                for p in range(multi.numGeometries()):
+                    poly = multi.geometryN(p)
+                    if p == part_idx:
+                        new_poly = QgsPolygon()
+                        ext_ring = poly.exteriorRing()
+                        if ext_ring is None:
+                            new_multi.addGeometry(poly.clone())
+                            continue
+                        if ring_idx == 0:
+                            res = cls.restore_sharp_corner_between_segments_in_curve(ext_ring, seg1_idx, seg2_idx)
+                            if res:
+                                new_ext, v_sharp_res = res
+                                new_poly.setExteriorRing(new_ext)
+                            else:
+                                new_poly.setExteriorRing(ext_ring.clone())
+                        else:
+                            new_poly.setExteriorRing(ext_ring.clone())
+
+                        for r in range(poly.numInteriorRings()):
+                            int_ring = poly.interiorRing(r)
+                            if ring_idx == r + 1:
+                                res = cls.restore_sharp_corner_between_segments_in_curve(int_ring, seg1_idx, seg2_idx)
+                                if res:
+                                    new_int, v_sharp_res = res
+                                    new_poly.addInteriorRing(new_int)
+                                else:
+                                    new_poly.addInteriorRing(int_ring.clone())
+                            else:
+                                new_poly.addInteriorRing(int_ring.clone())
+                        new_multi.addGeometry(new_poly)
+                    else:
+                        new_multi.addGeometry(poly.clone())
+
+                return (QgsGeometry(new_multi), v_sharp_res) if v_sharp_res else None
+
+        return None
+
     # Alias for backwards compatibility
     batch_process_geometry = batch_apply_geometry

@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Zpracováno {} prvků.</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>Dávkové obnovení rohů</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Použít zaoblení nebo zkosení na všechny lomové body vybraných prvků</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>Obnovit rohy</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>Odstranit zaoblení a zkosení a obnovit ostré rohy</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>Parametry obnovení rohů</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>Odstraní všechna zjištěná zaoblení a zkosení a obnoví původní ostré rohy pro všechny vrcholy vybraných prvků.</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>Vzdálenosti oddělené (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>Obnovit</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>Krok 1: Klikněte na první hranu rohu</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>Kliknutím na vrchol obnovíte ostrý roh.</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>Krok 2: Klikněte na sousední druhou hranu (Pravé tlačítko pro zrušení)</translation>
         </message>
     </context>
     <context>

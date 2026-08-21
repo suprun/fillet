@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>تمت معالجة {} معلم (معالم).</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>استعادة الزوايا دفعة واحدة</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>تطبيق التسطيح أو الشطب على جميع رؤوس المعالم المحددة</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>استعادة الزوايا</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>إزالة التقويس والشطب واستعادة الزوايا الحادة</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>معلمات استعادة الزوايا</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>يزيل جميع التقويسات والشتوب المكتشفة، ويعيد الزوايا الحادة الأصلية لجميع رؤوس المعالم المحددة.</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>المسافات منفصلة (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>استعادة</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>الخطوة 1: انقر فوق الحافة الأولى للزاوية</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>انقر فوق رأس لاستعادة الزاوية الحادة.</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>الخطوة 2: انقر فوق الحافة المجاورة الثانية (زر الفأرة الأيمن للإلغاء)</translation>
         </message>
     </context>
     <context>

@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Επεξεργάστηκαν {} στοιχεία.</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>Μαζική επαναφορά γωνιών</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Εφαρμογή στρογγυλοποίησης ή λοξότμησης σε όλες τις κορυφές των επιλεγμένων στοιχείων</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>Επαναφορά γωνιών</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>Αφαίρεση στρογγυλοποιήσεων και λοξοτμήσεων και επαναφορά αιχμηρών γωνιών</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>Παράμετροι επαναφοράς γωνιών</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>Αφαιρεί όλες τις εντοπισμένες στρογγυλοποιήσεις και λοξοτμήσεις, επαναφέροντας τις αρχικές αιχμηρές γωνίες για όλες τις κορυφές των επιλεγμένων στοιχείων.</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>Ανεξάρτητες αποστάσεις (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>Επαναφορά</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>Βήμα 1: Κάντε κλικ στην πρώτη ακμή της γωνίας</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>Κάντε κλικ σε μια κορυφή για να επαναφέρετε την αιχμηρή γωνία.</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>Βήμα 2: Κάντε κλικ στη γειτονική δεύτερη ακμή (Δεξί κλικ για ακύρωση)</translation>
         </message>
     </context>
     <context>

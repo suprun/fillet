@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Käsitelty {} kohdetta.</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>Kulmien eräpalautus</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Käytä pyöristystä tai viistettä valittujen kohteiden kaikkiin taitteisiin</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>Palauta kulmat</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>Poista pyöristykset ja viisteet palauttaen terävät kulmat</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>Kulmien palautusparametrit</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>Poistaa kaikki havaitut pyöristykset ja viisteet palauttaen alkuperäiset terävät kulmat kaikille valittujen kohteiden taitteille.</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>Erilliset etäisyydet (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>Palauta</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>Vaihe 1: Napsauta kulman ensimmäistä reunaa</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>Napsauta taitetta palauttaaksesi terävän kulman.</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>Vaihe 2: Napsauta viereistä toista reunaa (Oikea painike peruu)</translation>
         </message>
     </context>
     <context>

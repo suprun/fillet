@@ -194,14 +194,28 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
         tool._update_preview()
         self.assertIsNotNone(tool.preview_geom)
 
-        # 3. Restore mode
+        # 3. Restore mode (Two-Edge CAD selection)
         self.plugin.canvas_widget.radio_restore.setChecked(True)
         # Apply fillet first to test restore
         f_geom = GeometryEngine.apply_fillet_to_geometry(geom, part_idx=0, ring_idx=0, vertex_idx=1, radius=2.0, segments_count=6)
-        tool.current_match = VertexMatch(point=QgsPointXY(0.1, 1.8), vertex_idx=2, part_idx=0, ring_idx=0, fid=1, geometry=f_geom)
-        tool._update_preview()
-        self.assertIsNotNone(tool.preview_geom)
-        self.assertEqual(len(tool.preview_geom.asPolyline()), 3)
+        from core.snapping_helper import SegmentMatch
+        last_seg = len(f_geom.asPolyline()) - 2
+        tool.first_segment_match = SegmentMatch(
+            fid=1, part_idx=0, ring_idx=0, segment_idx=0,
+            point=QgsPointXY(0, 5), p1=QgsPointXY(0, 10), p2=QgsPointXY(0, 2),
+            geometry=f_geom
+        )
+        tool.current_segment_match = SegmentMatch(
+            fid=1, part_idx=0, ring_idx=0, segment_idx=last_seg,
+            point=QgsPointXY(5, 0), p1=QgsPointXY(2, 0), p2=QgsPointXY(10, 0),
+            geometry=f_geom
+        )
+        restore_res = GeometryEngine.restore_sharp_corner_between_segments(f_geom, 0, 0, 0, last_seg)
+        self.assertIsNotNone(restore_res)
+        new_g, v_pt = restore_res
+        self.assertEqual(len(new_g.asPolyline()), 3)
+        self.assertAlmostEqual(v_pt.x(), 0.0)
+        self.assertAlmostEqual(v_pt.y(), 0.0)
 
         layer.rollBack()
 

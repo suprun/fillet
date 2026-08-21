@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Обрађено {} објеката.</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>Пакетно враћање углова</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Примени заобљење или закошење на сва темена изабраних објеката</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>Врати углове</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>Уклони заобљења и закошења и врати оштре углове</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>Параметри враћања углова</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>Уклања сва откривена заобљења и закошења, враћајући изворне оштре углове за све тачке одабраних објеката.</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>Раздвојена растојања (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>Врати</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>Корак 1: Кликните на прву ивицу угла</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>Кликните на тачку да бисте вратили оштар угао.</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>Корак 2: Кликните на суседну другу ивицу (Десни клик за отказивање)</translation>
         </message>
     </context>
     <context>

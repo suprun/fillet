@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>{} 件の地物を処理しました。</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>角の一括復元</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>選択した地物のすべての頂点にフィレットまたは面取りを適用</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>角を復元</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>フィレットと面取りを削除して鋭角を復元</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>角復元パラメータ</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>検出されたすべてのフィレットと面取りを削除し、選択した地物のすべての頂点に対して元の鋭角を復元します。</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>距離を個別設定 (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>復元</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>ステップ1：角の最初の辺をクリック</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>頂点をクリックして鋭角を復元します。</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>ステップ2：隣接する2番目の辺をクリック（右クリックでキャンセル）</translation>
         </message>
     </context>
     <context>

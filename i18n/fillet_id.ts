@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Diproses {} fitur.</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>Pulihkan Sudut Massal</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Terapkan fillet atau chamfer ke semua simpul dari fitur yang dipilih</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>Pulihkan Sudut</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>Hapus fillet dan chamfer, pulihkan sudut tajam</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>Parameter Pemulihan Sudut</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>Menghapus semua fillet dan chamfer yang terdeteksi, memulihkan sudut tajam asli untuk semua simpul fitur yang dipilih.</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>Jarak terpisah (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>Pulihkan</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>Langkah 1: Klik tepi pertama sudut</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>Klik pada simpul untuk memulihkan sudut tajam.</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>Langkah 2: Klik tepi kedua yang berdekatan (Klik kanan untuk membatalkan)</translation>
         </message>
     </context>
     <context>

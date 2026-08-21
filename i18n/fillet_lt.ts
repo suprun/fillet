@@ -54,10 +54,6 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Apdorota {} objektų.</translation>
         </message>
-        <message>
-            <source>Пакетне відновлення кутів</source>
-            <translation>Paketinis kampų atkūrimas</translation>
-        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -117,22 +113,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Taikyti užapvalinimą arba nusklembimą visoms pasirinktų objektų viršūnėms</translation>
         </message>
-        <message>
-            <source>Відновлення кутів</source>
-            <translation>Atkurti kampus</translation>
-        </message>
-        <message>
-            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
-            <translation>Pašalinti užapvalinimus ir nusklemSingleimus, atkuriant aštrius kampus</translation>
-        </message>
-        <message>
-            <source>Параметри відновлення кутів</source>
-            <translation>Kampų atkūrimo parametrai</translation>
-        </message>
-        <message>
-            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
-            <translation>Pašalina visus aptiktus užapvalinimus ir nusklemSingleimus, atkuriant pradinius aštrius kampus visoms pasirinktų objektų viršūnėms.</translation>
-        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -181,12 +161,12 @@
             <translation>Atstumai nepriklausomi (d1 ≠ d2)</translation>
         </message>
         <message>
-            <source>Restore</source>
-            <translation>Atkurti</translation>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>1 žingsnis: spustelėkite pirmąją kampo briauną</translation>
         </message>
         <message>
-            <source>Клікніть на вершину для відновлення гострого кута.</source>
-            <translation>Spustelėkite viršūnę, kad atkurtumėte aštrų kampą.</translation>
+            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
+            <translation>2 žingsnis: spustelėkite gretimą antrąją briauną (Dešinysis pelės mygtukas atšaukti)</translation>
         </message>
     </context>
     <context>
