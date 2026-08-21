@@ -35,7 +35,6 @@ class FilletSettingsWidget(QWidget):
 
     MODE_FILLET = constants.MODE_FILLET
     MODE_CHAMFER = constants.MODE_CHAMFER
-    MODE_RESTORE = constants.MODE_RESTORE
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -96,17 +95,12 @@ class FilletSettingsWidget(QWidget):
         self.radio_chamfer = QRadioButton(self.tr("Фаска (Chamfer)"), mode_group)
         self.radio_chamfer.setIcon(self._get_icon("chamfer.svg"))
 
-        self.radio_restore = QRadioButton(self.tr("Відновлення кутів"), mode_group)
-        self.radio_restore.setToolTip(self.tr("Видалити скруглення та фаски, відновивши гострі кути"))
-
         self.btn_group_mode = QButtonGroup(self)
         self.btn_group_mode.addButton(self.radio_fillet)
         self.btn_group_mode.addButton(self.radio_chamfer)
-        self.btn_group_mode.addButton(self.radio_restore)
 
         mode_layout.addWidget(self.radio_fillet)
         mode_layout.addWidget(self.radio_chamfer)
-        mode_layout.addWidget(self.radio_restore)
         mode_layout.addStretch()
         main_layout.addWidget(mode_group)
 
@@ -188,19 +182,6 @@ class FilletSettingsWidget(QWidget):
 
         self.stacked_params.addWidget(self.group_chamfer)
 
-        # Restore parameters page
-        self.group_restore = QGroupBox(self.tr("Параметри відновлення кутів"), self)
-        restore_layout = QVBoxLayout(self.group_restore)
-        restore_layout.setContentsMargins(6, 6, 6, 6)
-        self.lbl_restore_desc = QLabel(
-            self.tr("Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів."),
-            self.group_restore,
-        )
-        self.lbl_restore_desc.setWordWrap(True)
-        self.lbl_restore_desc.setStyleSheet("color: #718096; font-size: 11px;")
-        restore_layout.addWidget(self.lbl_restore_desc)
-        self.stacked_params.addWidget(self.group_restore)
-
         main_layout.addWidget(self.stacked_params)
 
         # Batch apply button
@@ -231,7 +212,6 @@ class FilletSettingsWidget(QWidget):
         # Connections
         self.radio_fillet.toggled.connect(self._on_mode_changed)
         self.radio_chamfer.toggled.connect(self._on_mode_changed)
-        self.radio_restore.toggled.connect(self._on_mode_changed)
         self.btn_link.toggled.connect(self._on_link_toggled)
         self.spin_dist1.valueChanged.connect(self._on_dist1_changed)
 
@@ -270,8 +250,6 @@ class FilletSettingsWidget(QWidget):
             mode = s.value("plugins/fillet/batch_mode", self.MODE_FILLET, type=str)
             if mode == self.MODE_CHAMFER:
                 self.radio_chamfer.setChecked(True)
-            elif mode == self.MODE_RESTORE:
-                self.radio_restore.setChecked(True)
             else:
                 self.radio_fillet.setChecked(True)
 
@@ -279,7 +257,7 @@ class FilletSettingsWidget(QWidget):
             self.spin_segments.setValue(int(s.value("plugins/fillet/batch_segments", constants.DEFAULT_SEGMENTS_COUNT)))
             self.spin_dist1.setValue(float(s.value("plugins/fillet/batch_dist1", constants.DEFAULT_DIST1_METRIC)))
             self.spin_dist2.setValue(float(s.value("plugins/fillet/batch_dist2", constants.DEFAULT_DIST2_METRIC)))
-            
+
             # Load link state (support either key)
             is_linked = s.value("plugins/fillet/batch_equal_dist", constants.DEFAULT_LINK_DISTANCES, type=bool)
             self.btn_link.setChecked(is_linked)
@@ -304,10 +282,8 @@ class FilletSettingsWidget(QWidget):
     def _update_stacked_index(self):
         if self.mode == self.MODE_FILLET:
             self.stacked_params.setCurrentIndex(0)
-        elif self.mode == self.MODE_CHAMFER:
-            self.stacked_params.setCurrentIndex(1)
         else:
-            self.stacked_params.setCurrentIndex(2)
+            self.stacked_params.setCurrentIndex(1)
 
     def _on_mode_changed(self):
         mode = self.mode
@@ -337,20 +313,16 @@ class FilletSettingsWidget(QWidget):
 
     @property
     def mode(self) -> str:
-        if self.radio_fillet.isChecked():
-            return self.MODE_FILLET
-        elif self.radio_chamfer.isChecked():
+        if self.radio_chamfer.isChecked():
             return self.MODE_CHAMFER
-        return self.MODE_RESTORE
+        return self.MODE_FILLET
 
     @mode.setter
     def mode(self, value: str):
-        if value == self.MODE_FILLET:
-            self.radio_fillet.setChecked(True)
-        elif value == self.MODE_CHAMFER:
+        if value == self.MODE_CHAMFER:
             self.radio_chamfer.setChecked(True)
-        elif value == self.MODE_RESTORE:
-            self.radio_restore.setChecked(True)
+        else:
+            self.radio_fillet.setChecked(True)
 
     @property
     def radius(self) -> float:

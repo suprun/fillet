@@ -464,12 +464,10 @@ class FilletPlugin:
         d1 = self.settings_widget.distance1
         d2 = self.settings_widget.distance2
 
-        if mode == FilletSettingsWidget.MODE_FILLET:
-            cmd_title = self.tr("Пакетне скруглення")
-        elif mode == FilletSettingsWidget.MODE_CHAMFER:
+        if mode == FilletSettingsWidget.MODE_CHAMFER:
             cmd_title = self.tr("Пакетна фаска")
         else:
-            cmd_title = self.tr("Пакетне відновлення кутів")
+            cmd_title = self.tr("Пакетне скруглення")
 
         layer.beginEditCommand(cmd_title)
 
@@ -501,13 +499,8 @@ class FilletPlugin:
         d1: float,
         d2: float,
     ) -> Optional[QgsGeometry]:
-        """Applies fillet/chamfer/restore to all vertices of a geometry."""
-        if mode == FilletSettingsWidget.MODE_FILLET:
-            engine_mode = "fillet"
-        elif mode == FilletSettingsWidget.MODE_CHAMFER:
-            engine_mode = "chamfer"
-        else:
-            engine_mode = "restore"
+        """Applies fillet or chamfer to all vertices of a geometry."""
+        engine_mode = "chamfer" if mode == FilletSettingsWidget.MODE_CHAMFER else "fillet"
 
         return GeometryEngine.batch_apply_geometry(
             geom=geom,

@@ -739,281 +739,6 @@ class GeometryEngine:
         return QgsPoint(p1.x() + t * dx1, p1.y() + t * dy1)
 
     @classmethod
-    def detect_fillet_chamfer_span(
-        cls,
-        curve: Union[QgsLineString, QgsAbstractGeometry],
-        vertex_idx: int,
-    ) -> Optional[Tuple[int, int, QgsPoint]]:
-        """
-        Detects the arc or chamfer span [start_idx, end_idx] around vertex_idx and calculates V_sharp.
-        Returns: (start_idx, end_idx, V_sharp) or None
-        """
-        if not curve:
-            return None
-        num_pts = curve.numPoints()
-        if num_pts < 3:
-            return None
-
-        is_closed = curve.isClosed()
-        effective_count = (
-            num_pts - 1
-            if (is_closed and num_pts > 1 and curve.pointN(0) == curve.pointN(num_pts - 1))
-            else num_pts
-        )
-        if effective_count < 3:
-            return None
-
-        def get_pt(idx):
-            return curve.pointN(idx % effective_count if is_closed else idx)
-
-        k = vertex_idx % effective_count
-
-        # 1. Check for circular arc spans of length L in 3..65 (smallest to largest to find the tightest true arc)
-        for length in range(3, min(65, effective_count)):
-            for offset in range(length):
-                start_cand = (k - offset) % effective_count if is_closed else (k - offset)
-                end_cand = (start_cand + length - 1) % effective_count if is_closed else (start_cand + length - 1)
-                if not is_closed and (start_cand < 1 or end_cand + 1 >= num_pts):
-                    continue
-
-                p_in_prev = get_pt(start_cand - 1)
-                p_in = get_pt(start_cand)
-                p_out_prev = get_pt(end_cand + 1)
-                p_out = get_pt(end_cand)
-
-                v_sharp = cls.compute_line_intersection(p_in_prev, p_in, p_out_prev, p_out)
-                if not v_sharp:
-                    continue
-
-                vin_x, vin_y = p_in.x() - p_in_prev.x(), p_in.y() - p_in_prev.y()
-                vout_x, vout_y = p_out.x() - p_out_prev.x(), p_out.y() - p_out_prev.y()
-                dot_in = vin_x * (v_sharp.x() - p_in.x()) + vin_y * (v_sharp.y() - p_in.y())
-                dot_out = vout_x * (v_sharp.x() - p_out.x()) + vout_y * (v_sharp.y() - p_out.y())
-                if dot_in <= 1e-6 or dot_out <= 1e-6:
-                    continue
-
-                # Circumcircle through start, mid, end
-                mid_idx = (start_cand + length // 2) % effective_count if is_closed else (start_cand + length // 2)
-                p_mid = get_pt(mid_idx)
-
-                ax, ay = p_in.x(), p_in.y()
-                bx, by = p_mid.x(), p_mid.y()
-                cx, cy = p_out.x(), p_out.y()
-                d = 2 * (ax * (by - cy) + bx * (cy - ay) + cx * (ay - by))
-                if abs(d) < 1e-9:
-                    continue
-                ux = ((ax * ax + ay * ay) * (by - cy) + (bx * bx + by * by) * (cy - ay) + (cx * cx + cy * cy) * (ay - by)) / d
-                uy = ((ax * ax + ay * ay) * (cx - bx) + (bx * bx + by * by) * (ax - cx) + (cx * cx + cy * cy) * (bx - ax)) / d
-                radius = math.hypot(ax - ux, ay - uy)
-
-                # Tangency check at entry and exit
-                len_in = math.hypot(vin_x, vin_y)
-                len_out = math.hypot(vout_x, vout_y)
-                if len_in < 1e-9 or len_out < 1e-9 or radius < 1e-9:
-                    continue
-
-                tangent_dot_in = abs(vin_x * (ax - ux) + vin_y * (ay - uy)) / (len_in * radius)
-                tangent_dot_out = abs(vout_x * (cx - ux) + vout_y * (cy - uy)) / (len_out * radius)
-                if tangent_dot_in > 0.08 or tangent_dot_out > 0.08:
-                    continue
-
-                # Check circle tolerance for all intermediate points
-                is_valid_circle = True
-                for i in range(1, length - 1):
-                    cur_idx = (start_cand + i) % effective_count if is_closed else (start_cand + i)
-                    p_cur = get_pt(cur_idx)
-                    cur_r = math.hypot(p_cur.x() - ux, p_cur.y() - uy)
-                    if abs(cur_r - radius) > max(0.04 * radius, 0.005):
-                        is_valid_circle = False
-                        break
-
-                if is_valid_circle:
-                    return (start_cand, end_cand, v_sharp)
-
-        # 2. Check for 2-point chamfer [k, k+1] or [k-1, k]
-        for start_cand in [k, (k - 1) % effective_count if is_closed else k - 1]:
-            if not is_closed and (start_cand < 1 or start_cand + 2 >= num_pts):
-                continue
-            end_cand = (start_cand + 1) % effective_count if is_closed else start_cand + 1
-            p_in_prev = get_pt(start_cand - 1)
-            p_in = get_pt(start_cand)
-            p_out_prev = get_pt(end_cand + 1)
-            p_out = get_pt(end_cand)
-
-            # Chamfer touch points must NOT be sharp corners themselves
-            def turn_angle(pa, pb, pc):
-                v1x, v1y = pb.x() - pa.x(), pb.y() - pa.y()
-                v2x, v2y = pc.x() - pb.x(), pc.y() - pb.y()
-                c = v1x * v2y - v1y * v2x
-                d = v1x * v2x + v1y * v2y
-                return abs(math.atan2(c, d))
-
-            turn_start = turn_angle(p_in_prev, p_in, p_out)
-            turn_end = turn_angle(p_in, p_out, p_out_prev)
-            if turn_start > math.radians(65) or turn_end > math.radians(65):
-                continue
-            if turn_start < math.radians(5) or turn_end < math.radians(5):
-                continue
-
-            v_sharp = cls.compute_line_intersection(p_in_prev, p_in, p_out_prev, p_out)
-            if v_sharp:
-                vin_x, vin_y = p_in.x() - p_in_prev.x(), p_in.y() - p_in_prev.y()
-                vout_x, vout_y = p_out.x() - p_out_prev.x(), p_out.y() - p_out_prev.y()
-                dot_in = vin_x * (v_sharp.x() - p_in.x()) + vin_y * (v_sharp.y() - p_in.y())
-                dot_out = vout_x * (v_sharp.x() - p_out.x()) + vout_y * (v_sharp.y() - p_out.y())
-                if dot_in > 1e-6 and dot_out > 1e-6:
-                    d_to_sharp1 = math.hypot(v_sharp.x() - p_in.x(), v_sharp.y() - p_in.y())
-                    d_to_sharp2 = math.hypot(v_sharp.x() - p_out.x(), v_sharp.y() - p_out.y())
-                    if d_to_sharp1 > 1e-4 and d_to_sharp2 > 1e-4:
-                        return (start_cand, end_cand, v_sharp)
-
-        return None
-
-    @classmethod
-    def restore_sharp_corner_in_curve(
-        cls,
-        curve: QgsAbstractGeometry,
-        vertex_idx: int,
-    ) -> Optional[QgsAbstractGeometry]:
-        """
-        Restores the sharp corner in a curve at the given vertex by replacing the arc/chamfer span.
-        """
-        if not curve:
-            return None
-
-        ls = curve if isinstance(curve, QgsLineString) else QgsLineString(curve.points())
-        match = cls.detect_fillet_chamfer_span(ls, vertex_idx)
-        if not match:
-            return None
-
-        start_idx, end_idx, v_sharp = match
-        num_pts = ls.numPoints()
-        is_closed = ls.isClosed()
-        effective_count = (
-            num_pts - 1 if (is_closed and num_pts > 1 and ls.pointN(0) == ls.pointN(num_pts - 1)) else num_pts
-        )
-
-        if not is_closed:
-            new_pts = (
-                [ls.pointN(i) for i in range(start_idx)]
-                + [v_sharp]
-                + [ls.pointN(i) for i in range(end_idx + 1, num_pts)]
-            )
-        else:
-            if start_idx <= end_idx:
-                pts_before = [ls.pointN(i) for i in range(start_idx)]
-                pts_after = [ls.pointN(i) for i in range(end_idx + 1, effective_count)]
-                new_pts = pts_before + [v_sharp] + pts_after
-            else:
-                span_indices = set(list(range(start_idx, effective_count)) + list(range(0, end_idx + 1)))
-                preserved = [ls.pointN(i) for i in range(effective_count) if i not in span_indices]
-                new_pts = [v_sharp] + preserved
-
-            if new_pts and (new_pts[0].x() != new_pts[-1].x() or new_pts[0].y() != new_pts[-1].y()):
-                new_pts.append(QgsPoint(new_pts[0].x(), new_pts[0].y()))
-
-        res = QgsLineString()
-        for pt in new_pts:
-            res.addVertex(pt)
-        return res
-
-    @classmethod
-    def restore_sharp_corner_at_vertex(
-        cls,
-        geom: QgsGeometry,
-        part_idx: int,
-        ring_idx: int,
-        vertex_idx: int,
-    ) -> Optional[QgsGeometry]:
-        """
-        Removes a fillet or chamfer at the given vertex by restoring the sharp corner.
-        """
-        if geom.isEmpty() or geom.isNull():
-            return None
-
-        geom_type = geom.type()
-        is_multi = geom.isMultipart()
-
-        if geom_type == QgsWkbTypes.LineGeometry:
-            if not is_multi:
-                orig_curve = geom.constGet()
-                if not orig_curve:
-                    return None
-                new_curve = cls.restore_sharp_corner_in_curve(orig_curve, vertex_idx)
-                if not new_curve:
-                    return None
-                return QgsGeometry(new_curve)
-            else:
-                multi = geom.constGet()
-                if not multi or part_idx >= multi.numGeometries():
-                    return None
-                new_multi = QgsMultiLineString()
-                for p in range(multi.numGeometries()):
-                    line = multi.geometryN(p)
-                    if p == part_idx:
-                        new_line = cls.restore_sharp_corner_in_curve(line, vertex_idx)
-                        new_multi.addGeometry(new_line if new_line else line.clone())
-                    else:
-                        new_multi.addGeometry(line.clone())
-                return QgsGeometry(new_multi)
-
-        elif geom_type == QgsWkbTypes.PolygonGeometry:
-            if not is_multi:
-                poly = geom.constGet()
-                if not poly:
-                    return None
-                new_poly = QgsPolygon()
-                ext_ring = poly.exteriorRing()
-                if ext_ring is None:
-                    return None
-                if ring_idx == 0:
-                    new_ext = cls.restore_sharp_corner_in_curve(ext_ring, vertex_idx)
-                    new_poly.setExteriorRing(new_ext if new_ext else ext_ring.clone())
-                else:
-                    new_poly.setExteriorRing(ext_ring.clone())
-
-                for r in range(poly.numInteriorRings()):
-                    int_ring = poly.interiorRing(r)
-                    if ring_idx == r + 1:
-                        new_int = cls.restore_sharp_corner_in_curve(int_ring, vertex_idx)
-                        new_poly.addInteriorRing(new_int if new_int else int_ring.clone())
-                    else:
-                        new_poly.addInteriorRing(int_ring.clone())
-                return QgsGeometry(new_poly)
-            else:
-                multi = geom.constGet()
-                if not multi or part_idx >= multi.numGeometries():
-                    return None
-                new_multi = QgsMultiPolygon()
-                for p in range(multi.numGeometries()):
-                    poly = multi.geometryN(p)
-                    if p == part_idx:
-                        new_poly = QgsPolygon()
-                        ext_ring = poly.exteriorRing()
-                        if ext_ring is None:
-                            new_multi.addGeometry(poly.clone())
-                            continue
-                        if ring_idx == 0:
-                            new_ext = cls.restore_sharp_corner_in_curve(ext_ring, vertex_idx)
-                            new_poly.setExteriorRing(new_ext if new_ext else ext_ring.clone())
-                        else:
-                            new_poly.setExteriorRing(ext_ring.clone())
-
-                        for r in range(poly.numInteriorRings()):
-                            int_ring = poly.interiorRing(r)
-                            if ring_idx == r + 1:
-                                new_int = cls.restore_sharp_corner_in_curve(int_ring, vertex_idx)
-                                new_poly.addInteriorRing(new_int if new_int else int_ring.clone())
-                            else:
-                                new_poly.addInteriorRing(int_ring.clone())
-                        new_multi.addGeometry(new_poly)
-                    else:
-                        new_multi.addGeometry(poly.clone())
-                return QgsGeometry(new_multi)
-
-        return None
-
-    @classmethod
     def batch_apply_geometry(
         cls,
         geom: QgsGeometry,
@@ -1025,7 +750,7 @@ class GeometryEngine:
         use_true_curve: bool = False,
     ) -> Optional[QgsGeometry]:
         """
-        Batch applies fillet, chamfer, or sharp corner restoration to all corners of all parts and rings in the geometry.
+        Batch applies fillet or chamfer to all corners of all parts and rings in the geometry.
         """
         if geom.isEmpty() or geom.isNull():
             return None
@@ -1034,60 +759,74 @@ class GeometryEngine:
         is_multi = geom.isMultipart()
         curr_geom = QgsGeometry(geom)
 
-        if mode == "restore":
-            # For restore mode, repeatedly find and restore detected spans until none remain
-            if geom_type == QgsWkbTypes.LineGeometry:
-                for part_idx in range(num_parts):
-                    for _ in range(500):
-                        curve = cls.get_vertex_curve(curr_geom, part_idx, 0)
-                        if not curve or curve.numPoints() < 3:
-                            break
-                        found = False
-                        for v_idx in range(curve.numPoints()):
-                            m = cls.detect_fillet_chamfer_span(curve, v_idx)
-                            if m:
-                                res = cls.restore_sharp_corner_at_vertex(curr_geom, part_idx, 0, v_idx)
-                                if res and not res.isEmpty():
-                                    curr_geom = res
-                                    found = True
-                                    break
-                        if not found:
-                            break
-            elif geom_type == QgsWkbTypes.PolygonGeometry:
-                abstract_geom = curr_geom.constGet()
-                if not abstract_geom:
-                    return None
-                num_parts = abstract_geom.numGeometries() if is_multi else 1
-                for part_idx in range(num_parts):
-                    poly = abstract_geom.geometryN(part_idx) if is_multi else abstract_geom
-                    if not poly or not hasattr(poly, "numInteriorRings"):
+        if geom_type == QgsWkbTypes.LineGeometry:
+            abstract_geom = curr_geom.constGet()
+            if not abstract_geom:
+                return None
+            num_parts = abstract_geom.numGeometries() if is_multi else 1
+            for part_idx in range(num_parts):
+                curve = cls.get_vertex_curve(curr_geom, part_idx, 0)
+                if not curve:
+                    continue
+                n_pts = curve.numPoints()
+                if n_pts < 3:
+                    continue
+                is_closed = curve.isClosed()
+                start_v = n_pts - 2 if is_closed else n_pts - 2
+                end_v = 0 if is_closed else 1
+                for v_idx in range(start_v, end_v - 1, -1):
+                    if mode == "fillet":
+                        res = cls.apply_fillet_to_geometry(
+                            curr_geom, part_idx, 0, v_idx, radius, segments_count, use_true_curve
+                        )
+                    elif mode == "chamfer":
+                        res = cls.apply_chamfer_to_geometry(
+                            curr_geom, part_idx, 0, v_idx, dist1, dist2
+                        )
+                    else:
+                        res = None
+
+                    if res and not res.isEmpty():
+                        curr_geom = res
+
+        elif geom_type == QgsWkbTypes.PolygonGeometry:
+            abstract_geom = curr_geom.constGet()
+            if not abstract_geom:
+                return None
+            num_parts = abstract_geom.numGeometries() if is_multi else 1
+            for part_idx in range(num_parts):
+                poly = abstract_geom.geometryN(part_idx) if is_multi else abstract_geom
+                if not poly or not hasattr(poly, "numInteriorRings"):
+                    continue
+                num_rings = 1 + poly.numInteriorRings()
+                for ring_idx in range(num_rings):
+                    ring_curve = cls.get_vertex_curve(curr_geom, part_idx, ring_idx)
+                    if not ring_curve:
                         continue
-                    num_rings = 1 + poly.numInteriorRings()
-                    for ring_idx in range(num_rings):
-                        for _ in range(500):
-                            curve = cls.get_vertex_curve(curr_geom, part_idx, ring_idx)
-                            if not curve:
-                                break
-                            n_pts = curve.numPoints()
-                            eff = (
-                                n_pts - 1
-                                if (n_pts > 1 and curve.pointN(0) == curve.pointN(n_pts - 1))
-                                else n_pts
+                    n_pts = ring_curve.numPoints()
+                    effective_count = (
+                        n_pts - 1
+                        if (n_pts > 1 and ring_curve.pointN(0) == ring_curve.pointN(n_pts - 1))
+                        else n_pts
+                    )
+                    if effective_count < 3:
+                        continue
+                    for v_idx in range(effective_count - 1, -1, -1):
+                        if mode == "fillet":
+                            res = cls.apply_fillet_to_geometry(
+                                curr_geom, part_idx, ring_idx, v_idx, radius, segments_count, use_true_curve
                             )
-                            if eff < 3:
-                                break
-                            found = False
-                            for v_idx in range(eff):
-                                m = cls.detect_fillet_chamfer_span(curve, v_idx)
-                                if m:
-                                    res = cls.restore_sharp_corner_at_vertex(curr_geom, part_idx, ring_idx, v_idx)
-                                    if res and not res.isEmpty():
-                                        curr_geom = res
-                                        found = True
-                                        break
-                            if not found:
-                                break
-            return curr_geom
+                        elif mode == "chamfer":
+                            res = cls.apply_chamfer_to_geometry(
+                                curr_geom, part_idx, ring_idx, v_idx, dist1, dist2
+                            )
+                        else:
+                            res = None
+
+                        if res and not res.isEmpty():
+                            curr_geom = res
+
+        return curr_geom
 
         if geom_type == QgsWkbTypes.LineGeometry:
             abstract_geom = curr_geom.constGet()

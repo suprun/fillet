@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
-  <pyqgis_plugin name="Fillet, Chamfer &amp; Corner Restore (Interactive &amp; Batch)" version="1.0.0.8" plugin_id="fillet">
-    <description>Interactive Fillet, Chamfer &amp; Corner Restoration tools for QGIS with instant Batch Processing for selected features.</description>
-    <about>Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), and Two-Edge Corner Restoration (Unfillet / Unchamfer) map tools for QGIS, along with a batch processing dock panel for selected vector features across QGIS 3.x and QGIS 4.x.</about>
-    <version>1.0.0.8</version>
+  <pyqgis_plugin name="Fillet, Chamfer &amp; Corner Restore (Interactive &amp; Batch)" version="1.0.0.9" plugin_id="fillet">
+    <description>Interactive Fillet, Chamfer &amp; Corner Restoration tools for QGIS with instant Batch Fillet/Chamfer for selected features.</description>
+    <about>Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), and Two-Edge Corner Restoration (Unfillet / Unchamfer) map tools for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.</about>
+    <version>1.0.0.9</version>
     <qgis_minimum_version>3.16</qgis_minimum_version>
     <qgis_maximum_version>4.99</qgis_maximum_version>
     <file_name>fillet.zip</file_name>
@@ -14,7 +14,11 @@
     <experimental>False</experimental>
     <deprecated>False</deprecated>
     <tags>cad, editing, fillet, chamfer, unfillet, corner, restore, geometry, digitizing, curve, batch, qgis4</tags>
-    <change_log>1.0.0.8:
+    <change_log>1.0.0.9:
+- Removed batch corner restore from dock panel; corner restoration is exclusively available via the interactive CAD Two-Edge tool.
+- Updated Batch Processing panel to focus on batch Fillet and batch Chamfer operations.
+- Thoroughly revised English README and documentation.
+1.0.0.8:
 - Renamed plugin to reflect full CAD editing suite: Fillet, Chamfer &amp; Corner Restore.
 - Added dedicated toolbar button with QGIS delete-badge icon for interactive Corner Restoration.
 - Cleaned up interaction workflow and removed floating canvas banner for corner restoration.

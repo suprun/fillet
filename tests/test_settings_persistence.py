@@ -107,14 +107,6 @@ class TestSettingsPersistence(unittest.TestCase):
         sw.radio_fillet.setChecked(True)
         self.assertAlmostEqual(sw.spin_radius.value(), 45.0, places=2)
 
-    def test_restore_mode_persistence(self):
-        # Settings dock widget restore mode for batch processing
-        sw1 = FilletSettingsWidget()
-        sw1.radio_restore.setChecked(True)
-        sw1._save_settings()
-
-        sw2 = FilletSettingsWidget()
-        self.assertEqual(sw2.mode, FilletSettingsWidget.MODE_RESTORE)
 
     def test_crs_adaptation(self):
         # Geographic CRS (degrees)
