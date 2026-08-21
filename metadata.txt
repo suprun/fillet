@@ -1,5 +1,5 @@
 [general]
-name=Fillet, Chamfer & Corner Restore for QGIS 3.x and 4.x (Interactive & Batch)
+name=Fillet & Chamfer for QGIS 3.x (Interactive & Batch)
 qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
 description=Interactive Fillet, Chamfer & Corner Restoration tools for QGIS with instant Batch Fillet/Chamfer for selected features.
@@ -15,7 +15,7 @@ icon=icon.png
 experimental=False
 deprecated=False
 changelog=1.0.0.11:
-    - Updated plugin name to Fillet, Chamfer & Corner Restore for QGIS 3.x and 4.x (Interactive & Batch).
+    - Updated plugin name to Fillet & Chamfer for QGIS 3.x (Interactive & Batch).
     - Added interactive CAD Two-Edge Corner Restoration tool (Unfillet / Unchamfer) with real-time intersection preview.
     - Dedicated toolbar button with custom QGIS delete-badge icon for corner reconstruction.
     - Added Batch Processing dock panel for instant Fillet and Chamfer on selected features in QGIS 3.x and QGIS 4.x.

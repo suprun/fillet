@@ -1,9 +1,9 @@
 <div align="center">
 
-# Fillet, Chamfer & Corner Restore for QGIS 3.x and 4.x (Interactive & Batch)
+# Fillet & Chamfer for QGIS 3.x (Interactive & Batch)
 
 <p align="center">
-  <img src="icon.png" alt="Fillet, Chamfer & Corner Restore Logo" width="96" height="96" />
+  <img src="icon.png" alt="Fillet & Chamfer Logo" width="96" height="96" />
 </p>
 
 **Comprehensive CAD editing suite for QGIS: Interactive Fillet (corner rounding), Chamfer (corner beveling), and Two-Edge Corner Restoration (Unfillet / Unchamfer), plus instant Batch Fillet & Chamfer Processing for QGIS 3.x & 4.x.**
@@ -21,7 +21,7 @@
 
 ## 🌟 Overview
 
-The **Fillet, Chamfer & Corner Restore for QGIS 3.x and 4.x** plugin brings a complete suite of CAD-grade corner editing tools into QGIS:
+The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grade corner editing tools into QGIS:
 
 1. **Interactive Fillet & Chamfer CAD Tool (QGIS 3.x)**: Backports the interactive digitizing workflow introduced in QGIS 4.0 directly into the **QGIS 3.x LTR series** (from QGIS 3.16 to 3.44+), complete with an on-canvas CAD HUD widget.
 2. **Interactive Corner Restoration Tool / Unfillet & Unchamfer (QGIS 3.x & QGIS 4.x)**: A dedicated CAD Two-Edge selection tool allowing you to select two adjacent straight edges, remove intermediate arc chords or bevel segments, and reconstruct the exact sharp intersection corner ($V_{\text{sharp}}$).
@@ -95,7 +95,7 @@ The **Fillet, Chamfer & Corner Restore for QGIS 3.x and 4.x** plugin brings a co
 ### Method 1: Official QGIS Plugin Repository
 1. Open QGIS.
 2. Go to **Plugins** → **Manage and Install Plugins...**
-3. Search for **Fillet, Chamfer & Corner Restore**.
+3. Search for **Fillet & Chamfer**.
 4. Click **Install Plugin**.
 
 ### Method 2: Custom Plugin Repository

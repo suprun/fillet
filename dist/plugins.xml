@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
-  <pyqgis_plugin name="Fillet, Chamfer &amp; Corner Restore for QGIS 3.x and 4.x (Interactive &amp; Batch)" version="1.0.0.11" plugin_id="fillet">
+  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.11" plugin_id="fillet">
     <description>Interactive Fillet, Chamfer &amp; Corner Restoration tools for QGIS with instant Batch Fillet/Chamfer for selected features.</description>
     <about>Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), and Two-Edge Corner Restoration (Unfillet / Unchamfer) map tools for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.</about>
     <version>1.0.0.11</version>
@@ -15,7 +15,7 @@
     <deprecated>False</deprecated>
     <tags>cad, editing, fillet, chamfer, unfillet, corner, restore, geometry, digitizing, curve, batch, qgis4</tags>
     <change_log>1.0.0.11:
-- Updated plugin name to Fillet, Chamfer &amp; Corner Restore for QGIS 3.x and 4.x (Interactive &amp; Batch).
+- Updated plugin name to Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch).
 - Added interactive CAD Two-Edge Corner Restoration tool (Unfillet / Unchamfer) with real-time intersection preview.
 - Dedicated toolbar button with custom QGIS delete-badge icon for corner reconstruction.
 - Added Batch Processing dock panel for instant Fillet and Chamfer on selected features in QGIS 3.x and QGIS 4.x.
