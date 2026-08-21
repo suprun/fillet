@@ -71,14 +71,14 @@ class FilletMapTool(QgsMapToolEdit):
         self.snap_indicator = QgsSnapIndicator(self.canvas)
 
         # 2. Tangent / touch point markers (T1, T2 rendered in map canvas CRS)
-        self.tangent_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.PointGeometry)
-        self.tangent_rubberband.setIcon(QgsRubberBand.ICON_CROSS)
+        self.tangent_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
+        self.tangent_rubberband.setIcon(QgsRubberBand.IconType.ICON_CROSS)
         self.tangent_rubberband.setIconSize(10)
         self.tangent_rubberband.setWidth(2)
         self.tangent_rubberband.setColor(QColor(255, 140, 0, 240))
 
         # 3. Geometry preview rubberband (configured dynamically for Polygon / Line)
-        self.preview_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.PolygonGeometry)
+        self.preview_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PolygonGeometry)
         self.preview_rubberband.setWidth(4)
         if _DashLine is not None:
             self.preview_rubberband.setLineStyle(_DashLine)
@@ -301,7 +301,7 @@ class FilletMapTool(QgsMapToolEdit):
         """Displays the native QGIS system snapping indicator on vertex."""
         map_point = self.toMapCoordinates(layer, match.point)
         loc_match = QgsPointLocator.Match(
-            QgsPointLocator.Vertex,
+            QgsPointLocator.Type.Vertex,
             layer,
             match.fid,
             0.0,
@@ -376,13 +376,13 @@ class FilletMapTool(QgsMapToolEdit):
         # 1. Update geometry rubberband
         if new_geom and not new_geom.isEmpty():
             self.preview_geom = new_geom
-            if layer.geometryType() == QgsWkbTypes.PolygonGeometry:
-                self.preview_rubberband.reset(QgsWkbTypes.PolygonGeometry)
+            if layer.geometryType() == QgsWkbTypes.GeometryType.PolygonGeometry:
+                self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
                 self.preview_rubberband.setFillColor(fill_color)
                 self.preview_rubberband.setStrokeColor(stroke_color)
                 self.preview_rubberband.setWidth(4)
             else:
-                self.preview_rubberband.reset(QgsWkbTypes.LineGeometry)
+                self.preview_rubberband.reset(QgsWkbTypes.GeometryType.LineGeometry)
                 self.preview_rubberband.setFillColor(QColor(0, 0, 0, 0))
                 self.preview_rubberband.setColor(stroke_color)
                 self.preview_rubberband.setWidth(4)
@@ -399,7 +399,7 @@ class FilletMapTool(QgsMapToolEdit):
         if t1 and t2:
             t1_map = self.toMapCoordinates(layer, t1)
             t2_map = self.toMapCoordinates(layer, t2)
-            self.tangent_rubberband.reset(QgsWkbTypes.PointGeometry)
+            self.tangent_rubberband.reset(QgsWkbTypes.GeometryType.PointGeometry)
             self.tangent_rubberband.setColor(stroke_color)
             self.tangent_rubberband.addPoint(t1_map, False)
             self.tangent_rubberband.addPoint(t2_map, True)

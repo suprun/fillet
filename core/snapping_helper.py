@@ -56,7 +56,7 @@ class SnappingHelper:
             return None
 
         geom_type = layer.geometryType()
-        if geom_type not in (QgsWkbTypes.LineGeometry, QgsWkbTypes.PolygonGeometry):
+        if geom_type not in (QgsWkbTypes.GeometryType.LineGeometry, QgsWkbTypes.GeometryType.PolygonGeometry):
             return None
 
         # Determine search tolerance in map units
@@ -117,7 +117,7 @@ class SnappingHelper:
             return None
 
         geom_type = layer.geometryType()
-        if geom_type not in (QgsWkbTypes.LineGeometry, QgsWkbTypes.PolygonGeometry):
+        if geom_type not in (QgsWkbTypes.GeometryType.LineGeometry, QgsWkbTypes.GeometryType.PolygonGeometry):
             return None
 
         search_radius = QgsTolerance.vertexSearchRadius(layer, canvas.mapSettings()) * 1.5

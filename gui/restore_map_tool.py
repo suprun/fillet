@@ -52,23 +52,23 @@ class RestoreMapTool(QgsMapToolEdit):
         self.preview_geom: Optional[QgsGeometry] = None
 
         # 1. Edge selection rubberbands
-        self.edge1_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.LineGeometry)
+        self.edge1_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.LineGeometry)
         self.edge1_rubberband.setWidth(4)
         self.edge1_rubberband.setColor(QColor(234, 88, 12, 230))  # Amber
 
-        self.edge2_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.LineGeometry)
+        self.edge2_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.LineGeometry)
         self.edge2_rubberband.setWidth(4)
         self.edge2_rubberband.setColor(QColor(245, 158, 11, 230))  # Light Amber
 
         # 2. Geometry preview rubberband
-        self.preview_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.PolygonGeometry)
+        self.preview_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PolygonGeometry)
         self.preview_rubberband.setWidth(4)
         if _DashLine is not None:
             self.preview_rubberband.setLineStyle(_DashLine)
 
         # 3. Corner intersection marker rubberband
-        self.corner_marker = QgsRubberBand(self.canvas, QgsWkbTypes.PointGeometry)
-        self.corner_marker.setIcon(QgsRubberBand.ICON_CROSS)
+        self.corner_marker = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
+        self.corner_marker.setIcon(QgsRubberBand.IconType.ICON_CROSS)
         self.corner_marker.setIconSize(10)
         self.corner_marker.setWidth(2)
         self.corner_marker.setColor(QColor(234, 88, 12, 255))
@@ -111,7 +111,7 @@ class RestoreMapTool(QgsMapToolEdit):
                 self.current_segment_match = match
                 p1_map = self.toMapCoordinates(layer, match.p1)
                 p2_map = self.toMapCoordinates(layer, match.p2)
-                self.edge1_rubberband.reset(QgsWkbTypes.LineGeometry)
+                self.edge1_rubberband.reset(QgsWkbTypes.GeometryType.LineGeometry)
                 self.edge1_rubberband.setColor(QColor(234, 88, 12, 230))
                 self.edge1_rubberband.setWidth(4)
                 self.edge1_rubberband.addPoint(p1_map, False)
@@ -137,7 +137,7 @@ class RestoreMapTool(QgsMapToolEdit):
                 self.current_segment_match = m2
                 p1_map = self.toMapCoordinates(layer, m2.p1)
                 p2_map = self.toMapCoordinates(layer, m2.p2)
-                self.edge2_rubberband.reset(QgsWkbTypes.LineGeometry)
+                self.edge2_rubberband.reset(QgsWkbTypes.GeometryType.LineGeometry)
                 self.edge2_rubberband.setColor(QColor(245, 158, 11, 230))
                 self.edge2_rubberband.setWidth(4)
                 self.edge2_rubberband.addPoint(p1_map, False)
@@ -152,13 +152,13 @@ class RestoreMapTool(QgsMapToolEdit):
                     self.preview_geom = new_geom
                     stroke_color = QColor(234, 88, 12, 230)
                     fill_color = QColor(234, 88, 12, 65)
-                    if layer.geometryType() == QgsWkbTypes.PolygonGeometry:
-                        self.preview_rubberband.reset(QgsWkbTypes.PolygonGeometry)
+                    if layer.geometryType() == QgsWkbTypes.GeometryType.PolygonGeometry:
+                        self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
                         self.preview_rubberband.setFillColor(fill_color)
                         self.preview_rubberband.setStrokeColor(stroke_color)
                         self.preview_rubberband.setWidth(4)
                     else:
-                        self.preview_rubberband.reset(QgsWkbTypes.LineGeometry)
+                        self.preview_rubberband.reset(QgsWkbTypes.GeometryType.LineGeometry)
                         self.preview_rubberband.setFillColor(QColor(0, 0, 0, 0))
                         self.preview_rubberband.setColor(stroke_color)
                         self.preview_rubberband.setWidth(4)
@@ -169,7 +169,7 @@ class RestoreMapTool(QgsMapToolEdit):
 
                     v_xy = QgsPointXY(v_sharp.x(), v_sharp.y())
                     v_map = self.toMapCoordinates(layer, v_xy)
-                    self.corner_marker.reset(QgsWkbTypes.PointGeometry)
+                    self.corner_marker.reset(QgsWkbTypes.GeometryType.PointGeometry)
                     self.corner_marker.setColor(stroke_color)
                     self.corner_marker.addPoint(v_map, True)
                     self.corner_marker.show()

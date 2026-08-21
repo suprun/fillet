@@ -4,7 +4,7 @@ qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
 description=Interactive Fillet, Chamfer & Corner Restoration tools for QGIS with instant Batch Fillet/Chamfer for selected features.
 about=Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), and Two-Edge Corner Restoration (Unfillet / Unchamfer) map tools for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.
-version=1.0.0.9
+version=1.0.0.10
 author=suprun
 email=suprun.serhiy+qgis@gmail.com
 homepage=https://github.com/suprun/fillet
@@ -14,7 +14,9 @@ tags=cad, editing, fillet, chamfer, unfillet, corner, restore, geometry, digitiz
 icon=icon.png
 experimental=False
 deprecated=False
-changelog=1.0.0.9:
+changelog=1.0.0.10:
+    - Fixed all Qt6 / PyQt6 scoped enum compatibility issues (QgsWkbTypes.GeometryType, QgsRubberBand.IconType, QgsPointLocator.Type).
+    1.0.0.9:
     - Removed batch corner restore from dock panel; corner restoration is exclusively available via the interactive CAD Two-Edge tool.
     - Updated Batch Processing panel to focus on batch Fillet and batch Chamfer operations.
     - Thoroughly revised English README and documentation.
@@ -39,7 +41,7 @@ changelog=1.0.0.9:
     - Analytical line intersection geometry reconstruction for arcs and bevels.
     - Added 3rd mode in floating on-canvas HUD and batch dock panel.
     - Updated translations in 40 languages.
-    1.0.0.3:
+    1.0.0.0:
     - Initial release of Fillet & Chamfer Tool.
     - Interactive CAD digitizing tool with floating on-canvas HUD for QGIS 3.x (3.16-3.44).
     - Batch Fillet & Chamfer dock panel for selected features in QGIS 3.x and 4.x.

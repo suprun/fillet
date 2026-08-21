@@ -402,7 +402,7 @@ class GeometryEngine:
         geom_type = geom.type()
         is_multi = geom.isMultipart()
 
-        if geom_type == QgsWkbTypes.LineGeometry:
+        if geom_type == QgsWkbTypes.GeometryType.LineGeometry:
             if not is_multi:
                 curve = geom.constGet()
                 if not curve:
@@ -424,7 +424,7 @@ class GeometryEngine:
                         new_multi.addGeometry(c.clone())
                 return QgsGeometry(new_multi)
 
-        elif geom_type == QgsWkbTypes.PolygonGeometry:
+        elif geom_type == QgsWkbTypes.GeometryType.PolygonGeometry:
             if not is_multi:
                 poly = geom.constGet()
                 if not poly:
@@ -501,7 +501,7 @@ class GeometryEngine:
         geom_type = geom.type()
         is_multi = geom.isMultipart()
 
-        if geom_type == QgsWkbTypes.LineGeometry:
+        if geom_type == QgsWkbTypes.GeometryType.LineGeometry:
             if not is_multi:
                 curve = geom.constGet()
                 if not curve:
@@ -523,7 +523,7 @@ class GeometryEngine:
                         new_multi.addGeometry(c.clone())
                 return QgsGeometry(new_multi)
 
-        elif geom_type == QgsWkbTypes.PolygonGeometry:
+        elif geom_type == QgsWkbTypes.GeometryType.PolygonGeometry:
             if not is_multi:
                 poly = geom.constGet()
                 if not poly:
@@ -593,14 +593,14 @@ class GeometryEngine:
             return None
         geom_type = geom.type()
         is_multi = geom.isMultipart()
-        if geom_type == QgsWkbTypes.LineGeometry:
+        if geom_type == QgsWkbTypes.GeometryType.LineGeometry:
             if not is_multi:
                 return geom.constGet()
             else:
                 multi = geom.constGet()
                 if multi and part_idx < multi.numGeometries():
                     return multi.geometryN(part_idx)
-        elif geom_type == QgsWkbTypes.PolygonGeometry:
+        elif geom_type == QgsWkbTypes.GeometryType.PolygonGeometry:
             if not is_multi:
                 poly = geom.constGet()
                 if poly:
@@ -759,7 +759,7 @@ class GeometryEngine:
         is_multi = geom.isMultipart()
         curr_geom = QgsGeometry(geom)
 
-        if geom_type == QgsWkbTypes.LineGeometry:
+        if geom_type == QgsWkbTypes.GeometryType.LineGeometry:
             abstract_geom = curr_geom.constGet()
             if not abstract_geom:
                 return None
@@ -789,76 +789,7 @@ class GeometryEngine:
                     if res and not res.isEmpty():
                         curr_geom = res
 
-        elif geom_type == QgsWkbTypes.PolygonGeometry:
-            abstract_geom = curr_geom.constGet()
-            if not abstract_geom:
-                return None
-            num_parts = abstract_geom.numGeometries() if is_multi else 1
-            for part_idx in range(num_parts):
-                poly = abstract_geom.geometryN(part_idx) if is_multi else abstract_geom
-                if not poly or not hasattr(poly, "numInteriorRings"):
-                    continue
-                num_rings = 1 + poly.numInteriorRings()
-                for ring_idx in range(num_rings):
-                    ring_curve = cls.get_vertex_curve(curr_geom, part_idx, ring_idx)
-                    if not ring_curve:
-                        continue
-                    n_pts = ring_curve.numPoints()
-                    effective_count = (
-                        n_pts - 1
-                        if (n_pts > 1 and ring_curve.pointN(0) == ring_curve.pointN(n_pts - 1))
-                        else n_pts
-                    )
-                    if effective_count < 3:
-                        continue
-                    for v_idx in range(effective_count - 1, -1, -1):
-                        if mode == "fillet":
-                            res = cls.apply_fillet_to_geometry(
-                                curr_geom, part_idx, ring_idx, v_idx, radius, segments_count, use_true_curve
-                            )
-                        elif mode == "chamfer":
-                            res = cls.apply_chamfer_to_geometry(
-                                curr_geom, part_idx, ring_idx, v_idx, dist1, dist2
-                            )
-                        else:
-                            res = None
-
-                        if res and not res.isEmpty():
-                            curr_geom = res
-
-        return curr_geom
-
-        if geom_type == QgsWkbTypes.LineGeometry:
-            abstract_geom = curr_geom.constGet()
-            if not abstract_geom:
-                return None
-            num_parts = abstract_geom.numGeometries() if is_multi else 1
-            for part_idx in range(num_parts):
-                curve = cls.get_vertex_curve(curr_geom, part_idx, 0)
-                if not curve:
-                    continue
-                n_pts = curve.numPoints()
-                if n_pts < 3:
-                    continue
-                is_closed = curve.isClosed()
-                start_v = n_pts - 2 if is_closed else n_pts - 2
-                end_v = 0 if is_closed else 1
-                for v_idx in range(start_v, end_v - 1, -1):
-                    if mode == "fillet":
-                        res = cls.apply_fillet_to_geometry(
-                            curr_geom, part_idx, 0, v_idx, radius, segments_count, use_true_curve
-                        )
-                    elif mode == "chamfer":
-                        res = cls.apply_chamfer_to_geometry(
-                            curr_geom, part_idx, 0, v_idx, dist1, dist2
-                        )
-                    else:
-                        res = None
-
-                    if res and not res.isEmpty():
-                        curr_geom = res
-
-        elif geom_type == QgsWkbTypes.PolygonGeometry:
+        elif geom_type == QgsWkbTypes.GeometryType.PolygonGeometry:
             abstract_geom = curr_geom.constGet()
             if not abstract_geom:
                 return None
@@ -1038,7 +969,7 @@ class GeometryEngine:
         geom_type = geom.type()
         is_multi = geom.isMultipart()
 
-        if geom_type == QgsWkbTypes.LineGeometry:
+        if geom_type == QgsWkbTypes.GeometryType.LineGeometry:
             if not is_multi:
                 curve = geom.constGet()
                 if not curve or not isinstance(curve, QgsLineString):
@@ -1067,7 +998,7 @@ class GeometryEngine:
                         new_multi.addGeometry(line.clone())
                 return (QgsGeometry(new_multi), v_sharp_res) if v_sharp_res else None
 
-        elif geom_type == QgsWkbTypes.PolygonGeometry:
+        elif geom_type == QgsWkbTypes.GeometryType.PolygonGeometry:
             if not is_multi:
                 poly = geom.constGet()
                 if not poly:

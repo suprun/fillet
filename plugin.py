@@ -406,7 +406,9 @@ class FilletPlugin:
 
         is_vector = isinstance(layer, QgsVectorLayer)
         is_supported_geom = (
-            is_vector and layer.geometryType() in (QgsWkbTypes.LineGeometry, QgsWkbTypes.PolygonGeometry)
+            is_vector
+            and layer.geometryType()
+            in (QgsWkbTypes.GeometryType.LineGeometry, QgsWkbTypes.GeometryType.PolygonGeometry)
         )
         is_editable = bool(is_supported_geom and layer.isEditable())
 
