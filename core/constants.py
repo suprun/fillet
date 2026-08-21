@@ -6,6 +6,7 @@ Central configuration constants and default values for Fillet & Chamfer Tool.
 # Operation modes
 MODE_FILLET = "fillet"
 MODE_CHAMFER = "chamfer"
+MODE_RESTORE = "restore"
 
 # Fillet default parameters
 DEFAULT_RADIUS_METRIC = 5.0

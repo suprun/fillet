@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>S'han processat {} entitats.</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>Restaura cantonades per lots</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Aplica l'arrodoniment o el xamfrà a tots els vèrtexs de les entitats seleccionades</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>Restaura cantonades</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>Elimina arrodoniments i xamfrans restaurant cantonades vives</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>Paràmetres de restauració de cantonades</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>Elimina tots els arrodoniments i xamfrans detectats, restaurant les cantonades vives originals per a tots els vèrtexs de les entitats seleccionades.</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Distàncies independents (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>Restaura</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>Feu clic en un vèrtex per restaurar la cantonada viva.</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>Xamfrà de vèrtex</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Restaura cantonada</translation>
         </message>
     </context>
 </TS>

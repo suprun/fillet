@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Przetworzono {} obiekt(ów).</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>Wsadowe przywracanie narożników</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Zastosuj zaokrąglenie lub ścięcie do wszystkich wierzchołków zaznaczonych obiektów</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>Przywróć narożniki</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>Usuń zaokrąglenia i fazowania, przywracając ostre narożniki</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>Parametry przywracania narożników</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>Usuwa wszystkie wykryte zaokrąglenia i fazowania, przywracając oryginalne ostre narożniki dla wszystkich wierzchołków zaznaczonych obiektów.</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Odległości niezależne (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>Przywróć</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>Kliknij wierzchołek, aby przywrócić ostry narożnik.</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>Ścięcie wierzchołka</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Przywróć narożnik</translation>
         </message>
     </context>
 </TS>

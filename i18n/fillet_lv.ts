@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Apstrādāti {} objekti.</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>Partijas stūru atjaunošana</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Lietot noapaļošanu vai nolīdzināšanu visām atlasīto objektu virsotnēm</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>Atjaunot stūrus</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>Noņemt noapaļojumus un nolīdzinājumus, atjaunojot asus stūrus</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>Stūru atjaunošanas parametri</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>Noņem visus atklātos noapaļojumus un nolīdzinājumus, atjaunojot sākotnējos asos stūrus visām atlasīto objektu virsotnēm.</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Attālumi atsevišķi (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>Atjaunot</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>Noklikšķiniet uz virsotnes, lai atjaunotu aso stūri.</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>Virsotnes nolīdzināšana</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Atjaunot stūri</translation>
         </message>
     </context>
 </TS>

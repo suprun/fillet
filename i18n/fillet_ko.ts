@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>{} 개 객체를 처리했습니다.</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>배치 모서리 복원</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>선택한 객체의 모든 꼭짓점에 필렛 또는 챔퍼 적용</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>모서리 복원</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>필렛 및 챔퍼를 제거하고 날카로운 모서리 복원</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>모서리 복원 매개변수</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>감지된 모든 필렛 및 챔퍼를 제거하고 선택한 객체의 모든 정점에 대해 원래의 날카로운 모서리를 복원합니다.</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>거리 개별 설정 (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>복원</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>날카로운 모서리를 복원하려면 정점을 클릭하세요.</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>꼭짓점 챔퍼</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>모서리 복원</translation>
         </message>
     </context>
 </TS>

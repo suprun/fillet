@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>S-au procesat {} element(e).</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>Restaurare colțuri în lot</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Aplică racordarea sau teșirea la toate nodurile elementelor selectate</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>Restaurare colțuri</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>Elimină racordările și teșirile, restaurând colțurile ascuțite</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>Parametri restaurare colțuri</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>Elimină toate racordările și teșirile detectate, restaurând colțurile ascuțite originale pentru toate nodurile elementelor selectate.</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Distanțe independente (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>Restaurare</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>Faceți clic pe un nod pentru a restaura colțul ascuțit.</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>Teșire nod</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Restaurare colț</translation>
         </message>
     </context>
 </TS>

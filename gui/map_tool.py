@@ -144,11 +144,13 @@ class FilletMapTool(QgsMapToolEdit):
         if isinstance(self.widget, FilletCanvasWidget):
             if self.widget.mode == FilletCanvasWidget.MODE_FILLET:
                 return self.widget.is_radius_locked
-            else:
+            elif self.widget.mode == FilletCanvasWidget.MODE_CHAMFER:
                 if self.widget.is_linked:
                     return self.widget.is_dist1_locked
                 else:
                     return self.widget.is_dist1_locked and self.widget.is_dist2_locked
+            else:
+                return True
         return True
 
     def canvasMoveEvent(self, event: QgsMapMouseEvent):
@@ -218,7 +220,7 @@ class FilletMapTool(QgsMapToolEdit):
             rounded_dist = max(min_limit, round(dist, 6 if is_geo else (4 if dist < 1.0 else 3)))
             if not self.widget.is_radius_locked:
                 self.widget.set_radius(rounded_dist, block_signals=True)
-        else:
+        elif self.widget.mode == FilletCanvasWidget.MODE_CHAMFER:
             if p_prev and v and p_next:
                 u1x, u1y, len1 = GeometryEngine.normalize_vector(p_prev.x() - v.x(), p_prev.y() - v.y())
                 u2x, u2y, len2 = GeometryEngine.normalize_vector(p_next.x() - v.x(), p_next.y() - v.y())
@@ -305,13 +307,16 @@ class FilletMapTool(QgsMapToolEdit):
         if not layer:
             return
 
-        is_fillet = (
-            self.widget.mode == FilletCanvasWidget.MODE_FILLET
+        mode = (
+            self.widget.mode
             if isinstance(self.widget, FilletCanvasWidget)
-            else True
+            else FilletCanvasWidget.MODE_FILLET
         )
 
-        if is_fillet:
+        t1, t2 = None, None
+        v_sharp_pt = None
+
+        if mode == FilletCanvasWidget.MODE_FILLET:
             radius = self.widget.radius
             segments = self.widget.segments_count
             new_geom = GeometryEngine.apply_fillet_to_geometry(
@@ -322,7 +327,6 @@ class FilletMapTool(QgsMapToolEdit):
                 radius=radius,
                 segments_count=segments,
             )
-            # Tangent points for fillet
             t1, t2 = GeometryEngine.compute_tangent_points_for_vertex(
                 match.geometry,
                 match.part_idx,
@@ -332,7 +336,9 @@ class FilletMapTool(QgsMapToolEdit):
                 val1=radius,
                 val2=radius,
             )
-        else:
+            stroke_color = QColor(37, 99, 235, 230)  # Blue #2563EB
+            fill_color = QColor(37, 99, 235, 65)
+        elif mode == FilletCanvasWidget.MODE_CHAMFER:
             dist1 = self.widget.distance1
             dist2 = self.widget.distance2
             new_geom = GeometryEngine.apply_chamfer_to_geometry(
@@ -343,7 +349,6 @@ class FilletMapTool(QgsMapToolEdit):
                 dist1=dist1,
                 dist2=dist2,
             )
-            # Tangent points for chamfer
             t1, t2 = GeometryEngine.compute_tangent_points_for_vertex(
                 match.geometry,
                 match.part_idx,
@@ -353,15 +358,24 @@ class FilletMapTool(QgsMapToolEdit):
                 val1=dist1,
                 val2=dist2,
             )
-
-        # 1. Update geometry rubberband (Blue for Fillet, Green for Chamfer)
-        if is_fillet:
-            stroke_color = QColor(37, 99, 235, 230)  # Blue #2563EB
-            fill_color = QColor(37, 99, 235, 65)
-        else:
             stroke_color = QColor(5, 150, 105, 230)  # Green #059669
             fill_color = QColor(5, 150, 105, 65)
+        else:
+            new_geom = GeometryEngine.restore_sharp_corner_at_vertex(
+                match.geometry,
+                part_idx=match.part_idx,
+                ring_idx=match.ring_idx,
+                vertex_idx=match.vertex_idx,
+            )
+            curve = GeometryEngine.get_vertex_curve(match.geometry, match.part_idx, match.ring_idx)
+            if curve:
+                span_info = GeometryEngine.detect_fillet_chamfer_span(curve, match.vertex_idx)
+                if span_info:
+                    _, _, v_sharp_pt = span_info
+            stroke_color = QColor(234, 88, 12, 230)  # Amber-Orange #EA580C
+            fill_color = QColor(234, 88, 12, 65)
 
+        # 1. Update geometry rubberband
         if new_geom and not new_geom.isEmpty():
             self.preview_geom = new_geom
             if layer.geometryType() == QgsWkbTypes.PolygonGeometry:
@@ -383,7 +397,7 @@ class FilletMapTool(QgsMapToolEdit):
             self.preview_geom = None
             self.preview_rubberband.reset()
 
-        # 2. Update tangent touch markers (transformed to map coordinates)
+        # 2. Update tangent touch markers or restored corner marker
         if t1 and t2:
             t1_map = self.toMapCoordinates(layer, t1)
             t2_map = self.toMapCoordinates(layer, t2)
@@ -391,6 +405,12 @@ class FilletMapTool(QgsMapToolEdit):
             self.tangent_rubberband.setColor(stroke_color)
             self.tangent_rubberband.addPoint(t1_map, False)
             self.tangent_rubberband.addPoint(t2_map, True)
+            self.tangent_rubberband.show()
+        elif v_sharp_pt:
+            v_map = self.toMapCoordinates(layer, v_sharp_pt)
+            self.tangent_rubberband.reset(QgsWkbTypes.PointGeometry)
+            self.tangent_rubberband.setColor(stroke_color)
+            self.tangent_rubberband.addPoint(v_map, True)
             self.tangent_rubberband.show()
         else:
             self.tangent_rubberband.reset()
@@ -401,12 +421,17 @@ class FilletMapTool(QgsMapToolEdit):
         if not layer or not self.current_match or not self.preview_geom:
             return
 
-        is_fillet = (
-            self.widget.mode == FilletCanvasWidget.MODE_FILLET
+        mode = (
+            self.widget.mode
             if isinstance(self.widget, FilletCanvasWidget)
-            else True
+            else FilletCanvasWidget.MODE_FILLET
         )
-        mode_name = self.tr("Скруглення вершини") if is_fillet else self.tr("Фаска вершини")
+        if mode == FilletCanvasWidget.MODE_FILLET:
+            mode_name = self.tr("Скруглення вершини")
+        elif mode == FilletCanvasWidget.MODE_CHAMFER:
+            mode_name = self.tr("Фаска вершини")
+        else:
+            mode_name = self.tr("Відновлення кута")
 
         layer.beginEditCommand(mode_name)
         success = layer.changeGeometry(self.current_match.fid, self.preview_geom)

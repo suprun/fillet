@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Diproses {} fitur.</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>Pulihkan Sudut Massal</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Terapkan fillet atau chamfer ke semua simpul dari fitur yang dipilih</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>Pulihkan Sudut</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>Hapus fillet dan chamfer, pulihkan sudut tajam</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>Parameter Pemulihan Sudut</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>Menghapus semua fillet dan chamfer yang terdeteksi, memulihkan sudut tajam asli untuk semua simpul fitur yang dipilih.</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Jarak terpisah (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>Pulihkan</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>Klik pada simpul untuk memulihkan sudut tajam.</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>Chamfer simpul</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Pulihkan Sudut</translation>
         </message>
     </context>
 </TS>

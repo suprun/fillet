@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Behandlede {} objekter.</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>Batch-gendannelse af hjørner</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Anvend afrunding eller affasning på alle knudepunkter i de valgte objekter</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>Gendan hjørner</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>Fjern afrundinger og affasninger og gendan skarpe hjørner</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>Parametre for gendannelse af hjørner</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>Fjerner alle registrerede afrundinger og affasninger og gendanner oprindelige skarpe hjørner for alle knudepunkter i valgte objekter.</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Uafhængige afstande (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>Gendan</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>Klik på et knudepunkt for at gendanne det skarpe hjørne.</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>Knudepunktsaffasning</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Gendan hjørne</translation>
         </message>
     </context>
 </TS>

@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>{} detay işlendi.</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>Toplu Köşeleri Geri Yükle</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Seçili detayların tüm düğüm noktalarına yuvarlatma veya pah kırma uygula</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>Köşeleri Geri Yükle</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>Yuvarlatmaları ve pahları kaldırarak keskin köşeleri geri yükleyin</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>Köşe Geri Yükleme Parametreleri</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>Algılanan tüm yuvarlatmaları ve pahları kaldırarak seçili detayların tüm düğüm noktaları için orijinal keskin köşeleri geri yükler.</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Mesafeler ayrı (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>Geri Yükle</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>Keskin köşeyi geri yüklemek için bir düğüm noktasına tıklayın.</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>Düğüm Pah Kırma</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Köşeyi Geri Yükle</translation>
         </message>
     </context>
 </TS>

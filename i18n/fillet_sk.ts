@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Spracovaných {} prvkov.</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>Dávková obnova rohov</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Použiť zaoblenie alebo skosenie na všetky lomové body vybraných prvkov</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>Obnoviť rohy</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>Odstrániť zaoblenia a skosenia a obnoviť ostré rohy</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>Parametre obnovy rohov</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>Odstráni všetky zistené zaoblenia a skosenia a obnoví pôvodné ostré rohy pre všetky vrcholy vybraných prvkov.</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Oddelené vzdialenosti (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>Obnoviť</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>Kliknutím na vrchol obnovíte ostrý roh.</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>Skosenie vrcholu</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Obnoviť roh</translation>
         </message>
     </context>
 </TS>

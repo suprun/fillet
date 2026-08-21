@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Apdorota {} objektų.</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>Paketinis kampų atkūrimas</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Taikyti užapvalinimą arba nusklembimą visoms pasirinktų objektų viršūnėms</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>Atkurti kampus</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>Pašalinti užapvalinimus ir nusklemSingleimus, atkuriant aštrius kampus</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>Kampų atkūrimo parametrai</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>Pašalina visus aptiktus užapvalinimus ir nusklemSingleimus, atkuriant pradinius aštrius kampus visoms pasirinktų objektų viršūnėms.</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Atstumai nepriklausomi (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>Atkurti</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>Spustelėkite viršūnę, kad atkurtumėte aštrų kampą.</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>Viršūnės nusklembimas</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Atkurti kampą</translation>
         </message>
     </context>
 </TS>

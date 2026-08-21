@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>{} entitate prozesatu dira.</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>Izkina leheneratzea multzoka</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Aplikatu biribiltzea edo xaflaketa hautatutako entitateen erpin guztiei</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>Izkina leheneratu</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>Kendu biribiltzeak eta xaflaketak ertz zorrotzak leheneratuz</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>Izkina leheneratzeko parametroak</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>Hautemandako biribiltze eta xaflaketa guztiak kentzen ditu, hautatutako entitateen erpin guztietarako jatorrizko ertz zorrotzak leheneratuz.</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Distantzia independenteak (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>Leheneratu</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>Egin klik erpinean ertz zorrotza leheneratzeko.</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>Erpinaren xaflaketa</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Izkina leheneratu</translation>
         </message>
     </context>
 </TS>

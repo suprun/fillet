@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>ประมวลผลแล้ว {} ฟีเจอร์</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>กู้คืนมุมแบบชุด</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>ใช้การลบมุมมนหรือมุมเหลี่ยมกับจุดยอดทั้งหมดของฟีเจอร์ที่เลือก</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>กู้คืนมุม</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>ลบการลบมุมและการตัดมุมเพื่อกู้คืนมุมแหลม</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>พารามิเตอร์การกู้คืนมุม</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>ลบการลบมุมและการตัดมุมทั้งหมดที่ตรวจพบ กู้คืนมุมแหลมดั้งเดิมสำหรับทุกจุดยอดของฟีเจอร์ที่เลือก</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>แยกอิสระระยะทาง (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>กู้คืน</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>คลิกที่จุดยอดเพื่อกู้คืนมุมแหลม</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>ลบมุมเหลี่ยมจุดยอด</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>กู้คืนมุม</translation>
         </message>
     </context>
 </TS>

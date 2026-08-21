@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>已處理 {} 個圖徵。</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>批次恢復尖角</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>將圓角或倒角套用到選取圖徵的所有頂點</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>恢復尖角</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>移除圓角與倒角，恢復銳角</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>恢復尖角參數</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>移除所有偵測到的圓角與倒角，為所選圖徵的所有頂點恢復原始銳角。</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>距離獨立 (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>恢復</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>點擊頂點以恢復銳角。</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>頂點倒角</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>恢復尖角</translation>
         </message>
     </context>
 </TS>

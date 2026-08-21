@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>{} फ़ीचर संसाधित किए गए।</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>कोनों को बैच में पुनर्स्थापित करें</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>चयनित फ़ीचर्स के सभी शीर्षों पर फिलेट या चैम्फर लागू करें</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>कोनों को पुनर्स्थापित करें</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>फ़िलेट और चम्फ़र हटाएं और नुकीले कोनों को पुनर्स्थापित करें</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>कोना पुनर्स्थापना पैरामीटर</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>सभी पहचाने गए फ़िलेट और चम्फ़र को हटाता है, चयनित फ़ीचर के सभी शीर्षों के लिए मूल नुकीले कोनों को पुनर्स्थापित करता है।</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>अलग-अलग दूरियां (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>पुनर्स्थापित करें</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>नुकीले कोने को पुनर्स्थापित करने के लिए एक शीर्ष पर क्लिक करें।</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>शीर्ष चैम्फर</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>कोना पुनर्स्थापित करें</translation>
         </message>
     </context>
 </TS>

@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>{} 件の地物を処理しました。</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>角の一括復元</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>選択した地物のすべての頂点にフィレットまたは面取りを適用</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>角を復元</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>フィレットと面取りを削除して鋭角を復元</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>角復元パラメータ</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>検出されたすべてのフィレットと面取りを削除し、選択した地物のすべての頂点に対して元の鋭角を復元します。</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>距離を個別設定 (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>復元</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>頂点をクリックして鋭角を復元します。</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>頂点の面取り</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>角を復元</translation>
         </message>
     </context>
 </TS>

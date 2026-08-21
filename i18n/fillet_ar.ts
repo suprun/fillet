@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>تمت معالجة {} معلم (معالم).</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>استعادة الزوايا دفعة واحدة</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>تطبيق التسطيح أو الشطب على جميع رؤوس المعالم المحددة</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>استعادة الزوايا</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>إزالة التقويس والشطب واستعادة الزوايا الحادة</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>معلمات استعادة الزوايا</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>يزيل جميع التقويسات والشتوب المكتشفة، ويعيد الزوايا الحادة الأصلية لجميع رؤوس المعالم المحددة.</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>المسافات منفصلة (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>استعادة</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>انقر فوق رأس لاستعادة الزاوية الحادة.</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>شطب الرأس</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>استعادة الزاوية</translation>
         </message>
     </context>
 </TS>

@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>{} object(en) verwerkt.</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>Hoeken herstellen in batch</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Afronding of afschuining toepassen op alle hoekpunten van geselecteerde objecten</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>Hoeken herstellen</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>Afrondingen en afschuiningen verwijderen en scherpe hoeken herstellen</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>Parameters voor herstellen van hoeken</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>Verwijdert alle gedetecteerde afrondingen en afschuiningen en herstelt de oorspronkelijke scherpe hoeken voor alle hoekpunten van geselecteerde objecten.</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Afstanden ontkoppeld (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>Herstellen</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>Klik op een hoekpunt om de scherpe hoek te herstellen.</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>Hoekpunt afschuinen</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Hoek herstellen</translation>
         </message>
     </context>
 </TS>

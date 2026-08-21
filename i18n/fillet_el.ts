@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Επεξεργάστηκαν {} στοιχεία.</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>Μαζική επαναφορά γωνιών</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Εφαρμογή στρογγυλοποίησης ή λοξότμησης σε όλες τις κορυφές των επιλεγμένων στοιχείων</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>Επαναφορά γωνιών</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>Αφαίρεση στρογγυλοποιήσεων και λοξοτμήσεων και επαναφορά αιχμηρών γωνιών</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>Παράμετροι επαναφοράς γωνιών</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>Αφαιρεί όλες τις εντοπισμένες στρογγυλοποιήσεις και λοξοτμήσεις, επαναφέροντας τις αρχικές αιχμηρές γωνίες για όλες τις κορυφές των επιλεγμένων στοιχείων.</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Ανεξάρτητες αποστάσεις (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>Επαναφορά</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>Κάντε κλικ σε μια κορυφή για να επαναφέρετε την αιχμηρή γωνία.</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>Λοξότμηση κορυφής</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Επαναφορά γωνίας</translation>
         </message>
     </context>
 </TS>

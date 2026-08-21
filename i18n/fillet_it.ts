@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Elaborati {} elementi.</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>Ripristino angoli batch</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Applica raccordo o cimosa a tutti i vertici degli elementi selezionati</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>Ripristina angoli</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>Rimuovi raccordi e smussi ripristinando gli angoli acuti</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>Parametri di ripristino angoli</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>Rimuove tutti i raccordi e gli smussi rilevati, ripristinando gli angoli acuti originali per tutti i vertici degli elementi selezionati.</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Distanze separate (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>Ripristina</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>Fai clic su un vertice per ripristinare l'angolo acuto.</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>Cimosa vertice</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Ripristina angolo</translation>
         </message>
     </context>
 </TS>

@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>{} entité(s) traitée(s).</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>Restauration des angles par lot</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Appliquer un congé ou un chanfrein à tous les sommets des entités sélectionnées</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>Restaurer les angles</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>Supprimer les congés et chanfreins en restaurant les angles vifs</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>Paramètres de restauration des angles</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>Supprime tous les congés et chanfreins détectés, en restaurant les angles vifs d'origine pour tous les sommets des entités sélectionnées.</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Distances séparées (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>Restaurer</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>Cliquez sur un sommet pour restaurer l'angle vif.</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>Chanfrein de sommet</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Restaurer l'angle</translation>
         </message>
     </context>
 </TS>

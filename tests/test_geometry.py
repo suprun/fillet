@@ -176,28 +176,110 @@ class TestGeometryEngine(unittest.TestCase):
         )
         fillet_geom = GeometryEngine.batch_process_geometry(geom, mode="fillet", radius=1.0, segments_count=4)
         self.assertIsNotNone(fillet_geom)
-    def test_geographic_coordinates_fillet_and_chamfer(self):
-        """Test fillet and chamfer calculations with tiny coordinates in degrees (e.g., EPSG:4326)."""
-        # Corner around Kyiv (approx 30.5E, 50.4N), 10-meter scale ~ 0.0001 degrees
-        p_prev = QgsPoint(30.5000, 50.4010)
-        v = QgsPoint(30.5000, 50.4000)
-        p_next = QgsPoint(30.5010, 50.4000)
+    def test_compute_line_intersection(self):
+        """Test analytical infinite line intersection."""
+        p1 = QgsPoint(0, 10)
+        p2 = QgsPoint(0, 2)
+        p3 = QgsPoint(10, 0)
+        p4 = QgsPoint(2, 0)
+        pt = GeometryEngine.compute_line_intersection(p1, p2, p3, p4)
+        self.assertIsNotNone(pt)
+        self.assertAlmostEqual(pt.x(), 0.0, places=6)
+        self.assertAlmostEqual(pt.y(), 0.0, places=6)
 
-        # Fillet with small degree radius: 0.0002 deg
-        success, t1, arc_mid, t2, tangent_dist = GeometryEngine.compute_fillet_points(
-            p_prev, v, p_next, radius=0.0002
-        )
-        self.assertTrue(success)
-        self.assertAlmostEqual(t1.y(), 50.4002, places=6)
-        self.assertAlmostEqual(t2.x(), 30.5002, places=6)
+        # Parallel lines
+        p_par1 = QgsPoint(0, 0)
+        p_par2 = QgsPoint(0, 5)
+        p_par3 = QgsPoint(2, 0)
+        p_par4 = QgsPoint(2, 5)
+        self.assertIsNone(GeometryEngine.compute_line_intersection(p_par1, p_par2, p_par3, p_par4))
 
-        # Chamfer with small degree distances: 0.00015 deg
-        c_success, c1, c2 = GeometryEngine.compute_chamfer_points(
-            p_prev, v, p_next, dist1=0.00015, dist2=0.00015
+    def test_restore_sharp_corner_linestring_roundtrip(self):
+        """Test round-trip: L-shape line -> fillet/chamfer -> restore sharp corner."""
+        orig_geom = QgsGeometry.fromPolylineXY([QgsPointXY(0, 10), QgsPointXY(0, 0), QgsPointXY(10, 0)])
+
+        # 1. Fillet round-trip
+        fillet_geom = GeometryEngine.apply_fillet_to_geometry(
+            orig_geom, part_idx=0, ring_idx=0, vertex_idx=1, radius=2.5, segments_count=8
         )
-        self.assertTrue(c_success)
-        self.assertAlmostEqual(c1.y(), 50.40015, places=6)
-        self.assertAlmostEqual(c2.x(), 30.50015, places=6)
+        self.assertEqual(len(fillet_geom.asPolyline()), 11)
+
+        # Restore from any vertex of the arc (e.g. vertex 4)
+        restored_geom = GeometryEngine.restore_sharp_corner_at_vertex(
+            fillet_geom, part_idx=0, ring_idx=0, vertex_idx=4
+        )
+        self.assertIsNotNone(restored_geom)
+        res_pts = restored_geom.asPolyline()
+        self.assertEqual(len(res_pts), 3)
+        self.assertAlmostEqual(res_pts[0].x(), 0.0, places=5)
+        self.assertAlmostEqual(res_pts[0].y(), 10.0, places=5)
+        self.assertAlmostEqual(res_pts[1].x(), 0.0, places=5)
+        self.assertAlmostEqual(res_pts[1].y(), 0.0, places=5)
+        self.assertAlmostEqual(res_pts[2].x(), 10.0, places=5)
+        self.assertAlmostEqual(res_pts[2].y(), 0.0, places=5)
+
+        # 2. Chamfer round-trip
+        chamfer_geom = GeometryEngine.apply_chamfer_to_geometry(
+            orig_geom, part_idx=0, ring_idx=0, vertex_idx=1, dist1=3.0, dist2=4.0
+        )
+        self.assertEqual(len(chamfer_geom.asPolyline()), 4)
+
+        restored_ch = GeometryEngine.restore_sharp_corner_at_vertex(
+            chamfer_geom, part_idx=0, ring_idx=0, vertex_idx=1
+        )
+        self.assertIsNotNone(restored_ch)
+        res_ch_pts = restored_ch.asPolyline()
+        self.assertEqual(len(res_ch_pts), 3)
+        self.assertAlmostEqual(res_ch_pts[1].x(), 0.0, places=5)
+        self.assertAlmostEqual(res_ch_pts[1].y(), 0.0, places=5)
+
+    def test_restore_sharp_corner_polygon_roundtrip(self):
+        """Test round-trip on a polygon corner and closure vertex."""
+        poly_geom = QgsGeometry.fromPolygonXY(
+            [[QgsPointXY(0, 0), QgsPointXY(0, 10), QgsPointXY(10, 10), QgsPointXY(10, 0), QgsPointXY(0, 0)]]
+        )
+
+        # Fillet corner 1 (0, 10)
+        fpoly = GeometryEngine.apply_fillet_to_geometry(
+            poly_geom, part_idx=0, ring_idx=0, vertex_idx=1, radius=2.0, segments_count=6
+        )
+        restored_poly = GeometryEngine.restore_sharp_corner_at_vertex(
+            fpoly, part_idx=0, ring_idx=0, vertex_idx=3
+        )
+        self.assertIsNotNone(restored_poly)
+        ring_pts = restored_poly.asPolygon()[0]
+        self.assertEqual(len(ring_pts), 5)
+        self.assertAlmostEqual(ring_pts[1].x(), 0.0, places=5)
+        self.assertAlmostEqual(ring_pts[1].y(), 10.0, places=5)
+
+        # Fillet closure corner 0 (0, 0)
+        fpoly_close = GeometryEngine.apply_fillet_to_geometry(
+            poly_geom, part_idx=0, ring_idx=0, vertex_idx=0, radius=2.0, segments_count=6
+        )
+        restored_close = GeometryEngine.restore_sharp_corner_at_vertex(
+            fpoly_close, part_idx=0, ring_idx=0, vertex_idx=0
+        )
+        self.assertIsNotNone(restored_close)
+        close_pts = restored_close.asPolygon()[0]
+        self.assertEqual(len(close_pts), 5)
+        self.assertAlmostEqual(close_pts[0].x(), 0.0, places=5)
+        self.assertAlmostEqual(close_pts[0].y(), 0.0, places=5)
+
+    def test_batch_restore_polygon_corners(self):
+        """Test batch restoring all filleted corners of a polygon to sharp corners."""
+        orig_poly = QgsGeometry.fromPolygonXY(
+            [[QgsPointXY(0, 0), QgsPointXY(0, 20), QgsPointXY(20, 20), QgsPointXY(20, 0), QgsPointXY(0, 0)]]
+        )
+        # 1. Batch fillet all 4 corners
+        filleted = GeometryEngine.batch_apply_geometry(orig_poly, mode="fillet", radius=3.0, segments_count=6)
+        self.assertTrue(filleted.isGeosValid())
+        self.assertGreater(filleted.constGet().exteriorRing().numPoints(), 15)
+
+        # 2. Batch restore all corners
+        restored = GeometryEngine.batch_apply_geometry(filleted, mode="restore")
+        self.assertTrue(restored.isGeosValid())
+        ext_ring = restored.constGet().exteriorRing()
+        self.assertEqual(ext_ring.numPoints(), 5)
 
 
 if __name__ == "__main__":

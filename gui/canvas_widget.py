@@ -35,6 +35,7 @@ class FilletCanvasWidget(QFrame):
 
     MODE_FILLET = constants.MODE_FILLET
     MODE_CHAMFER = constants.MODE_CHAMFER
+    MODE_RESTORE = constants.MODE_RESTORE
 
     def __init__(self, canvas: QgsMapCanvas):
         super().__init__(canvas)
@@ -43,8 +44,8 @@ class FilletCanvasWidget(QFrame):
 
         self._drag_pos: Optional[QPoint] = None
         self._user_moved = False
-        self._last_focused_spin: Optional[QWidget] = None
         self._icons_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources", "icons")
+        self._last_focused_spin = None
 
         self._init_ui()
         self._apply_style()
@@ -92,7 +93,7 @@ class FilletCanvasWidget(QFrame):
         # Mode selection row
         mode_layout = QHBoxLayout()
         mode_layout.setContentsMargins(0, 0, 0, 0)
-        mode_layout.setSpacing(12)
+        mode_layout.setSpacing(8)
 
         self.radio_fillet = QRadioButton(self.tr("Fillet"), self)
         self.radio_fillet.setIcon(self._get_icon("fillet.svg"))
@@ -101,12 +102,17 @@ class FilletCanvasWidget(QFrame):
         self.radio_chamfer = QRadioButton(self.tr("Chamfer"), self)
         self.radio_chamfer.setIcon(self._get_icon("chamfer.svg"))
 
+        self.radio_restore = QRadioButton(self.tr("Restore"), self)
+        self.radio_restore.setToolTip(self.tr("Відновити гострий кут (видалити скруглення або фаску)"))
+
         self.mode_group = QButtonGroup(self)
         self.mode_group.addButton(self.radio_fillet)
         self.mode_group.addButton(self.radio_chamfer)
+        self.mode_group.addButton(self.radio_restore)
 
         mode_layout.addWidget(self.radio_fillet)
         mode_layout.addWidget(self.radio_chamfer)
+        mode_layout.addWidget(self.radio_restore)
         mode_layout.addStretch()
 
         main_layout.addLayout(mode_layout)
@@ -233,6 +239,18 @@ class FilletCanvasWidget(QFrame):
         grid_chamfer.addWidget(self.btn_link, 0, 3, 2, 1)
 
         self.stacked_controls.addWidget(self.widget_chamfer)
+
+        # --- 3. RESTORE SUB-WIDGET ---
+        self.widget_restore = QWidget(self)
+        layout_restore = QVBoxLayout(self.widget_restore)
+        layout_restore.setContentsMargins(4, 4, 4, 4)
+        layout_restore.setSpacing(2)
+        self.lbl_restore_info = QLabel(self.tr("Клікніть на дугу або фаску для відновлення гострого кута"), self.widget_restore)
+        self.lbl_restore_info.setStyleSheet("color: #718096; font-size: 11px; font-style: italic;")
+        self.lbl_restore_info.setWordWrap(True)
+        layout_restore.addWidget(self.lbl_restore_info)
+        self.stacked_controls.addWidget(self.widget_restore)
+
         main_layout.addWidget(self.stacked_controls)
 
         # Initial visibility & load persisted settings from user profile
@@ -241,6 +259,8 @@ class FilletCanvasWidget(QFrame):
 
         # Signal connections
         self.radio_fillet.toggled.connect(self._on_radio_mode_toggled)
+        self.radio_chamfer.toggled.connect(self._on_radio_mode_toggled)
+        self.radio_restore.toggled.connect(self._on_radio_mode_toggled)
         self.spin_radius.valueChanged.connect(self.parametersChanged)
         self.spin_segments.valueChanged.connect(self.parametersChanged)
         self.spin_dist1.valueChanged.connect(self._on_dist1_changed)
@@ -280,6 +300,7 @@ class FilletCanvasWidget(QFrame):
         for btn in (
             self.radio_fillet,
             self.radio_chamfer,
+            self.radio_restore,
             self.btn_lock_radius,
             self.btn_lock_segments,
             self.btn_lock_dist1,
@@ -326,6 +347,8 @@ class FilletCanvasWidget(QFrame):
             mode = s.value("plugins/fillet/mode", self.MODE_FILLET, type=str)
             if mode == self.MODE_CHAMFER:
                 self.radio_chamfer.setChecked(True)
+            elif mode == self.MODE_RESTORE:
+                self.radio_restore.setChecked(True)
             else:
                 self.radio_fillet.setChecked(True)
 
@@ -363,14 +386,15 @@ class FilletCanvasWidget(QFrame):
         s.setValue("plugins/fillet/link_dist", self.btn_link.isChecked())
 
     def _on_radio_mode_toggled(self):
-        is_fillet = self.radio_fillet.isChecked()
-        mode = self.MODE_FILLET if is_fillet else self.MODE_CHAMFER
+        mode = self.mode
+        is_fillet = mode == self.MODE_FILLET
+        is_chamfer = mode == self.MODE_CHAMFER
 
         # Transfer value between primary inputs (Radius <-> Distance 1)
         if not getattr(self, "_is_loading", False):
             if is_fillet:
                 self.spin_radius.setValue(self.spin_dist1.value())
-            else:
+            elif is_chamfer:
                 self.spin_dist1.setValue(self.spin_radius.value())
                 if self.btn_link.isChecked():
                     self.spin_dist2.setValue(self.spin_radius.value())
@@ -381,23 +405,33 @@ class FilletCanvasWidget(QFrame):
         self.focus_primary_input()
 
     def _update_mode_visibility(self, mode: str):
-        is_fillet = mode == self.MODE_FILLET
-        self.stacked_controls.setCurrentIndex(0 if is_fillet else 1)
-        self._update_tab_order(is_fillet)
+        if mode == self.MODE_FILLET:
+            idx = 0
+        elif mode == self.MODE_CHAMFER:
+            idx = 1
+        else:
+            idx = 2
+        self.stacked_controls.setCurrentIndex(idx)
+        self._update_tab_order(mode)
         self.reposition_to_default()
 
-    def _update_tab_order(self, is_fillet: bool):
-        if is_fillet:
+    def _update_tab_order(self, mode: str):
+        if mode == self.MODE_FILLET:
             QWidget.setTabOrder(self.spin_radius, self.spin_segments)
             QWidget.setTabOrder(self.spin_segments, self.btn_lock_radius)
             QWidget.setTabOrder(self.btn_lock_radius, self.radio_fillet)
             QWidget.setTabOrder(self.radio_fillet, self.radio_chamfer)
-        else:
+            QWidget.setTabOrder(self.radio_chamfer, self.radio_restore)
+        elif mode == self.MODE_CHAMFER:
             QWidget.setTabOrder(self.spin_dist1, self.spin_dist2)
             QWidget.setTabOrder(self.spin_dist2, self.btn_link)
             QWidget.setTabOrder(self.btn_link, self.btn_lock_dist1)
             QWidget.setTabOrder(self.btn_lock_dist1, self.btn_lock_dist2)
             QWidget.setTabOrder(self.btn_lock_dist2, self.radio_fillet)
+            QWidget.setTabOrder(self.radio_fillet, self.radio_chamfer)
+            QWidget.setTabOrder(self.radio_chamfer, self.radio_restore)
+        else:
+            QWidget.setTabOrder(self.radio_restore, self.radio_fillet)
             QWidget.setTabOrder(self.radio_fillet, self.radio_chamfer)
 
     def _on_link_toggled(self, checked: bool):
@@ -508,14 +542,20 @@ class FilletCanvasWidget(QFrame):
     # --- Properties & Methods ---
     @property
     def mode(self) -> str:
-        return self.MODE_FILLET if self.radio_fillet.isChecked() else self.MODE_CHAMFER
+        if self.radio_fillet.isChecked():
+            return self.MODE_FILLET
+        elif self.radio_chamfer.isChecked():
+            return self.MODE_CHAMFER
+        return self.MODE_RESTORE
 
     @mode.setter
     def mode(self, value: str):
         if value == self.MODE_FILLET:
             self.radio_fillet.setChecked(True)
-        else:
+        elif value == self.MODE_CHAMFER:
             self.radio_chamfer.setChecked(True)
+        elif value == self.MODE_RESTORE:
+            self.radio_restore.setChecked(True)
 
     @property
     def radius(self) -> float:

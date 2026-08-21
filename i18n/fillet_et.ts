@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Töödeldud {} objekti.</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>Nurkade taastamine pakktöötluses</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Rakenda ümardamist või faasimist kõigile valitud objektide tippudele</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>Taasta nurgad</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>Eemalda ümardused ja faasid, taastades teravad nurgad</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>Nurkade taastamise parameetrid</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>Eemaldab kõik tuvastatud ümardused ja faasid, taastades valitud objektide kõigi tippude algsed teravad nurgad.</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Kaugused eraldi (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>Taasta</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>Klõpsake tipul terava nurga taastamiseks.</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>Tippude faasimine</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Taasta nurk</translation>
         </message>
     </context>
 </TS>

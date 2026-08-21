@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>{} Objekt(e) verarbeitet.</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>Ecken im Stapel wiederherstellen</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Abrundung oder Fase auf alle Stützpunkte der ausgewählten Objekte anwenden</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>Ecken wiederherstellen</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>Abrundungen und Fasen entfernen und scharfe Ecken wiederherstellen</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>Parameter zur Eckenwiederherstellung</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>Entfernt alle erkannten Abrundungen und Fasen und stellt die ursprünglichen scharfen Ecken für alle Stützpunkte der ausgewählten Objekte wieder her.</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Abstände getrennt (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>Wiederherstellen</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>Klicken Sie auf einen Stützpunkt, um die scharfe Ecke wiederherzustellen.</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>Stützpunkt-Fase</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Ecke wiederherstellen</translation>
         </message>
     </context>
 </TS>

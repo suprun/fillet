@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Обрађено {} објеката.</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>Пакетно враћање углова</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Примени заобљење или закошење на сва темена изабраних објеката</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>Врати углове</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>Уклони заобљења и закошења и врати оштре углове</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>Параметри враћања углова</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>Уклања сва откривена заобљења и закошења, враћајући изворне оштре углове за све тачке одабраних објеката.</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Раздвојена растојања (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>Врати</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>Кликните на тачку да бисте вратили оштар угао.</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>Закошење темена</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Врати угао</translation>
         </message>
     </context>
 </TS>

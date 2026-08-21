@@ -54,6 +54,10 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Processed {} feature(s).</translation>
         </message>
+        <message>
+            <source>Пакетне відновлення кутів</source>
+            <translation>Batch Restore Corners</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -113,6 +117,22 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Apply fillet or chamfer to all vertices of selected features</translation>
         </message>
+        <message>
+            <source>Відновлення кутів</source>
+            <translation>Restore Corners</translation>
+        </message>
+        <message>
+            <source>Видалити скруглення та фаски, відновивши гострі кути</source>
+            <translation>Remove fillets and chamfers, restoring sharp corners</translation>
+        </message>
+        <message>
+            <source>Параметри відновлення кутів</source>
+            <translation>Restore Corner Parameters</translation>
+        </message>
+        <message>
+            <source>Видаляє всі виявлені скруглення та фаски, відновлюючи вихідні гострі кути для всіх вершин виділених об'єктів.</source>
+            <translation>Removes all detected fillets and chamfers, restoring original sharp corners for all vertices of selected features.</translation>
+        </message>
     </context>
     <context>
         <name>FilletCanvasWidget</name>
@@ -160,6 +180,14 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Distances unlinked (d1 ≠ d2)</translation>
         </message>
+        <message>
+            <source>Restore</source>
+            <translation>Restore</translation>
+        </message>
+        <message>
+            <source>Клікніть на вершину для відновлення гострого кута.</source>
+            <translation>Click on a vertex to restore sharp corner.</translation>
+        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -170,6 +198,10 @@
         <message>
             <source>Фаска вершини</source>
             <translation>Vertex chamfer</translation>
+        </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Restore Corner</translation>
         </message>
     </context>
 </TS>
