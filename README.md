@@ -13,7 +13,7 @@
 [![Python](https://img.shields.io/badge/Python-3.9%20%7C%203.12-blue.svg?logo=python)](https://python.org)
 [![PyQt](https://img.shields.io/badge/UI-PyQt5%20%7C%20PyQt6-orange.svg?logo=qt)](https://riverbankcomputing.com/software/pyqt/)
 [![Multi-Version Tests](https://img.shields.io/badge/Tests-5%20QGIS%20Versions%20Passed-success.svg)](#multi-version-testing)
-[![Languages](https://img.shields.io/badge/Languages-28%20Locales-blueviolet.svg)](#localization)
+[![Languages](https://img.shields.io/badge/Languages-40%20Locales-blueviolet.svg)](#localization)
 
 </div>
 
@@ -137,7 +137,7 @@ python scripts/package_plugin.py
 
 ## 🌐 Localization
 
-The plugin is translated into **28 languages**:
+The plugin is fully translated into **40 locales (all official QGIS GUI languages)**:
 - Arabic (`ar`), Bulgarian (`bg`), Catalan (`ca`), Czech (`cs`), Danish (`da`), German (`de`), Greek (`el`), English (`en`), Spanish (`es`), Estonian (`et`), Basque (`eu`), Finnish (`fi`), French (`fr`), Galician (`gl`), Hindi (`hi`), Croatian (`hr`), Hungarian (`hu`), Indonesian (`id`), Italian (`it`), Japanese (`ja`), Korean (`ko`), Lithuanian (`lt`), Latvian (`lv`), Norwegian (`nb`), Dutch (`nl`), Polish (`pl`), Portuguese (`pt`, `pt_BR`), Romanian (`ro`), Slovak (`sk`), Slovenian (`sl`), Serbian (`sr`), Swedish (`sv`), Thai (`th`), Turkish (`tr`), Ukrainian (`uk`), Vietnamese (`vi`), Chinese (`zh`, `zh_CN`, `zh_TW`).
 
 Translations are automatically compiled from `.ts` to `.qm` via:

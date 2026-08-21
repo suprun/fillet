@@ -58,3 +58,6 @@ desktop.ini
 .env.*
 *.ENV
 .ENV.*
+
+# QGIS repository
+AGENTS.md
