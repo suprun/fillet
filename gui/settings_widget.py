@@ -21,6 +21,11 @@ from qgis.PyQt.QtWidgets import (
     QWidget,
 )
 
+try:
+    from ..core import constants
+except (ImportError, ValueError):
+    from core import constants
+
 
 class FilletSettingsWidget(QWidget):
     """Floating or dockable settings widget for Fillet & Chamfer parameters."""
@@ -28,8 +33,8 @@ class FilletSettingsWidget(QWidget):
     parametersChanged = pyqtSignal()
     applyToSelectedRequested = pyqtSignal()
 
-    MODE_FILLET = "fillet"
-    MODE_CHAMFER = "chamfer"
+    MODE_FILLET = constants.MODE_FILLET
+    MODE_CHAMFER = constants.MODE_CHAMFER
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -117,18 +122,18 @@ class FilletSettingsWidget(QWidget):
 
         lbl_radius = QLabel(self.tr("Радіус (R):"), self.group_fillet)
         self.spin_radius = QDoubleSpinBox(self.group_fillet)
-        self.spin_radius.setRange(0.0001, 9999999.0)
-        self.spin_radius.setValue(5.0)
-        self.spin_radius.setDecimals(3)
-        self.spin_radius.setSingleStep(1.0)
+        self.spin_radius.setRange(constants.MIN_METRIC_VALUE, constants.MAX_METRIC_VALUE)
+        self.spin_radius.setValue(constants.DEFAULT_RADIUS_METRIC)
+        self.spin_radius.setDecimals(constants.DECIMALS_METRIC)
+        self.spin_radius.setSingleStep(constants.STEP_METRIC_VALUE)
         self.spin_radius.setMaximumWidth(160)
         fillet_layout.addWidget(lbl_radius, 0, 0)
         fillet_layout.addWidget(self.spin_radius, 0, 1)
 
         lbl_segments = QLabel(self.tr("Кількість сегментів дуги:"), self.group_fillet)
         self.spin_segments = QSpinBox(self.group_fillet)
-        self.spin_segments.setRange(2, 64)
-        self.spin_segments.setValue(12)
+        self.spin_segments.setRange(constants.MIN_SEGMENTS_COUNT, constants.MAX_SEGMENTS_COUNT)
+        self.spin_segments.setValue(constants.DEFAULT_SEGMENTS_COUNT)
         self.spin_segments.setMaximumWidth(160)
         fillet_layout.addWidget(lbl_segments, 1, 0)
         fillet_layout.addWidget(self.spin_segments, 1, 1)
@@ -144,20 +149,20 @@ class FilletSettingsWidget(QWidget):
 
         lbl_dist1 = QLabel(self.tr("Відстань 1 (d1):"), self.group_chamfer)
         self.spin_dist1 = QDoubleSpinBox(self.group_chamfer)
-        self.spin_dist1.setRange(0.0001, 9999999.0)
-        self.spin_dist1.setValue(5.0)
-        self.spin_dist1.setDecimals(3)
-        self.spin_dist1.setSingleStep(1.0)
+        self.spin_dist1.setRange(constants.MIN_METRIC_VALUE, constants.MAX_METRIC_VALUE)
+        self.spin_dist1.setValue(constants.DEFAULT_DIST1_METRIC)
+        self.spin_dist1.setDecimals(constants.DECIMALS_METRIC)
+        self.spin_dist1.setSingleStep(constants.STEP_METRIC_VALUE)
         self.spin_dist1.setMaximumWidth(160)
         chamfer_layout.addWidget(lbl_dist1, 0, 0)
         chamfer_layout.addWidget(self.spin_dist1, 0, 1)
 
         lbl_dist2 = QLabel(self.tr("Відстань 2 (d2):"), self.group_chamfer)
         self.spin_dist2 = QDoubleSpinBox(self.group_chamfer)
-        self.spin_dist2.setRange(0.0001, 9999999.0)
-        self.spin_dist2.setValue(5.0)
-        self.spin_dist2.setDecimals(3)
-        self.spin_dist2.setSingleStep(1.0)
+        self.spin_dist2.setRange(constants.MIN_METRIC_VALUE, constants.MAX_METRIC_VALUE)
+        self.spin_dist2.setValue(constants.DEFAULT_DIST2_METRIC)
+        self.spin_dist2.setDecimals(constants.DECIMALS_METRIC)
+        self.spin_dist2.setSingleStep(constants.STEP_METRIC_VALUE)
         self.spin_dist2.setMaximumWidth(160)
         self.spin_dist2.setEnabled(False)
         chamfer_layout.addWidget(lbl_dist2, 1, 0)
@@ -246,13 +251,13 @@ class FilletSettingsWidget(QWidget):
             else:
                 self.radio_fillet.setChecked(True)
 
-            self.spin_radius.setValue(float(s.value("plugins/fillet/batch_radius", 5.0)))
-            self.spin_segments.setValue(int(s.value("plugins/fillet/batch_segments", 12)))
-            self.spin_dist1.setValue(float(s.value("plugins/fillet/batch_dist1", 5.0)))
-            self.spin_dist2.setValue(float(s.value("plugins/fillet/batch_dist2", 5.0)))
+            self.spin_radius.setValue(float(s.value("plugins/fillet/batch_radius", constants.DEFAULT_RADIUS_METRIC)))
+            self.spin_segments.setValue(int(s.value("plugins/fillet/batch_segments", constants.DEFAULT_SEGMENTS_COUNT)))
+            self.spin_dist1.setValue(float(s.value("plugins/fillet/batch_dist1", constants.DEFAULT_DIST1_METRIC)))
+            self.spin_dist2.setValue(float(s.value("plugins/fillet/batch_dist2", constants.DEFAULT_DIST2_METRIC)))
             
             # Load link state (support either key)
-            is_linked = s.value("plugins/fillet/batch_equal_dist", True, type=bool)
+            is_linked = s.value("plugins/fillet/batch_equal_dist", constants.DEFAULT_LINK_DISTANCES, type=bool)
             self.btn_link.setChecked(is_linked)
             self._update_link_icon()
 
@@ -325,24 +330,24 @@ class FilletSettingsWidget(QWidget):
         """Adapts spinbox decimals, range, and step to geographic or projected CRS."""
         is_geo = crs.isGeographic() if crs and crs.isValid() else False
         if is_geo:
-            decimals = 6
-            step = 0.00005
-            min_val = 0.000001
-            max_val = 180.0
+            decimals = constants.DECIMALS_GEO
+            step = constants.STEP_GEO_VALUE
+            min_val = constants.MIN_GEO_VALUE
+            max_val = constants.MAX_GEO_VALUE
             for spin in (self.spin_radius, self.spin_dist1, self.spin_dist2):
                 spin.setDecimals(decimals)
                 spin.setRange(min_val, max_val)
                 spin.setSingleStep(step)
                 if spin.value() >= 0.5:
-                    spin.setValue(0.0001)
+                    spin.setValue(constants.DEFAULT_RADIUS_GEO)
         else:
-            decimals = 3
-            step = 1.0
-            min_val = 0.0001
-            max_val = 9999999.0
+            decimals = constants.DECIMALS_METRIC
+            step = constants.STEP_METRIC_VALUE
+            min_val = constants.MIN_METRIC_VALUE
+            max_val = constants.MAX_METRIC_VALUE
             for spin in (self.spin_radius, self.spin_dist1, self.spin_dist2):
                 spin.setDecimals(decimals)
                 spin.setRange(min_val, max_val)
                 spin.setSingleStep(step)
-                if spin.value() < 0.0001:
-                    spin.setValue(5.0)
+                if spin.value() < constants.MIN_METRIC_VALUE:
+                    spin.setValue(constants.DEFAULT_RADIUS_METRIC)

@@ -20,6 +20,11 @@ from qgis.PyQt.QtWidgets import (
     QWidget,
 )
 
+try:
+    from ..core import constants
+except (ImportError, ValueError):
+    from core import constants
+
 
 class FilletCanvasWidget(QFrame):
     """Floating CAD-style panel inside the QGIS map canvas."""
@@ -28,8 +33,8 @@ class FilletCanvasWidget(QFrame):
     modeChanged = pyqtSignal(str)
     commitRequested = pyqtSignal()
 
-    MODE_FILLET = "fillet"
-    MODE_CHAMFER = "chamfer"
+    MODE_FILLET = constants.MODE_FILLET
+    MODE_CHAMFER = constants.MODE_CHAMFER
 
     def __init__(self, canvas: QgsMapCanvas):
         super().__init__(canvas)
@@ -120,10 +125,10 @@ class FilletCanvasWidget(QFrame):
         # Row 0: Radius
         self.lbl_radius = QLabel(self.tr("Radius"), self.widget_fillet)
         self.spin_radius = QgsDoubleSpinBox(self.widget_fillet)
-        self.spin_radius.setRange(0.001, 9999999.0)
-        self.spin_radius.setValue(5.0)
-        self.spin_radius.setDecimals(3)
-        self.spin_radius.setSingleStep(1.0)
+        self.spin_radius.setRange(constants.MIN_METRIC_VALUE, constants.MAX_METRIC_VALUE)
+        self.spin_radius.setValue(constants.DEFAULT_RADIUS_METRIC)
+        self.spin_radius.setDecimals(constants.DECIMALS_METRIC)
+        self.spin_radius.setSingleStep(constants.STEP_METRIC_VALUE)
         self.spin_radius.setShowClearButton(True)
 
         self.btn_lock_radius = QToolButton(self.widget_fillet)
@@ -141,8 +146,8 @@ class FilletCanvasWidget(QFrame):
         # Row 1: Fillet segments
         self.lbl_segments = QLabel(self.tr("Fillet segments"), self.widget_fillet)
         self.spin_segments = QgsSpinBox(self.widget_fillet)
-        self.spin_segments.setRange(2, 64)
-        self.spin_segments.setValue(20)
+        self.spin_segments.setRange(constants.MIN_SEGMENTS_COUNT, constants.MAX_SEGMENTS_COUNT)
+        self.spin_segments.setValue(constants.DEFAULT_SEGMENTS_COUNT)
         self.spin_segments.setShowClearButton(True)
 
         self.btn_lock_segments = QToolButton(self.widget_fillet)
@@ -169,10 +174,10 @@ class FilletCanvasWidget(QFrame):
         # Row 0: Distance 1
         self.lbl_dist1 = QLabel(self.tr("Distance 1"), self.widget_chamfer)
         self.spin_dist1 = QgsDoubleSpinBox(self.widget_chamfer)
-        self.spin_dist1.setRange(0.001, 9999999.0)
-        self.spin_dist1.setValue(5.0)
-        self.spin_dist1.setDecimals(3)
-        self.spin_dist1.setSingleStep(1.0)
+        self.spin_dist1.setRange(constants.MIN_METRIC_VALUE, constants.MAX_METRIC_VALUE)
+        self.spin_dist1.setValue(constants.DEFAULT_DIST1_METRIC)
+        self.spin_dist1.setDecimals(constants.DECIMALS_METRIC)
+        self.spin_dist1.setSingleStep(constants.STEP_METRIC_VALUE)
         self.spin_dist1.setShowClearButton(True)
 
         self.btn_lock_dist1 = QToolButton(self.widget_chamfer)
@@ -190,10 +195,10 @@ class FilletCanvasWidget(QFrame):
         # Row 1: Distance 2
         self.lbl_dist2 = QLabel(self.tr("Distance 2"), self.widget_chamfer)
         self.spin_dist2 = QgsDoubleSpinBox(self.widget_chamfer)
-        self.spin_dist2.setRange(0.001, 9999999.0)
-        self.spin_dist2.setValue(5.0)
-        self.spin_dist2.setDecimals(3)
-        self.spin_dist2.setSingleStep(1.0)
+        self.spin_dist2.setRange(constants.MIN_METRIC_VALUE, constants.MAX_METRIC_VALUE)
+        self.spin_dist2.setValue(constants.DEFAULT_DIST2_METRIC)
+        self.spin_dist2.setDecimals(constants.DECIMALS_METRIC)
+        self.spin_dist2.setSingleStep(constants.STEP_METRIC_VALUE)
         self.spin_dist2.setShowClearButton(True)
         self.spin_dist2.setEnabled(False)
 
@@ -324,15 +329,15 @@ class FilletCanvasWidget(QFrame):
             else:
                 self.radio_fillet.setChecked(True)
 
-            self.spin_radius.setValue(float(s.value("plugins/fillet/radius", 5.0)))
+            self.spin_radius.setValue(float(s.value("plugins/fillet/radius", constants.DEFAULT_RADIUS_METRIC)))
             self.btn_lock_radius.setChecked(s.value("plugins/fillet/lock_radius", True, type=bool))
-            self.spin_segments.setValue(int(s.value("plugins/fillet/segments", 20)))
+            self.spin_segments.setValue(int(s.value("plugins/fillet/segments", constants.DEFAULT_SEGMENTS_COUNT)))
 
-            self.spin_dist1.setValue(float(s.value("plugins/fillet/dist1", 5.0)))
+            self.spin_dist1.setValue(float(s.value("plugins/fillet/dist1", constants.DEFAULT_DIST1_METRIC)))
             self.btn_lock_dist1.setChecked(s.value("plugins/fillet/lock_dist1", True, type=bool))
-            self.spin_dist2.setValue(float(s.value("plugins/fillet/dist2", 5.0)))
+            self.spin_dist2.setValue(float(s.value("plugins/fillet/dist2", constants.DEFAULT_DIST2_METRIC)))
             self.btn_lock_dist2.setChecked(s.value("plugins/fillet/lock_dist2", True, type=bool))
-            self.btn_link.setChecked(s.value("plugins/fillet/link_dist", True, type=bool))
+            self.btn_link.setChecked(s.value("plugins/fillet/link_dist", constants.DEFAULT_LINK_DISTANCES, type=bool))
 
             self._update_link_icon()
             self._update_lock_icon(self.btn_lock_radius)
@@ -478,27 +483,27 @@ class FilletCanvasWidget(QFrame):
         is_geo = crs.isGeographic() if crs and crs.isValid() else False
 
         if is_geo:
-            decimals = 6
-            step = 0.00005
-            min_val = 0.000001
-            max_val = 180.0
+            decimals = constants.DECIMALS_GEO
+            step = constants.STEP_GEO_VALUE
+            min_val = constants.MIN_GEO_VALUE
+            max_val = constants.MAX_GEO_VALUE
             for spin in (self.spin_radius, self.spin_dist1, self.spin_dist2):
                 spin.setDecimals(decimals)
                 spin.setRange(min_val, max_val)
                 spin.setSingleStep(step)
                 if spin.value() >= 0.5:
-                    spin.setValue(0.0001)
+                    spin.setValue(constants.DEFAULT_RADIUS_GEO)
         else:
-            decimals = 3
-            step = 1.0
-            min_val = 0.001
-            max_val = 9999999.0
+            decimals = constants.DECIMALS_METRIC
+            step = constants.STEP_METRIC_VALUE
+            min_val = constants.MIN_METRIC_VALUE
+            max_val = constants.MAX_METRIC_VALUE
             for spin in (self.spin_radius, self.spin_dist1, self.spin_dist2):
                 spin.setDecimals(decimals)
                 spin.setRange(min_val, max_val)
                 spin.setSingleStep(step)
-                if spin.value() < 0.001:
-                    spin.setValue(5.0)
+                if spin.value() < constants.MIN_METRIC_VALUE:
+                    spin.setValue(constants.DEFAULT_RADIUS_METRIC)
 
     # --- Properties & Methods ---
     @property
