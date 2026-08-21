@@ -53,6 +53,7 @@ class FilletPlugin:
         self.canvas_widget: Optional[FilletCanvasWidget] = None
         self.dock_widget: Optional[QDockWidget] = None
         self.settings_widget: Optional[FilletSettingsWidget] = None
+        self._tracked_layer: Optional[QgsVectorLayer] = None
 
     @staticmethod
     def is_qgis_4() -> bool:
@@ -189,16 +190,28 @@ class FilletPlugin:
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.batch_action)
 
         # Track layer changes
-        self.iface.currentLayerChanged.connect(self.update_action_state)
+        self.iface.currentLayerChanged.connect(self._on_current_layer_changed)
 
         self.update_action_state()
 
     def unload(self):
-        # 1. Disconnect global signals
+        # 1. Disconnect global signals & tracked layer signals
         try:
-            self.iface.currentLayerChanged.disconnect(self.update_action_state)
+            self.iface.currentLayerChanged.disconnect(self._on_current_layer_changed)
         except (TypeError, RuntimeError):
             pass  # nosec B110
+
+        if self._tracked_layer is not None:
+            try:
+                self._tracked_layer.editingStarted.disconnect(self.update_action_state)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            try:
+                self._tracked_layer.editingStopped.disconnect(self.update_action_state)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            self._tracked_layer = None
+
         if not self.is_qgis_4():
             try:
                 self.canvas.mapToolSet.disconnect(self.on_map_tool_changed)
@@ -311,21 +324,58 @@ class FilletPlugin:
             if not is_active and self.canvas_widget:
                 self.canvas_widget.hide()
 
+    def _on_current_layer_changed(self, layer=None):
+        self.update_action_state()
+
     def update_action_state(self):
-        layer = self.canvas.currentLayer()
-        enabled = False
-        if isinstance(layer, QgsVectorLayer):
-            if layer.geometryType() in (QgsWkbTypes.LineGeometry, QgsWkbTypes.PolygonGeometry):
-                enabled = True
-                if self.settings_widget and hasattr(self.settings_widget, "adapt_to_crs"):
-                    self.settings_widget.adapt_to_crs(layer.crs())
-                if self.canvas_widget and hasattr(self.canvas_widget, "adapt_to_crs"):
-                    self.canvas_widget.adapt_to_crs(layer.crs())
+        layer = self.canvas.currentLayer() if self.canvas else None
+
+        # Re-bind editing state signals if current layer changed
+        if layer != self._tracked_layer:
+            if self._tracked_layer is not None:
+                try:
+                    self._tracked_layer.editingStarted.disconnect(self.update_action_state)
+                except (TypeError, RuntimeError):
+                    pass  # nosec B110
+                try:
+                    self._tracked_layer.editingStopped.disconnect(self.update_action_state)
+                except (TypeError, RuntimeError):
+                    pass  # nosec B110
+            self._tracked_layer = layer
+            if isinstance(layer, QgsVectorLayer):
+                try:
+                    layer.editingStarted.connect(self.update_action_state)
+                    layer.editingStopped.connect(self.update_action_state)
+                except (TypeError, RuntimeError):
+                    pass  # nosec B110
+
+        is_vector = isinstance(layer, QgsVectorLayer)
+        is_supported_geom = (
+            is_vector and layer.geometryType() in (QgsWkbTypes.LineGeometry, QgsWkbTypes.PolygonGeometry)
+        )
+        is_editable = bool(is_supported_geom and layer.isEditable())
+
+        if is_vector and is_supported_geom:
+            if self.settings_widget and hasattr(self.settings_widget, "adapt_to_crs"):
+                self.settings_widget.adapt_to_crs(layer.crs())
+            if self.canvas_widget and hasattr(self.canvas_widget, "adapt_to_crs"):
+                self.canvas_widget.adapt_to_crs(layer.crs())
 
         if self.action:
-            self.action.setEnabled(enabled)
+            self.action.setEnabled(is_editable)
         if self.batch_action:
-            self.batch_action.setEnabled(enabled)
+            self.batch_action.setEnabled(is_editable)
+
+        if self.settings_widget and hasattr(self.settings_widget, "set_editable_state"):
+            self.settings_widget.set_editable_state(is_editable)
+
+        # If editing was stopped while the interactive tool is active on canvas, deactivate it
+        if not is_editable and self.map_tool and self.canvas and self.canvas.mapTool() == self.map_tool:
+            self.canvas.unsetMapTool(self.map_tool)
+            if self.canvas_widget:
+                self.canvas_widget.hide()
+            if self.action:
+                self.action.setChecked(False)
 
     def apply_to_selected_features(self):
         """Batch apply fillet or chamfer to all corners of selected features."""

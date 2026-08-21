@@ -351,3 +351,15 @@ class FilletSettingsWidget(QWidget):
                 spin.setSingleStep(step)
                 if spin.value() < constants.MIN_METRIC_VALUE:
                     spin.setValue(constants.DEFAULT_RADIUS_METRIC)
+
+    def set_editable_state(self, is_editable: bool):
+        """Enables or disables the batch apply button based on layer editability."""
+        self.btn_apply_selected.setEnabled(is_editable)
+        if is_editable:
+            self.btn_apply_selected.setToolTip(
+                self.tr("Застосувати скруглення або фаску до всіх вершин виділених об'єктів")
+            )
+        else:
+            self.btn_apply_selected.setToolTip(
+                self.tr("Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти")
+            )
