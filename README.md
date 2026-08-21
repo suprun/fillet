@@ -1,6 +1,6 @@
 <div align="center">
 
-# Fillet, Chamfer & Corner Restore for QGIS (Interactive & Batch)
+# Fillet, Chamfer & Corner Restore for QGIS 3.x and 4.x (Interactive & Batch)
 
 <p align="center">
   <img src="icon.png" alt="Fillet, Chamfer & Corner Restore Logo" width="96" height="96" />
@@ -21,7 +21,7 @@
 
 ## 🌟 Overview
 
-The **Fillet, Chamfer & Corner Restore** plugin brings a complete suite of CAD-grade corner editing tools into QGIS:
+The **Fillet, Chamfer & Corner Restore for QGIS 3.x and 4.x** plugin brings a complete suite of CAD-grade corner editing tools into QGIS:
 
 1. **Interactive Fillet & Chamfer CAD Tool (QGIS 3.x)**: Backports the interactive digitizing workflow introduced in QGIS 4.0 directly into the **QGIS 3.x LTR series** (from QGIS 3.16 to 3.44+), complete with an on-canvas CAD HUD widget.
 2. **Interactive Corner Restoration Tool / Unfillet & Unchamfer (QGIS 3.x & QGIS 4.x)**: A dedicated CAD Two-Edge selection tool allowing you to select two adjacent straight edges, remove intermediate arc chords or bevel segments, and reconstruct the exact sharp intersection corner ($V_{\text{sharp}}$).
