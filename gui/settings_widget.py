@@ -2,8 +2,14 @@ import os
 from typing import Optional
 
 from qgis.core import QgsCoordinateReferenceSystem, QgsSettings
-from qgis.PyQt.QtCore import QEvent, QSize, Qt, QTimer, pyqtSignal
-from qgis.PyQt.QtGui import QCursor, QIcon, QPixmap, QTransform
+from qgis.PyQt.QtCore import QEvent, QRegularExpression, QSize, Qt, QTimer, pyqtSignal
+from qgis.PyQt.QtGui import (
+    QCursor,
+    QIcon,
+    QPixmap,
+    QRegularExpressionValidator,
+    QTransform,
+)
 from qgis.PyQt.QtWidgets import (
     QButtonGroup,
     QDoubleSpinBox,
@@ -225,15 +231,91 @@ class FilletSettingsWidget(QWidget):
         self.parametersChanged.connect(self._save_settings)
         self.btn_link.toggled.connect(lambda _: self._save_settings())
 
+        # Configure numeric validators on lineEdits
+        self._configure_numeric_validators()
+
         # Load persisted settings from user profile
         self._load_settings()
 
+    def _configure_numeric_validators(self):
+        """Sets strict numeric validators on all spinbox lineEdits."""
+        double_regex = QRegularExpression(r"^[0-9]*[.,]?[0-9]*$")
+        int_regex = QRegularExpression(r"^[0-9]*$")
+
+        for spin in (self.spin_radius, self.spin_dist1, self.spin_dist2):
+            if hasattr(spin, "lineEdit") and spin.lineEdit():
+                val = QRegularExpressionValidator(double_regex, spin.lineEdit())
+                spin.lineEdit().setValidator(val)
+
+        if hasattr(self.spin_segments, "lineEdit") and self.spin_segments.lineEdit():
+            val = QRegularExpressionValidator(int_regex, self.spin_segments.lineEdit())
+            self.spin_segments.lineEdit().setValidator(val)
+
+    def _handle_spin_key_press(self, spin: QWidget, event) -> bool:
+        """Restricts text input to numeric digits and normalizes decimal separators."""
+        text = event.text()
+        if not text:
+            return False
+
+        # Allow standard Qt modifier shortcuts (Ctrl+C, Ctrl+V, Ctrl+A, Ctrl+Z, etc.)
+        modifiers = event.modifiers()
+        control_mod = getattr(Qt.KeyboardModifier, "ControlModifier", getattr(Qt, "ControlModifier", 0x04000000))
+        if modifiers and (modifiers & control_mod):
+            return False
+
+        # Integer stepper (Fillet segments): allow only digits 0-9
+        if spin == self.spin_segments:
+            if not text.isdigit():
+                return True
+            return False
+
+        # Floating-point steppers (Radius, Distance 1, Distance 2):
+        if text.isdigit():
+            return False
+
+        if text in (".", ","):
+            line_edit = spin.lineEdit() if hasattr(spin, "lineEdit") else None
+            if not line_edit:
+                return False
+
+            curr_text = line_edit.text()
+            sel_start = line_edit.selectionStart()
+            sel_len = len(line_edit.selectedText())
+
+            # Text that remains if current selection is replaced
+            unselected = (
+                curr_text[:sel_start] + curr_text[sel_start + sel_len :]
+                if sel_start >= 0
+                else curr_text
+            )
+
+            # If decimal point already exists in unselected text, drop extra separator
+            if "." in unselected or "," in unselected:
+                return True
+
+            # Insert decimal point matching the spinbox locale
+            dec_sep = spin.locale().decimalPoint() if hasattr(spin, "locale") else "."
+            line_edit.insert(dec_sep)
+            return True
+
+        # Consume/block any other character (letters, symbols, spaces, minus)
+        return True
+
     def eventFilter(self, obj, event):
         focus_in = getattr(QEvent.Type, "FocusIn", getattr(QEvent, "FocusIn", None))
+        evt_key_press = getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", None))
+
         if event.type() == focus_in:
             for spin in (self.spin_radius, self.spin_segments, self.spin_dist1, self.spin_dist2):
                 if obj == spin or (hasattr(spin, "lineEdit") and obj == spin.lineEdit()):
                     QTimer.singleShot(0, lambda s=spin: self._select_all_spin(s))
+        elif event.type() == evt_key_press:
+            for spin in (self.spin_radius, self.spin_segments, self.spin_dist1, self.spin_dist2):
+                if hasattr(spin, "lineEdit") and obj == spin.lineEdit():
+                    if self._handle_spin_key_press(spin, event):
+                        return True
+                    break
+
         return super().eventFilter(obj, event)
 
     def _select_all_spin(self, spin):

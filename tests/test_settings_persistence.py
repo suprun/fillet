@@ -130,6 +130,54 @@ class TestSettingsPersistence(unittest.TestCase):
         sw.adapt_to_crs(proj_crs)
         self.assertEqual(sw.spin_dist1.decimals(), 3)
 
+    def test_numeric_input_validation(self):
+        from qgis.PyQt.QtCore import QEvent, Qt
+        from qgis.PyQt.QtGui import QKeyEvent, QValidator
+
+        cw = FilletCanvasWidget(self.canvas)
+
+        # 1. Test validator on lineEdit of spin_radius
+        val_double = cw.spin_radius.lineEdit().validator()
+        self.assertIsNotNone(val_double)
+        # Check validation states
+        res, _, _ = val_double.validate("12.34", 0)
+        self.assertIn(res, (QValidator.State.Acceptable if hasattr(QValidator, "State") else QValidator.Acceptable,
+                            QValidator.State.Intermediate if hasattr(QValidator, "State") else QValidator.Intermediate))
+        res, _, _ = val_double.validate("abc", 0)
+        self.assertEqual(res, QValidator.State.Invalid if hasattr(QValidator, "State") else QValidator.Invalid)
+
+        # 2. Test validator on spin_segments
+        val_int = cw.spin_segments.lineEdit().validator()
+        self.assertIsNotNone(val_int)
+        res, _, _ = val_int.validate("16", 0)
+        self.assertIn(res, (QValidator.State.Acceptable if hasattr(QValidator, "State") else QValidator.Acceptable,
+                            QValidator.State.Intermediate if hasattr(QValidator, "State") else QValidator.Intermediate))
+        res, _, _ = val_int.validate("12.5", 0)
+        self.assertEqual(res, QValidator.State.Invalid if hasattr(QValidator, "State") else QValidator.Invalid)
+
+        # 3. Test key filtering on canvas widget
+        key_a = QKeyEvent(getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", None)), Qt.Key.Key_A if hasattr(Qt, "Key") else Qt.Key_A, Qt.KeyboardModifier.NoModifier if hasattr(Qt, "KeyboardModifier") else Qt.NoModifier, "a")
+        key_5 = QKeyEvent(getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", None)), Qt.Key.Key_5 if hasattr(Qt, "Key") else Qt.Key_5, Qt.KeyboardModifier.NoModifier if hasattr(Qt, "KeyboardModifier") else Qt.NoModifier, "5")
+        key_dot = QKeyEvent(getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", None)), Qt.Key.Key_Period if hasattr(Qt, "Key") else Qt.Key_Period, Qt.KeyboardModifier.NoModifier if hasattr(Qt, "KeyboardModifier") else Qt.NoModifier, ".")
+        key_comma = QKeyEvent(getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", None)), Qt.Key.Key_Comma if hasattr(Qt, "Key") else Qt.Key_Comma, Qt.KeyboardModifier.NoModifier if hasattr(Qt, "KeyboardModifier") else Qt.NoModifier, ",")
+
+        # Letters must be blocked (returns True)
+        self.assertTrue(cw._handle_spin_key_press(cw.spin_radius, key_a))
+        self.assertTrue(cw._handle_spin_key_press(cw.spin_segments, key_a))
+
+        # Digits must be allowed (returns False)
+        self.assertFalse(cw._handle_spin_key_press(cw.spin_radius, key_5))
+        self.assertFalse(cw._handle_spin_key_press(cw.spin_segments, key_5))
+
+        # Dot / Comma must be blocked for integer spin_segments
+        self.assertTrue(cw._handle_spin_key_press(cw.spin_segments, key_dot))
+        self.assertTrue(cw._handle_spin_key_press(cw.spin_segments, key_comma))
+
+        # Dot / Comma for double spinbox: normalized and handled
+        cw.spin_radius.lineEdit().setText("10")
+        cw.spin_radius.lineEdit().selectAll()
+        self.assertTrue(cw._handle_spin_key_press(cw.spin_radius, key_comma))
+
 
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(TestSettingsPersistence)
@@ -137,3 +185,4 @@ if __name__ == "__main__":
     result = runner.run(suite)
     app.exitQgis()
     sys.exit(0 if result.wasSuccessful() else 1)
+
