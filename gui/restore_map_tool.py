@@ -22,7 +22,7 @@ from qgis.gui import (
     QgsMapToolEdit,
     QgsRubberBand,
 )
-from qgis.PyQt.QtCore import Qt, QTimer
+from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtGui import QColor, QCursor
 
 # Safe cross-version Qt5 / Qt6 constants
@@ -35,20 +35,17 @@ _Key_Escape = getattr(Qt.Key, "Key_Escape", getattr(Qt, "Key_Escape", 0x01000000
 try:
     from ..core.geometry_engine import GeometryEngine
     from ..core.snapping_helper import SegmentMatch, SnappingHelper
-    from .restore_canvas_widget import RestoreCanvasWidget
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
     from core.snapping_helper import SegmentMatch, SnappingHelper
-    from gui.restore_canvas_widget import RestoreCanvasWidget
 
 
 class RestoreMapTool(QgsMapToolEdit):
     """Dedicated interactive CAD Map Tool for restoring sharp corners."""
 
-    def __init__(self, canvas: QgsMapCanvas, widget: Optional[RestoreCanvasWidget] = None):
+    def __init__(self, canvas: QgsMapCanvas):
         super().__init__(canvas)
         self.canvas = canvas
-        self.widget = widget if widget else RestoreCanvasWidget(canvas)
 
         self.first_segment_match: Optional[SegmentMatch] = None
         self.current_segment_match: Optional[SegmentMatch] = None
@@ -79,17 +76,11 @@ class RestoreMapTool(QgsMapToolEdit):
         if _CrossCursor is not None:
             self.setCursor(QCursor(_CrossCursor))
 
-        self.widget.cancelRequested.connect(self._cancel_operation)
-
     def activate(self):
         super().activate()
         self._clear_preview()
-        if self.widget:
-            self.widget.show_on_canvas()
 
     def deactivate(self):
-        if self.widget:
-            self.widget.hide()
         self._clear_preview()
         super().deactivate()
 
@@ -202,8 +193,6 @@ class RestoreMapTool(QgsMapToolEdit):
             if self.first_segment_match is None:
                 if self.current_segment_match:
                     self.first_segment_match = self.current_segment_match
-                    if self.widget:
-                        self.widget.set_step(2)
             else:
                 if self.preview_geom and self.first_segment_match:
                     fid = self.first_segment_match.fid
@@ -212,8 +201,6 @@ class RestoreMapTool(QgsMapToolEdit):
                     layer.changeGeometry(fid, new_geom)
                     layer.endEditCommand()
                     self._clear_preview()
-                    if self.widget:
-                        self.widget.set_step(1)
 
         elif event.button() == _RightButton:
             self._cancel_operation()
@@ -227,8 +214,6 @@ class RestoreMapTool(QgsMapToolEdit):
 
     def _cancel_operation(self):
         self._clear_preview()
-        if self.widget:
-            self.widget.set_step(1)
 
     def _clear_preview(self):
         self.edge1_rubberband.reset()

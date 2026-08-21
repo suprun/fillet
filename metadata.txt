@@ -1,20 +1,26 @@
 [general]
-name=Fillet & Chamfer for QGIS 3.x (Interactive & Batch)
+name=Fillet, Chamfer & Corner Restore (Interactive & Batch)
 qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
-description=Interactive Fillet & Chamfer tool for QGIS 3.16-3.44 and Batch Fillet / Chamfer Tool for QGIS 3.16-4.0+.
-about=Provides interactive CAD-like Fillet (corner rounding) and Chamfer (corner beveling) digitizing for QGIS 3.16-3.44, plus an instant Batch Processing panel for selected vector features in both QGIS 3.16-3.44 and QGIS 4.0+.
-version=1.0.0.7
+description=Interactive Fillet, Chamfer & Corner Restoration tools for QGIS with instant Batch Processing for selected features.
+about=Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), and Two-Edge Corner Restoration (Unfillet / Unchamfer) map tools for QGIS, along with a batch processing dock panel for selected vector features across QGIS 3.x and QGIS 4.x.
+version=1.0.0.8
 author=suprun
 email=suprun.serhiy+qgis@gmail.com
 homepage=https://github.com/suprun/fillet
 repository=https://github.com/suprun/fillet
 tracker=https://github.com/suprun/fillet/issues
-tags=cad, editing, fillet, chamfer, geometry, digitizing, curve, batch, qgis4
+tags=cad, editing, fillet, chamfer, unfillet, corner, restore, geometry, digitizing, curve, batch, qgis4
 icon=icon.png
 experimental=False
 deprecated=False
-changelog=1.0.0.7:
+changelog=1.0.0.8:
+    - Renamed plugin to reflect full CAD editing suite: Fillet, Chamfer & Corner Restore.
+    - Added dedicated toolbar button with QGIS delete-badge icon for interactive Corner Restoration.
+    - Cleaned up interaction workflow and removed floating canvas banner for corner restoration.
+    - Updated English README and documentation.
+    - Full 40 languages translation support.
+    1.0.0.7:
     - Added dedicated toolbar button and CAD tool for Unfillet / Unchamfer (Corner Restoration).
     - Custom icon with remove badge for corner reconstruction.
     - Updated translations in 40 languages.

@@ -15,7 +15,7 @@
      style="display:inline;fill:#d5bc4c;fill-opacity:1;stroke:#555753;stroke-dasharray:1, 1;stroke-dashoffset:0;stroke-opacity:1"
      d="M 0,3.7591371 7.256687,3.8733453 20.329052,12 v 0 c 0,0 0.252252,8.599181 -8.951535,8.59918 L 0,20.599179"
      id="path1471" />
-  <!-- Remove / minus badge in bottom corner (QGIS style) -->
+  <!-- Red delete badge with white cross (QGIS mActionDelete style) -->
   <rect
      id="badge_bg"
      x="13"
@@ -25,11 +25,8 @@
      rx="1"
      ry="1"
      style="fill:#ef2929;fill-opacity:1;stroke:#a40000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter" />
-  <rect
-     id="badge_minus"
-     x="15"
-     y="17"
-     width="6"
-     height="2"
-     style="fill:#ffffff;fill-opacity:1;stroke:none" />
+  <path
+     id="badge_cross"
+     d="M 15.5,15.5 L 20.5,20.5 M 20.5,15.5 L 15.5,20.5"
+     style="fill:none;stroke:#ffffff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round" />
 </svg>
