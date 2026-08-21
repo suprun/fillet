@@ -191,31 +191,19 @@ class GeometryEngine:
         segments_count: int = 12,
     ) -> List[QgsPoint]:
         """
-        Discretizes a 3-point circular arc (p1 -> pm -> p2) into a list of QgsPoints.
+        Discretizes a 3-point circular arc (p1 -> pm -> p2) into a list of QgsPoints
+        with exactly `segments_count` linear segments (segments_count + 1 vertices).
         """
         if segments_count < 2:
             segments_count = 2
 
-        # Use QgsCircularString curveToLine if available
-        circ = QgsCircularString()
-        circ.setPoints([p1, pm, p2])
-
-        try:
-            ls = circ.curveToLine()
-            if ls and ls.numPoints() > 0:
-                return [ls.pointN(i) for i in range(ls.numPoints())]
-        except (AttributeError, RuntimeError, TypeError):
-            # Fallback to manual arc calculation below
-            pass  # nosec B110
-
-        # Fallback calculation
         ax, ay = p1.x(), p1.y()
         bx, by = pm.x(), pm.y()
         cx, cy = p2.x(), p2.y()
 
         d = 2 * (ax * (by - cy) + bx * (cy - ay) + cx * (ay - by))
         if abs(d) < 1e-10:
-            return [p1, pm, p2]
+            return [QgsPoint(p1.x(), p1.y()), QgsPoint(pm.x(), pm.y()), QgsPoint(p2.x(), p2.y())]
 
         ux = ((ax * ax + ay * ay) * (by - cy) + (bx * bx + by * by) * (cy - ay) + (cx * cx + cy * cy) * (ay - by)) / d
         uy = ((ax * ax + ay * ay) * (cx - bx) + (bx * bx + by * by) * (ax - cx) + (cx * cx + cy * cy) * (bx - ax)) / d
@@ -240,11 +228,12 @@ class GeometryEngine:
             start_ang = a1
             end_ang = a2_norm - 2 * math.pi
 
-        points = []
-        for i in range(segments_count + 1):
+        points = [QgsPoint(p1.x(), p1.y())]
+        for i in range(1, segments_count):
             t = i / float(segments_count)
             ang = start_ang + t * (end_ang - start_ang)
             points.append(QgsPoint(ux + r * math.cos(ang), uy + r * math.sin(ang)))
+        points.append(QgsPoint(p2.x(), p2.y()))
 
         return points
 

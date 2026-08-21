@@ -84,14 +84,20 @@ class TestGeometryEngine(unittest.TestCase):
         )
         self.assertIsNotNone(new_geom)
         self.assertTrue(new_geom.isGeosValid())
-        # The new geometry should have more points than the original 3
+        # The new geometry with 8 segments replaces 1 vertex with 9 arc points: total = 1 + 9 + 1 = 11 points
         ls = new_geom.asPolyline()
-        self.assertGreater(len(ls), 3)
+        self.assertEqual(len(ls), 11)
         # Start point and end point should be preserved
         self.assertAlmostEqual(ls[0].x(), 0.0, places=5)
         self.assertAlmostEqual(ls[0].y(), 10.0, places=5)
         self.assertAlmostEqual(ls[-1].x(), 10.0, places=5)
         self.assertAlmostEqual(ls[-1].y(), 0.0, places=5)
+
+        # Test with 4 segments (total 1 + 5 + 1 = 7 points)
+        geom4 = GeometryEngine.apply_fillet_to_geometry(
+            geom, part_idx=0, ring_idx=0, vertex_idx=1, radius=2.0, segments_count=4
+        )
+        self.assertEqual(len(geom4.asPolyline()), 7)
 
     def test_apply_fillet_to_polygon(self):
         """Test applying fillet to a polygon corner."""
