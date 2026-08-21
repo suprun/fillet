@@ -4,7 +4,7 @@ qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
 description=Interactive Fillet & Chamfer tool for QGIS 3.16-3.44 and Batch Fillet / Chamfer Tool for QGIS 3.16-4.0+.
 about=Provides interactive CAD-like Fillet (corner rounding) and Chamfer (corner beveling) digitizing for QGIS 3.16-3.44, plus an instant Batch Processing panel for selected vector features in both QGIS 3.16-3.44 and QGIS 4.0+.
-version=1.0.0.4
+version=1.0.0.5
 author=suprun
 email=suprun.serhiy+qgis@gmail.com
 homepage=https://github.com/suprun/fillet
@@ -14,7 +14,9 @@ tags=cad, editing, fillet, chamfer, geometry, digitizing, curve, batch, qgis4
 icon=icon.png
 experimental=False
 deprecated=False
-changelog=1.0.0.4:
+changelog=1.0.0.5:
+    - Fixed point type conversion in map canvas preview marker for restore mode.
+    1.0.0.4:
     - Added Unfillet / Unchamfer tool (restore sharp corners interactively and in batch).
     - Analytical line intersection geometry reconstruction for arcs and bevels.
     - Added 3rd mode in floating on-canvas HUD and batch dock panel.

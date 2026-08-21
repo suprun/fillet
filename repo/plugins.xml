@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
-  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.4" plugin_id="fillet">
+  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.5" plugin_id="fillet">
     <description>Interactive Fillet &amp; Chamfer tool for QGIS 3.16-3.44 and Batch Fillet / Chamfer Tool for QGIS 3.16-4.0+.</description>
     <about>Provides interactive CAD-like Fillet (corner rounding) and Chamfer (corner beveling) digitizing for QGIS 3.16-3.44, plus an instant Batch Processing panel for selected vector features in both QGIS 3.16-3.44 and QGIS 4.0+.</about>
-    <version>1.0.0.4</version>
+    <version>1.0.0.5</version>
     <qgis_minimum_version>3.16</qgis_minimum_version>
     <qgis_maximum_version>4.99</qgis_maximum_version>
     <file_name>fillet.zip</file_name>
@@ -14,7 +14,9 @@
     <experimental>False</experimental>
     <deprecated>False</deprecated>
     <tags>cad, editing, fillet, chamfer, geometry, digitizing, curve, batch, qgis4</tags>
-    <change_log>1.0.0.4:
+    <change_log>1.0.0.5:
+- Fixed point type conversion in map canvas preview marker for restore mode.
+1.0.0.4:
 - Added Unfillet / Unchamfer tool (restore sharp corners interactively and in batch).
 - Analytical line intersection geometry reconstruction for arcs and bevels.
 - Added 3rd mode in floating on-canvas HUD and batch dock panel.

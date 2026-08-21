@@ -407,7 +407,8 @@ class FilletMapTool(QgsMapToolEdit):
             self.tangent_rubberband.addPoint(t2_map, True)
             self.tangent_rubberband.show()
         elif v_sharp_pt:
-            v_map = self.toMapCoordinates(layer, v_sharp_pt)
+            v_xy = QgsPointXY(v_sharp_pt.x(), v_sharp_pt.y())
+            v_map = self.toMapCoordinates(layer, v_xy)
             self.tangent_rubberband.reset(QgsWkbTypes.PointGeometry)
             self.tangent_rubberband.setColor(stroke_color)
             self.tangent_rubberband.addPoint(v_map, True)

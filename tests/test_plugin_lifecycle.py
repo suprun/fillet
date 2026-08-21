@@ -158,6 +158,53 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
         self.assertFalse(self.plugin.action.isChecked())
         self.assertFalse(self.plugin.action.isEnabled())
 
+    def test_map_tool_preview_in_all_modes(self):
+        """Verify that _update_preview works without errors in fillet, chamfer, and restore modes."""
+        if self.plugin.is_qgis_4():
+            return
+
+        from qgis.core import QgsFeature, QgsGeometry, QgsPointXY
+        from core.geometry_engine import GeometryEngine
+        from gui.map_tool import VertexMatch
+        from gui.canvas_widget import FilletCanvasWidget
+
+        layer = QgsVectorLayer("LineString?crs=EPSG:4326", "temp_lines", "memory")
+        pr = layer.dataProvider()
+        feat = QgsFeature()
+        geom = QgsGeometry.fromPolylineXY([QgsPointXY(0, 10), QgsPointXY(0, 0), QgsPointXY(10, 0)])
+        feat.setGeometry(geom)
+        pr.addFeatures([feat])
+        layer.updateExtents()
+        layer.startEditing()
+        canvas.setCurrentLayer(layer)
+        self.iface.currentLayerChanged.emit(layer)
+
+        tool = self.plugin.map_tool
+        self.plugin.toggle_tool(True)
+        match = VertexMatch(point=QgsPointXY(0, 0), vertex_idx=1, part_idx=0, ring_idx=0, fid=1, geometry=geom)
+        tool.current_match = match
+
+        # 1. Fillet mode
+        self.plugin.canvas_widget.radio_fillet.setChecked(True)
+        tool._update_preview()
+        self.assertIsNotNone(tool.preview_geom)
+
+        # 2. Chamfer mode
+        self.plugin.canvas_widget.radio_chamfer.setChecked(True)
+        tool._update_preview()
+        self.assertIsNotNone(tool.preview_geom)
+
+        # 3. Restore mode
+        self.plugin.canvas_widget.radio_restore.setChecked(True)
+        # Apply fillet first to test restore
+        f_geom = GeometryEngine.apply_fillet_to_geometry(geom, part_idx=0, ring_idx=0, vertex_idx=1, radius=2.0, segments_count=6)
+        tool.current_match = VertexMatch(point=QgsPointXY(0.1, 1.8), vertex_idx=2, part_idx=0, ring_idx=0, fid=1, geometry=f_geom)
+        tool._update_preview()
+        self.assertIsNotNone(tool.preview_geom)
+        self.assertEqual(len(tool.preview_geom.asPolyline()), 3)
+
+        layer.rollBack()
+
 
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(TestPluginLifecycleAndEditState)
