@@ -15,37 +15,11 @@ icon=icon.png
 experimental=False
 deprecated=False
 changelog=1.0.0.10:
-    - Fixed all Qt6 / PyQt6 scoped enum compatibility issues (QgsWkbTypes.GeometryType, QgsRubberBand.IconType, QgsPointLocator.Type).
-    1.0.0.9:
-    - Removed batch corner restore from dock panel; corner restoration is exclusively available via the interactive CAD Two-Edge tool.
-    - Updated Batch Processing panel to focus on batch Fillet and batch Chamfer operations.
-    - Thoroughly revised English README and documentation.
-    1.0.0.8:
-    - Renamed plugin to reflect full CAD editing suite: Fillet, Chamfer & Corner Restore.
-    - Added dedicated toolbar button with QGIS delete-badge icon for interactive Corner Restoration.
-    - Cleaned up interaction workflow and removed floating canvas banner for corner restoration.
-    - Updated English README and documentation.
-    - Full 40 languages translation support.
-    1.0.0.7:
-    - Added dedicated toolbar button and CAD tool for Unfillet / Unchamfer (Corner Restoration).
-    - Custom icon with remove badge for corner reconstruction.
-    - Updated translations in 40 languages.
-    1.0.0.6:
-    - Redesigned Unfillet / Unchamfer tool with CAD Two-Edge selection interaction.
-    - Added edge snapping, live ray intersection preview, and dynamic HUD step prompts.
-    - Updated translations in 40 languages.
-    1.0.0.5:
-    - Fixed point type conversion in map canvas preview marker for restore mode.
-    1.0.0.4:
-    - Added Unfillet / Unchamfer tool (restore sharp corners interactively and in batch).
-    - Analytical line intersection geometry reconstruction for arcs and bevels.
-    - Added 3rd mode in floating on-canvas HUD and batch dock panel.
-    - Updated translations in 40 languages.
-    1.0.0.0:
-    - Initial release of Fillet & Chamfer Tool.
-    - Interactive CAD digitizing tool with floating on-canvas HUD for QGIS 3.x (3.16-3.44).
-    - Batch Fillet & Chamfer dock panel for selected features in QGIS 3.x and 4.x.
+    - Added interactive CAD Two-Edge Corner Restoration tool (Unfillet / Unchamfer) with real-time intersection preview.
+    - Dedicated toolbar button with custom QGIS delete-badge icon for corner reconstruction.
+    - Added Batch Processing dock panel for instant Fillet and Chamfer on selected features in QGIS 3.x and QGIS 4.x.
+    - Fixed all Qt6 / PyQt6 / QGIS 4.0 scoped enum compatibility issues.
     - Full CRS adaptation (metric meters and geographic degrees EPSG:4326).
-    - Exact arc discretization by segments count.
-    - Action enablement locked to active layer editing mode.
-    - Localized in 40 languages.
+    - Localized in 40 languages (all official QGIS GUI locales).
+    1.0.0.0:
+    - Initial release of Fillet & Chamfer Tool for QGIS.

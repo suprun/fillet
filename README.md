@@ -102,7 +102,7 @@ The **Fillet, Chamfer & Corner Restore** plugin brings a complete suite of CAD-g
 1. In QGIS, open **Plugins** → **Manage and Install Plugins...** → **Settings**.
 2. Under *Plugin Repositories*, click **Add...**.
 3. Set Name: `Suprun QGIS Plugins`
-4. Set URL: `https://raw.githubusercontent.com/suprun/fillet/master/repo/plugins.xml`
+4. Set URL: `https://raw.githubusercontent.com/suprun/fillet/master/dist/plugins.xml`
 5. Click **OK**, then install the plugin.
 
 ### Method 3: Manual Installation (from ZIP)

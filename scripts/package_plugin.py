@@ -7,15 +7,15 @@ import os
 import zipfile
 
 IGNORED_EXTENSIONS = {".pyc", ".pyo", ".pyd", ".zip", ".log", ".swp", ".swo"}
-IGNORED_DIRS = {"__pycache__", ".git", ".idea", ".vscode", ".venv", "venv", "dist", "build", "repo", "tests", "scratch", "scripts"}
+IGNORED_DIRS = {"__pycache__", ".git", ".idea", ".vscode", ".venv", "venv", "dist", "build", "tests", "scratch", "scripts"}
 
 
 def package_plugin():
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    repo_dir = os.path.join(root_dir, "repo")
-    os.makedirs(repo_dir, exist_ok=True)
+    dist_dir = os.path.join(root_dir, "dist")
+    os.makedirs(dist_dir, exist_ok=True)
 
-    zip_path = os.path.join(repo_dir, "fillet.zip")
+    zip_path = os.path.join(dist_dir, "fillet.zip")
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
         for root, dirs, files in os.walk(root_dir):
             # Filter out ignored directories
