@@ -54,6 +54,14 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>{} Objekt(e) verarbeitet.</translation>
         </message>
+        <message>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Ecken wiederherstellen (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Werkzeug zur Wiederherstellung scharfer Ecken (entfernt Abrundungen und Fasen)</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -160,14 +168,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Abstände getrennt (d1 ≠ d2)</translation>
         </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Schritt 1: Klicken Sie auf die erste Kante der Ecke</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
-            <translation>Schritt 2: Klicken Sie auf die benachbarte zweite Kante (RMB zum Abbrechen)</translation>
-        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -179,6 +179,36 @@
             <source>Фаска вершини</source>
             <translation>Stützpunkt-Fase</translation>
         </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Ecke wiederherstellen</translation>
+        </message>
+    </context>
+    <context>
+        <name>RestoreCanvasWidget</name>
+        <message>
+            <source>Відновлення гострого кута</source>
+            <translation>Scharfe Ecke wiederherstellen</translation>
+        </message>
+        <message>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>Schritt 1: Klicken Sie auf die erste Kante der Ecke</translation>
+        </message>
+        <message>
+            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
+            <translation>Schritt 2: Klicken Sie auf die benachbarte zweite Kante, um die Ecke zu rekonstruieren</translation>
+        </message>
+        <message>
+            <source>ПКМ або Esc — скасувати</source>
+            <translation>RMB oder Esc — Abbrechen</translation>
+        </message>
+        <message>
+            <source>Скасувати</source>
+            <translation>Abbrechen</translation>
+        </message>
+    </context>
+    <context>
+        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Ecke wiederherstellen</translation>

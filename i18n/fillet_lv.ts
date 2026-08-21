@@ -54,6 +54,14 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Apstrādāti {} objekti.</translation>
         </message>
+        <message>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Atjaunot stūrus (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Aso stūru atjaunošanas rīks (noņem noapaļojumus un nolīdzinājumus)</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -160,14 +168,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Attālumi atsevišķi (d1 ≠ d2)</translation>
         </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>1. solis: noklikšķiniet uz stūra pirmās malas</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
-            <translation>2. solis: noklikšķiniet uz blakus esošās otrās malas (Labais klikšķis, lai atceltu)</translation>
-        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -179,6 +179,36 @@
             <source>Фаска вершини</source>
             <translation>Virsotnes nolīdzināšana</translation>
         </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Atjaunot stūri</translation>
+        </message>
+    </context>
+    <context>
+        <name>RestoreCanvasWidget</name>
+        <message>
+            <source>Відновлення гострого кута</source>
+            <translation>Atjaunot aso stūri</translation>
+        </message>
+        <message>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>1. solis: noklikšķiniet uz stūra pirmās malas</translation>
+        </message>
+        <message>
+            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
+            <translation>2. solis: noklikšķiniet uz blakus esošās otrās malas, lai rekonstruētu stūri</translation>
+        </message>
+        <message>
+            <source>ПКМ або Esc — скасувати</source>
+            <translation>Labais klikšķis vai Esc — Atcelt</translation>
+        </message>
+        <message>
+            <source>Скасувати</source>
+            <translation>Atcelt</translation>
+        </message>
+    </context>
+    <context>
+        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Atjaunot stūri</translation>

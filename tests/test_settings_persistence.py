@@ -108,15 +108,7 @@ class TestSettingsPersistence(unittest.TestCase):
         self.assertAlmostEqual(sw.spin_radius.value(), 45.0, places=2)
 
     def test_restore_mode_persistence(self):
-        # 1. Canvas widget restore mode
-        cw1 = FilletCanvasWidget(self.canvas)
-        cw1.radio_restore.setChecked(True)
-        cw1._save_settings()
-
-        cw2 = FilletCanvasWidget(self.canvas)
-        self.assertEqual(cw2.mode, FilletCanvasWidget.MODE_RESTORE)
-
-        # 2. Settings dock widget restore mode
+        # Settings dock widget restore mode for batch processing
         sw1 = FilletSettingsWidget()
         sw1.radio_restore.setChecked(True)
         sw1._save_settings()

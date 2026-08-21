@@ -54,6 +54,14 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>{} elem feldolgozva.</translation>
         </message>
+        <message>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Sarkok visszaállítása (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Éles sarok visszaállító eszköz (eltávolítja a lekerekítéseket és letöréseket)</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -160,14 +168,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Különálló távolságok (d1 ≠ d2)</translation>
         </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>1. lépés: Kattintson a sarok első élére</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
-            <translation>2. lépés: Kattintson a szomszédos második élre (Jobb gomb a megszakításhoz)</translation>
-        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -179,6 +179,36 @@
             <source>Фаска вершини</source>
             <translation>Töréspont letörése</translation>
         </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Sarok visszaállítása</translation>
+        </message>
+    </context>
+    <context>
+        <name>RestoreCanvasWidget</name>
+        <message>
+            <source>Відновлення гострого кута</source>
+            <translation>Éles sarok visszaállítása</translation>
+        </message>
+        <message>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>1. lépés: Kattintson a sarok első élére</translation>
+        </message>
+        <message>
+            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
+            <translation>2. lépés: Kattintson a szomszédos második élre a sarok rekonstruálásához</translation>
+        </message>
+        <message>
+            <source>ПКМ або Esc — скасувати</source>
+            <translation>Jobb gomb vagy Esc — Mégse</translation>
+        </message>
+        <message>
+            <source>Скасувати</source>
+            <translation>Mégse</translation>
+        </message>
+    </context>
+    <context>
+        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Sarok visszaállítása</translation>

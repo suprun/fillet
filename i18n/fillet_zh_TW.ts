@@ -54,6 +54,14 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>已處理 {} 個圖徵。</translation>
         </message>
+        <message>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>恢復尖角 (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>銳角恢復工具（移除圓角與倒角）</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -160,14 +168,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>距離獨立 (d1 ≠ d2)</translation>
         </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>步驟 1：點擊角的第一個邊</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
-            <translation>步驟 2：點擊相鄰的第二個邊（右鍵取消）</translation>
-        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -179,6 +179,36 @@
             <source>Фаска вершини</source>
             <translation>頂點倒角</translation>
         </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>恢復尖角</translation>
+        </message>
+    </context>
+    <context>
+        <name>RestoreCanvasWidget</name>
+        <message>
+            <source>Відновлення гострого кута</source>
+            <translation>恢復銳角</translation>
+        </message>
+        <message>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>步驟 1：點擊角的第一個邊</translation>
+        </message>
+        <message>
+            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
+            <translation>步驟 2：點擊相鄰的第二個邊以重建角</translation>
+        </message>
+        <message>
+            <source>ПКМ або Esc — скасувати</source>
+            <translation>右鍵或 Esc — 取消</translation>
+        </message>
+        <message>
+            <source>Скасувати</source>
+            <translation>取消</translation>
+        </message>
+    </context>
+    <context>
+        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>恢復尖角</translation>

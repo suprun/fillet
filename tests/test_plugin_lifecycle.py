@@ -104,6 +104,8 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
 
         if self.plugin.action:
             self.assertFalse(self.plugin.action.isEnabled())
+        if self.plugin.restore_action:
+            self.assertFalse(self.plugin.restore_action.isEnabled())
         if self.plugin.batch_action:
             self.assertFalse(self.plugin.batch_action.isEnabled())
         self.assertFalse(self.plugin.settings_widget.btn_apply_selected.isEnabled())
@@ -119,12 +121,16 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
         # 1. Not editable yet -> disabled
         if self.plugin.action:
             self.assertFalse(self.plugin.action.isEnabled())
+        if self.plugin.restore_action:
+            self.assertFalse(self.plugin.restore_action.isEnabled())
         self.assertFalse(self.plugin.batch_action.isEnabled())
 
         # 2. Start editing -> enabled
         layer.startEditing()
         if self.plugin.action:
             self.assertTrue(self.plugin.action.isEnabled())
+        if self.plugin.restore_action:
+            self.assertTrue(self.plugin.restore_action.isEnabled())
         self.assertTrue(self.plugin.batch_action.isEnabled())
         self.assertTrue(self.plugin.settings_widget.btn_apply_selected.isEnabled())
 
@@ -132,41 +138,49 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
         layer.rollBack()
         if self.plugin.action:
             self.assertFalse(self.plugin.action.isEnabled())
+        if self.plugin.restore_action:
+            self.assertFalse(self.plugin.restore_action.isEnabled())
         self.assertFalse(self.plugin.batch_action.isEnabled())
         self.assertFalse(self.plugin.settings_widget.btn_apply_selected.isEnabled())
 
     def test_interactive_tool_auto_deactivation_on_editing_stop(self):
         """If interactive tool is active on map canvas, it must unset when layer stops editing."""
-        if self.plugin.is_qgis_4():
-            return  # Interactive tool only in QGIS 3.x
-
         layer = QgsVectorLayer("LineString?crs=EPSG:4326", "temp_lines", "memory")
         layer.startEditing()
         canvas.setCurrentLayer(layer)
         self.iface.currentLayerChanged.emit(layer)
 
-        # Activate map tool
-        self.plugin.toggle_tool(True)
-        self.assertEqual(canvas.mapTool(), self.plugin.map_tool)
-        self.assertTrue(self.plugin.action.isChecked())
+        if not self.plugin.is_qgis_4():
+            # Activate fillet map tool
+            self.plugin.toggle_tool(True)
+            self.assertEqual(canvas.mapTool(), self.plugin.map_tool)
+            self.assertTrue(self.plugin.action.isChecked())
 
-        # Stop editing
+            # Stop editing
+            layer.rollBack()
+            self.assertNotEqual(canvas.mapTool(), self.plugin.map_tool)
+            self.assertFalse(self.plugin.action.isChecked())
+            self.assertFalse(self.plugin.action.isEnabled())
+
+        # Test Restore tool deactivation
+        layer.startEditing()
+        self.plugin.toggle_restore_tool(True)
+        self.assertEqual(canvas.mapTool(), self.plugin.restore_map_tool)
+        self.assertTrue(self.plugin.restore_action.isChecked())
+
         layer.rollBack()
-
-        # Tool should be automatically unset
-        self.assertNotEqual(canvas.mapTool(), self.plugin.map_tool)
-        self.assertFalse(self.plugin.action.isChecked())
-        self.assertFalse(self.plugin.action.isEnabled())
+        self.assertNotEqual(canvas.mapTool(), self.plugin.restore_map_tool)
+        self.assertFalse(self.plugin.restore_action.isChecked())
+        self.assertFalse(self.plugin.restore_action.isEnabled())
 
     def test_map_tool_preview_in_all_modes(self):
-        """Verify that _update_preview works without errors in fillet, chamfer, and restore modes."""
+        """Verify that _update_preview works without errors in fillet and chamfer modes."""
         if self.plugin.is_qgis_4():
             return
 
         from qgis.core import QgsFeature, QgsGeometry, QgsPointXY
         from core.geometry_engine import GeometryEngine
         from gui.map_tool import VertexMatch
-        from gui.canvas_widget import FilletCanvasWidget
 
         layer = QgsVectorLayer("LineString?crs=EPSG:4326", "temp_lines", "memory")
         pr = layer.dataProvider()
@@ -194,18 +208,37 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
         tool._update_preview()
         self.assertIsNotNone(tool.preview_geom)
 
-        # 3. Restore mode (Two-Edge CAD selection)
-        self.plugin.canvas_widget.radio_restore.setChecked(True)
-        # Apply fillet first to test restore
-        f_geom = GeometryEngine.apply_fillet_to_geometry(geom, part_idx=0, ring_idx=0, vertex_idx=1, radius=2.0, segments_count=6)
+        layer.rollBack()
+
+    def test_restore_map_tool_interaction(self):
+        """Verify dedicated RestoreMapTool with Two-Edge CAD corner restoration."""
+        from qgis.core import QgsFeature, QgsGeometry, QgsPointXY
+        from core.geometry_engine import GeometryEngine
         from core.snapping_helper import SegmentMatch
+
+        layer = QgsVectorLayer("LineString?crs=EPSG:4326", "temp_lines", "memory")
+        pr = layer.dataProvider()
+        feat = QgsFeature()
+        geom = QgsGeometry.fromPolylineXY([QgsPointXY(0, 10), QgsPointXY(0, 0), QgsPointXY(10, 0)])
+        f_geom = GeometryEngine.apply_fillet_to_geometry(geom, part_idx=0, ring_idx=0, vertex_idx=1, radius=2.0, segments_count=6)
+        feat.setGeometry(f_geom)
+        pr.addFeatures([feat])
+        layer.updateExtents()
+        layer.startEditing()
+        canvas.setCurrentLayer(layer)
+        self.iface.currentLayerChanged.emit(layer)
+
+        r_tool = self.plugin.restore_map_tool
+        self.plugin.toggle_restore_tool(True)
+        self.assertEqual(canvas.mapTool(), r_tool)
+
         last_seg = len(f_geom.asPolyline()) - 2
-        tool.first_segment_match = SegmentMatch(
+        r_tool.first_segment_match = SegmentMatch(
             fid=1, part_idx=0, ring_idx=0, segment_idx=0,
             point=QgsPointXY(0, 5), p1=QgsPointXY(0, 10), p2=QgsPointXY(0, 2),
             geometry=f_geom
         )
-        tool.current_segment_match = SegmentMatch(
+        r_tool.current_segment_match = SegmentMatch(
             fid=1, part_idx=0, ring_idx=0, segment_idx=last_seg,
             point=QgsPointXY(5, 0), p1=QgsPointXY(2, 0), p2=QgsPointXY(10, 0),
             geometry=f_geom

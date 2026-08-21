@@ -54,6 +54,14 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>Käsitelty {} kohdetta.</translation>
         </message>
+        <message>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Palauta kulmat (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Terävien kulmien palautustyökalu (poistaa pyöristykset ja viisteet)</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -160,14 +168,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Erilliset etäisyydet (d1 ≠ d2)</translation>
         </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Vaihe 1: Napsauta kulman ensimmäistä reunaa</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
-            <translation>Vaihe 2: Napsauta viereistä toista reunaa (Oikea painike peruu)</translation>
-        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -179,6 +179,36 @@
             <source>Фаска вершини</source>
             <translation>Taitteen viiste</translation>
         </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Palauta kulma</translation>
+        </message>
+    </context>
+    <context>
+        <name>RestoreCanvasWidget</name>
+        <message>
+            <source>Відновлення гострого кута</source>
+            <translation>Palauta terävä kulma</translation>
+        </message>
+        <message>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>Vaihe 1: Napsauta kulman ensimmäistä reunaa</translation>
+        </message>
+        <message>
+            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
+            <translation>Vaihe 2: Napsauta viereistä toista reunaa kulman rekonstruoimiseksi</translation>
+        </message>
+        <message>
+            <source>ПКМ або Esc — скасувати</source>
+            <translation>Oikea painike tai Esc — Peruuta</translation>
+        </message>
+        <message>
+            <source>Скасувати</source>
+            <translation>Peruuta</translation>
+        </message>
+    </context>
+    <context>
+        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Palauta kulma</translation>

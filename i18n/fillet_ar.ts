@@ -54,6 +54,14 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>تمت معالجة {} معلم (معالم).</translation>
         </message>
+        <message>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>استعادة الزوايا (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>أداة استعادة الزوايا الحادة (تزيل الاستدارات والشطفات)</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -160,14 +168,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>المسافات منفصلة (d1 ≠ d2)</translation>
         </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>الخطوة 1: انقر فوق الحافة الأولى للزاوية</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
-            <translation>الخطوة 2: انقر فوق الحافة المجاورة الثانية (زر الفأرة الأيمن للإلغاء)</translation>
-        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -179,6 +179,36 @@
             <source>Фаска вершини</source>
             <translation>شطب الرأس</translation>
         </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>استعادة الزاوية</translation>
+        </message>
+    </context>
+    <context>
+        <name>RestoreCanvasWidget</name>
+        <message>
+            <source>Відновлення гострого кута</source>
+            <translation>استعادة الزاوية الحادة</translation>
+        </message>
+        <message>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>الخطوة 1: انقر فوق الحافة الأولى للزاوية</translation>
+        </message>
+        <message>
+            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
+            <translation>الخطوة 2: انقر فوق الحافة المجاورة الثانية لإعادة بناء الزاوية</translation>
+        </message>
+        <message>
+            <source>ПКМ або Esc — скасувати</source>
+            <translation>زر الفأرة الأيمن أو Esc — إلغاء</translation>
+        </message>
+        <message>
+            <source>Скасувати</source>
+            <translation>إلغاء</translation>
+        </message>
+    </context>
+    <context>
+        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>استعادة الزاوية</translation>

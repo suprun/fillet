@@ -27,11 +27,15 @@ try:
     from .core.geometry_engine import GeometryEngine
     from .gui.canvas_widget import FilletCanvasWidget
     from .gui.map_tool import FilletMapTool
+    from .gui.restore_canvas_widget import RestoreCanvasWidget
+    from .gui.restore_map_tool import RestoreMapTool
     from .gui.settings_widget import FilletSettingsWidget
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
     from gui.canvas_widget import FilletCanvasWidget
     from gui.map_tool import FilletMapTool
+    from gui.restore_canvas_widget import RestoreCanvasWidget
+    from gui.restore_map_tool import RestoreMapTool
     from gui.settings_widget import FilletSettingsWidget
 
 
@@ -48,9 +52,12 @@ class FilletPlugin:
         self._init_translator()
 
         self.action: Optional[QAction] = None
+        self.restore_action: Optional[QAction] = None
         self.batch_action: Optional[QAction] = None
         self.map_tool: Optional[FilletMapTool] = None
+        self.restore_map_tool: Optional[RestoreMapTool] = None
         self.canvas_widget: Optional[FilletCanvasWidget] = None
+        self.restore_canvas_widget: Optional[RestoreCanvasWidget] = None
         self.dock_widget: Optional[QDockWidget] = None
         self.settings_widget: Optional[FilletSettingsWidget] = None
         self._tracked_layer: Optional[QgsVectorLayer] = None
@@ -117,18 +124,30 @@ class FilletPlugin:
         self.batch_action.triggered.connect(self.toggle_batch_panel)
         self.dock_widget.visibilityChanged.connect(self.on_dock_visibility_changed)
 
+        # 3. Create interactive Corner Restore (Unfillet/Unchamfer) CAD Map Tool (available in QGIS 3.x and QGIS 4.x)
+        self.restore_canvas_widget = RestoreCanvasWidget(self.canvas)
+        self.restore_canvas_widget.hide()
+        self.restore_map_tool = RestoreMapTool(self.canvas, self.restore_canvas_widget)
+
+        restore_icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionRestoreCorners.svg")
+        self.restore_action = QAction(
+            QIcon(restore_icon_path),
+            self.tr("Відновлення кутів (Unfillet / Unchamfer)"),
+            self.iface.mainWindow(),
+        )
+        self.restore_action.setCheckable(True)
+        self.restore_action.setObjectName("actionRestoreCorners")
+        self.restore_action.setToolTip(self.tr("Інструмент відновлення гострих кутів (видалення скруглень та фасок)"))
+        self.restore_action.triggered.connect(self.toggle_restore_tool)
+
         adv_tb = self.iface.advancedDigitizeToolBar()
 
-        # 3. Create interactive MapTool ONLY in QGIS 3.x (native in QGIS 4.0+)
+        # 4. Create interactive Fillet / Chamfer MapTool ONLY in QGIS 3.x (native in QGIS 4.0+)
         if not self.is_qgis_4():
-            # Create on-canvas CAD HUD widget
             self.canvas_widget = FilletCanvasWidget(self.canvas)
             self.canvas_widget.hide()
-
-            # Create map tool with on-canvas widget
             self.map_tool = FilletMapTool(self.canvas, self.canvas_widget)
 
-            # Create action using official QGIS 4 icon
             icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionChamferFillet.svg")
             self.action = QAction(
                 QIcon(icon_path),
@@ -140,7 +159,6 @@ class FilletPlugin:
             self.action.setToolTip(self.tr("Інструмент для створення скруглень (Fillet) та фасок (Chamfer)"))
             self.action.triggered.connect(self.toggle_tool)
 
-            # Add to Advanced Digitizing toolbar (inserted as 13th button, index 12) and Vector menu
             if adv_tb:
                 actions = adv_tb.actions()
                 if len(actions) >= 13:
@@ -151,43 +169,49 @@ class FilletPlugin:
                 self.iface.addVectorToolBarIcon(self.action)
             self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.action)
 
-            self.canvas.mapToolSet.connect(self.on_map_tool_changed)
-
-        # 4. Insert batch_action on toolbar right after fillet/chamfer action
+        # 5. Insert restore_action and batch_action on toolbar
         if adv_tb:
-            if self.action:
-                actions_now = adv_tb.actions()
-                try:
-                    idx = actions_now.index(self.action)
-                    if idx + 1 < len(actions_now):
-                        adv_tb.insertAction(actions_now[idx + 1], self.batch_action)
-                    else:
-                        adv_tb.addAction(self.batch_action)
-                except ValueError:
-                    adv_tb.addAction(self.batch_action)
-            else:
-                # In QGIS 4.x, insert after native fillet action if found
-                native_action = None
+            anchor_act = self.action
+            if not anchor_act:
+                # In QGIS 4.x, locate native fillet action as anchor
                 for act in adv_tb.actions():
                     name_lower = act.objectName().lower()
                     if "chamfer" in name_lower or "fillet" in name_lower:
-                        native_action = act
+                        anchor_act = act
                         break
-                if native_action:
-                    actions_now = adv_tb.actions()
-                    try:
-                        idx = actions_now.index(native_action)
-                        if idx + 1 < len(actions_now):
-                            adv_tb.insertAction(actions_now[idx + 1], self.batch_action)
-                        else:
-                            adv_tb.addAction(self.batch_action)
-                    except ValueError:
-                        adv_tb.addAction(self.batch_action)
+
+            if anchor_act:
+                actions_now = adv_tb.actions()
+                try:
+                    idx = actions_now.index(anchor_act)
+                    if idx + 1 < len(actions_now):
+                        adv_tb.insertAction(actions_now[idx + 1], self.restore_action)
+                    else:
+                        adv_tb.addAction(self.restore_action)
+                except ValueError:
+                    adv_tb.addAction(self.restore_action)
+            else:
+                adv_tb.addAction(self.restore_action)
+
+            # Insert batch_action after restore_action
+            actions_now = adv_tb.actions()
+            try:
+                idx = actions_now.index(self.restore_action)
+                if idx + 1 < len(actions_now):
+                    adv_tb.insertAction(actions_now[idx + 1], self.batch_action)
                 else:
                     adv_tb.addAction(self.batch_action)
+            except ValueError:
+                adv_tb.addAction(self.batch_action)
         else:
+            self.iface.addVectorToolBarIcon(self.restore_action)
             self.iface.addVectorToolBarIcon(self.batch_action)
+
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.restore_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.batch_action)
+
+        if self.canvas:
+            self.canvas.mapToolSet.connect(self.on_map_tool_changed)
 
         # Track layer changes
         self.iface.currentLayerChanged.connect(self._on_current_layer_changed)
@@ -218,7 +242,7 @@ class FilletPlugin:
             except (TypeError, RuntimeError):
                 pass  # nosec B110
 
-        # 2. Clean up interactive action
+        # 2. Clean up interactive fillet action
         if self.action:
             try:
                 self.action.triggered.disconnect(self.toggle_tool)
@@ -232,7 +256,21 @@ class FilletPlugin:
             self.action.deleteLater()
             self.action = None
 
-        # 3. Clean up batch action
+        # 3. Clean up restore action
+        if self.restore_action:
+            try:
+                self.restore_action.triggered.disconnect(self.toggle_restore_tool)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            if self.iface.advancedDigitizeToolBar():
+                self.iface.advancedDigitizeToolBar().removeAction(self.restore_action)
+            self.iface.removeVectorToolBarIcon(self.restore_action)
+            self.iface.removePluginVectorMenu(self.tr("Fillet & Chamfer"), self.restore_action)
+            self.restore_action.setParent(None)
+            self.restore_action.deleteLater()
+            self.restore_action = None
+
+        # 4. Clean up batch action
         if self.batch_action:
             try:
                 self.batch_action.triggered.disconnect(self.toggle_batch_panel)
@@ -246,9 +284,9 @@ class FilletPlugin:
             self.batch_action.deleteLater()
             self.batch_action = None
 
-        # 4. Clean up map tool
+        # 5. Clean up map tools
         if self.map_tool:
-            if self.canvas.mapTool() == self.map_tool:
+            if self.canvas and self.canvas.mapTool() == self.map_tool:
                 self.canvas.unsetMapTool(self.map_tool)
             if hasattr(self.map_tool, "cleanup"):
                 self.map_tool.cleanup()
@@ -257,7 +295,17 @@ class FilletPlugin:
             self.map_tool.deleteLater()
             self.map_tool = None
 
-        # 5. Clean up canvas widget
+        if self.restore_map_tool:
+            if self.canvas and self.canvas.mapTool() == self.restore_map_tool:
+                self.canvas.unsetMapTool(self.restore_map_tool)
+            if hasattr(self.restore_map_tool, "cleanup"):
+                self.restore_map_tool.cleanup()
+            else:
+                self.restore_map_tool.deactivate()
+            self.restore_map_tool.deleteLater()
+            self.restore_map_tool = None
+
+        # 6. Clean up canvas widgets
         if self.canvas_widget:
             try:
                 self.canvas.removeEventFilter(self.canvas_widget)
@@ -268,7 +316,17 @@ class FilletPlugin:
             self.canvas_widget.deleteLater()
             self.canvas_widget = None
 
-        # 6. Clean up settings widget and dock widget
+        if self.restore_canvas_widget:
+            try:
+                self.canvas.removeEventFilter(self.restore_canvas_widget)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            self.restore_canvas_widget.hide()
+            self.restore_canvas_widget.setParent(None)
+            self.restore_canvas_widget.deleteLater()
+            self.restore_canvas_widget = None
+
+        # 7. Clean up settings widget and dock widget
         if self.settings_widget:
             try:
                 self.settings_widget.applyToSelectedRequested.disconnect(self.apply_to_selected_features)
@@ -296,7 +354,7 @@ class FilletPlugin:
                 old_dock.setParent(None)
                 old_dock.deleteLater()
 
-        # 7. Remove translator
+        # 8. Remove translator
         if self.translator:
             QCoreApplication.removeTranslator(self.translator)
             self.translator = None
@@ -306,8 +364,16 @@ class FilletPlugin:
             if self.map_tool:
                 self.canvas.setMapTool(self.map_tool)
         else:
-            if self.canvas.mapTool() == self.map_tool:
+            if self.canvas and self.canvas.mapTool() == self.map_tool:
                 self.canvas.unsetMapTool(self.map_tool)
+
+    def toggle_restore_tool(self, checked: bool):
+        if checked:
+            if self.restore_map_tool:
+                self.canvas.setMapTool(self.restore_map_tool)
+        else:
+            if self.canvas and self.canvas.mapTool() == self.restore_map_tool:
+                self.canvas.unsetMapTool(self.restore_map_tool)
 
     def toggle_batch_panel(self, checked: bool):
         if self.dock_widget:
@@ -323,6 +389,12 @@ class FilletPlugin:
             self.action.setChecked(is_active)
             if not is_active and self.canvas_widget:
                 self.canvas_widget.hide()
+
+        if self.restore_action:
+            is_restore_active = tool == self.restore_map_tool
+            self.restore_action.setChecked(is_restore_active)
+            if not is_restore_active and self.restore_canvas_widget:
+                self.restore_canvas_widget.hide()
 
     def _on_current_layer_changed(self, layer=None):
         self.update_action_state()
@@ -363,19 +435,29 @@ class FilletPlugin:
 
         if self.action:
             self.action.setEnabled(is_editable)
+        if self.restore_action:
+            self.restore_action.setEnabled(is_editable)
         if self.batch_action:
             self.batch_action.setEnabled(is_editable)
 
         if self.settings_widget and hasattr(self.settings_widget, "set_editable_state"):
             self.settings_widget.set_editable_state(is_editable)
 
-        # If editing was stopped while the interactive tool is active on canvas, deactivate it
-        if not is_editable and self.map_tool and self.canvas and self.canvas.mapTool() == self.map_tool:
-            self.canvas.unsetMapTool(self.map_tool)
-            if self.canvas_widget:
-                self.canvas_widget.hide()
-            if self.action:
-                self.action.setChecked(False)
+        # If editing was stopped while an interactive tool is active on canvas, deactivate it
+        if not is_editable and self.canvas:
+            if self.map_tool and self.canvas.mapTool() == self.map_tool:
+                self.canvas.unsetMapTool(self.map_tool)
+                if self.canvas_widget:
+                    self.canvas_widget.hide()
+                if self.action:
+                    self.action.setChecked(False)
+
+            if self.restore_map_tool and self.canvas.mapTool() == self.restore_map_tool:
+                self.canvas.unsetMapTool(self.restore_map_tool)
+                if self.restore_canvas_widget:
+                    self.restore_canvas_widget.hide()
+                if self.restore_action:
+                    self.restore_action.setChecked(False)
 
     def apply_to_selected_features(self):
         """Batch apply fillet or chamfer to all corners of selected features."""

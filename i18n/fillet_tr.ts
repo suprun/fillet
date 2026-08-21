@@ -54,6 +54,14 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>{} detay işlendi.</translation>
         </message>
+        <message>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Köşeleri Geri Yükle (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Keskin köşe geri yükleme aracı (yuvarlatmaları ve pahları kaldırır)</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -160,14 +168,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Mesafeler ayrı (d1 ≠ d2)</translation>
         </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Adım 1: Köşenin ilk kenarına tıklayın</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
-            <translation>Adım 2: Bitişik ikinci kenara tıklayın (İptal için sağ tıklayın)</translation>
-        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -179,6 +179,36 @@
             <source>Фаска вершини</source>
             <translation>Düğüm Pah Kırma</translation>
         </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>Köşeyi Geri Yükle</translation>
+        </message>
+    </context>
+    <context>
+        <name>RestoreCanvasWidget</name>
+        <message>
+            <source>Відновлення гострого кута</source>
+            <translation>Keskin Köşeyi Geri Yükle</translation>
+        </message>
+        <message>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>Adım 1: Köşenin ilk kenarına tıklayın</translation>
+        </message>
+        <message>
+            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
+            <translation>Adım 2: Köşeyi yeniden oluşturmak için bitişik ikinci kenara tıklayın</translation>
+        </message>
+        <message>
+            <source>ПКМ або Esc — скасувати</source>
+            <translation>Sağ tık veya Esc — İptal</translation>
+        </message>
+        <message>
+            <source>Скасувати</source>
+            <translation>İptal</translation>
+        </message>
+    </context>
+    <context>
+        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Köşeyi Geri Yükle</translation>

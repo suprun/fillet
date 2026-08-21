@@ -54,6 +54,14 @@
             <source>Оброблено {} об'єкт(ів).</source>
             <translation>ประมวลผลแล้ว {} ฟีเจอร์</translation>
         </message>
+        <message>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>กู้คืนมุม (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>เครื่องมือกู้คืนมุมแหลม (ลบมุมมนและมุมตัด)</translation>
+        </message>
     </context>
     <context>
         <name>FilletSettingsWidget</name>
@@ -160,14 +168,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>แยกอิสระระยะทาง (d1 ≠ d2)</translation>
         </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>ขั้นตอนที่ 1: คลิกที่ขอบแรกของมุม</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро (ПКМ — скасувати)</source>
-            <translation>ขั้นตอนที่ 2: คลิกที่ขอบที่สองที่อยู่ติดกัน (คลิกขวาเพื่อยกเลิก)</translation>
-        </message>
     </context>
     <context>
         <name>FilletMapTool</name>
@@ -179,6 +179,36 @@
             <source>Фаска вершини</source>
             <translation>ลบมุมเหลี่ยมจุดยอด</translation>
         </message>
+        <message>
+            <source>Відновлення кута</source>
+            <translation>กู้คืนมุม</translation>
+        </message>
+    </context>
+    <context>
+        <name>RestoreCanvasWidget</name>
+        <message>
+            <source>Відновлення гострого кута</source>
+            <translation>กู้คืนมุมแหลม</translation>
+        </message>
+        <message>
+            <source>Крок 1: Клікніть на перше ребро кута</source>
+            <translation>ขั้นตอนที่ 1: คลิกที่ขอบแรกของมุม</translation>
+        </message>
+        <message>
+            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
+            <translation>ขั้นตอนที่ 2: คลิกที่ขอบที่สองที่อยู่ติดกันเพื่อสร้างมุมใหม่</translation>
+        </message>
+        <message>
+            <source>ПКМ або Esc — скасувати</source>
+            <translation>คลิกขวาหรือ Esc — ยกเลิก</translation>
+        </message>
+        <message>
+            <source>Скасувати</source>
+            <translation>ยกเลิก</translation>
+        </message>
+    </context>
+    <context>
+        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>กู้คืนมุม</translation>

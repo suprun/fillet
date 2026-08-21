@@ -83,15 +83,6 @@ class FilletMapTool(QgsMapToolEdit):
         if _DashLine is not None:
             self.preview_rubberband.setLineStyle(_DashLine)
 
-        # 4. Edge selection rubberbands for Restore (Two-Edge selection mode)
-        self.edge1_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.LineGeometry)
-        self.edge1_rubberband.setWidth(4)
-        self.edge1_rubberband.setColor(QColor(234, 88, 12, 230))  # Amber
-
-        self.edge2_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.LineGeometry)
-        self.edge2_rubberband.setWidth(4)
-        self.edge2_rubberband.setColor(QColor(245, 158, 11, 230))  # Lighter amber
-
         if _CrossCursor is not None:
             self.setCursor(QCursor(_CrossCursor))
         self.widget.parametersChanged.connect(self._update_preview)
@@ -145,16 +136,6 @@ class FilletMapTool(QgsMapToolEdit):
             del self.preview_rubberband
             self.preview_rubberband = None
 
-        if hasattr(self, "edge1_rubberband") and self.edge1_rubberband:
-            self.edge1_rubberband.reset()
-            del self.edge1_rubberband
-            self.edge1_rubberband = None
-
-        if hasattr(self, "edge2_rubberband") and self.edge2_rubberband:
-            self.edge2_rubberband.reset()
-            del self.edge2_rubberband
-            self.edge2_rubberband = None
-
     def current_vector_layer(self) -> Optional[QgsVectorLayer]:
         layer = self.canvas.currentLayer()
         if isinstance(layer, QgsVectorLayer) and layer.isEditable():
@@ -187,99 +168,12 @@ class FilletMapTool(QgsMapToolEdit):
         )
         map_point = event.mapPoint()
 
-        # Handle RESTORE mode (Two-Edge selection workflow)
-        if mode == FilletCanvasWidget.MODE_RESTORE:
-            self.snap_indicator.setVisible(False)
-            if self.first_segment_match is None:
-                # Step 1: Hovering over first edge
-                match = SnappingHelper.find_segment_at_position(layer, self.canvas, map_point)
-                if match:
-                    self.current_segment_match = match
-                    p1_map = self.toMapCoordinates(layer, match.p1)
-                    p2_map = self.toMapCoordinates(layer, match.p2)
-                    self.edge1_rubberband.reset(QgsWkbTypes.LineGeometry)
-                    self.edge1_rubberband.setColor(QColor(234, 88, 12, 230))
-                    self.edge1_rubberband.setWidth(4)
-                    self.edge1_rubberband.addPoint(p1_map, False)
-                    self.edge1_rubberband.addPoint(p2_map, True)
-                    self.edge1_rubberband.show()
-                else:
-                    self.current_segment_match = None
-                    self.edge1_rubberband.reset()
-                self.edge2_rubberband.reset()
-                self.preview_rubberband.reset()
-                self.tangent_rubberband.reset()
-            else:
-                # Step 2: Hovering over second adjacent edge
-                m1 = self.first_segment_match
-                m2 = SnappingHelper.find_segment_at_position(layer, self.canvas, map_point)
-                if (
-                    m2
-                    and m2.fid == m1.fid
-                    and m2.part_idx == m1.part_idx
-                    and m2.ring_idx == m1.ring_idx
-                    and m2.segment_idx != m1.segment_idx
-                ):
-                    self.current_segment_match = m2
-                    p1_map = self.toMapCoordinates(layer, m2.p1)
-                    p2_map = self.toMapCoordinates(layer, m2.p2)
-                    self.edge2_rubberband.reset(QgsWkbTypes.LineGeometry)
-                    self.edge2_rubberband.setColor(QColor(245, 158, 11, 230))
-                    self.edge2_rubberband.setWidth(4)
-                    self.edge2_rubberband.addPoint(p1_map, False)
-                    self.edge2_rubberband.addPoint(p2_map, True)
-                    self.edge2_rubberband.show()
-
-                    restore_res = GeometryEngine.restore_sharp_corner_between_segments(
-                        m1.geometry, m1.part_idx, m1.ring_idx, m1.segment_idx, m2.segment_idx
-                    )
-                    if restore_res:
-                        new_geom, v_sharp = restore_res
-                        self.preview_geom = new_geom
-                        stroke_color = QColor(234, 88, 12, 230)
-                        fill_color = QColor(234, 88, 12, 65)
-                        if layer.geometryType() == QgsWkbTypes.PolygonGeometry:
-                            self.preview_rubberband.reset(QgsWkbTypes.PolygonGeometry)
-                            self.preview_rubberband.setFillColor(fill_color)
-                            self.preview_rubberband.setStrokeColor(stroke_color)
-                            self.preview_rubberband.setWidth(4)
-                        else:
-                            self.preview_rubberband.reset(QgsWkbTypes.LineGeometry)
-                            self.preview_rubberband.setFillColor(QColor(0, 0, 0, 0))
-                            self.preview_rubberband.setColor(stroke_color)
-                            self.preview_rubberband.setWidth(4)
-                        if _DashLine is not None:
-                            self.preview_rubberband.setLineStyle(_DashLine)
-                        self.preview_rubberband.setToGeometry(new_geom, layer)
-                        self.preview_rubberband.show()
-
-                        v_xy = QgsPointXY(v_sharp.x(), v_sharp.y())
-                        v_map = self.toMapCoordinates(layer, v_xy)
-                        self.tangent_rubberband.reset(QgsWkbTypes.PointGeometry)
-                        self.tangent_rubberband.setColor(stroke_color)
-                        self.tangent_rubberband.addPoint(v_map, True)
-                        self.tangent_rubberband.show()
-                    else:
-                        self.preview_geom = None
-                        self.preview_rubberband.reset()
-                        self.tangent_rubberband.reset()
-                else:
-                    self.current_segment_match = None
-                    self.edge2_rubberband.reset()
-                    self.preview_geom = None
-                    self.preview_rubberband.reset()
-                    self.tangent_rubberband.reset()
-            return
-
         # Regular FILLET and CHAMFER vertex hover / adjust workflow
-        self.edge1_rubberband.reset()
-        self.edge2_rubberband.reset()
         if self.state == self.STATE_HOVER:
             match = SnappingHelper.find_vertex_at_position(layer, self.canvas, map_point)
             if match:
                 self.current_match = match
                 self._show_vertex_marker(layer, match)
-                # If parameter is locked, show preview; if unlocked, only show snap indicator until clicked
                 if self._is_current_parameter_locked():
                     self._update_preview()
                 else:
@@ -374,24 +268,6 @@ class FilletMapTool(QgsMapToolEdit):
         )
 
         if event.button() == _LeftButton:
-            if mode == FilletCanvasWidget.MODE_RESTORE:
-                if self.first_segment_match is None:
-                    if self.current_segment_match:
-                        self.first_segment_match = self.current_segment_match
-                        if isinstance(self.widget, FilletCanvasWidget):
-                            self.widget.set_restore_step(2)
-                else:
-                    if self.preview_geom and self.first_segment_match:
-                        fid = self.first_segment_match.fid
-                        new_geom = self.preview_geom
-                        layer.beginEditCommand(self.tr("Відновлення кута"))
-                        layer.changeGeometry(fid, new_geom)
-                        layer.endEditCommand()
-                        self._clear_preview()
-                        if isinstance(self.widget, FilletCanvasWidget):
-                            self.widget.set_restore_step(1)
-                return
-
             if self.state == self.STATE_HOVER:
                 map_point = event.mapPoint()
                 match = SnappingHelper.find_vertex_at_position(layer, self.canvas, map_point)
@@ -451,7 +327,6 @@ class FilletMapTool(QgsMapToolEdit):
         )
 
         t1, t2 = None, None
-        v_sharp_pt = None
 
         if mode == FilletCanvasWidget.MODE_FILLET:
             radius = self.widget.radius
@@ -475,7 +350,7 @@ class FilletMapTool(QgsMapToolEdit):
             )
             stroke_color = QColor(37, 99, 235, 230)  # Blue #2563EB
             fill_color = QColor(37, 99, 235, 65)
-        elif mode == FilletCanvasWidget.MODE_CHAMFER:
+        else:
             dist1 = self.widget.distance1
             dist2 = self.widget.distance2
             new_geom = GeometryEngine.apply_chamfer_to_geometry(
@@ -497,20 +372,6 @@ class FilletMapTool(QgsMapToolEdit):
             )
             stroke_color = QColor(5, 150, 105, 230)  # Green #059669
             fill_color = QColor(5, 150, 105, 65)
-        else:
-            new_geom = GeometryEngine.restore_sharp_corner_at_vertex(
-                match.geometry,
-                part_idx=match.part_idx,
-                ring_idx=match.ring_idx,
-                vertex_idx=match.vertex_idx,
-            )
-            curve = GeometryEngine.get_vertex_curve(match.geometry, match.part_idx, match.ring_idx)
-            if curve:
-                span_info = GeometryEngine.detect_fillet_chamfer_span(curve, match.vertex_idx)
-                if span_info:
-                    _, _, v_sharp_pt = span_info
-            stroke_color = QColor(234, 88, 12, 230)  # Amber-Orange #EA580C
-            fill_color = QColor(234, 88, 12, 65)
 
         # 1. Update geometry rubberband
         if new_geom and not new_geom.isEmpty():
@@ -534,7 +395,7 @@ class FilletMapTool(QgsMapToolEdit):
             self.preview_geom = None
             self.preview_rubberband.reset()
 
-        # 2. Update tangent touch markers or restored corner marker
+        # 2. Update tangent touch markers
         if t1 and t2:
             t1_map = self.toMapCoordinates(layer, t1)
             t2_map = self.toMapCoordinates(layer, t2)
@@ -542,13 +403,6 @@ class FilletMapTool(QgsMapToolEdit):
             self.tangent_rubberband.setColor(stroke_color)
             self.tangent_rubberband.addPoint(t1_map, False)
             self.tangent_rubberband.addPoint(t2_map, True)
-            self.tangent_rubberband.show()
-        elif v_sharp_pt:
-            v_xy = QgsPointXY(v_sharp_pt.x(), v_sharp_pt.y())
-            v_map = self.toMapCoordinates(layer, v_xy)
-            self.tangent_rubberband.reset(QgsWkbTypes.PointGeometry)
-            self.tangent_rubberband.setColor(stroke_color)
-            self.tangent_rubberband.addPoint(v_map, True)
             self.tangent_rubberband.show()
         else:
             self.tangent_rubberband.reset()
@@ -566,10 +420,8 @@ class FilletMapTool(QgsMapToolEdit):
         )
         if mode == FilletCanvasWidget.MODE_FILLET:
             mode_name = self.tr("Скруглення вершини")
-        elif mode == FilletCanvasWidget.MODE_CHAMFER:
-            mode_name = self.tr("Фаска вершини")
         else:
-            mode_name = self.tr("Відновлення кута")
+            mode_name = self.tr("Фаска вершини")
 
         layer.beginEditCommand(mode_name)
         success = layer.changeGeometry(self.current_match.fid, self.preview_geom)
@@ -586,8 +438,6 @@ class FilletMapTool(QgsMapToolEdit):
         """Cancels current operation and returns to hovering state."""
         self._clear_preview()
         self.state = self.STATE_HOVER
-        if isinstance(self.widget, FilletCanvasWidget):
-            self.widget.set_restore_step(1)
 
     def keyPressEvent(self, event):
         key = event.key()
@@ -654,11 +504,5 @@ class FilletMapTool(QgsMapToolEdit):
         self.snap_indicator.setVisible(False)
         self.tangent_rubberband.reset()
         self.preview_rubberband.reset()
-        if hasattr(self, "edge1_rubberband") and self.edge1_rubberband:
-            self.edge1_rubberband.reset()
-        if hasattr(self, "edge2_rubberband") and self.edge2_rubberband:
-            self.edge2_rubberband.reset()
         self.current_match = None
-        self.first_segment_match = None
-        self.current_segment_match = None
         self.preview_geom = None
