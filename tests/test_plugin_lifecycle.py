@@ -106,6 +106,8 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
             self.assertFalse(self.plugin.action.isEnabled())
         if self.plugin.restore_action:
             self.assertFalse(self.plugin.restore_action.isEnabled())
+        if self.plugin.rotate_action:
+            self.assertFalse(self.plugin.rotate_action.isEnabled())
         if self.plugin.batch_action:
             self.assertFalse(self.plugin.batch_action.isEnabled())
         self.assertFalse(self.plugin.settings_widget.btn_apply_selected.isEnabled())
@@ -123,6 +125,8 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
             self.assertFalse(self.plugin.action.isEnabled())
         if self.plugin.restore_action:
             self.assertFalse(self.plugin.restore_action.isEnabled())
+        if self.plugin.rotate_action:
+            self.assertFalse(self.plugin.rotate_action.isEnabled())
         self.assertFalse(self.plugin.batch_action.isEnabled())
 
         # 2. Start editing -> enabled
@@ -131,6 +135,8 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
             self.assertTrue(self.plugin.action.isEnabled())
         if self.plugin.restore_action:
             self.assertTrue(self.plugin.restore_action.isEnabled())
+        if self.plugin.rotate_action:
+            self.assertTrue(self.plugin.rotate_action.isEnabled())
         self.assertTrue(self.plugin.batch_action.isEnabled())
         self.assertTrue(self.plugin.settings_widget.btn_apply_selected.isEnabled())
 
@@ -140,6 +146,8 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
             self.assertFalse(self.plugin.action.isEnabled())
         if self.plugin.restore_action:
             self.assertFalse(self.plugin.restore_action.isEnabled())
+        if self.plugin.rotate_action:
+            self.assertFalse(self.plugin.rotate_action.isEnabled())
         self.assertFalse(self.plugin.batch_action.isEnabled())
         self.assertFalse(self.plugin.settings_widget.btn_apply_selected.isEnabled())
 
@@ -172,6 +180,17 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
         self.assertNotEqual(canvas.mapTool(), self.plugin.restore_map_tool)
         self.assertFalse(self.plugin.restore_action.isChecked())
         self.assertFalse(self.plugin.restore_action.isEnabled())
+
+        # Test Rotate tool deactivation
+        layer.startEditing()
+        self.plugin.toggle_rotate_tool(True)
+        self.assertEqual(canvas.mapTool(), self.plugin.rotate_map_tool)
+        self.assertTrue(self.plugin.rotate_action.isChecked())
+
+        layer.rollBack()
+        self.assertNotEqual(canvas.mapTool(), self.plugin.rotate_map_tool)
+        self.assertFalse(self.plugin.rotate_action.isChecked())
+        self.assertFalse(self.plugin.rotate_action.isEnabled())
 
     def test_map_tool_preview_in_all_modes(self):
         """Verify that _update_preview works without errors in fillet and chamfer modes."""

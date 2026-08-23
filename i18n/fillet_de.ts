@@ -55,12 +55,12 @@
             <translation>{} Objekt(e) verarbeitet.</translation>
         </message>
         <message>
-            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Ecken wiederherstellen (Unfillet / Unchamfer)</translation>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Drehen</translation>
         </message>
         <message>
-            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Werkzeug zur Wiederherstellung scharfer Ecken (entfernt Abrundungen und Fasen)</translation>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktives CAD-Werkzeug zum Drehen von Geometrien mit Drehpunktauswahl</translation>
         </message>
     </context>
     <context>
@@ -185,33 +185,49 @@
         </message>
     </context>
     <context>
-        <name>RestoreCanvasWidget</name>
+        <name>RotationCanvasWidget</name>
         <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Scharfe Ecke wiederherstellen</translation>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Drehpunkt angeben</translation>
         </message>
         <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Schritt 1: Klicken Sie auf die erste Kante der Ecke</translation>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Referenzrichtung angeben</translation>
         </message>
         <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Schritt 2: Klicken Sie auf die benachbarte zweite Kante, um die Ecke zu rekonstruieren</translation>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Drehwinkel angeben</translation>
         </message>
         <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>RMB oder Esc — Abbrechen</translation>
+            <source>Кут (Angle):</source>
+            <translation>Winkel:</translation>
         </message>
         <message>
-            <source>Скасувати</source>
-            <translation>Abbrechen</translation>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Winkel sperren / interaktives Drehen</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Fangschritt:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Frei</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Kopie speichern</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Erstellt eine gedrehte Kopie der ausgewählten Objekte und behält das Original</translation>
         </message>
     </context>
     <context>
-        <name>RestoreMapTool</name>
+        <name>RotateMapTool</name>
         <message>
-            <source>Відновлення кута</source>
-            <translation>Ecke wiederherstellen</translation>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD-Drehung von Objekten</translation>
         </message>
     </context>
 </TS>

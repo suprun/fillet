@@ -55,12 +55,12 @@
             <translation>Obrađeno {} objekata.</translation>
         </message>
         <message>
-            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Vrati kutove (Unfillet / Unchamfer)</translation>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Rotiraj</translation>
         </message>
         <message>
-            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Alat za vraćanje oštrih kutova (uklanja zaobljenja i zakošenja)</translation>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktivni CAD alat za rotaciju geometrija s odabirom točke rotacije</translation>
         </message>
     </context>
     <context>
@@ -185,33 +185,49 @@
         </message>
     </context>
     <context>
-        <name>RestoreCanvasWidget</name>
+        <name>RotationCanvasWidget</name>
         <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Vrati oštar kut</translation>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Odredite točku rotacije</translation>
         </message>
         <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>1. korak: Kliknite na prvi rub kuta</translation>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Odredite referentni smjer</translation>
         </message>
         <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>2. korak: Kliknite na susjedni drugi rub za rekonstrukciju kuta</translation>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Odredite kut rotacije</translation>
         </message>
         <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Desni klik ili Esc — Odustani</translation>
+            <source>Кут (Angle):</source>
+            <translation>Kut:</translation>
         </message>
         <message>
-            <source>Скасувати</source>
-            <translation>Odustani</translation>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Zaključaj kut / interaktivna rotacija</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Korak privlačenja:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Slobodno</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Spremi kopiju</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Stvara rotiranu kopiju odabranih objekata zadržavajući izvornik</translation>
         </message>
     </context>
     <context>
-        <name>RestoreMapTool</name>
+        <name>RotateMapTool</name>
         <message>
-            <source>Відновлення кута</source>
-            <translation>Vrati kut</translation>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Rotacija objekata</translation>
         </message>
     </context>
 </TS>

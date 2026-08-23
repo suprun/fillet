@@ -55,12 +55,12 @@
             <translation>Diproses {} fitur.</translation>
         </message>
         <message>
-            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Pulihkan Sudut (Unfillet / Unchamfer)</translation>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Putar</translation>
         </message>
         <message>
-            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Alat pemulihan sudut tajam (menghapus fillet dan chamfer)</translation>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Alat rotasi geometri CAD interaktif dengan pemilihan titik poros</translation>
         </message>
     </context>
     <context>
@@ -185,33 +185,49 @@
         </message>
     </context>
     <context>
-        <name>RestoreCanvasWidget</name>
+        <name>RotationCanvasWidget</name>
         <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Pulihkan Sudut Tajam</translation>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Tentukan titik poros</translation>
         </message>
         <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Langkah 1: Klik tepi pertama sudut</translation>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Tentukan arah referensi</translation>
         </message>
         <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Langkah 2: Klik tepi kedua yang berdekatan untuk merekonstruksi sudut</translation>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Tentukan sudut rotasi</translation>
         </message>
         <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Klik kanan atau Esc — Batal</translation>
+            <source>Кут (Angle):</source>
+            <translation>Sudut:</translation>
         </message>
         <message>
-            <source>Скасувати</source>
-            <translation>Batal</translation>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Kunci sudut / rotasi interaktif</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Langkah snap:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Bebas</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Simpan salinan</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Membuat salinan fitur terpilih yang diputar, mempertahankan aslinya</translation>
         </message>
     </context>
     <context>
-        <name>RestoreMapTool</name>
+        <name>RotateMapTool</name>
         <message>
-            <source>Відновлення кута</source>
-            <translation>Pulihkan Sudut</translation>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Putar Fitur</translation>
         </message>
     </context>
 </TS>

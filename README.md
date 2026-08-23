@@ -21,11 +21,12 @@
 
 ## 🌟 Overview
 
-The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grade corner editing tools into QGIS:
+The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grade corner and rotation editing tools into QGIS:
 
 1. **Interactive Fillet & Chamfer CAD Tool (QGIS 3.x)**: Backports the interactive digitizing workflow introduced in QGIS 4.0 directly into the **QGIS 3.x LTR series** (from QGIS 3.16 to 3.44+), complete with an on-canvas CAD HUD widget.
 2. **Interactive Corner Restoration Tool / Unfillet & Unchamfer (QGIS 3.x & QGIS 4.x)**: A dedicated CAD Two-Edge selection tool allowing you to select two adjacent straight edges, remove intermediate arc chords or bevel segments, and reconstruct the exact sharp intersection corner ($V_{\text{sharp}}$).
-3. **Batch Processing Dock Panel (QGIS 3.x & QGIS 4.x)**: A dedicated dock widget to round or bevel all vertices across selected features and complex polygon rings with a single click.
+3. **Interactive CAD 3-Point Rotation Tool (QGIS 3.x & QGIS 4.x)**: Precision 3-point CAD geometry rotation (Pivot Center $\rightarrow$ Reference Baseline $\rightarrow$ Target Angle / Direction) with full native QGIS snapping, floating CAD HUD, angle locking, angle snap stepping (15°, 45°, 90°), and duplicate copy mode.
+4. **Batch Processing Dock Panel (QGIS 3.x & QGIS 4.x)**: A dedicated dock widget to round or bevel all vertices across selected features and complex polygon rings with a single click.
 
 ---
 
@@ -62,7 +63,22 @@ The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grad
 
 ---
 
-### 3. ⚡ Batch Processing Dock Panel (QGIS 3.x & QGIS 4.x)
+### 3. 🔄 Interactive CAD 3-Point Rotation Tool (QGIS 3.x & QGIS 4.x)
+- **3-Point CAD Workflow**:
+  - **Point 1 (Pivot Center $P_{\text{center}}$)**: Click anywhere on the map or snap to existing vertices/edges/intersections.
+  - **Point 2 (Reference Direction $P_{\text{ref}}$)**: Click to establish the baseline ray orientation.
+  - **Point 3 (Target Angle / Direction)**: Move the mouse to rotate interactively or enter the exact numeric angle in the floating HUD. Click or press `Enter` to commit.
+- **Floating CAD HUD & Advanced Controls**:
+  - Numeric angle input with strict digit-only validator and decimal separator normalization.
+  - Angle locking toggle for applying fixed rotation angles instantly.
+  - Discrete angle snap stepping (`Free`, `5°`, `15°`, `45°`, `90°`) and `Shift` key shortcut.
+  - **Save Copy Mode**: Rotate a copy while keeping the original geometry intact.
+- **Full Snapping Integration**:
+  - Uses native QGIS `QgsSnappingUtils` and displays `QgsSnapIndicator` matching project snap settings.
+
+---
+
+### 4. ⚡ Batch Processing Dock Panel (QGIS 3.x & QGIS 4.x)
 - Dockable panel in the main window for rapid batch processing.
 - Automatically processes all vertices of all parts in selected features (`LineString`, `Polygon`, `MultiLineString`, `MultiPolygon`).
 - Supports exterior rings as well as all interior hole rings.
@@ -71,7 +87,7 @@ The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grad
 
 ---
 
-### 4. 🛡️ Edit-Mode Safety & Native Transactions
+### 5. 🛡️ Edit-Mode Safety & Native Transactions
 - All toolbar action buttons and tools are **automatically enabled only when an active vector layer is in Edit Mode** (`layer.isEditable() == True`).
 - If editing is toggled off while a tool is active, the tool automatically unsets and closes on-canvas widgets to prevent unintended changes.
 - Full native Undo/Redo (`Ctrl+Z` / `Ctrl+Y`) transaction support for all interactive and batch operations.
@@ -80,13 +96,13 @@ The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grad
 
 ## 📦 Compatibility Matrix
 
-| QGIS Version | Platform | UI Framework | Fillet & Chamfer Tool | Corner Restore Tool | Batch Dock Widget | Test Status |
-| :--- | :--- | :--- | :---: | :---: | :---: | :---: |
-| **QGIS 3.16 LTR** | Windows / Linux / macOS | Qt5 / PyQt5 | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
-| **QGIS 3.28 LTR** | Windows / Linux / macOS | Qt5 / PyQt5 | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
-| **QGIS 3.34 LTR** | Windows / Linux / macOS | Qt5 / PyQt5 | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
-| **QGIS 3.40 LTR** | Windows / Linux / macOS | Qt5 / PyQt5 | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
-| **QGIS 4.0.x** | Windows / Linux / macOS | Qt6 / PyQt6 | *Native QGIS 4 tool* | ✅ Included | ✅ Included | ✅ Passed |
+| QGIS Version | Platform | UI Framework | Fillet & Chamfer Tool | Corner Restore Tool | CAD Rotation Tool | Batch Dock Widget | Test Status |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| **QGIS 3.16 LTR** | Windows / Linux / macOS | Qt5 / PyQt5 | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
+| **QGIS 3.28 LTR** | Windows / Linux / macOS | Qt5 / PyQt5 | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
+| **QGIS 3.34 LTR** | Windows / Linux / macOS | Qt5 / PyQt5 | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
+| **QGIS 3.40 LTR** | Windows / Linux / macOS | Qt5 / PyQt5 | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
+| **QGIS 4.0.x** | Windows / Linux / macOS | Qt6 / PyQt6 | *Native QGIS 4 tool* | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
 
 ---
 
@@ -134,7 +150,16 @@ The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grad
 4. Hover over the second adjacent straight edge $E_2$ to see the intersection preview and reconstructed sharp corner.
 5. Click the second edge $E_2$ to commit the corner reconstruction. Right-click or press `Escape` to cancel.
 
-### ⚡ 3. Batch Processing Panel (QGIS 3.x & QGIS 4.x)
+### 🔄 3. Interactive CAD 3-Point Rotation (QGIS 3.x & QGIS 4.x)
+1. Put your target layer into edit mode and select the features you wish to rotate.
+2. Click the **CAD Rotate Tool** button on the *Advanced Digitizing Toolbar*.
+3. **Step 1 (Pivot)**: Click on the canvas (or snap to any vertex/edge) to set the rotation center pivot $P_{\text{center}}$.
+4. **Step 2 (Reference)**: Click to set the reference baseline direction $P_{\text{ref}}$.
+5. **Step 3 (Angle / Target)**: Move the mouse to rotate interactively, or type the exact angle in the floating HUD. Click or press `Enter` to commit the rotation.
+   - Check **Save copy (Copy)** in the HUD if you want to duplicate rotated features.
+   - Use the **Snap step** selector (`5°`, `15°`, `45°`, `90°`) or hold `Shift` to constrain the angle.
+
+### ⚡ 4. Batch Processing Panel (QGIS 3.x & QGIS 4.x)
 1. Put your target layer into edit mode.
 2. Select one or more features using the QGIS selection tool.
 3. Click the **Fillet / Chamfer (Batch Processing)** button to open the dock panel.

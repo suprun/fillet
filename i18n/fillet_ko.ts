@@ -55,12 +55,12 @@
             <translation>{} 개 객체를 처리했습니다.</translation>
         </message>
         <message>
-            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>모서리 복원 (Unfillet / Unchamfer)</translation>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD 회전</translation>
         </message>
         <message>
-            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>날카로운 모서리 복원 도구 (필렛 및 챔퍼 제거)</translation>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>회전 중심점 선택 기능이 있는 대화형 CAD 지오메트리 회전 도구</translation>
         </message>
     </context>
     <context>
@@ -185,33 +185,49 @@
         </message>
     </context>
     <context>
-        <name>RestoreCanvasWidget</name>
+        <name>RotationCanvasWidget</name>
         <message>
-            <source>Відновлення гострого кута</source>
-            <translation>날카로운 모서리 복원</translation>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. 회전 중심점 지정</translation>
         </message>
         <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>1단계: 모서리의 첫 번째 가장자리를 클릭하세요</translation>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. 기준 방향 지정</translation>
         </message>
         <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>2단계: 모서리를 재구성하려면 인접한 두 번째 가장자리를 클릭하세요</translation>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. 회전 각도 지정</translation>
         </message>
         <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>마우스 오른쪽 버튼 또는 Esc — 취소</translation>
+            <source>Кут (Angle):</source>
+            <translation>각도:</translation>
         </message>
         <message>
-            <source>Скасувати</source>
-            <translation>취소</translation>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>각도 고정 / 대화형 회전</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>스냅 단계:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>자유</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>사본 유지</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>원본을 유지하면서 선택한 피처의 회전된 사본을 만듭니다.</translation>
         </message>
     </context>
     <context>
-        <name>RestoreMapTool</name>
+        <name>RotateMapTool</name>
         <message>
-            <source>Відновлення кута</source>
-            <translation>모서리 복원</translation>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD 피처 회전</translation>
         </message>
     </context>
 </TS>

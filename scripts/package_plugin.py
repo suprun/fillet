@@ -6,8 +6,9 @@ Helper script to package the QGIS plugin cleanly according to repository rules.
 import os
 import zipfile
 
-IGNORED_EXTENSIONS = {".pyc", ".pyo", ".pyd", ".zip", ".log", ".swp", ".swo"}
+IGNORED_EXTENSIONS = {".pyc", ".pyo", ".pyd", ".zip", ".log", ".swp", ".swo", ".db"}
 IGNORED_DIRS = {"__pycache__", ".git", ".idea", ".vscode", ".venv", "venv", "dist", "build", "tests", "scratch", "scripts"}
+IGNORED_FILES = {"AGENTS.md", "desktop.ini", "Thumbs.db", ".DS_Store"}
 
 
 def package_plugin():
@@ -23,7 +24,7 @@ def package_plugin():
 
             for file in files:
                 ext = os.path.splitext(file)[1].lower()
-                if ext in IGNORED_EXTENSIONS or file.startswith("."):
+                if ext in IGNORED_EXTENSIONS or file.startswith(".") or file in IGNORED_FILES:
                     continue
 
                 abs_path = os.path.join(root, file)

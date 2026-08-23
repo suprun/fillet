@@ -55,12 +55,12 @@
             <translation>Επεξεργάστηκαν {} στοιχεία.</translation>
         </message>
         <message>
-            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Επαναφορά γωνιών (Unfillet / Unchamfer)</translation>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Περιστροφή</translation>
         </message>
         <message>
-            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Εργαλείο επαναφοράς αιχμηρών γωνιών (αφαιρεί στρογγυλοποιήσεις και λοξοτμήσεις)</translation>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Διαδραστικό εργαλείο περιστροφής CAD με επιλογή σημείου άξονα περιστροφής</translation>
         </message>
     </context>
     <context>
@@ -185,33 +185,49 @@
         </message>
     </context>
     <context>
-        <name>RestoreCanvasWidget</name>
+        <name>RotationCanvasWidget</name>
         <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Επαναφορά αιχμηρής γωνίας</translation>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Ορίστε σημείο περιστροφής</translation>
         </message>
         <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Βήμα 1: Κάντε κλικ στην πρώτη ακμή της γωνίας</translation>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Ορίστε κατεύθυνση αναφοράς</translation>
         </message>
         <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Βήμα 2: Κάντε κλικ στη γειτονική δεύτερη ακμή για να ανακατασκευάσετε τη γωνία</translation>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Ορίστε γωνία περιστροφής</translation>
         </message>
         <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Δεξί κλικ ή Esc — Ακύρωση</translation>
+            <source>Кут (Angle):</source>
+            <translation>Γωνία:</translation>
         </message>
         <message>
-            <source>Скасувати</source>
-            <translation>Ακύρωση</translation>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Κλείδωμα γωνίας / διαδραστική περιστροφή</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Βήμα προσκόλλησης:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Ελεύθερο</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Διατήρηση αντιγράφου</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Δημιουργεί περιστραμμένο αντίγραφο των επιλεγμένων στοιχείων, διατηρώντας το αρχικό</translation>
         </message>
     </context>
     <context>
-        <name>RestoreMapTool</name>
+        <name>RotateMapTool</name>
         <message>
-            <source>Відновлення кута</source>
-            <translation>Επαναφορά γωνίας</translation>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Περιστροφή στοιχείων</translation>
         </message>
     </context>
 </TS>

@@ -55,12 +55,12 @@
             <translation>{} detay işlendi.</translation>
         </message>
         <message>
-            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Köşeleri Geri Yükle (Unfillet / Unchamfer)</translation>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Döndür</translation>
         </message>
         <message>
-            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Keskin köşe geri yükleme aracı (yuvarlatmaları ve pahları kaldırır)</translation>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Dönme merkezi seçimi ile etkileşimli CAD geometri döndürme aracı</translation>
         </message>
     </context>
     <context>
@@ -185,33 +185,49 @@
         </message>
     </context>
     <context>
-        <name>RestoreCanvasWidget</name>
+        <name>RotationCanvasWidget</name>
         <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Keskin Köşeyi Geri Yükle</translation>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Dönme merkezini belirleyin</translation>
         </message>
         <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Adım 1: Köşenin ilk kenarına tıklayın</translation>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Referans yönünü belirleyin</translation>
         </message>
         <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Adım 2: Köşeyi yeniden oluşturmak için bitişik ikinci kenara tıklayın</translation>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Dönme açısını belirleyin</translation>
         </message>
         <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Sağ tık veya Esc — İptal</translation>
+            <source>Кут (Angle):</source>
+            <translation>Açı:</translation>
         </message>
         <message>
-            <source>Скасувати</source>
-            <translation>İptal</translation>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Açıyı kilitle / etkileşimli döndürme</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Yakalama adımı:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Serbest</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Kopyayı sakla</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Orijinali koruyarak seçili nesnelerin döndürülmüş bir kopyasını oluşturur</translation>
         </message>
     </context>
     <context>
-        <name>RestoreMapTool</name>
+        <name>RotateMapTool</name>
         <message>
-            <source>Відновлення кута</source>
-            <translation>Köşeyi Geri Yükle</translation>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Nesne(leri) Döndür</translation>
         </message>
     </context>
 </TS>

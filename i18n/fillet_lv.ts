@@ -55,12 +55,12 @@
             <translation>Apstrādāti {} objekti.</translation>
         </message>
         <message>
-            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Atjaunot stūrus (Unfillet / Unchamfer)</translation>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Pagriezt</translation>
         </message>
         <message>
-            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Aso stūru atjaunošanas rīks (noņem noapaļojumus un nolīdzinājumus)</translation>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktīvs CAD ģeometriju pagriešanas rīks ar pagrieziena punkta izvēli</translation>
         </message>
     </context>
     <context>
@@ -185,33 +185,49 @@
         </message>
     </context>
     <context>
-        <name>RestoreCanvasWidget</name>
+        <name>RotationCanvasWidget</name>
         <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Atjaunot aso stūri</translation>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Norādiet pagrieziena punktu</translation>
         </message>
         <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>1. solis: noklikšķiniet uz stūra pirmās malas</translation>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Norādiet atsauces virzienu</translation>
         </message>
         <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>2. solis: noklikšķiniet uz blakus esošās otrās malas, lai rekonstruētu stūri</translation>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Norādiet pagrieziena leņķi</translation>
         </message>
         <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Labais klikšķis vai Esc — Atcelt</translation>
+            <source>Кут (Angle):</source>
+            <translation>Leņķis:</translation>
         </message>
         <message>
-            <source>Скасувати</source>
-            <translation>Atcelt</translation>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Bloķēt leņķi / interaktīva pagriešana</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Piesaistes solis:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Brīvs</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Saglabāt kopiju</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Izveido atlasīto objektu pagrieztu kopiju, saglabājot oriģinālu</translation>
         </message>
     </context>
     <context>
-        <name>RestoreMapTool</name>
+        <name>RotateMapTool</name>
         <message>
-            <source>Відновлення кута</source>
-            <translation>Atjaunot stūri</translation>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Objektu pagriešana</translation>
         </message>
     </context>
 </TS>

@@ -55,12 +55,12 @@
             <translation>Przetworzono {} obiekt(ów).</translation>
         </message>
         <message>
-            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Przywróć narożniki (Unfillet / Unchamfer)</translation>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Obróć</translation>
         </message>
         <message>
-            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Narzędzie przywracania ostrych narożników (usuwa zaokrąglenia i fazowania)</translation>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktywne narzędzie CAD do obracania geometrii z wyborem punktu obrotu</translation>
         </message>
     </context>
     <context>
@@ -185,33 +185,49 @@
         </message>
     </context>
     <context>
-        <name>RestoreCanvasWidget</name>
+        <name>RotationCanvasWidget</name>
         <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Przywróć ostry narożnik</translation>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Wskaż punkt obrotu</translation>
         </message>
         <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Krok 1: Kliknij pierwszą krawędź narożnika</translation>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Wskaż kierunek referencyjny</translation>
         </message>
         <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Krok 2: Kliknij sąsiednią drugą krawędź, aby zrekonstruować narożnik</translation>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Wskaż kąt obrotu</translation>
         </message>
         <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>PPM lub Esc — Anuluj</translation>
+            <source>Кут (Angle):</source>
+            <translation>Kąt:</translation>
         </message>
         <message>
-            <source>Скасувати</source>
-            <translation>Anuluj</translation>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Zablokuj kąt / obrót interaktywny</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Krok przyciągania:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Swobodny</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Zachowaj kopię</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Tworzy obróconą kopię zaznaczonych obiektów, zachowując oryginał</translation>
         </message>
     </context>
     <context>
-        <name>RestoreMapTool</name>
+        <name>RotateMapTool</name>
         <message>
-            <source>Відновлення кута</source>
-            <translation>Przywróć narożnik</translation>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Obracanie obiektów</translation>
         </message>
     </context>
 </TS>

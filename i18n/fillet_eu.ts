@@ -55,12 +55,12 @@
             <translation>{} entitate prozesatu dira.</translation>
         </message>
         <message>
-            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Leheneratu izkinak (Unfillet / Unchamfer)</translation>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Biratu</translation>
         </message>
         <message>
-            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Izkina zorrotzak leheneratzeko tresna (biribiltzeak eta xaflaketak kentzen ditu)</translation>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>CAD geometria biraketa interaktiboa pibot-puntuaren aukeraketarekin</translation>
         </message>
     </context>
     <context>
@@ -185,33 +185,49 @@
         </message>
     </context>
     <context>
-        <name>RestoreCanvasWidget</name>
+        <name>RotationCanvasWidget</name>
         <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Leheneratu izkina zorrotza</translation>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Zehaztu pibot-puntua</translation>
         </message>
         <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>1. urratsa: Egin klik izkinaren lehen ertzean</translation>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Zehaztu erreferentzia-norabidea</translation>
         </message>
         <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>2. urratsa: Egin klik ondoko bigarren ertzean izkina berreraikitzeko</translation>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Zehaztu biraketa-angelua</translation>
         </message>
         <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Eskuin-klika edo Esc — Utzi</translation>
+            <source>Кут (Angle):</source>
+            <translation>Angelua:</translation>
         </message>
         <message>
-            <source>Скасувати</source>
-            <translation>Utzi</translation>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Blokeatu angelua / biraketa interaktiboa</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Atxikitze-urratsa:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Askea</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Gorde kopia</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Hautatutako elementuen kopia biratua sortzen du, jatorrizkoa gordeta</translation>
         </message>
     </context>
     <context>
-        <name>RestoreMapTool</name>
+        <name>RotateMapTool</name>
         <message>
-            <source>Відновлення кута</source>
-            <translation>Leheneratu izkina</translation>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Elementuen biraketa</translation>
         </message>
     </context>
 </TS>

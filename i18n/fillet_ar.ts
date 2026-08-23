@@ -55,12 +55,12 @@
             <translation>تمت معالجة {} معلم (معالم).</translation>
         </message>
         <message>
-            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>استعادة الزوايا (Unfillet / Unchamfer)</translation>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD تدوير</translation>
         </message>
         <message>
-            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>أداة استعادة الزوايا الحادة (تزيل الاستدارات والشطفات)</translation>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>أداة تدوير هندسي تفاعلية CAD مع تحديد نقطة الارتكاز</translation>
         </message>
     </context>
     <context>
@@ -185,33 +185,49 @@
         </message>
     </context>
     <context>
-        <name>RestoreCanvasWidget</name>
+        <name>RotationCanvasWidget</name>
         <message>
-            <source>Відновлення гострого кута</source>
-            <translation>استعادة الزاوية الحادة</translation>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. حدد نقطة الارتكاز</translation>
         </message>
         <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>الخطوة 1: انقر فوق الحافة الأولى للزاوية</translation>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. حدد اتجاه المرجع</translation>
         </message>
         <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>الخطوة 2: انقر فوق الحافة المجاورة الثانية لإعادة بناء الزاوية</translation>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. حدد زاوية التدوير</translation>
         </message>
         <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>زر الفأرة الأيمن أو Esc — إلغاء</translation>
+            <source>Кут (Angle):</source>
+            <translation>الزاوية:</translation>
         </message>
         <message>
-            <source>Скасувати</source>
-            <translation>إلغاء</translation>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>قفل الزاوية / التدوير التفاعلي</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>خطوة الانجذاب:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>حر</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>حفظ نسخة</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>ينشئ نسخة مدورة من المعالم المحددة مع الحفاظ على الأصل</translation>
         </message>
     </context>
     <context>
-        <name>RestoreMapTool</name>
+        <name>RotateMapTool</name>
         <message>
-            <source>Відновлення кута</source>
-            <translation>استعادة الزاوية</translation>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD تدوير المعالم</translation>
         </message>
     </context>
 </TS>

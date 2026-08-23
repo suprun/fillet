@@ -55,12 +55,12 @@
             <translation>Đã xử lý {} đối tượng.</translation>
         </message>
         <message>
-            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Khôi phục góc (Unfillet / Unchamfer)</translation>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Xoay</translation>
         </message>
         <message>
-            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Công cụ khôi phục góc nhọn (loại bỏ góc bo và góc vát)</translation>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Công cụ xoay hình học CAD tương tác với lựa chọn điểm trục xoay</translation>
         </message>
     </context>
     <context>
@@ -185,33 +185,49 @@
         </message>
     </context>
     <context>
-        <name>RestoreCanvasWidget</name>
+        <name>RotationCanvasWidget</name>
         <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Khôi phục góc nhọn</translation>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Chỉ định điểm trục xoay</translation>
         </message>
         <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Bước 1: Nhấp vào cạnh đầu tiên của góc</translation>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Chỉ định hướng tham chiếu</translation>
         </message>
         <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Bước 2: Nhấp vào cạnh thứ hai liền kề để tái tạo góc</translation>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Chỉ định góc xoay</translation>
         </message>
         <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Nhấp chuột phải hoặc Esc — Hủy</translation>
+            <source>Кут (Angle):</source>
+            <translation>Góc:</translation>
         </message>
         <message>
-            <source>Скасувати</source>
-            <translation>Hủy</translation>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Khóa góc / xoay tương tác</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Bước bắt dính:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Tự do</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Lưu bản sao</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Tạo bản sao đã xoay của các đối tượng được chọn, giữ nguyên bản gốc</translation>
         </message>
     </context>
     <context>
-        <name>RestoreMapTool</name>
+        <name>RotateMapTool</name>
         <message>
-            <source>Відновлення кута</source>
-            <translation>Khôi phục góc</translation>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Xoay đối tượng</translation>
         </message>
     </context>
 </TS>

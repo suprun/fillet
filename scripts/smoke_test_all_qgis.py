@@ -6,6 +6,7 @@ import sys
 # List of test files to run
 TEST_FILES = [
     "tests/test_geometry.py",
+    "tests/test_rotate_tool.py",
     "tests/test_plugin_lifecycle.py",
     "tests/test_translations.py",
     "tests/test_settings_persistence.py",

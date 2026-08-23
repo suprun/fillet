@@ -55,12 +55,12 @@
             <translation>Käsitelty {} kohdetta.</translation>
         </message>
         <message>
-            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Palauta kulmat (Unfillet / Unchamfer)</translation>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Kierrä</translation>
         </message>
         <message>
-            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Terävien kulmien palautustyökalu (poistaa pyöristykset ja viisteet)</translation>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktiivinen CAD-geometrioiden pyöritystyökalu kääntöpisteen valinnalla</translation>
         </message>
     </context>
     <context>
@@ -185,33 +185,49 @@
         </message>
     </context>
     <context>
-        <name>RestoreCanvasWidget</name>
+        <name>RotationCanvasWidget</name>
         <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Palauta terävä kulma</translation>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Määritä kääntöpiste</translation>
         </message>
         <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Vaihe 1: Napsauta kulman ensimmäistä reunaa</translation>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Määritä viitesuunta</translation>
         </message>
         <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Vaihe 2: Napsauta viereistä toista reunaa kulman rekonstruoimiseksi</translation>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Määritä pyörityskulma</translation>
         </message>
         <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Oikea painike tai Esc — Peruuta</translation>
+            <source>Кут (Angle):</source>
+            <translation>Kulma:</translation>
         </message>
         <message>
-            <source>Скасувати</source>
-            <translation>Peruuta</translation>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Lukitse kulma / interaktiivinen pyöritys</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Tartunnan askel:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Vapaa</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Tallenna kopio</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Luo valituista kohteista kierretyn kopion säilyttäen alkuperäisen</translation>
         </message>
     </context>
     <context>
-        <name>RestoreMapTool</name>
+        <name>RotateMapTool</name>
         <message>
-            <source>Відновлення кута</source>
-            <translation>Palauta kulma</translation>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Kohteiden pyöritys</translation>
         </message>
     </context>
 </TS>

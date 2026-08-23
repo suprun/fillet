@@ -2,19 +2,20 @@
 name=Fillet & Chamfer for QGIS 3.x (Interactive & Batch)
 qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
-description=Interactive Fillet, Chamfer & Corner Restoration tools for QGIS with instant Batch Fillet/Chamfer for selected features.
-about=Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), and Two-Edge Corner Restoration (Unfillet / Unchamfer) map tools for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.
-version=1.0.0.12
+description=Interactive Fillet, Chamfer, Corner Restoration & CAD Rotation tools for QGIS with instant Batch Fillet/Chamfer for selected features.
+about=Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Edge Corner Restoration (Unfillet / Unchamfer), and 3-Point CAD Rotation map tools for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.
+version=1.0.0.13
 author=suprun
 email=suprun.serhiy+qgis@gmail.com
 homepage=https://github.com/suprun/fillet
 repository=https://github.com/suprun/fillet
 tracker=https://github.com/suprun/fillet/issues
-tags=cad, editing, fillet, chamfer, unfillet, corner, restore, geometry, digitizing, curve, batch, qgis4
+tags=cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation, geometry, digitizing, curve, batch, qgis4
 icon=icon.png
 experimental=False
 deprecated=False
-changelog=1.0.0.12:
+changelog=1.0.0.13:
+    - Added interactive CAD 3-Point Rotation Map Tool (Pivot -> Reference Baseline -> Angle) with full native QGIS snapping support, on-canvas CAD HUD widget, angle locking, step snapping, and copy mode.
     - Restricted numeric stepper inputs to digits only and normalized decimal separator (dot/comma) handling across canvas HUD and batch panel.
     - Added interactive CAD Two-Edge Corner Restoration tool (Unfillet / Unchamfer) with real-time intersection preview.
     - Dedicated toolbar button with custom QGIS delete-badge icon for corner reconstruction.

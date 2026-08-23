@@ -1,0 +1,197 @@
+# -*- coding: utf-8 -*-
+"""
+Tests for CAD Rotate tool (RotateMapTool, RotationCanvasWidget, and GeometryEngine rotation methods).
+"""
+
+import math
+import os
+import sys
+import unittest
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from qgis.core import (
+    QgsApplication,
+    QgsCoordinateReferenceSystem,
+    QgsFeature,
+    QgsGeometry,
+    QgsPointXY,
+    QgsVectorLayer,
+)
+from qgis.gui import QgsMapCanvas
+
+app = QgsApplication([], False)
+app.initQgis()
+
+from core.geometry_engine import GeometryEngine
+from gui.rotate_map_tool import RotateMapTool
+from gui.rotation_canvas_widget import RotationCanvasWidget
+
+
+class TestCADRotateTool(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.canvas = QgsMapCanvas()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.canvas = None
+
+    def test_calculate_bearing_and_rotation_angle(self):
+        center = QgsPointXY(0, 0)
+        p_east = QgsPointXY(10, 0)
+        p_north = QgsPointXY(0, 10)
+        p_west = QgsPointXY(-10, 0)
+        p_south = QgsPointXY(0, -10)
+
+        # Bearing
+        self.assertAlmostEqual(GeometryEngine.calculate_bearing(center, p_east), 0.0)
+        self.assertAlmostEqual(GeometryEngine.calculate_bearing(center, p_north), 90.0)
+        self.assertAlmostEqual(GeometryEngine.calculate_bearing(center, p_west), 180.0)
+        self.assertAlmostEqual(GeometryEngine.calculate_bearing(center, p_south), -90.0)
+
+        # Delta angle from East to North (+90 CCW)
+        self.assertAlmostEqual(GeometryEngine.calculate_rotation_angle(center, p_east, p_north), 90.0)
+        # Delta angle from North to East (-90 CCW / 90 CW)
+        self.assertAlmostEqual(GeometryEngine.calculate_rotation_angle(center, p_north, p_east), -90.0)
+        # Delta angle from South to North (180)
+        self.assertAlmostEqual(GeometryEngine.calculate_rotation_angle(center, p_south, p_north), 180.0)
+
+    def test_rotate_geometry_types(self):
+        center = QgsPointXY(0, 0)
+
+        # 1. Point rotation
+        pt_geom = QgsGeometry.fromPointXY(QgsPointXY(10, 0))
+        rot_pt = GeometryEngine.rotate_geometry(pt_geom, center, 90.0)
+        self.assertAlmostEqual(rot_pt.asPoint().x(), 0.0)
+        self.assertAlmostEqual(rot_pt.asPoint().y(), 10.0)
+
+        # 2. LineString rotation
+        line_geom = QgsGeometry.fromPolylineXY([QgsPointXY(0, 0), QgsPointXY(10, 0)])
+        rot_line = GeometryEngine.rotate_geometry(line_geom, center, 45.0)
+        pts = rot_line.asPolyline()
+        self.assertAlmostEqual(pts[0].x(), 0.0)
+        self.assertAlmostEqual(pts[0].y(), 0.0)
+        self.assertAlmostEqual(pts[1].x(), 10.0 * math.cos(math.radians(45.0)))
+        self.assertAlmostEqual(pts[1].y(), 10.0 * math.sin(math.radians(45.0)))
+
+        # 3. Polygon rotation
+        poly_geom = QgsGeometry.fromPolygonXY([[QgsPointXY(0, 0), QgsPointXY(10, 0), QgsPointXY(10, 10), QgsPointXY(0, 10)]])
+        rot_poly = GeometryEngine.rotate_geometry(poly_geom, center, 180.0)
+        ring = rot_poly.asPolygon()[0]
+        self.assertAlmostEqual(ring[1].x(), -10.0)
+        self.assertAlmostEqual(ring[1].y(), 0.0)
+
+    def test_rotation_canvas_widget_ui(self):
+        widget = RotationCanvasWidget(self.canvas)
+        widget.set_step(RotationCanvasWidget.STEP_PIVOT)
+        self.assertEqual(widget._current_step, RotationCanvasWidget.STEP_PIVOT)
+
+        widget.set_step(RotationCanvasWidget.STEP_ROTATING)
+        self.assertEqual(widget._current_step, RotationCanvasWidget.STEP_ROTATING)
+
+        widget.set_angle(45.5)
+        self.assertAlmostEqual(widget.angle, 45.5)
+
+        widget.btn_lock_angle.setChecked(True)
+        self.assertTrue(widget.is_angle_locked)
+
+        widget.chk_copy.setChecked(True)
+        self.assertTrue(widget.is_copy_mode)
+
+    def test_rotate_map_tool_lifecycle_and_state_machine(self):
+        widget = RotationCanvasWidget(self.canvas)
+        tool = RotateMapTool(self.canvas, widget)
+
+        self.assertEqual(tool.state, RotateMapTool.STATE_SET_PIVOT)
+        self.assertIsNone(tool.pivot_point)
+
+        # Step 1: Set Pivot
+        tool.pivot_point = QgsPointXY(5, 5)
+        tool.state = RotateMapTool.STATE_SET_REFERENCE
+        widget.set_step(RotationCanvasWidget.STEP_REFERENCE)
+
+        # Step 2: Set Reference
+        tool.ref_point = QgsPointXY(15, 5)
+        tool.state = RotateMapTool.STATE_ROTATING
+        widget.set_step(RotationCanvasWidget.STEP_ROTATING)
+
+        # Step 3: Calculate rotation angle to (5, 15) -> 90 degrees
+        target = QgsPointXY(5, 15)
+        angle = GeometryEngine.calculate_rotation_angle(tool.pivot_point, tool.ref_point, target)
+        self.assertAlmostEqual(angle, 90.0)
+
+        # Reset
+        tool.reset_state()
+        self.assertEqual(tool.state, RotateMapTool.STATE_SET_PIVOT)
+        self.assertIsNone(tool.pivot_point)
+        self.assertIsNone(tool.ref_point)
+
+    def test_rotate_tool_commit_transaction(self):
+        layer = QgsVectorLayer("Polygon?crs=EPSG:3857", "temp_poly", "memory")
+        pr = layer.dataProvider()
+        feat = QgsFeature()
+        geom = QgsGeometry.fromPolygonXY([[QgsPointXY(0, 0), QgsPointXY(10, 0), QgsPointXY(10, 10), QgsPointXY(0, 10)]])
+        feat.setGeometry(geom)
+        pr.addFeatures([feat])
+        layer.updateExtents()
+
+        layer.startEditing()
+        layer.selectByIds([1])
+        self.canvas.setCurrentLayer(layer)
+
+        widget = RotationCanvasWidget(self.canvas)
+        tool = RotateMapTool(self.canvas, widget)
+
+        tool.pivot_point = QgsPointXY(0, 0)
+        tool.ref_point = QgsPointXY(10, 0)
+        tool.current_angle = 90.0
+        tool.state = RotateMapTool.STATE_ROTATING
+
+        # Commit rotation
+        tool.commit_rotation()
+
+        # Verify geometry in layer
+        feat_after = layer.getFeature(1)
+        poly_after = feat_after.geometry().asPolygon()[0]
+        self.assertAlmostEqual(poly_after[1].x(), 0.0)
+        self.assertAlmostEqual(poly_after[1].y(), 10.0)
+
+        layer.rollBack()
+
+    def test_rotate_tool_copy_mode(self):
+        layer = QgsVectorLayer("Polygon?crs=EPSG:3857", "temp_poly", "memory")
+        pr = layer.dataProvider()
+        feat = QgsFeature()
+        geom = QgsGeometry.fromPolygonXY([[QgsPointXY(0, 0), QgsPointXY(10, 0), QgsPointXY(10, 10), QgsPointXY(0, 10)]])
+        feat.setGeometry(geom)
+        pr.addFeatures([feat])
+        layer.updateExtents()
+
+        layer.startEditing()
+        layer.selectByIds([1])
+        self.canvas.setCurrentLayer(layer)
+
+        widget = RotationCanvasWidget(self.canvas)
+        widget.chk_copy.setChecked(True)
+        tool = RotateMapTool(self.canvas, widget)
+
+        tool.pivot_point = QgsPointXY(0, 0)
+        tool.ref_point = QgsPointXY(10, 0)
+        tool.current_angle = 45.0
+        tool.state = RotateMapTool.STATE_ROTATING
+
+        tool.commit_rotation()
+
+        # Should have 2 features now (original + copy)
+        self.assertEqual(layer.featureCount(), 2)
+
+        layer.rollBack()
+
+
+if __name__ == "__main__":
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestCADRotateTool)
+    runner = unittest.TextTestRunner(verbosity=2)
+    res = runner.run(suite)
+    app.exitQgis()
+    sys.exit(0 if res.wasSuccessful() else 1)

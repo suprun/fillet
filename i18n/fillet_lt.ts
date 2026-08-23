@@ -55,12 +55,12 @@
             <translation>Apdorota {} objektų.</translation>
         </message>
         <message>
-            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Atkurti kampus (Unfillet / Unchamfer)</translation>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Pasukti</translation>
         </message>
         <message>
-            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Aštrių kampų atkūrimo įrankis (pašalina užapvalinimus ir nusklembimus)</translation>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktyvus CAD geometrijos pasukimo įrankis su sukimosi centro parinkimu</translation>
         </message>
     </context>
     <context>
@@ -185,33 +185,49 @@
         </message>
     </context>
     <context>
-        <name>RestoreCanvasWidget</name>
+        <name>RotationCanvasWidget</name>
         <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Atkurti aštrų kampą</translation>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Nurodykite sukimosi centrą</translation>
         </message>
         <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>1 žingsnis: spustelėkite pirmąją kampo briauną</translation>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Nurodykite atskaitos kryptį</translation>
         </message>
         <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>2 žingsnis: spustelėkite gretimą antrąją briauną, kad atkurtumėte kampą</translation>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Nurodykite sukimosi kampą</translation>
         </message>
         <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Dešinysis mygtukas arba Esc — Atšaukti</translation>
+            <source>Кут (Angle):</source>
+            <translation>Kampas:</translation>
         </message>
         <message>
-            <source>Скасувати</source>
-            <translation>Atšaukti</translation>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Užrakinti kampą / interaktyvus pasukimas</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Pritraukimo žingsnis:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Laisvas</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Išsaugoti kopiją</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Sukuria pasuktą pasirinktų objektų kopiją, išsaugodamas originalą</translation>
         </message>
     </context>
     <context>
-        <name>RestoreMapTool</name>
+        <name>RotateMapTool</name>
         <message>
-            <source>Відновлення кута</source>
-            <translation>Atkurti kampą</translation>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Objektų pasukimas</translation>
         </message>
     </context>
 </TS>

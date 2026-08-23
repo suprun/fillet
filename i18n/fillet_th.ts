@@ -55,12 +55,12 @@
             <translation>ประมวลผลแล้ว {} ฟีเจอร์</translation>
         </message>
         <message>
-            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>กู้คืนมุม (Unfillet / Unchamfer)</translation>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD หมุน</translation>
         </message>
         <message>
-            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>เครื่องมือกู้คืนมุมแหลม (ลบมุมมนและมุมตัด)</translation>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>เครื่องมือหมุนรูปทรง CAD แบบโต้ตอบพร้อมการเลือกจุดศูนย์กลาง</translation>
         </message>
     </context>
     <context>
@@ -185,33 +185,49 @@
         </message>
     </context>
     <context>
-        <name>RestoreCanvasWidget</name>
+        <name>RotationCanvasWidget</name>
         <message>
-            <source>Відновлення гострого кута</source>
-            <translation>กู้คืนมุมแหลม</translation>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. ระบุจุดศูนย์กลางการหมุน</translation>
         </message>
         <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>ขั้นตอนที่ 1: คลิกที่ขอบแรกของมุม</translation>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. ระบุทิศทางอ้างอิง</translation>
         </message>
         <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>ขั้นตอนที่ 2: คลิกที่ขอบที่สองที่อยู่ติดกันเพื่อสร้างมุมใหม่</translation>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. ระบุมุมการหมุน</translation>
         </message>
         <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>คลิกขวาหรือ Esc — ยกเลิก</translation>
+            <source>Кут (Angle):</source>
+            <translation>มุม:</translation>
         </message>
         <message>
-            <source>Скасувати</source>
-            <translation>ยกเลิก</translation>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>ล็อกมุม / การหมุนแบบโต้ตอบ</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>ขั้นการสแน็ป:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>อิสระ</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>บันทึกสำเนา</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>สร้างสำเนาที่หมุนแล้วของฟีเจอร์ที่เลือก โดยยังคงรักษาฟีเจอร์เดิมไว้</translation>
         </message>
     </context>
     <context>
-        <name>RestoreMapTool</name>
+        <name>RotateMapTool</name>
         <message>
-            <source>Відновлення кута</source>
-            <translation>กู้คืนมุม</translation>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD หมุนฟีเจอร์</translation>
         </message>
     </context>
 </TS>

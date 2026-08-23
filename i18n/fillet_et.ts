@@ -55,12 +55,12 @@
             <translation>Töödeldud {} objekti.</translation>
         </message>
         <message>
-            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Taasta nurgad (Unfillet / Unchamfer)</translation>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Pööra</translation>
         </message>
         <message>
-            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Teravate nurkade taastamise tööriist (eemaldab ümardused ja faasid)</translation>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktiivne CAD-geomeetria pööramise tööriist pöördepunkti valikuga</translation>
         </message>
     </context>
     <context>
@@ -185,33 +185,49 @@
         </message>
     </context>
     <context>
-        <name>RestoreCanvasWidget</name>
+        <name>RotationCanvasWidget</name>
         <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Taasta terav nurk</translation>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Määra pöördepunkt</translation>
         </message>
         <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>1. samm: klõpsake nurga esimesel serval</translation>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Määra võrdlussuund</translation>
         </message>
         <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>2. samm: klõpsake külgneval teisel serval nurga taastamiseks</translation>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Määra pöördenurk</translation>
         </message>
         <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Paremklõps või Esc — Tühista</translation>
+            <source>Кут (Angle):</source>
+            <translation>Nurk:</translation>
         </message>
         <message>
-            <source>Скасувати</source>
-            <translation>Tühista</translation>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Lukusta nurk / interaktiivne pööramine</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Haardumissamm:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Vaba</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Salvesta koopia</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Loob valitud objektidest pööratud koopia, säilitades originaali</translation>
         </message>
     </context>
     <context>
-        <name>RestoreMapTool</name>
+        <name>RotateMapTool</name>
         <message>
-            <source>Відновлення кута</source>
-            <translation>Taasta nurk</translation>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Objektide pööramine</translation>
         </message>
     </context>
 </TS>

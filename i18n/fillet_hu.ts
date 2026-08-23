@@ -55,12 +55,12 @@
             <translation>{} elem feldolgozva.</translation>
         </message>
         <message>
-            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Sarkok visszaállítása (Unfillet / Unchamfer)</translation>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Forgatás</translation>
         </message>
         <message>
-            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Éles sarok visszaállító eszköz (eltávolítja a lekerekítéseket és letöréseket)</translation>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktív CAD geometriai forgatóeszköz forgáspont-kijelöléssel</translation>
         </message>
     </context>
     <context>
@@ -185,33 +185,49 @@
         </message>
     </context>
     <context>
-        <name>RestoreCanvasWidget</name>
+        <name>RotationCanvasWidget</name>
         <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Éles sarok visszaállítása</translation>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Forgáspont megadása</translation>
         </message>
         <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>1. lépés: Kattintson a sarok első élére</translation>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Referencia-irány megadása</translation>
         </message>
         <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>2. lépés: Kattintson a szomszédos második élre a sarok rekonstruálásához</translation>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Forgatási szög megadása</translation>
         </message>
         <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Jobb gomb vagy Esc — Mégse</translation>
+            <source>Кут (Angle):</source>
+            <translation>Szög:</translation>
         </message>
         <message>
-            <source>Скасувати</source>
-            <translation>Mégse</translation>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Szög zárolása / interaktív forgatás</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Igazítási lépésköz:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Szabad</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Másolat mentése</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Elforgatott másolatot készít a kijelölt elemekről, megőrizve az eredetit</translation>
         </message>
     </context>
     <context>
-        <name>RestoreMapTool</name>
+        <name>RotateMapTool</name>
         <message>
-            <source>Відновлення кута</source>
-            <translation>Sarok visszaállítása</translation>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Elemek elforgatása</translation>
         </message>
     </context>
 </TS>

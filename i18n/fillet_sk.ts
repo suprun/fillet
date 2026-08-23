@@ -55,12 +55,12 @@
             <translation>Spracovaných {} prvkov.</translation>
         </message>
         <message>
-            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Obnoviť rohy (Unfillet / Unchamfer)</translation>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Otočiť</translation>
         </message>
         <message>
-            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Nástroj na obnovu ostrých rohov (odstráni zaoblenia a skosenia)</translation>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktívny CAD nástroj na otáčanie geometrií s výberom stredu otáčania</translation>
         </message>
     </context>
     <context>
@@ -185,33 +185,49 @@
         </message>
     </context>
     <context>
-        <name>RestoreCanvasWidget</name>
+        <name>RotationCanvasWidget</name>
         <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Obnoviť ostrý roh</translation>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Zadajte stred otáčania</translation>
         </message>
         <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Krok 1: Kliknite na prvú hranu rohu</translation>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Zadajte referenčný smer</translation>
         </message>
         <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Krok 2: Kliknite na susednú druhú hranu pre rekonštrukciu rohu</translation>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Zadajte uhol otáčania</translation>
         </message>
         <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Pravé tlačidlo alebo Esc — Zrušiť</translation>
+            <source>Кут (Angle):</source>
+            <translation>Uhol:</translation>
         </message>
         <message>
-            <source>Скасувати</source>
-            <translation>Zrušiť</translation>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Zamknúť uhol / interaktívne otáčanie</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Krok prichytávania:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Voľný</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Uložiť kópiu</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Vytvorí otočenú kópiu vybraných prvkov a zachová originál</translation>
         </message>
     </context>
     <context>
-        <name>RestoreMapTool</name>
+        <name>RotateMapTool</name>
         <message>
-            <source>Відновлення кута</source>
-            <translation>Obnoviť roh</translation>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Otočenie prvkov</translation>
         </message>
     </context>
 </TS>

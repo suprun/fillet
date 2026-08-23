@@ -55,12 +55,12 @@
             <translation>{} फ़ीचर संसाधित किए गए।</translation>
         </message>
         <message>
-            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>कोने पुनर्स्थापित करें (Unfillet / Unchamfer)</translation>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD घुमाएँ</translation>
         </message>
         <message>
-            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>नुकीले कोने पुनर्स्थापना उपकरण (गोलाई और चेंफर हटाता है)</translation>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>घूर्णन बिंदु चयन के साथ इंटरैक्टिव सीएडी ज्यामिति रोटेशन उपकरण</translation>
         </message>
     </context>
     <context>
@@ -185,33 +185,49 @@
         </message>
     </context>
     <context>
-        <name>RestoreCanvasWidget</name>
+        <name>RotationCanvasWidget</name>
         <message>
-            <source>Відновлення гострого кута</source>
-            <translation>नुकीला कोना पुनर्स्थापित करें</translation>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. घूर्णन बिंदु निर्दिष्ट करें</translation>
         </message>
         <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>चरण 1: कोने के पहले किनारे पर क्लिक करें</translation>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. संदर्भ दिशा निर्दिष्ट करें</translation>
         </message>
         <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>चरण 2: कोने के पुनर्निर्माण के लिए आसन्न दूसरे किनारे पर क्लिक करें</translation>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. घूर्णन कोण निर्दिष्ट करें</translation>
         </message>
         <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>दायां क्लिक या Esc — रद्द करें</translation>
+            <source>Кут (Angle):</source>
+            <translation>कोण:</translation>
         </message>
         <message>
-            <source>Скасувати</source>
-            <translation>रद्द करें</translation>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>कोण लॉक करें / इंटरैक्टिव रोटेशन</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>स्नैप चरण:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>मुक्त</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>प्रतिलिपि सहेजें</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>मूल को बनाए रखते हुए चयनित सुविधाओं की एक घूर्णन प्रतिलिपि बनाता है</translation>
         </message>
     </context>
     <context>
-        <name>RestoreMapTool</name>
+        <name>RotateMapTool</name>
         <message>
-            <source>Відновлення кута</source>
-            <translation>कोना पुनर्स्थापित करें</translation>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD सुविधाएँ घुमाएँ</translation>
         </message>
     </context>
 </TS>

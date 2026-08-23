@@ -55,12 +55,12 @@
             <translation>S-au procesat {} element(e).</translation>
         </message>
         <message>
-            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Restaurare colțuri (Unfillet / Unchamfer)</translation>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Rotire</translation>
         </message>
         <message>
-            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Instrument de restaurare a colțurilor ascuțite (elimină racordările și teșirile)</translation>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Instrument CAD interactiv de rotire a geometriilor cu selectarea punctului pivot</translation>
         </message>
     </context>
     <context>
@@ -185,33 +185,49 @@
         </message>
     </context>
     <context>
-        <name>RestoreCanvasWidget</name>
+        <name>RotationCanvasWidget</name>
         <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Restaurare colț ascuțit</translation>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Specificați punctul pivot</translation>
         </message>
         <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Pasul 1: Faceți clic pe prima latură a colțului</translation>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Specificați direcția de referință</translation>
         </message>
         <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Pasul 2: Faceți clic pe a doua latură adiacentă pentru a reconstrui colțul</translation>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Specificați unghiul de rotire</translation>
         </message>
         <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Clic dreapta sau Esc — Anulare</translation>
+            <source>Кут (Angle):</source>
+            <translation>Unghi:</translation>
         </message>
         <message>
-            <source>Скасувати</source>
-            <translation>Anulare</translation>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Blocare unghi / rotire interactivă</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Pas de acroșare:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Liber</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Păstrează o copie</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Creează o copie rotită a entităților selectate, păstrând originalul</translation>
         </message>
     </context>
     <context>
-        <name>RestoreMapTool</name>
+        <name>RotateMapTool</name>
         <message>
-            <source>Відновлення кута</source>
-            <translation>Restaurare colț</translation>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Rotire entitate/entități</translation>
         </message>
     </context>
 </TS>
