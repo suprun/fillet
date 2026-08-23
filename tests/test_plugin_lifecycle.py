@@ -21,14 +21,39 @@ tb = QToolBar("Digitize", win)
 win.addToolBar(tb)
 
 
+class MockMessageBar(QObject):
+    def __init__(self):
+        super().__init__()
+        self.messages = []
+
+    def pushMessage(self, title, text, level=None, duration=0):
+        self.messages.append({"title": title, "text": text, "level": level, "duration": duration})
+
+    def pushInfo(self, title, text, duration=0):
+        self.messages.append({"title": title, "text": text, "level": "info", "duration": duration})
+
+    def pushWarning(self, title, text, duration=0):
+        self.messages.append({"title": title, "text": text, "level": "warning", "duration": duration})
+
+    def pushSuccess(self, title, text, duration=0):
+        self.messages.append({"title": title, "text": text, "level": "success", "duration": duration})
+
+
 class MockIface(QObject):
     currentLayerChanged = pyqtSignal(object)
+
+    def __init__(self):
+        super().__init__()
+        self._msg_bar = MockMessageBar()
 
     def mainWindow(self):
         return win
 
     def mapCanvas(self):
         return canvas
+
+    def messageBar(self):
+        return self._msg_bar
 
     def advancedDigitizeToolBar(self):
         return tb
@@ -308,6 +333,15 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
         self.assertAlmostEqual(v_pt.y(), 0.0)
 
         layer.rollBack()
+
+    def test_message_bar_auto_dismiss_timer(self):
+        """Verify that notification strips are posted with a non-zero duration timer."""
+        self.plugin._show_message("Test Title", "Test Message", duration=5)
+        self.assertGreater(len(self.iface.messageBar().messages), 0)
+        last_msg = self.iface.messageBar().messages[-1]
+        self.assertEqual(last_msg["title"], "Test Title")
+        self.assertEqual(last_msg["text"], "Test Message")
+        self.assertEqual(last_msg["duration"], 5)
 
 
 if __name__ == "__main__":

@@ -572,21 +572,43 @@ class FilletPlugin:
                     if self.rotate_action:
                         self.rotate_action.setChecked(False)
 
+    def _show_message(self, title: str, text: str, level=None, duration: int = 5):
+        """Displays an auto-dismissing notification strip on the QGIS message bar."""
+        if not self.iface or not hasattr(self.iface, "messageBar") or not self.iface.messageBar():
+            return
+        msg_bar = self.iface.messageBar()
+        if level is None:
+            level = getattr(Qgis.MessageLevel, "Info", getattr(Qgis, "Info", 0))
+        try:
+            msg_bar.pushMessage(title, text, level=level, duration=duration)
+        except (TypeError, AttributeError):
+            # Fallback if pushMessage keyword syntax varies
+            try:
+                msg_bar.pushMessage(title, text, level, duration)
+            except Exception:
+                pass
+
     def apply_to_selected_features(self):
         """Batch apply fillet or chamfer to all corners of selected features."""
         layer = self.canvas.currentLayer()
         if not isinstance(layer, QgsVectorLayer) or not layer.isEditable():
-            self.iface.messageBar().pushWarning(
+            lvl_warn = getattr(Qgis.MessageLevel, "Warning", getattr(Qgis, "Warning", 1))
+            self._show_message(
                 self.tr("Увага"),
                 self.tr("Активний шар повинен бути векторним і перебувати в режимі редагування."),
+                level=lvl_warn,
+                duration=5,
             )
             return
 
         selected_fids = layer.selectedFeatureIds()
         if not selected_fids:
-            self.iface.messageBar().pushInfo(
+            lvl_info = getattr(Qgis.MessageLevel, "Info", getattr(Qgis, "Info", 0))
+            self._show_message(
                 self.tr("Інфо"),
                 self.tr("Немає виділених об'єктів для обробки."),
+                level=lvl_info,
+                duration=5,
             )
             return
 
@@ -617,9 +639,13 @@ class FilletPlugin:
 
         layer.endEditCommand()
         self.canvas.refresh()
-        self.iface.messageBar().pushSuccess(
+
+        lvl_success = getattr(Qgis.MessageLevel, "Success", getattr(Qgis, "Success", 3))
+        self._show_message(
             self.tr("Успіх"),
             self.tr("Оброблено {} об'єкт(ів).").format(modified_count),
+            level=lvl_success,
+            duration=4,
         )
 
     def _batch_process_geometry(
