@@ -113,8 +113,14 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
         self.assertFalse(self.plugin.settings_widget.btn_apply_selected.isEnabled())
 
     def test_actions_enabled_when_editing_starts_and_disabled_on_stop(self):
-        """Actions become enabled when editing starts and disabled when editing stops."""
+        """Actions become enabled when editing starts, and rotate requires active selection."""
         layer = QgsVectorLayer("Polygon?crs=EPSG:4326", "temp_poly", "memory")
+        pr = layer.dataProvider()
+        from qgis.core import QgsFeature, QgsGeometry, QgsPointXY
+        feat = QgsFeature()
+        feat.setGeometry(QgsGeometry.fromPolygonXY([[QgsPointXY(0,0), QgsPointXY(1,0), QgsPointXY(1,1), QgsPointXY(0,1)]]))
+        pr.addFeatures([feat])
+        layer.updateExtents()
         self.assertTrue(layer.isValid())
 
         canvas.setCurrentLayer(layer)
@@ -129,18 +135,28 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
             self.assertFalse(self.plugin.rotate_action.isEnabled())
         self.assertFalse(self.plugin.batch_action.isEnabled())
 
-        # 2. Start editing -> enabled
+        # 2. Start editing with NO selection -> fillet/restore/batch enabled, rotate disabled
         layer.startEditing()
         if self.plugin.action:
             self.assertTrue(self.plugin.action.isEnabled())
         if self.plugin.restore_action:
             self.assertTrue(self.plugin.restore_action.isEnabled())
         if self.plugin.rotate_action:
-            self.assertTrue(self.plugin.rotate_action.isEnabled())
+            self.assertFalse(self.plugin.rotate_action.isEnabled())
         self.assertTrue(self.plugin.batch_action.isEnabled())
         self.assertTrue(self.plugin.settings_widget.btn_apply_selected.isEnabled())
 
-        # 3. Roll back (stop editing) -> disabled
+        # 3. Select feature -> rotate action becomes ENABLED
+        layer.selectByIds([1])
+        if self.plugin.rotate_action:
+            self.assertTrue(self.plugin.rotate_action.isEnabled())
+
+        # 4. Deselect feature -> rotate action becomes DISABLED
+        layer.removeSelection()
+        if self.plugin.rotate_action:
+            self.assertFalse(self.plugin.rotate_action.isEnabled())
+
+        # 5. Roll back (stop editing) -> all disabled
         layer.rollBack()
         if self.plugin.action:
             self.assertFalse(self.plugin.action.isEnabled())
@@ -152,8 +168,15 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
         self.assertFalse(self.plugin.settings_widget.btn_apply_selected.isEnabled())
 
     def test_interactive_tool_auto_deactivation_on_editing_stop(self):
-        """If interactive tool is active on map canvas, it must unset when layer stops editing."""
+        """If interactive tool is active on map canvas, it must unset when layer stops editing or selection removed."""
         layer = QgsVectorLayer("LineString?crs=EPSG:4326", "temp_lines", "memory")
+        pr = layer.dataProvider()
+        from qgis.core import QgsFeature, QgsGeometry, QgsPointXY
+        feat = QgsFeature()
+        feat.setGeometry(QgsGeometry.fromPolylineXY([QgsPointXY(0,0), QgsPointXY(1,0)]))
+        pr.addFeatures([feat])
+        layer.updateExtents()
+
         layer.startEditing()
         canvas.setCurrentLayer(layer)
         self.iface.currentLayerChanged.emit(layer)
@@ -181,8 +204,9 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
         self.assertFalse(self.plugin.restore_action.isChecked())
         self.assertFalse(self.plugin.restore_action.isEnabled())
 
-        # Test Rotate tool deactivation
+        # Test Rotate tool deactivation when editing rolls back
         layer.startEditing()
+        layer.selectByIds([1])
         self.plugin.toggle_rotate_tool(True)
         self.assertEqual(canvas.mapTool(), self.plugin.rotate_map_tool)
         self.assertTrue(self.plugin.rotate_action.isChecked())
@@ -191,6 +215,20 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
         self.assertNotEqual(canvas.mapTool(), self.plugin.rotate_map_tool)
         self.assertFalse(self.plugin.rotate_action.isChecked())
         self.assertFalse(self.plugin.rotate_action.isEnabled())
+
+        # Test Rotate tool deactivation when selection is removed while editing
+        layer.startEditing()
+        layer.selectByIds([1])
+        self.plugin.toggle_rotate_tool(True)
+        self.assertEqual(canvas.mapTool(), self.plugin.rotate_map_tool)
+        self.assertTrue(self.plugin.rotate_action.isChecked())
+
+        layer.removeSelection()
+        self.assertNotEqual(canvas.mapTool(), self.plugin.rotate_map_tool)
+        self.assertFalse(self.plugin.rotate_action.isChecked())
+        self.assertFalse(self.plugin.rotate_action.isEnabled())
+
+        layer.rollBack()
 
     def test_map_tool_preview_in_all_modes(self):
         """Verify that _update_preview works without errors in fillet and chamfer modes."""

@@ -188,6 +188,48 @@ class TestCADRotateTool(unittest.TestCase):
 
         layer.rollBack()
 
+    def test_step_back_and_deactivate_cleanup(self):
+        """Test Escape/Right-click step back (Variant 1) and clean deactivation."""
+        from qgis.gui import QgsMapMouseEvent
+        from qgis.PyQt.QtCore import QEvent, QPoint, Qt
+        from qgis.PyQt.QtGui import QKeyEvent
+
+        _KeyPress = getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", 6))
+        _Key_Escape = getattr(Qt.Key, "Key_Escape", getattr(Qt, "Key_Escape", 0x01000000))
+        _NoModifier = getattr(Qt.KeyboardModifier, "NoModifier", getattr(Qt, "NoModifier", 0))
+
+        widget = RotationCanvasWidget(self.canvas)
+        tool = RotateMapTool(self.canvas, widget)
+
+        # Set up to Step 3
+        tool.pivot_point = QgsPointXY(0, 0)
+        tool.ref_point = QgsPointXY(10, 0)
+        tool.state = RotateMapTool.STATE_ROTATING
+        widget.set_step(RotationCanvasWidget.STEP_ROTATING)
+
+        # 1. Escape key on Step 3 -> steps back to Step 2
+        esc_event = QKeyEvent(_KeyPress, _Key_Escape, _NoModifier)
+        tool.keyPressEvent(esc_event)
+        self.assertEqual(tool.state, RotateMapTool.STATE_SET_REFERENCE)
+        self.assertEqual(widget._current_step, RotationCanvasWidget.STEP_REFERENCE)
+        self.assertIsNone(tool.ref_point)
+        self.assertIsNotNone(tool.pivot_point)
+
+        # 2. Escape key on Step 2 -> steps back to Step 1 (full reset)
+        tool.keyPressEvent(esc_event)
+        self.assertEqual(tool.state, RotateMapTool.STATE_SET_PIVOT)
+        self.assertEqual(widget._current_step, RotationCanvasWidget.STEP_PIVOT)
+        self.assertIsNone(tool.pivot_point)
+
+        # 3. Deactivate -> clean state and hidden widget
+        tool.pivot_point = QgsPointXY(5, 5)
+        tool.state = RotateMapTool.STATE_SET_REFERENCE
+        widget.show()
+        tool.deactivate()
+        self.assertEqual(tool.state, RotateMapTool.STATE_SET_PIVOT)
+        self.assertIsNone(tool.pivot_point)
+        self.assertFalse(widget.isVisible())
+
 
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(TestCADRotateTool)

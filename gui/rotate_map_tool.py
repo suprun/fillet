@@ -123,7 +123,7 @@ class RotateMapTool(QgsMapToolEdit):
     def deactivate(self):
         self.widget.save_settings()
         self.widget.hide()
-        self._clear_visuals()
+        self.reset_state()
         super().deactivate()
 
     def cleanup(self):
@@ -246,11 +246,14 @@ class RotateMapTool(QgsMapToolEdit):
             # Right click steps back or cancels
             if self.state == self.STATE_ROTATING:
                 self.state = self.STATE_SET_REFERENCE
+                self.ref_point = None
                 self.widget.set_step(RotationCanvasWidget.STEP_REFERENCE)
                 self.target_ray_rubberband.reset(QgsWkbTypes.GeometryType.LineGeometry)
                 self.angle_arc_rubberband.reset(QgsWkbTypes.GeometryType.LineGeometry)
                 self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
             elif self.state == self.STATE_SET_REFERENCE:
+                self.reset_state()
+            else:
                 self.reset_state()
             return
 
@@ -370,6 +373,7 @@ class RotateMapTool(QgsMapToolEdit):
         if key == _Key_Escape:
             if self.state == self.STATE_ROTATING:
                 self.state = self.STATE_SET_REFERENCE
+                self.ref_point = None
                 self.widget.set_step(RotationCanvasWidget.STEP_REFERENCE)
                 self.target_ray_rubberband.reset(QgsWkbTypes.GeometryType.LineGeometry)
                 self.angle_arc_rubberband.reset(QgsWkbTypes.GeometryType.LineGeometry)

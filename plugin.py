@@ -187,7 +187,33 @@ class FilletPlugin:
                 self.iface.addVectorToolBarIcon(self.action)
             self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.action)
 
-        # 6. Insert restore_action, rotate_action, and batch_action on toolbar
+        # 6. Insert rotate_action on toolbar (after standard Rotate Feature action / 4th place)
+        if adv_tb:
+            rotate_feature_act = None
+            for act in adv_tb.actions():
+                name_lower = act.objectName().lower()
+                if "rotatefeature" in name_lower or act.objectName() == "mActionRotateFeature":
+                    rotate_feature_act = act
+                    break
+
+            actions_now = adv_tb.actions()
+            if rotate_feature_act and rotate_feature_act in actions_now:
+                try:
+                    idx = actions_now.index(rotate_feature_act)
+                    if idx + 1 < len(actions_now):
+                        adv_tb.insertAction(actions_now[idx + 1], self.rotate_action)
+                    else:
+                        adv_tb.addAction(self.rotate_action)
+                except ValueError:
+                    adv_tb.addAction(self.rotate_action)
+            elif len(actions_now) >= 4:
+                adv_tb.insertAction(actions_now[3], self.rotate_action)
+            else:
+                adv_tb.addAction(self.rotate_action)
+        else:
+            self.iface.addVectorToolBarIcon(self.rotate_action)
+
+        # 7. Insert restore_action and batch_action on toolbar
         if adv_tb:
             anchor_act = self.action
             if not anchor_act:
@@ -198,7 +224,7 @@ class FilletPlugin:
                         anchor_act = act
                         break
 
-            if anchor_act:
+            if anchor_act and anchor_act in adv_tb.actions():
                 actions_now = adv_tb.actions()
                 try:
                     idx = actions_now.index(anchor_act)
@@ -211,21 +237,10 @@ class FilletPlugin:
             else:
                 adv_tb.addAction(self.restore_action)
 
-            # Insert rotate_action after restore_action
+            # Insert batch_action after restore_action
             actions_now = adv_tb.actions()
             try:
                 idx = actions_now.index(self.restore_action)
-                if idx + 1 < len(actions_now):
-                    adv_tb.insertAction(actions_now[idx + 1], self.rotate_action)
-                else:
-                    adv_tb.addAction(self.rotate_action)
-            except ValueError:
-                adv_tb.addAction(self.rotate_action)
-
-            # Insert batch_action after rotate_action
-            actions_now = adv_tb.actions()
-            try:
-                idx = actions_now.index(self.rotate_action)
                 if idx + 1 < len(actions_now):
                     adv_tb.insertAction(actions_now[idx + 1], self.batch_action)
                 else:
@@ -234,7 +249,6 @@ class FilletPlugin:
                 adv_tb.addAction(self.batch_action)
         else:
             self.iface.addVectorToolBarIcon(self.restore_action)
-            self.iface.addVectorToolBarIcon(self.rotate_action)
             self.iface.addVectorToolBarIcon(self.batch_action)
 
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.restore_action)
@@ -263,6 +277,10 @@ class FilletPlugin:
                 pass  # nosec B110
             try:
                 self._tracked_layer.editingStopped.disconnect(self.update_action_state)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            try:
+                self._tracked_layer.selectionChanged.disconnect(self.update_action_state)
             except (TypeError, RuntimeError):
                 pass  # nosec B110
             self._tracked_layer = None
@@ -469,7 +487,7 @@ class FilletPlugin:
     def update_action_state(self):
         layer = self.canvas.currentLayer() if self.canvas else None
 
-        # Re-bind editing state signals if current layer changed
+        # Re-bind editing state and selection signals if current layer changed
         if layer != self._tracked_layer:
             if self._tracked_layer is not None:
                 try:
@@ -480,11 +498,16 @@ class FilletPlugin:
                     self._tracked_layer.editingStopped.disconnect(self.update_action_state)
                 except (TypeError, RuntimeError):
                     pass  # nosec B110
+                try:
+                    self._tracked_layer.selectionChanged.disconnect(self.update_action_state)
+                except (TypeError, RuntimeError):
+                    pass  # nosec B110
             self._tracked_layer = layer
             if isinstance(layer, QgsVectorLayer):
                 try:
                     layer.editingStarted.connect(self.update_action_state)
                     layer.editingStopped.connect(self.update_action_state)
+                    layer.selectionChanged.connect(self.update_action_state)
                 except (TypeError, RuntimeError):
                     pass  # nosec B110
 
@@ -499,6 +522,8 @@ class FilletPlugin:
             )
         )
         is_editable = bool(is_supported_geom and layer.isEditable())
+        has_selection = bool(is_supported_geom and layer.selectedFeatureCount() > 0)
+        is_rotate_enabled = bool(is_editable and has_selection)
 
         is_fillet_geom = is_vector and layer.geometryType() in (
             QgsWkbTypes.GeometryType.LineGeometry,
@@ -517,33 +542,35 @@ class FilletPlugin:
         if self.restore_action:
             self.restore_action.setEnabled(is_fillet_editable)
         if self.rotate_action:
-            self.rotate_action.setEnabled(is_editable)
+            self.rotate_action.setEnabled(is_rotate_enabled)
         if self.batch_action:
             self.batch_action.setEnabled(is_fillet_editable)
 
         if self.settings_widget and hasattr(self.settings_widget, "set_editable_state"):
             self.settings_widget.set_editable_state(is_fillet_editable)
 
-        # If editing was stopped while an interactive tool is active on canvas, deactivate it
-        if not is_editable and self.canvas:
-            if self.map_tool and self.canvas.mapTool() == self.map_tool:
-                self.canvas.unsetMapTool(self.map_tool)
-                if self.canvas_widget:
-                    self.canvas_widget.hide()
-                if self.action:
-                    self.action.setChecked(False)
+        # If editing was stopped or selection removed, deactivate active tools
+        if self.canvas:
+            if not is_editable:
+                if self.map_tool and self.canvas.mapTool() == self.map_tool:
+                    self.canvas.unsetMapTool(self.map_tool)
+                    if self.canvas_widget:
+                        self.canvas_widget.hide()
+                    if self.action:
+                        self.action.setChecked(False)
 
-            if self.restore_map_tool and self.canvas.mapTool() == self.restore_map_tool:
-                self.canvas.unsetMapTool(self.restore_map_tool)
-                if self.restore_action:
-                    self.restore_action.setChecked(False)
+                if self.restore_map_tool and self.canvas.mapTool() == self.restore_map_tool:
+                    self.canvas.unsetMapTool(self.restore_map_tool)
+                    if self.restore_action:
+                        self.restore_action.setChecked(False)
 
-            if self.rotate_map_tool and self.canvas.mapTool() == self.rotate_map_tool:
-                self.canvas.unsetMapTool(self.rotate_map_tool)
-                if self.rotation_widget:
-                    self.rotation_widget.hide()
-                if self.rotate_action:
-                    self.rotate_action.setChecked(False)
+            if not is_rotate_enabled:
+                if self.rotate_map_tool and self.canvas.mapTool() == self.rotate_map_tool:
+                    self.canvas.unsetMapTool(self.rotate_map_tool)
+                    if self.rotation_widget:
+                        self.rotation_widget.hide()
+                    if self.rotate_action:
+                        self.rotate_action.setChecked(False)
 
     def apply_to_selected_features(self):
         """Batch apply fillet or chamfer to all corners of selected features."""
