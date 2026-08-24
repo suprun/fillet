@@ -354,5 +354,9 @@
             <source>Блокувати кут осі / інтерактивне обрання</source>
             <translation>Blokeatu ardatzaren angelua / hautapen interaktiboa</translation>
         </message>
+        <message>
+            <source>Кут:</source>
+            <translation>Angelua:</translation>
+        </message>
     </context>
 </TS>

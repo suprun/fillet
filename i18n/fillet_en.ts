@@ -354,5 +354,9 @@
             <source>Блокувати кут осі / інтерактивне обрання</source>
             <translation>Lock axis angle / interactive pick</translation>
         </message>
+        <message>
+            <source>Кут:</source>
+            <translation>Angle:</translation>
+        </message>
     </context>
 </TS>

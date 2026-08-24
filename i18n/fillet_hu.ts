@@ -354,5 +354,9 @@
             <source>Блокувати кут осі / інтерактивне обрання</source>
             <translation>Tengelyszög zárolása / interaktív választás</translation>
         </message>
+        <message>
+            <source>Кут:</source>
+            <translation>Szög:</translation>
+        </message>
     </context>
 </TS>

@@ -354,5 +354,9 @@
             <source>Блокувати кут осі / інтерактивне обрання</source>
             <translation>Blocare unghi axă / alegere interactivă</translation>
         </message>
+        <message>
+            <source>Кут:</source>
+            <translation>Unghi:</translation>
+        </message>
     </context>
 </TS>

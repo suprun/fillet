@@ -354,5 +354,9 @@
             <source>Блокувати кут осі / інтерактивне обрання</source>
             <translation>锁定轴线角度 / 交互选择</translation>
         </message>
+        <message>
+            <source>Кут:</source>
+            <translation>角度:</translation>
+        </message>
     </context>
 </TS>

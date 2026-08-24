@@ -354,5 +354,9 @@
             <source>Блокувати кут осі / інтерактивне обрання</source>
             <translation>Kunci sudut sumbu / pemilihan interaktif</translation>
         </message>
+        <message>
+            <source>Кут:</source>
+            <translation>Sudut:</translation>
+        </message>
     </context>
 </TS>

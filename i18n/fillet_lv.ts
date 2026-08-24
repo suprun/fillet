@@ -354,5 +354,9 @@
             <source>Блокувати кут осі / інтерактивне обрання</source>
             <translation>Bloķēt ass leņķi / interaktīva izvēle</translation>
         </message>
+        <message>
+            <source>Кут:</source>
+            <translation>Leņķis:</translation>
+        </message>
     </context>
 </TS>

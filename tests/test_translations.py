@@ -355,6 +355,10 @@ class TestTranslations(unittest.TestCase):
                 QCoreApplication.translate("FilletPlugin", "Блокувати масштаб / вільний розрахунок"),
                 "Lock scale / free interactive calculation"
             )
+            self.assertEqual(
+                QCoreApplication.translate("FilletPlugin", "Кут:"),
+                "Angle:"
+            )
         finally:
             QCoreApplication.removeTranslator(translator_en)
             canvas.deleteLater()

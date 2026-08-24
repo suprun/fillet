@@ -354,5 +354,9 @@
             <source>Блокувати кут осі / інтерактивне обрання</source>
             <translation>Zablokuj kąt osi / wybór interaktywny</translation>
         </message>
+        <message>
+            <source>Кут:</source>
+            <translation>Kąt:</translation>
+        </message>
     </context>
 </TS>

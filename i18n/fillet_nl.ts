@@ -354,5 +354,9 @@
             <source>Блокувати кут осі / інтерактивне обрання</source>
             <translation>Ashoek vergrendelen / interactief kiezen</translation>
         </message>
+        <message>
+            <source>Кут:</source>
+            <translation>Hoek:</translation>
+        </message>
     </context>
 </TS>

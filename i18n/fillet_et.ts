@@ -354,5 +354,9 @@
             <source>Блокувати кут осі / інтерактивне обрання</source>
             <translation>Lukusta telje nurk / interaktiivne valik</translation>
         </message>
+        <message>
+            <source>Кут:</source>
+            <translation>Nurk:</translation>
+        </message>
     </context>
 </TS>

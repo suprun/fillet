@@ -354,5 +354,9 @@
             <source>Блокувати кут осі / інтерактивне обрання</source>
             <translation>축 각도 고정 / 대화형 선택</translation>
         </message>
+        <message>
+            <source>Кут:</source>
+            <translation>각도:</translation>
+        </message>
     </context>
 </TS>

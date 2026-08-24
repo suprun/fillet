@@ -354,5 +354,9 @@
             <source>Блокувати кут осі / інтерактивне обрання</source>
             <translation>Achsenwinkel sperren / interaktiv wählen</translation>
         </message>
+        <message>
+            <source>Кут:</source>
+            <translation>Winkel:</translation>
+        </message>
     </context>
 </TS>

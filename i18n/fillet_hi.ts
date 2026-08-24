@@ -354,5 +354,9 @@
             <source>Блокувати кут осі / інтерактивне обрання</source>
             <translation>अक्ष कोण लॉक करें / इंटरैक्टिव चयन</translation>
         </message>
+        <message>
+            <source>Кут:</source>
+            <translation>कोण:</translation>
+        </message>
     </context>
 </TS>

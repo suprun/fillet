@@ -354,5 +354,9 @@
             <source>Блокувати кут осі / інтерактивне обрання</source>
             <translation>Lås aksevinkel / interaktivt valg</translation>
         </message>
+        <message>
+            <source>Кут:</source>
+            <translation>Vinkel:</translation>
+        </message>
     </context>
 </TS>

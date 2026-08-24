@@ -354,5 +354,9 @@
             <source>Блокувати кут осі / інтерактивне обрання</source>
             <translation>Κλείδωμα γωνίας άξονα / διαδραστική επιλογή</translation>
         </message>
+        <message>
+            <source>Кут:</source>
+            <translation>Γωνία:</translation>
+        </message>
     </context>
 </TS>

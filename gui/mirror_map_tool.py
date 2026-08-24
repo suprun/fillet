@@ -41,6 +41,7 @@ _Key_Backspace = getattr(Qt.Key, "Key_Backspace", getattr(Qt, "Key_Backspace", 0
 _Key_Return = getattr(Qt.Key, "Key_Return", getattr(Qt, "Key_Return", 0x01000004))
 _Key_Enter = getattr(Qt.Key, "Key_Enter", getattr(Qt, "Key_Enter", 0x01000005))
 _Key_Space = getattr(Qt.Key, "Key_Space", getattr(Qt, "Key_Space", 0x20))
+_Key_Shift = getattr(Qt.Key, "Key_Shift", getattr(Qt, "Key_Shift", 0x01000020))
 _ShiftModifier = getattr(Qt.KeyboardModifier, "ShiftModifier", getattr(Qt, "ShiftModifier", 0x02000000))
 
 try:
@@ -113,8 +114,10 @@ class MirrorMapTool(QgsMapToolEdit):
         QTimer.singleShot(50, self.widget.focus_angle_input)
 
     def deactivate(self):
-        self.widget.save_settings()
-        self.widget.hide()
+        if self.widget:
+            self.widget.set_shift_override(False)
+            self.widget.save_settings()
+            self.widget.hide()
         self.reset_state()
         super().deactivate()
 
@@ -443,5 +446,16 @@ class MirrorMapTool(QgsMapToolEdit):
                 event.accept()
                 return
 
+        elif key == _Key_Shift:
+            if self.widget:
+                self.widget.set_shift_override(True)
+
         else:
             super().keyPressEvent(event)
+
+    def keyReleaseEvent(self, event):
+        key = event.key()
+        if key == _Key_Shift:
+            if self.widget:
+                self.widget.set_shift_override(False)
+        super().keyReleaseEvent(event)

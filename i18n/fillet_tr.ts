@@ -354,5 +354,9 @@
             <source>Блокувати кут осі / інтерактивне обрання</source>
             <translation>Eksen açısını kilitle / etkileşimli seçim</translation>
         </message>
+        <message>
+            <source>Кут:</source>
+            <translation>Açı:</translation>
+        </message>
     </context>
 </TS>

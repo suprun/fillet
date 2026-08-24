@@ -354,5 +354,9 @@
             <source>Блокувати кут осі / інтерактивне обрання</source>
             <translation>قفل زاوية المحور / الاختيار التفاعلي</translation>
         </message>
+        <message>
+            <source>Кут:</source>
+            <translation>الزاوية:</translation>
+        </message>
     </context>
 </TS>

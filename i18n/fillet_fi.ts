@@ -354,5 +354,9 @@
             <source>Блокувати кут осі / інтерактивне обрання</source>
             <translation>Lukitse akselikulma / interaktiivinen valinta</translation>
         </message>
+        <message>
+            <source>Кут:</source>
+            <translation>Kulma:</translation>
+        </message>
     </context>
 </TS>
