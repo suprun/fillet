@@ -63,8 +63,12 @@
             <translation>2. 隣接する2番目のエッジを指定</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>右クリック / Esc — キャンセル / 戻る</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>角の復元 (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>鋭角を復元する対話型ツール（フィレットや面取りを削除）</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. 目標の回転角度を指定</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD 回転</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>ピボット中心を選択できる対話型CADジオメトリ回転ツール</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>角度:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>角度をロック / 対話型回転</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>角度スナップ:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>フリー</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>コピーを保持</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>元の地物を保持したまま、選択した地物の回転コピーを作成します</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>一括処理を行うには、レイヤが編集可能で選択された地物を含んでいる必要があります</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD 地物を回転</translation>
         </message>
     </context>
     <context>

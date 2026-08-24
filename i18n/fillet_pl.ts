@@ -63,8 +63,12 @@
             <translation>2. Wskaż drugą przyległą krawędź</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>Prawy przycisk / Esc — anuluj / krok wstecz</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Przywracanie narożników (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Interaktywne narzędzie do przywracania ostrych narożników (usuwa zaokrąglenia i ścięcia)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. Wskaż docelowy kąt obrotu</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>Obrót CAD</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktywne narzędzie obrotu CAD z wyborem punktu obrotu</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Kąt:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Zablokuj kąt / obrót interaktywny</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Krok kąta:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Swobodny</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Zachowaj kopię</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Tworzy obróconą kopię zaznaczonych obiektów, pozostawiając oryginał</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>W przypadku przetwarzania wsadowego warstwa musi być edytowalna i zawierać zaznaczone obiekty</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Obrót obiektów</translation>
         </message>
     </context>
     <context>

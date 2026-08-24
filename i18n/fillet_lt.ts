@@ -63,8 +63,12 @@
             <translation>2. Nurodykite gretimą antrąją briauną</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>Dešinysis spustelėjimas / Esc — atšaukti / žingsnis atgal</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Kampų atkūrimas (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Interaktyvus įrankis aštriems kampams atkurti (pašalina apvalinimus ir nusklembimus)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. Nurodykite tikslinį sukimosi kampą</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Pasukimas</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktyvus CAD sukimo įrankis geometrijoms su sukimosi centro pasirinkimu</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Kampas:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Užrakinti kampą / interaktyvus pasukimas</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Kampo žingsnis:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Laisvas</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Išlaikyti kopiją</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Sukuria pasuktą pasirinktų objektų kopiją, išlaikant originalą</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Paketiniam apdorojimui sluoksnis turi būti redaguojamas ir turėti pasirinktų objektų</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Pasukti objektą(-us)</translation>
         </message>
     </context>
     <context>

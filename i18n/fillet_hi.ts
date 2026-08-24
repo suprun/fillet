@@ -63,8 +63,12 @@
             <translation>2. आसन्न दूसरा किनारा निर्दिष्ट करें</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>दायाँ क्लिक / Esc — रद्द करें / एक कदम पीछे</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>कोना पुनर्स्थापन (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>नुकीले कोनों को पुनर्स्थापित करने के लिए इंटरैक्टिव टूल (फिलेट और चैम्फर हटाता है)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. लक्ष्य घूर्णन कोण निर्दिष्ट करें</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>सीएडी घुमाएँ</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>धुरी केंद्र चयन के साथ ज्यामिति के लिए इंटरैक्टिव सीएडी रोटेशन टूल</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>कोण:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>कोण लॉक करें / इंटरैक्टिव रोटेशन</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>कोण चरण:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>मुक्त</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>प्रतिलिपि रखें</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>मूल को बरकरार रखते हुए चयनित सुविधाओं की एक घुमाई गई प्रतिलिपि बनाता है</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>बैच प्रसंस्करण के लिए, परत संपादन योग्य होनी चाहिए और इसमें चयनित सुविधाएं होनी चाहिए</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>सीएडी फ़ीचर घुमाएँ</translation>
         </message>
     </context>
     <context>

@@ -47,6 +47,35 @@ class TestTranslations(unittest.TestCase):
 
         QCoreApplication.removeTranslator(translator)
 
+        # Test English
+        en_qm = os.path.join(self.i18n_dir, "fillet_en.qm")
+        translator_en = QTranslator()
+        self.assertTrue(translator_en.load(en_qm))
+        QCoreApplication.installTranslator(translator_en)
+
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Відновлення кутів (Unfillet / Unchamfer)"),
+            "Corner Restoration (Unfillet / Unchamfer)"
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "CAD Обертання (Rotate)"),
+            "CAD Rotate"
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Кут (Angle):"),
+            "Angle:"
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "1. Вкажіть центр обертання"),
+            "1. Specify rotation center (Pivot)"
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "1. Вкажіть перше ребро кута"),
+            "1. Specify first corner edge"
+        )
+
+        QCoreApplication.removeTranslator(translator_en)
+
         # Test French
         fr_qm = os.path.join(self.i18n_dir, "fillet_fr.qm")
         translator_fr = QTranslator()

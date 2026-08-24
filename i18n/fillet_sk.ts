@@ -63,8 +63,12 @@
             <translation>2. Určite druhú priľahlú hranu</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>Pravé tlačidlo / Esc — zrušiť / krok späť</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Obnova rohov (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Interaktívny nástroj na obnovu ostrých rohov (odstráni zaoblenia a skosenia)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. Určite cieľový uhol otáčania</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Otočenie</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktívny CAD nástroj na otáčanie geometrií s výberom stredu otáčania (Pivot)</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Uhol:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Zamknúť uhol / interaktívne otáčanie</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Krok uhla:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Voľný</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Zachovať kópiu</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Vytvorí otočenú kópiu vybraných prvkov a zachová pôvodné</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Pre dávkové spracovanie musí byť vrstva upraviteľná a obsahovať vybrané prvky</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Otočenie prvkov</translation>
         </message>
     </context>
     <context>

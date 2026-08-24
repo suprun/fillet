@@ -63,8 +63,12 @@
             <translation>2. Angi tilstøtende andre kant</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>Høyreklikk / Esc — avbryt / trinn tilbake</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Gjenopprett hjørner (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Interaktivt verktøy for å gjenopprette skarpe hjørner (fjerner avrundinger og avfasninger)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. Angi målrotasjonsvinkel</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Roter</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktivt CAD-rotasjonsverktøy for geometrier med valg av rotasjonssenter</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Vinkel:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Lås vinkel / interaktiv rotasjon</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Vinkeltrinn:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Fri</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Behold kopi</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Oppretter en rotert kopi av valgte objekter og beholder originalen</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>For batchbehandling må laget være redigerbart og inneholde valgte objekter</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Roter objekt(er)</translation>
         </message>
     </context>
     <context>

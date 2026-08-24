@@ -63,8 +63,12 @@
             <translation>2. Tentukan tepi kedua yang berdekatan</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>Klik kanan / Esc — batal / langkah mundur</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Pemulihan Sudut (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Alat interaktif untuk memulihkan sudut tajam (menghapus fillet dan chamfer)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. Tentukan sudut rotasi target</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>Rotasi CAD</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Alat rotasi CAD interaktif untuk geometri dengan pemilihan pusat pivot</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Sudut:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Kunci sudut / rotasi interaktif</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Langkah sudut:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Bebas</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Simpan salinan</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Membuat salinan fitur yang dipilih dalam posisi diputar, menjaga aslinya</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Untuk pemrosesan batch, layer harus dapat diedit dan berisi fitur yang dipilih</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>Rotasi Fitur CAD</translation>
         </message>
     </context>
     <context>

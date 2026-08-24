@@ -63,8 +63,12 @@
             <translation>2. حدد الحافة المجاورة الثانية</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>زر الفأرة الأيمن / Esc — إلغاء / خطوة للخلف</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>استعادة الزوايا (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>أداة تفاعلية لاستعادة الزوايا الحادة (تزيل الاستدارة والشطب)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. حدد زاوية الدوران المستهدفة</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>تدوير CAD</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>أداة تدوير CAD تفاعلية للأشكال الهندسية مع تحديد نقطة الارتكاز</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>الزاوية:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>قفل الزاوية / تدوير تفاعلي</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>خطوة الزاوية:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>حر</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>الاحتفاظ بنسخة</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>ينشئ نسخة مستدارة من المعالم المحددة مع الحفاظ على الأصل</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>للمعالجة الدفعية، يجب أن تكون الطبقة قابلة للتحرير وتحتوي على معالم محددة</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>تدوير المعالم بواسطة CAD</translation>
         </message>
     </context>
     <context>

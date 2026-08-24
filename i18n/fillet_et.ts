@@ -63,8 +63,12 @@
             <translation>2. Määrake külgnev teine serv</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>Paremklõps / Esc — tühista / samm tagasi</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Nurkade taastamine (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Interaktiivne tööriist teravate nurkade taastamiseks (eemaldab ümardused ja faasid)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. Määrake sihtpööramisnurk</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Pööramine</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktiivne CAD-pööramistööriist geomeetriatele pöördepunkti valikuga</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Nurk:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Lukusta nurk / interaktiivne pööramine</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Nurgasamm:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Vaba</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Säilita koopia</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Loob valitud objektidest pööratud koopia, säilitades originaali</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Pakktöötluseks peab kiht olema muudetav ja sisaldama valitud objekte</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Pööra objekte</translation>
         </message>
     </context>
     <context>

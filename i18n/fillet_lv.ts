@@ -63,8 +63,12 @@
             <translation>2. Norādiet blakus esošo otro malu</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>Labais klikšķis / Esc — atcelt / soli atpakaļ</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Stūru atjaunošana (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Interaktīvs rīks asu stūru atjaunošanai (noņem noapaļojumus un nolīdzinājumus)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. Norādiet mērķa rotācijas leņķi</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Rotācija</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktīvs CAD rotācijas rīks ģeometrijām ar rotācijas centra izvēli</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Leņķis:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Bloķēt leņķi / interaktīvā rotācija</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Leņķa solis:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Brīvs</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Saglabāt kopiju</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Izveido atlasīto objektu pagrieztu kopiju, saglabājot oriģinālu</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Pakešapstrādei slānim jābūt rediģējamam un jāsatur atlasītie objekti</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Pagriezt objektu(s)</translation>
         </message>
     </context>
     <context>

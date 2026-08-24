@@ -63,8 +63,12 @@
             <translation>2. Καθορίστε τη δεύτερη γειτονική ακμή</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>Δεξί κλικ / Esc — ακύρωση / βήμα πίσω</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Επαναφορά γωνιών (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Διαδραστικό εργαλείο για την επαναφορά αιχμηρών γωνιών (αφαιρεί στρογγυλοποιήσεις και λοξοτομές)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. Καθορίστε τη γωνία περιστροφής στόχου</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Περιστροφή</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Διαδραστικό εργαλείο περιστροφής CAD για γεωμετρίες με επιλογή κέντρου περιστροφής</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Γωνία:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Κλείδωμα γωνίας / διαδραστική περιστροφή</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Βήμα γωνίας:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Ελεύθερο</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Διατήρηση αντιγράφου</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Δημιουργεί ένα περιστραμμένο αντίγραφο των επιλεγμένων στοιχείων, διατηρώντας το πρωτότυπο</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Για ομαδική επεξεργασία, το επίπεδο πρέπει να είναι επεξεργάσιμο και να περιέχει επιλεγμένα στοιχεία</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Περιστροφή στοιχείων</translation>
         </message>
     </context>
     <context>

@@ -63,8 +63,12 @@
             <translation>2. Bitişik ikinci kenarı belirtin</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>Sağ tık / Esc — iptal / geri adım</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Köşe Geri Yükleme (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Keskin köşeleri geri yüklemek için etkileşimli araç (yuvarlatmaları ve pahları kaldırır)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. Hedef döndürme açısını belirtin</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Döndürme</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Pivot merkezi seçimi ile geometriler için etkileşimli CAD döndürme aracı</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Açı:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Açıyı kilitle / etkileşimli döndürme</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Açı adımı:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Serbest</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Kopyasını sakla</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Orijinalini koruyarak seçilen detayların döndürülmüş bir kopyasını oluşturur</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Toplu işlem için katman düzenlenebilir olmalı ve seçili detayları içermelidir</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Detay(ları) döndür</translation>
         </message>
     </context>
     <context>

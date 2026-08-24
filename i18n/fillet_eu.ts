@@ -63,8 +63,12 @@
             <translation>2. Zehaztu ondoko bigarren ertza</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>Eskuin-klika / Esc — ezeztatu / atzera urratsa</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Izkinak leheneratzea (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Izkina zorrotzak leheneratzeko tresna interaktiboa (biribiltzeak eta xaflaketak kentzen ditu)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. Zehaztu helburuko biraketa-angelua</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Biraketa</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Geometriak biratzeko CAD tresna interaktiboa, biraketa-zentroa hautatuta</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Angelua:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Blokeatu angelua / biraketa interaktiboa</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Angelu-urratsa:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Askea</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Gorde kopia</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Hautatutako entitateen biratutako kopia bat sortzen du, jatorrizkoa mantenduz</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Loteak prozesatzeko, geruzak editagarria izan behar du eta hautatutako entitateak eduki behar ditu</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Entitateak biratu</translation>
         </message>
     </context>
     <context>

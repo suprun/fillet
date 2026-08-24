@@ -63,8 +63,12 @@
             <translation>2. Specify adjacent second edge</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>Right-click / Esc — cancel / step back</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Corner Restoration (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Interactive tool to restore sharp corners (removes fillets and chamfers)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. Specify target rotation angle</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Rotate</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interactive CAD rotation tool for geometries with pivot center selection</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Angle:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Lock angle / interactive rotation</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Snap step:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Free</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Keep copy</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Creates a rotated copy of selected features, keeping the original intact</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>For batch processing, layer must be editable and contain selected features</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Rotate Feature(s)</translation>
         </message>
     </context>
     <context>

@@ -63,8 +63,12 @@
             <translation>2. 指定相邻的第二条边</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>右键 / Esc — 取消 / 后退一步</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>恢复尖角 (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>恢复尖角的交互式工具（移除圆角和倒角）</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. 指定目标旋转角度</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD 旋转</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>带基准点选择的交互式 CAD 几何体旋转工具</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>角度:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>锁定角度 / 交互式旋转</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>角度步进:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>自由</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>保留副本</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>创建选中要素的旋转副本，并保留原始要素</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>批处理需要图层处于可编辑状态并包含选中的要素</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD 旋转要素</translation>
         </message>
     </context>
     <context>

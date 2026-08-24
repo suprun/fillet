@@ -63,8 +63,12 @@
             <translation>2. Specificați a doua margine adiacentă</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>Clic dreapta / Esc — anulare / pas înapoi</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Restaurare colțuri (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Instrument interactiv pentru restaurarea colțurilor ascuțite (elimină racordările și teșirile)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. Specificați unghiul de rotație țintă</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>Rotire CAD</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Instrument interactiv de rotire CAD pentru geometrii cu selectarea centrului de pivotare</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Unghi:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Blocare unghi / rotire interactivă</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Pas unghi:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Liber</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Păstrează o copie</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Creează o copie rotită a elementelor selectate, păstrând originalul</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Pentru procesarea în lot, stratul trebuie să fie editabil și să conțină elemente selectate</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>Rotire CAD element(e)</translation>
         </message>
     </context>
     <context>

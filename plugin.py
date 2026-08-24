@@ -9,6 +9,7 @@ from typing import Optional
 
 from qgis.core import (
     Qgis,
+    QgsApplication,
     QgsGeometry,
     QgsSettings,
     QgsVectorLayer,
@@ -78,11 +79,23 @@ class FilletPlugin:
         return False
 
     def _init_translator(self):
-        locale_name = QgsSettings().value("locale/userLocale", "")
+        s = QgsSettings()
+        override = s.value("locale/overrideFlag", False, type=bool)
+        locale_name = ""
+        if override:
+            locale_name = s.value("locale/userLocale", "")
+        if not locale_name and hasattr(QgsApplication, "locale"):
+            locale_name = QgsApplication.locale()
+        if not locale_name:
+            locale_name = s.value("locale/userLocale", "")
         if not locale_name:
             locale_name = QLocale().name()
 
-        candidates = [locale_name, locale_name.replace("-", "_"), locale_name[:2]]
+        candidates = []
+        if locale_name:
+            candidates.extend([locale_name, locale_name.replace("-", "_"), locale_name[:2]])
+        candidates.append("en")
+
         i18n_dir = os.path.join(self.plugin_dir, "i18n")
 
         for cand in candidates:

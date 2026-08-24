@@ -63,8 +63,12 @@
             <translation>2. Määritä viereinen toinen särmä</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>Oikea napsautus / Esc — peruuta / askel taaksepäin</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Kulmien palautus (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Interaktiivinen työkalu terävien kulmien palauttamiseen (poistaa pyöristykset ja viisteet)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. Määritä tavoitekiertokulma</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Kierto</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktiivinen CAD-kiertotyökalu geometrioille kiertokeskipisteen valinnalla</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Kulma:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Lukitse kulma / interaktiivinen kierto</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Kulma-askel:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Vapaa</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Säilytä kopio</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Luo käännetyn kopion valituista kohteista säilyttäen alkuperäisen</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Eräkäsittelyä varten tason on oltava muokattavissa ja sisällettävä valittuja kohteita</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Kohteiden kierto</translation>
         </message>
     </context>
     <context>

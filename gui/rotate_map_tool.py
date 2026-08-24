@@ -30,7 +30,7 @@ from qgis.gui import (
     QgsRubberBand,
     QgsSnapIndicator,
 )
-from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtCore import QCoreApplication, Qt
 from qgis.PyQt.QtGui import QColor, QCursor
 
 # Safe cross-version Qt constants
@@ -58,6 +58,9 @@ class RotateMapTool(QgsMapToolEdit):
     STATE_SET_PIVOT = 0
     STATE_SET_REFERENCE = 1
     STATE_ROTATING = 2
+
+    def tr(self, message: str) -> str:
+        return QCoreApplication.translate("FilletPlugin", message)
 
     def __init__(self, canvas: QgsMapCanvas, widget: Optional[RotationCanvasWidget] = None):
         super().__init__(canvas)

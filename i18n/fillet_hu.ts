@@ -63,8 +63,12 @@
             <translation>2. Adja meg a szomszédos második élt</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>Jobb gomb / Esc — Mégse / Visszalépés</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Sarok visszaállítása (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Interaktív eszköz éles sarkok visszaállítására (lekerekítések és letörések eltávolítása)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. Adja meg a cél forgási szöget</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Forgatás</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktív CAD forgatóeszköz geometriákhoz forgáspont-választással</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Szög:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Szög zárolása / interaktív forgatás</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Szöglépés:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Szabad</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Másolat megtartása</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Elforgatott másolatot készít a kijelölt elemekről, megőrizve az eredetit</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>A kötegelt feldolgozáshoz a rétegnek szerkeszthetőnek kell lennie és kijelölt elemeket kell tartalmaznia</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Elem(ek) forgatása</translation>
         </message>
     </context>
     <context>

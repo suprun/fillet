@@ -3,7 +3,7 @@ from typing import Optional
 
 from qgis.core import QgsCoordinateReferenceSystem, QgsSettings
 from qgis.gui import QgsDoubleSpinBox, QgsMapCanvas, QgsSpinBox
-from qgis.PyQt.QtCore import QEvent, QPoint, QRegularExpression, QSize, Qt, QTimer, pyqtSignal
+from qgis.PyQt.QtCore import QCoreApplication, QEvent, QPoint, QRegularExpression, QSize, Qt, QTimer, pyqtSignal
 from qgis.PyQt.QtGui import (
     QColor,
     QCursor,
@@ -44,6 +44,9 @@ class FilletCanvasWidget(QFrame):
     MODE_FILLET = constants.MODE_FILLET
     MODE_CHAMFER = constants.MODE_CHAMFER
     MODE_RESTORE = constants.MODE_RESTORE
+
+    def tr(self, message: str) -> str:
+        return QCoreApplication.translate("FilletPlugin", message)
 
     def __init__(self, canvas: QgsMapCanvas):
         super().__init__(canvas)

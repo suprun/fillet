@@ -63,14 +63,6 @@ class RestoreCanvasWidget(QFrame):
         self.set_step(self.STEP_FIRST_EDGE)
         main_layout.addWidget(self.lbl_step)
 
-        # Hint subtext
-        self.lbl_hint = QLabel(self.tr("ПКМ / Esc — скасувати / крок назад"), self)
-        hint_font = self.lbl_hint.font()
-        hint_font.setPointSize(max(7, hint_font.pointSize() - 2))
-        self.lbl_hint.setFont(hint_font)
-        self.lbl_hint.setStyleSheet("color: #64748b; padding-left: 2px;")
-        main_layout.addWidget(self.lbl_hint)
-
     def _apply_style(self):
         shape_panel = getattr(QFrame.Shape, "StyledPanel", getattr(QFrame, "StyledPanel", None))
         shadow_plain = getattr(QFrame.Shadow, "Plain", getattr(QFrame, "Plain", None))

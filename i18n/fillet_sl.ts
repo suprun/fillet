@@ -63,8 +63,12 @@
             <translation>2. Določite sosednji drugi rob</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>Desni klik / Esc — prekliči / korak nazaj</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Obnova vogalov (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Interaktivno orodje za obnovo ostrih vogalov (odstrani zaokrožitve in posnetke)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. Določite ciljni kot vrtenja</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Vrtenje</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktivno CAD orodje za vrtenje geometrij z izbiro središča vrtenja</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Kot:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Zakleni kot / interaktivno vrtenje</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Korak kota:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Prosto</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Ohrani kopijo</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Ustvari zasukano kopijo izbranih gradnikov in ohrani izvirnik</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Za paketno obdelavo mora biti sloj mogoče urejati in vsebovati izbrane gradnike</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Vrtenje gradnikov</translation>
         </message>
     </context>
     <context>

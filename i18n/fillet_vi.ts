@@ -63,8 +63,12 @@
             <translation>2. Chỉ định cạnh liền kề thứ hai</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>Nhấp chuột phải / Esc — hủy / quay lại một bước</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Khôi phục góc (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Công cụ tương tác để khôi phục các góc nhọn (xóa bo tròn và vát mép)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. Chỉ định góc xoay mục tiêu</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>Xoay CAD</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Công cụ xoay CAD tương tác cho các hình học với việc chọn tâm tựa</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Góc:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Khóa góc / xoay tương tác</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Bước góc:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Tự do</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Giữ bản sao</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Tạo một bản sao đã xoay của các đối tượng được chọn, giữ nguyên bản gốc</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Để xử lý hàng loạt, lớp phải có thể chỉnh sửa và chứa các đối tượng được chọn</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>Xoay đối tượng CAD</translation>
         </message>
     </context>
     <context>

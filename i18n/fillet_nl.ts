@@ -63,8 +63,12 @@
             <translation>2. Aangrenzende tweede rand opgeven</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>Rechtsklik / Esc — annuleren / stap terug</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Hoeken herstellen (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Interactieve tool om scherpe hoeken te herstellen (verwijdert afrondingen en afschuiningen)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. Doeldraaihoek opgeven</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Draaien</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interactieve CAD-draaitool voor geometrieën met draaipuntselectie</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Hoek:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Hoek vergrendelen / interactief draaien</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Hoekstap:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Vrij</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Kopie behouden</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Maakt een gedraaide kopie van geselecteerde objecten met behoud van het origineel</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Voor batchverwerking moet de laag bewerkbaar zijn en geselecteerde objecten bevatten</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Object(en) draaien</translation>
         </message>
     </context>
     <context>

@@ -63,8 +63,12 @@
             <translation>2. ระบุขอบที่อยู่ติดกันอันที่สอง</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>คลิกขวา / Esc — ยกเลิก / ย้อนกลับหนึ่งขั้นตอน</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>กู้คืนมุม (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>เครื่องมือแบบโต้ตอบเพื่อกู้คืนมุมแหลม (ลบมุมมนและมุมเหลี่ยม)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. ระบุมุมการหมุนเป้าหมาย</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>หมุน CAD</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>เครื่องมือหมุน CAD แบบโต้ตอบสำหรับรูปทรงเรขาคณิตพร้อมการเลือกจุดหมุน</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>มุม:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>ล็อคมุม / การหมุนแบบโต้ตอบ</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>ระยะสแน็ปมุม:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>อิสระ</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>เก็บสำเนา</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>สร้างสำเนาที่หมุนแล้วของฟีเจอร์ที่เลือก โดยยังคงต้นฉบับไว้</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>สำหรับการประมวลผลแบบกลุ่ม เลเยอร์จะต้องแก้ไขได้และมีฟีเจอร์ที่เลือก</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD หมุนฟีเจอร์</translation>
         </message>
     </context>
     <context>

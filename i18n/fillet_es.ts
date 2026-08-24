@@ -63,8 +63,12 @@
             <translation>2. Especificar segunda arista adyacente</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>Clic derecho / Esc — cancelar / paso atrás</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>Restauración de esquinas (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>Herramienta interactiva para restaurar esquinas afiladas (elimina redondeos y chaflanes)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. Especificar ángulo de rotación objetivo</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>Rotación CAD</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Herramienta interactiva de rotación CAD para geometrías con selección de pivote</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Ángulo:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Bloquear ángulo / rotación interactiva</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Paso de ángulo:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Libre</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Conservar copia</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Crea una copia rotada de las entidades seleccionadas, manteniendo el original</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Para el procesamiento por lotes, la capa debe ser editable y contener entidades seleccionadas</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>Rotación CAD de entidad(es)</translation>
         </message>
     </context>
     <context>

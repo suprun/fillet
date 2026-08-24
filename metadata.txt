@@ -4,7 +4,7 @@ qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
 description=Interactive Fillet, Chamfer, Corner Restoration & CAD Rotation tools for QGIS with instant Batch Fillet/Chamfer for selected features.
 about=Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Edge Corner Restoration (Unfillet / Unchamfer), and 3-Point CAD Rotation map tools for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.
-version=1.0.0.18
+version=1.0.0.19
 author=suprun
 email=suprun.serhiy+qgis@gmail.com
 homepage=https://github.com/suprun/fillet
@@ -14,7 +14,10 @@ tags=cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation,
 icon=icon.png
 experimental=False
 deprecated=False
-changelog=1.0.0.18:
+changelog=1.0.0.19:
+    - Fixed English and non-Ukrainian UI translations for all CAD actions, toolbar buttons, tooltips, and canvas HUD widgets.
+    - Improved active locale detection with QgsApplication.locale() and fallback translation loading.
+    - Removed redundant second subtext hint row from Corner Restoration HUD widget.
     - Unified step hint styling across CAD tools with matching blue badge theme.
     - Pinned floating CAD HUD panels firmly to the top-right corner of the canvas (matching Fillet/Chamfer panel).
     - Added floating CAD HUD step-by-step hints and step-back workflow for Two-Edge Corner Restoration (Unfillet / Unchamfer) tool.

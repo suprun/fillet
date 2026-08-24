@@ -63,8 +63,12 @@
             <translation>2. 인접한 두 번째 가장자리 지정</translation>
         </message>
         <message>
-            <source>ПКМ / Esc — скасувати / крок назад</source>
-            <translation>우클릭 / Esc — 취소 / 뒤로 가기</translation>
+            <source>Відновлення кутів (Unfillet / Unchamfer)</source>
+            <translation>모서리 복원 (Unfillet / Unchamfer)</translation>
+        </message>
+        <message>
+            <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
+            <translation>날카로운 모서리 복원을 위한 대화형 도구 (필렛 및 챔퍼 제거)</translation>
         </message>
         <message>
             <source>1. Вкажіть центр обертання</source>
@@ -77,6 +81,46 @@
         <message>
             <source>3. Вкажіть цільовий кут</source>
             <translation>3. 목표 회전 각도 지정</translation>
+        </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD 회전</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>피벗 중심 선택을 지원하는 대화형 CAD 지오메트리 회전 도구</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>각도:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>각도 잠금 / 대화형 회전</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>각도 스냅:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>자유</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>사본 유지</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>원본을 유지하면서 선택한 객체의 회전된 사본을 만듭니다</translation>
+        </message>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>일괄 처리를 위해서는 레이어가 편집 가능하고 선택된 객체를 포함해야 합니다</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD 객체 회전</translation>
         </message>
     </context>
     <context>

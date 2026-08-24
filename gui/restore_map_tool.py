@@ -22,7 +22,7 @@ from qgis.gui import (
     QgsMapToolEdit,
     QgsRubberBand,
 )
-from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtCore import QCoreApplication, Qt
 from qgis.PyQt.QtGui import QColor, QCursor
 
 # Safe cross-version Qt5 / Qt6 constants
@@ -44,6 +44,9 @@ except (ImportError, ValueError):
 
 class RestoreMapTool(QgsMapToolEdit):
     """Dedicated interactive CAD Map Tool for restoring sharp corners with step-by-step HUD hints."""
+
+    def tr(self, message: str) -> str:
+        return QCoreApplication.translate("FilletPlugin", message)
 
     def __init__(self, canvas: QgsMapCanvas, widget: Optional[RestoreCanvasWidget] = None):
         super().__init__(canvas)
