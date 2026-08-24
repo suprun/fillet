@@ -211,6 +211,28 @@ class TestCADMirrorTool(unittest.TestCase):
         widget.btn_lock_angle.setChecked(False)
         self.assertFalse(widget.is_angle_locked)
 
+    def test_mirror_keypress_event_and_snapping(self):
+        from qgis.PyQt.QtCore import QEvent, Qt
+        from qgis.PyQt.QtGui import QKeyEvent
+
+        widget = MirrorCanvasWidget(self.canvas)
+        tool = MirrorMapTool(self.canvas, widget)
+        tool.activate()
+
+        tool.p1 = QgsPointXY(0, 0)
+        tool.p2 = QgsPointXY(0, 10)
+        tool.state = MirrorMapTool.STATE_SECOND_POINT
+
+        evt_type = getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", 6))
+        key_return = getattr(Qt.Key, "Key_Return", getattr(Qt, "Key_Return", 0x01000004))
+        no_mod = getattr(Qt.KeyboardModifier, "NoModifier", getattr(Qt, "NoModifier", 0))
+
+        # Simulate Return key press
+        key_evt = QKeyEvent(evt_type, key_return, no_mod)
+        tool.keyPressEvent(key_evt)
+        # Should not raise NameError and reset state
+        self.assertEqual(tool.state, MirrorMapTool.STATE_FIRST_POINT)
+
 
 if __name__ == "__main__":
     unittest.main()

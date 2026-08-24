@@ -437,6 +437,9 @@ class RotateMapTool(QgsMapToolEdit):
                     new_features.append(new_feat)
                 if new_features:
                     layer.addFeatures(new_features)
+                    new_fids = [f.id() for f in new_features if f.id() != 0]
+                    if new_fids:
+                        layer.selectByIds(new_fids)
             else:
                 for feat in features:
                     orig_geom = feat.geometry()
@@ -450,6 +453,9 @@ class RotateMapTool(QgsMapToolEdit):
             layer.destroyEditCommand()
             raise
 
+        layer.updateExtents()
         layer.triggerRepaint()
+        if hasattr(self.canvas.snappingUtils(), "clearAllLocators"):
+            self.canvas.snappingUtils().clearAllLocators()
         self.canvas.refresh()
         self.reset_state()

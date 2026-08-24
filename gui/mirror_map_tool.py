@@ -37,6 +37,8 @@ _LeftButton = getattr(Qt.MouseButton, "LeftButton", getattr(Qt, "LeftButton", 1)
 _RightButton = getattr(Qt.MouseButton, "RightButton", getattr(Qt, "RightButton", 2))
 _Key_Escape = getattr(Qt.Key, "Key_Escape", getattr(Qt, "Key_Escape", 0x01000000))
 _Key_Backspace = getattr(Qt.Key, "Key_Backspace", getattr(Qt, "Key_Backspace", 0x01000003))
+_Key_Return = getattr(Qt.Key, "Key_Return", getattr(Qt, "Key_Return", 0x01000004))
+_Key_Enter = getattr(Qt.Key, "Key_Enter", getattr(Qt, "Key_Enter", 0x01000005))
 _ShiftModifier = getattr(Qt.KeyboardModifier, "ShiftModifier", getattr(Qt, "ShiftModifier", 0x02000000))
 
 try:
@@ -320,19 +322,16 @@ class MirrorMapTool(QgsMapToolEdit):
                 geom = feat.geometry()
                 if geom and not geom.isEmpty():
                     mirrored_geom = GeometryEngine.mirror_geometry(geom, p1_layer, p2_layer)
-                    new_feat = QgsFeature(layer.fields())
-                    new_feat.setAttributes(feat.attributes())
+                    new_feat = QgsFeature(feat)
                     new_feat.setGeometry(mirrored_geom)
                     new_features.append(new_feat)
 
             if new_features:
-                res, added_features = layer.dataProvider().addFeatures(new_features)
-                if res:
-                    new_ids = [f.id() for f in added_features] if added_features else []
-                    if new_ids:
-                        layer.selectByIds(new_ids)
-                else:
-                    success = False
+                success = layer.addFeatures(new_features)
+                if success:
+                    new_fids = [f.id() for f in new_features if f.id() != 0]
+                    if new_fids:
+                        layer.selectByIds(new_fids)
         else:
             for feat in selected_features:
                 geom = feat.geometry()
@@ -344,6 +343,10 @@ class MirrorMapTool(QgsMapToolEdit):
 
         if success:
             layer.endEditCommand()
+            layer.updateExtents()
+            layer.triggerRepaint()
+            if hasattr(self.canvas.snappingUtils(), "clearAllLocators"):
+                self.canvas.snappingUtils().clearAllLocators()
             self.canvas.refresh()
         else:
             layer.destroyEditCommand()
