@@ -387,6 +387,100 @@ class TestTwoLineFillet(unittest.TestCase):
             tool.widget.deleteLater()
         layer.rollBack()
 
+    def test_merge_dialog_watcher_and_confirmation(self):
+        from qgis.core import (
+            QgsFeature,
+            QgsField,
+            QgsVectorLayer,
+            QgsSettings,
+        )
+        from qgis.PyQt.QtCore import QEvent, QObject, QVariant, pyqtSignal
+        from qgis.PyQt.QtWidgets import QAction, QDialog, QApplication
+        from gui.two_line_map_tool import TwoLineMapTool, _MergeDialogWatcher
+
+        # 1. Test _MergeDialogWatcher on Accepted and Rejected
+        watcher = _MergeDialogWatcher()
+        d_accept = QDialog()
+        d_accept.show()
+        d_accept.accept()
+        d_accept.hide()
+        watcher.eventFilter(d_accept, QEvent(QEvent.Type.Hide if hasattr(QEvent, "Type") else QEvent.Hide))
+        self.assertTrue(watcher.dialog_detected)
+        self.assertTrue(watcher.accepted)
+
+        watcher_reject = _MergeDialogWatcher()
+        d_reject = QDialog()
+        d_reject.show()
+        d_reject.reject()
+        d_reject.hide()
+        watcher_reject.eventFilter(d_reject, QEvent(QEvent.Type.Hide if hasattr(QEvent, "Type") else QEvent.Hide))
+        self.assertTrue(watcher_reject.dialog_detected)
+        self.assertFalse(watcher_reject.accepted)
+
+        # 2. Test _apply_two_line_operation with dialog simulation
+        layer = QgsVectorLayer("LineString?crs=EPSG:3857", "test_merge_dialog", "memory")
+        pr = layer.dataProvider()
+        pr.addAttributes([QgsField("name", getattr(QVariant, "String", 10))])
+        layer.updateFields()
+
+        f1 = QgsFeature(layer.fields())
+        f1.setGeometry(QgsGeometry.fromPolylineXY([QgsPointXY(0, 10), QgsPointXY(10, 10)]))
+        f1.setAttribute("name", "Line 1")
+        f2 = QgsFeature(layer.fields())
+        f2.setGeometry(QgsGeometry.fromPolylineXY([QgsPointXY(10, 0), QgsPointXY(10, 20)]))
+        f2.setAttribute("name", "Line 2")
+        pr.addFeatures([f1, f2])
+        layer.startEditing()
+        canvas.setCurrentLayer(layer)
+
+        # Disable always_first to test dialog path
+        s = QgsSettings()
+        s.setValue("plugins/fillet/merge_always_first_feature", False)
+
+        class MockIface(QObject):
+            def __init__(self, main_win):
+                super().__init__()
+                self._win = main_win
+
+            def mainWindow(self):
+                return self._win
+
+        # Mock action that simulates accepted QDialog
+        mock_action = QAction("Merge", win)
+        mock_action.setObjectName("mActionMergeFeatureAttributes")
+
+        def simulate_dialog():
+            dlg = QDialog(win)
+            dlg.show()
+            dlg.accept()
+            dlg.hide()
+
+        mock_action.triggered.connect(simulate_dialog)
+        win.addAction(mock_action)
+
+        mock_iface = MockIface(win)
+        tool = TwoLineMapTool(canvas, iface=mock_iface)
+        tool.activate()
+
+        new_geom = QgsGeometry.fromPolylineXY([QgsPointXY(0, 10), QgsPointXY(8, 10), QgsPointXY(10, 8), QgsPointXY(10, 0)])
+        tool._apply_two_line_operation(layer, 1, 2, new_geom)
+
+        # Verify target feature 1 received new geometry and feature 2 was deleted
+        feats = list(layer.getFeatures())
+        self.assertEqual(len(feats), 1)
+        self.assertEqual(feats[0].id(), 1)
+        self.assertFalse(feats[0].geometry().isEmpty())
+
+        win.removeAction(mock_action)
+        tool.cleanup()
+        if tool.widget:
+            try:
+                canvas.removeEventFilter(tool.widget)
+            except (TypeError, RuntimeError):
+                pass
+            tool.widget.deleteLater()
+        layer.rollBack()
+
 
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(TestTwoLineFillet)

@@ -24,9 +24,9 @@ from qgis.gui import (
     QgsMapToolEdit,
     QgsRubberBand,
 )
-from qgis.PyQt.QtCore import QCoreApplication, Qt
+from qgis.PyQt.QtCore import QCoreApplication, QEvent, QObject, Qt
 from qgis.PyQt.QtGui import QColor, QCursor
-from qgis.PyQt.QtWidgets import QAction
+from qgis.PyQt.QtWidgets import QAction, QApplication, QDialog
 
 # Safe cross-version Qt5 / Qt6 constants
 _CrossCursor = getattr(Qt.CursorShape, "CrossCursor", getattr(Qt, "CrossCursor", None))
@@ -49,6 +49,31 @@ except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
     from core.snapping_helper import SegmentMatch, SnappingHelper
     from gui.canvas_widget import FilletCanvasWidget
+
+
+class _MergeDialogWatcher(QObject):
+    """Watches QApplication for QDialog results during native merge attribute dialog execution."""
+
+    def __init__(self):
+        super().__init__()
+        self.dialog_detected = False
+        self.accepted = False
+
+    def eventFilter(self, obj, event):
+        if isinstance(obj, QDialog):
+            evt_type = event.type()
+            evt_show = getattr(QEvent.Type, "Show", getattr(QEvent, "Show", 17))
+            evt_hide = getattr(QEvent.Type, "Hide", getattr(QEvent, "Hide", 18))
+            evt_close = getattr(QEvent.Type, "Close", getattr(QEvent, "Close", 19))
+            if evt_type == evt_show:
+                self.dialog_detected = True
+            elif evt_type in (evt_hide, evt_close):
+                self.dialog_detected = True
+                res = obj.result()
+                accepted_code = getattr(getattr(QDialog, "DialogCode", QDialog), "Accepted", 1)
+                if res == accepted_code:
+                    self.accepted = True
+        return False
 
 
 class TwoLineMapTool(QgsMapToolEdit):
@@ -495,28 +520,39 @@ class TwoLineMapTool(QgsMapToolEdit):
             merge_action = self.iface.mainWindow().findChild(QAction, "mActionMergeFeatures")
 
         if merge_action:
-            # Execute QGIS native dialog
-            merge_action.trigger()
+            watcher = _MergeDialogWatcher()
+            app_inst = QApplication.instance()
+            if app_inst:
+                app_inst.installEventFilter(watcher)
 
-            # Check if merge was confirmed by user (OK) or cancelled (Cancel)
+            try:
+                # Execute QGIS native dialog
+                merge_action.trigger()
+            finally:
+                if app_inst:
+                    app_inst.removeEventFilter(watcher)
+
             current_fids = set(layer.allFeatureIds())
             current_undo_count = layer.undoStack().count() if layer.undoStack() else 0
             added_fids = current_fids - initial_fids
             selected_ids = layer.selectedFeatureIds()
 
-            is_confirmed = (
-                current_undo_count > initial_undo_count
-                or len(current_fids) < len(initial_fids)
-                or bool(added_fids)
-                or (fid2 not in current_fids and fid1 in current_fids)
-            )
+            if watcher.dialog_detected:
+                is_confirmed = watcher.accepted
+            else:
+                is_confirmed = (
+                    current_undo_count > initial_undo_count
+                    or len(current_fids) < len(initial_fids)
+                    or bool(added_fids)
+                    or (fid2 not in current_fids and fid1 in current_fids)
+                )
 
             if is_confirmed:
                 # User confirmed OK: determine target feature ID and feature to delete
                 if added_fids:
                     target_id = list(added_fids)[0]
                     delete_id = None
-                elif selected_ids and selected_ids[0] in current_fids:
+                elif len(selected_ids) == 1 and selected_ids[0] in current_fids:
                     target_id = selected_ids[0]
                     delete_id = fid2 if target_id == fid1 else fid1
                 else:
