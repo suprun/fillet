@@ -228,15 +228,60 @@ class TwoLineMapTool(QgsMapToolEdit):
                 cursor_pt = QgsPoint(layer_pt.x(), layer_pt.y())
                 dist = GeometryEngine.distance(self.v_sharp, cursor_pt)
 
+                # Geographic vs projected precision and clamp limits
+                is_geo = layer.crs().isGeographic() if layer and layer.crs().isValid() else False
+                min_limit = 1e-6 if is_geo else 0.0001
+                min_clamp = 1e-6 if is_geo else 0.001
+
                 # Update widget value based on distance
                 if self.widget:
                     if self.widget.mode == FilletCanvasWidget.MODE_FILLET:
                         # Smooth radius scaling based on cursor distance
-                        r = max(self.widget.spin_radius.minimum(), min(self.widget.spin_radius.maximum(), dist))
-                        self.widget.set_radius(r, block_signals=True)
+                        rounded_dist = max(min_limit, round(dist, 6 if is_geo else (4 if dist < 1.0 else 3)))
+                        if not self.widget.is_radius_locked:
+                            self.widget.set_radius(rounded_dist, block_signals=True)
                     else:
-                        d = max(self.widget.spin_dist1.minimum(), min(self.widget.spin_dist1.maximum(), dist))
-                        self.widget.set_distance1(d, block_signals=True)
+                        # Chamfer mode: 2D projection onto both rays
+                        m1 = self.first_segment_match
+                        m2 = self.current_segment_match
+
+                        # Ray 1 direction from v_sharp
+                        d1x = m1.p2.x() - m1.p1.x()
+                        d1y = m1.p2.y() - m1.p1.y()
+                        len1 = math.hypot(d1x, d1y)
+                        ud1x, ud1y = (d1x / len1, d1y / len1) if len1 > 1e-9 else (1.0, 0.0)
+                        t_click1 = (m1.point.x() - self.v_sharp.x()) * ud1x + (m1.point.y() - self.v_sharp.y()) * ud1y
+                        u1x = ud1x if t_click1 > 0 else -ud1x
+                        u1y = ud1y if t_click1 > 0 else -ud1y
+
+                        # Ray 2 direction from v_sharp
+                        d2x = m2.p2.x() - m2.p1.x()
+                        d2y = m2.p2.y() - m2.p1.y()
+                        len2 = math.hypot(d2x, d2y)
+                        ud2x, ud2y = (d2x / len2, d2y / len2) if len2 > 1e-9 else (1.0, 0.0)
+                        t_click2 = (m2.point.x() - self.v_sharp.x()) * ud2x + (m2.point.y() - self.v_sharp.y()) * ud2y
+                        u2x = ud2x if t_click2 > 0 else -ud2x
+                        u2y = ud2y if t_click2 > 0 else -ud2y
+
+                        if self.widget.is_linked:
+                            # Symmetrical linked chamfer: both distances scale identically
+                            rounded_dist = max(min_limit, round(dist, 6 if is_geo else (4 if dist < 1.0 else 3)))
+                            if not self.widget.is_dist1_locked:
+                                self.widget.set_distance1(rounded_dist, block_signals=True)
+                        else:
+                            # Asymmetrical unlinked chamfer: cursor position independently projects on rays
+                            wx = cursor_pt.x() - self.v_sharp.x()
+                            wy = cursor_pt.y() - self.v_sharp.y()
+                            proj1 = wx * u1x + wy * u1y
+                            proj2 = wx * u2x + wy * u2y
+                            d1 = max(min_clamp, abs(proj1))
+                            d2 = max(min_clamp, abs(proj2))
+                            rounded_d1 = round(d1, 6 if is_geo else (4 if d1 < 1.0 else 3))
+                            rounded_d2 = round(d2, 6 if is_geo else (4 if d2 < 1.0 else 3))
+                            if not self.widget.is_dist1_locked:
+                                self.widget.set_distance1(rounded_d1, block_signals=True)
+                            if not self.widget.is_dist2_locked:
+                                self.widget.set_distance2(rounded_d2, block_signals=True)
 
                 self._update_preview(layer, self.first_segment_match, self.current_segment_match)
 
@@ -351,13 +396,13 @@ class TwoLineMapTool(QgsMapToolEdit):
 
     def keyPressEvent(self, event):
         key = event.key()
-        if key == _Key_Escape:
+        if key in (_Key_Escape,):
             self._handle_step_back()
-            return
+            event.accept()
         elif key in (_Key_Return, _Key_Enter, _Key_Space):
-            if self.step in (self.STEP_SECOND_LINE, self.STEP_SET_RADIUS):
+            if self.step == self.STEP_SET_RADIUS and self.preview_geom:
                 self._commit_current_preview()
-                return
+                event.accept()
         elif key == _Key_L:
             if self.widget:
                 self.widget.toggle_active_lock()
@@ -374,7 +419,7 @@ class TwoLineMapTool(QgsMapToolEdit):
         super().keyPressEvent(event)
 
     def _handle_step_back(self):
-        """Reverts Step 3 -> Step 2 -> Step 1 -> Clear."""
+        """Step back through CAD workflow or clear selection."""
         if self.step == self.STEP_SET_RADIUS:
             self.step = self.STEP_SECOND_LINE
             if self.widget:
@@ -443,9 +488,9 @@ class TwoLineMapTool(QgsMapToolEdit):
         initial_fids = set(layer.allFeatureIds())
         layer.selectByIds([fid1, fid2])
 
-        merge_action = self.iface.mainWindow().findChild(QAction, "mActionMergeFeatureAttributes")
+        merge_action = self.iface.mainWindow().findChild(QAction, "mActionMergeFeatures")
         if not merge_action:
-            merge_action = self.iface.mainWindow().findChild(QAction, "mActionMergeFeatures")
+            merge_action = self.iface.mainWindow().findChild(QAction, "mActionMergeFeatureAttributes")
 
         if merge_action:
             # Execute QGIS native dialog
@@ -453,12 +498,22 @@ class TwoLineMapTool(QgsMapToolEdit):
 
             # Check if merge was confirmed by user (OK) or cancelled (Cancel)
             current_fids = set(layer.allFeatureIds())
-            if len(current_fids) < len(initial_fids) or (fid2 not in current_fids and fid1 in current_fids):
-                # User confirmed OK: update geometry of surviving feature
-                selected_ids = layer.selectedFeatureIds()
-                target_id = selected_ids[0] if selected_ids else (fid1 if fid1 in current_fids else fid2)
+            added_fids = current_fids - initial_fids
+            selected_ids = layer.selectedFeatureIds()
+
+            if len(current_fids) < len(initial_fids) or added_fids or (fid2 not in current_fids and fid1 in current_fids):
+                # User confirmed OK: determine target feature ID
+                if added_fids:
+                    target_id = list(added_fids)[0]
+                elif selected_ids and selected_ids[0] in current_fids:
+                    target_id = selected_ids[0]
+                else:
+                    target_id = fid1 if fid1 in current_fids else fid2
+
                 if target_id in current_fids:
+                    layer.beginEditCommand(self.tr("Оновлення геометрії з'єднання"))
                     layer.changeGeometry(target_id, new_geom)
+                    layer.endEditCommand()
                     layer.triggerRepaint()
             else:
                 # User cancelled (Cancel): do not modify geometry, layer remains clean

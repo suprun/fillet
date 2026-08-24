@@ -293,6 +293,100 @@ class TestTwoLineFillet(unittest.TestCase):
             tool.widget.deleteLater()
         layer.rollBack()
 
+    def test_large_radius_clamped_to_segment_length(self):
+        # Line 1: (0, 10) -> (5, 10), length from V(5, 10) is 5.0
+        # Line 2: (5, 0) -> (5, 10), length from V(5, 10) is 10.0
+        l1 = QgsGeometry(QgsLineString([QgsPoint(0, 10), QgsPoint(5, 10)]))
+        l2 = QgsGeometry(QgsLineString([QgsPoint(5, 0), QgsPoint(5, 10)]))
+
+        # Request radius = 100.0, which would exceed the 5.0 line length
+        res = GeometryEngine.fillet_or_chamfer_two_lines(
+            l1, 0, QgsPoint(2, 10),
+            l2, 0, QgsPoint(5, 2),
+            mode="fillet", radius=100.0, segments_count=8
+        )
+        self.assertIsNotNone(res)
+        geom, v, t1, t2 = res
+        pts = geom.asPolyline()
+        # Verify tangent points are strictly within [0, 5]
+        self.assertGreaterEqual(t1.x(), 0.0)
+        self.assertLessEqual(t1.x(), 5.0)
+        self.assertGreaterEqual(t2.y(), 0.0)
+        self.assertLessEqual(t2.y(), 10.0)
+        # Verify first point is (0, 10) and last point is (5, 0)
+        self.assertAlmostEqual(pts[0].x(), 0.0, places=4)
+        self.assertAlmostEqual(pts[0].y(), 10.0, places=4)
+        self.assertAlmostEqual(pts[-1].x(), 5.0, places=4)
+        self.assertAlmostEqual(pts[-1].y(), 0.0, places=4)
+
+    def test_chamfer_unlinked_cursor_drag(self):
+        from qgis.core import (
+            QgsFeature,
+            QgsField,
+            QgsVectorLayer,
+        )
+        from qgis.gui import QgsMapMouseEvent
+        from qgis.PyQt.QtCore import QEvent, QPoint, Qt, QVariant
+        from gui.two_line_map_tool import TwoLineMapTool
+        from gui.canvas_widget import FilletCanvasWidget
+        from core.snapping_helper import SegmentMatch
+
+        layer = QgsVectorLayer("LineString?crs=EPSG:3857", "test_chamfer_drag", "memory")
+        pr = layer.dataProvider()
+        pr.addAttributes([QgsField("name", getattr(QVariant, "String", 10))])
+        layer.updateFields()
+
+        f1 = QgsFeature(layer.fields())
+        f1.setGeometry(QgsGeometry.fromPolylineXY([QgsPointXY(0, 10), QgsPointXY(10, 10)]))
+        f2 = QgsFeature(layer.fields())
+        f2.setGeometry(QgsGeometry.fromPolylineXY([QgsPointXY(10, 0), QgsPointXY(10, 20)]))
+        pr.addFeatures([f1, f2])
+        layer.startEditing()
+        canvas.setCurrentLayer(layer)
+
+        tool = TwoLineMapTool(canvas, iface=None)
+        tool.activate()
+
+        # Switch to Chamfer and unlock distance links
+        tool.widget.radio_chamfer.setChecked(True)
+        tool.widget.btn_link.setChecked(False)
+        tool.widget.btn_lock_dist1.setChecked(False)
+        tool.widget.btn_lock_dist2.setChecked(False)
+
+        # Step 1: Click first segment
+        m1 = SegmentMatch(fid=1, part_idx=0, ring_idx=0, segment_idx=0, point=QgsPointXY(2, 10), p1=QgsPointXY(0, 10), p2=QgsPointXY(10, 10), geometry=f1.geometry())
+        tool.first_segment_match = m1
+        tool.step = tool.STEP_SECOND_LINE
+
+        # Step 2: Set second segment and transition to Step 3
+        m2 = SegmentMatch(fid=2, part_idx=0, ring_idx=0, segment_idx=0, point=QgsPointXY(10, 2), p1=QgsPointXY(10, 0), p2=QgsPointXY(10, 20), geometry=f2.geometry())
+        tool.current_segment_match = m2
+        tool.step = tool.STEP_SET_RADIUS
+        tool.v_sharp = QgsPoint(10, 10)
+
+        # Step 3: Move cursor to (8, 7), which is offset (-2, -3) from V(10, 10)
+        # Ray 1 is towards (0, 10) [-X direction], proj1 = 2.0
+        # Ray 2 is towards (10, 0) [-Y direction], proj2 = 3.0
+        evt_mouse_move = getattr(QEvent.Type, "MouseMove", getattr(QEvent, "MouseMove", None))
+        left_btn = getattr(Qt.MouseButton, "NoButton", getattr(Qt, "NoButton", 0))
+        from unittest.mock import patch
+        with patch.object(tool, "toLayerCoordinates", return_value=QgsPointXY(8, 7)):
+            mouse_evt = QgsMapMouseEvent(canvas, evt_mouse_move, QPoint(100, 100), left_btn)
+            tool.canvasMoveEvent(mouse_evt)
+
+        # Verify Distance 1 and Distance 2 both updated dynamically
+        self.assertAlmostEqual(tool.widget.distance1, 2.0, places=2)
+        self.assertAlmostEqual(tool.widget.distance2, 3.0, places=2)
+
+        tool.cleanup()
+        if tool.widget:
+            try:
+                canvas.removeEventFilter(tool.widget)
+            except (TypeError, RuntimeError):
+                pass
+            tool.widget.deleteLater()
+        layer.rollBack()
+
 
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(TestTwoLineFillet)

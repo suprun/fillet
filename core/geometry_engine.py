@@ -1174,31 +1174,45 @@ class GeometryEngine:
         tan_half = math.tan(half_angle)
         sin_half = math.sin(half_angle)
 
+        # Maximum extents of line 1 and line 2 along rays u1 and u2 from intersection v
+        s1_all = [(curve1.pointN(i).x() - v.x()) * u1x + (curve1.pointN(i).y() - v.y()) * u1y for i in range(n1)]
+        s2_all = [(curve2.pointN(i).x() - v.x()) * u2x + (curve2.pointN(i).y() - v.y()) * u2y for i in range(n2)]
+        max_len1 = max(0.0, max(s1_all))
+        max_len2 = max(0.0, max(s2_all))
+
+        if max_len1 < 1e-6 or max_len2 < 1e-6:
+            return None
+
         if mode == "fillet":
             if radius <= 0:
                 t1 = v
                 t2 = v
                 arc_pts = [v]
             else:
-                tangent_dist = radius / tan_half
+                max_tangent = min(max_len1, max_len2) * 0.9999
+                tangent_dist = min(radius / tan_half, max_tangent)
+                eff_radius = tangent_dist * tan_half
+
                 t1 = QgsPoint(v.x() + tangent_dist * u1x, v.y() + tangent_dist * u1y)
                 t2 = QgsPoint(v.x() + tangent_dist * u2x, v.y() + tangent_dist * u2y)
 
                 bx, by, blen = cls.normalize_vector(u1x + u2x, u1y + u2y)
-                center_dist = radius / sin_half
+                center_dist = eff_radius / sin_half
                 cx = v.x() + center_dist * bx
                 cy = v.y() + center_dist * by
 
-                arc_mid = QgsPoint(cx - radius * bx, cy - radius * by)
+                arc_mid = QgsPoint(cx - eff_radius * bx, cy - eff_radius * by)
                 arc_pts = cls.segmentize_arc_3p(t1, arc_mid, t2, segments_count)
         elif mode == "chamfer":
-            d1 = dist1 if dist1 > 0 else 0.0
-            d2 = dist2 if dist2 > 0 else d1
-            if d1 <= 0 and d2 <= 0:
+            d1_in = dist1 if dist1 > 0 else 0.0
+            d2_in = dist2 if dist2 > 0 else d1_in
+            if d1_in <= 0 and d2_in <= 0:
                 t1 = v
                 t2 = v
                 arc_pts = [v]
             else:
+                d1 = min(d1_in, max_len1 * 0.9999)
+                d2 = min(d2_in, max_len2 * 0.9999)
                 t1 = QgsPoint(v.x() + d1 * u1x, v.y() + d1 * u1y)
                 t2 = QgsPoint(v.x() + d2 * u2x, v.y() + d2 * u2y)
                 arc_pts = [t1, t2]
