@@ -192,7 +192,8 @@ class TwoLineMapTool(QgsMapToolEdit):
                         self.preview_rubberband.setLineStyle(_DashLine)
                     self.preview_rubberband.show()
 
-                    v_map = self.toMapCoordinates(layer, v_sharp)
+                    v_xy = QgsPointXY(v_sharp.x(), v_sharp.y())
+                    v_map = self.toMapCoordinates(layer, v_xy)
                     self.corner_marker.reset(QgsWkbTypes.GeometryType.PointGeometry)
                     self.corner_marker.addPoint(v_map, True)
                     self.corner_marker.show()

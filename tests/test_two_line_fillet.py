@@ -180,6 +180,64 @@ class TestTwoLineFillet(unittest.TestCase):
 
         tool.cleanup()
 
+    def test_two_line_map_tool_canvas_events(self):
+        from qgis.core import (
+            QgsFeature,
+            QgsField,
+            QgsVectorLayer,
+        )
+        from qgis.gui import QgsMapCanvas, QgsMapMouseEvent
+        from qgis.PyQt.QtCore import QEvent, QPoint, Qt, QVariant
+        from gui.two_line_map_tool import TwoLineMapTool
+        from core.snapping_helper import SegmentMatch
+
+        canvas = QgsMapCanvas()
+        canvas.resize(800, 600)
+
+        layer = QgsVectorLayer("LineString?crs=EPSG:3857", "test_lines_events", "memory")
+        pr = layer.dataProvider()
+        pr.addAttributes([QgsField("name", getattr(QVariant, "String", 10))])
+        layer.updateFields()
+
+        f1 = QgsFeature(layer.fields())
+        f1.setGeometry(QgsGeometry.fromPolylineXY([QgsPointXY(0, 10), QgsPointXY(10, 10)]))
+        f2 = QgsFeature(layer.fields())
+        f2.setGeometry(QgsGeometry.fromPolylineXY([QgsPointXY(10, 0), QgsPointXY(10, 20)]))
+        pr.addFeatures([f1, f2])
+        layer.startEditing()
+        canvas.setCurrentLayer(layer)
+
+        tool = TwoLineMapTool(canvas, iface=None)
+        tool.activate()
+
+        # Step 1: Simulate matching first segment
+        m1 = SegmentMatch(fid=1, part_idx=0, ring_idx=0, segment_idx=0, point=QgsPointXY(2, 10), p1=QgsPointXY(0, 10), p2=QgsPointXY(10, 10), geometry=f1.geometry())
+        tool.first_segment_match = m1
+
+        # Step 2: Hover over second segment
+        m2 = SegmentMatch(fid=2, part_idx=0, ring_idx=0, segment_idx=0, point=QgsPointXY(10, 2), p1=QgsPointXY(10, 0), p2=QgsPointXY(10, 20), geometry=f2.geometry())
+
+        # Test canvasMoveEvent logic
+        evt_mouse_move = getattr(QEvent.Type, "MouseMove", getattr(QEvent, "MouseMove", None))
+        evt_mouse_press = getattr(QEvent.Type, "MouseButtonPress", getattr(QEvent, "MouseButtonPress", None))
+
+        from unittest.mock import patch
+        with patch("core.snapping_helper.SnappingHelper.find_segment_at_position", return_value=m2):
+            left_btn = getattr(Qt.MouseButton, "NoButton", getattr(Qt, "NoButton", 0))
+            mouse_evt = QgsMapMouseEvent(canvas, evt_mouse_move, QPoint(100, 100), left_btn)
+            tool.canvasMoveEvent(mouse_evt)
+            self.assertIsNotNone(tool.preview_geom)
+            self.assertIsNotNone(tool.current_segment_match)
+
+        # Right click step-back
+        right_btn = getattr(Qt.MouseButton, "RightButton", getattr(Qt, "RightButton", 2))
+        press_evt = QgsMapMouseEvent(canvas, evt_mouse_press, QPoint(100, 100), right_btn)
+        tool.canvasPressEvent(press_evt)
+        self.assertIsNone(tool.first_segment_match)
+        self.assertIsNone(tool.preview_geom)
+
+        tool.cleanup()
+
 
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(TestTwoLineFillet)

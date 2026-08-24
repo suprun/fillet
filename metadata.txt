@@ -4,7 +4,7 @@ qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
 description=Interactive Fillet, Chamfer & Corner Restoration tools for QGIS with instant Batch Fillet/Chamfer for selected features.
 about=Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), and Two-Edge Corner Restoration (Unfillet / Unchamfer) map tools for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.
-version=1.0.0.15
+version=1.0.0.16
 author=suprun
 email=suprun.serhiy+qgis@gmail.com
 homepage=https://github.com/suprun/fillet
@@ -14,7 +14,9 @@ tags=cad, editing, fillet, chamfer, unfillet, corner, restore, geometry, digitiz
 icon=icon.png
 experimental=False
 deprecated=False
-changelog=1.0.0.15:
+changelog=1.0.0.16:
+    - Fixed TypeError in toMapCoordinates conversion for intersection marker in Two-Line Fillet map tool.
+    1.0.0.15:
     - Added Two-Line Fillet and Chamfer CAD Map Tool with feature merging (mActionTwoLineFillet) for line vector layers.
     - Integrated CAD step-by-step HUD guidance and live rubberband intersection preview for two separate lines.
     - Support for native QGIS merge attributes dialog or direct attribute preservation based on user setting.
