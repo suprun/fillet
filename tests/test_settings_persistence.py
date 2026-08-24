@@ -82,6 +82,21 @@ class TestSettingsPersistence(unittest.TestCase):
         self.assertAlmostEqual(sw2.radius, 7.5, places=2)
         self.assertEqual(sw2.segments_count, 16)
 
+    def test_two_line_canvas_widget_persistence(self):
+        from gui.two_line_canvas_widget import TwoLineCanvasWidget
+        w1 = TwoLineCanvasWidget(self.canvas)
+        w1.radio_chamfer.setChecked(True)
+        w1.spin_dist1.setValue(18.5)
+        w1.btn_lock_dist1.setChecked(True)
+        w1.chk_always_first.setChecked(True)
+        w1._save_settings()
+
+        w2 = TwoLineCanvasWidget(self.canvas)
+        self.assertEqual(w2.mode, TwoLineCanvasWidget.MODE_CHAMFER)
+        self.assertAlmostEqual(w2.distance1, 18.5, places=2)
+        self.assertTrue(w2.is_dist1_locked)
+        self.assertTrue(w2.always_use_first_feature)
+
     def test_mode_switching_value_transfer(self):
         # Canvas widget transfer
         cw = FilletCanvasWidget(self.canvas)

@@ -3,6 +3,10 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>3. Задайте радіус/фаску курсором або зафіксуйте кліком</source>
+            <translation>3. Stel straal/afschuining in met cursor of klik om te bevestigen</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Eerste lijn opgeven</translation>
         </message>

@@ -3,6 +3,10 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>3. Задайте радіус/фаску курсором або зафіксуйте кліком</source>
+            <translation>3. 커서로 반경/챔퍼를 설정하거나 클릭하여 확인</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. 첫 번째 선 지정</translation>
         </message>

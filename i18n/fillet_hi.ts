@@ -3,6 +3,10 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>3. Задайте радіус/фаску курсором або зафіксуйте кліком</source>
+            <translation>3. कर्सर से त्रिज्या/चैम्फर सेट करें या पुष्टि के लिए क्लिक करें</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. पहली रेखा निर्दिष्ट करें</translation>
         </message>

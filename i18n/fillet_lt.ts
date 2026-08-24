@@ -3,6 +3,10 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>3. Задайте радіус/фаску курсором або зафіксуйте кліком</source>
+            <translation>3. Nustatykite spindulį / nusklembimą žymekliu arba spustelėkite patvirtinti</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Nurodykite pirmąją liniją</translation>
         </message>

@@ -3,6 +3,10 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>3. Задайте радіус/фаску курсором або зафіксуйте кліком</source>
+            <translation>3. Đặt bán kính/vát góc bằng con trỏ hoặc nhấp để xác nhận</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Chỉ định đường đầu tiên</translation>
         </message>

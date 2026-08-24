@@ -3,6 +3,10 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>3. Задайте радіус/фаску курсором або зафіксуйте кліком</source>
+            <translation>3. Iestatiet rādiusu/nolīdzinājumu ar kursoru vai noklikšķiniet, lai apstiprinātu</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Norādiet pirmo līniju</translation>
         </message>

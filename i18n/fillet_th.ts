@@ -3,6 +3,10 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>3. Задайте радіус/фаску курсором або зафіксуйте кліком</source>
+            <translation>3. กำหนดรัศมี/ลบมุมเหลี่ยมด้วยเคอร์เซอร์หรือคลิกเพื่อยืนยัน</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. ระบุเส้นแรก</translation>
         </message>

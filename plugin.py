@@ -161,7 +161,6 @@ class FilletPlugin:
         self.two_line_canvas_widget.hide()
         self.two_line_map_tool = TwoLineMapTool(
             self.canvas,
-            settings_provider=self.settings_widget,
             widget=self.two_line_canvas_widget,
             iface=self.iface,
         )
@@ -538,6 +537,8 @@ class FilletPlugin:
                 self.settings_widget.adapt_to_crs(layer.crs())
             if self.canvas_widget and hasattr(self.canvas_widget, "adapt_to_crs"):
                 self.canvas_widget.adapt_to_crs(layer.crs())
+            if self.two_line_canvas_widget and hasattr(self.two_line_canvas_widget, "adapt_to_crs"):
+                self.two_line_canvas_widget.adapt_to_crs(layer.crs())
 
         if self.action:
             self.action.setEnabled(is_editable)

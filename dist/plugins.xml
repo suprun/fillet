@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
-  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.16" plugin_id="fillet">
+  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.17" plugin_id="fillet">
     <description>Interactive Fillet, Chamfer &amp; Corner Restoration tools for QGIS with instant Batch Fillet/Chamfer for selected features.</description>
     <about>Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), and Two-Edge Corner Restoration (Unfillet / Unchamfer) map tools for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.</about>
-    <version>1.0.0.16</version>
+    <version>1.0.0.17</version>
     <qgis_minimum_version>3.16</qgis_minimum_version>
     <qgis_maximum_version>4.99</qgis_maximum_version>
     <file_name>fillet.zip</file_name>
@@ -14,7 +14,11 @@
     <experimental>False</experimental>
     <deprecated>False</deprecated>
     <tags>cad, editing, fillet, chamfer, unfillet, corner, restore, geometry, digitizing, curve, batch, merge, qgis4</tags>
-    <change_log>1.0.0.16:
+    <change_log>1.0.0.17:
+- Added dedicated floating on-canvas settings panel for Two-Line Fillet/Chamfer tool with Fillet/Chamfer mode switches, numeric controls, lock/link options, step badges, and attribute merge checkbox.
+- Added interactive cursor-driven radius and chamfer adjustment step (Step 3) matching single-feature Fillet/Chamfer CAD workflow.
+- Added transactional rollback when QGIS native feature merge dialog is cancelled by user.
+1.0.0.16:
 - Fixed TypeError in toMapCoordinates conversion for intersection marker in Two-Line Fillet map tool.
 1.0.0.15:
 - Added Two-Line Fillet and Chamfer CAD Map Tool with feature merging (mActionTwoLineFillet) for line vector layers.
