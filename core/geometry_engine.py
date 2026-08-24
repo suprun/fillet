@@ -1219,40 +1219,87 @@ class GeometryEngine:
         else:
             return None
 
-        # Segment 1 points
-        a1, b1 = curve1.pointN(seg1_idx), curve1.pointN(seg1_idx + 1)
-        sa1 = (a1.x() - v.x()) * u1x + (a1.y() - v.y()) * u1y
-        sb1 = (b1.x() - v.x()) * u1x + (b1.y() - v.y()) * u1y
+        # Check if operation is on the same closed ring
+        is_closed1 = (n1 >= 4 and cls.distance(curve1.pointN(0), curve1.pointN(n1 - 1)) < 1e-6)
+        is_closed2 = (n2 >= 4 and cls.distance(curve2.pointN(0), curve2.pointN(n2 - 1)) < 1e-6)
+        is_same_closed_ring = (
+            is_closed1
+            and is_closed2
+            and (
+                curve1 == curve2
+                or (
+                    n1 == n2
+                    and cls.distance(curve1.pointN(0), curve2.pointN(0)) < 1e-6
+                    and cls.distance(curve1.pointN(1), curve2.pointN(1)) < 1e-6
+                )
+            )
+        )
 
-        # Line 1 topological chain towards t1:
-        # If sa1 >= sb1, b1 is closer to V so we keep prefix 0 -> seg1_idx (a1).
-        # If sb1 > sa1, a1 is closer to V so we keep suffix n1 - 1 down to seg1_idx + 1 (b1).
-        l1_pts = []
-        if sa1 >= sb1:
-            for i in range(0, seg1_idx + 1):
-                l1_pts.append(curve1.pointN(i))
+        if is_same_closed_ring:
+            m = n1 - 1
+            a1, b1 = curve1.pointN(seg1_idx), curve1.pointN((seg1_idx + 1) % m)
+            sa1 = (a1.x() - v.x()) * u1x + (a1.y() - v.y()) * u1y
+            sb1 = (b1.x() - v.x()) * u1x + (b1.y() - v.y()) * u1y
+            if sa1 >= sb1:
+                far1, near1 = seg1_idx, (seg1_idx + 1) % m
+            else:
+                far1, near1 = (seg1_idx + 1) % m, seg1_idx
+
+            a2, b2 = curve2.pointN(seg2_idx), curve2.pointN((seg2_idx + 1) % m)
+            sa2 = (a2.x() - v.x()) * u2x + (a2.y() - v.y()) * u2y
+            sb2 = (b2.x() - v.x()) * u2x + (b2.y() - v.y()) * u2y
+            if sa2 >= sb2:
+                far2, near2 = seg2_idx, (seg2_idx + 1) % m
+            else:
+                far2, near2 = (seg2_idx + 1) % m, seg2_idx
+
+            # Walk along ring from far2 towards far1 away from near2
+            step = -1 if near2 == (far2 + 1) % m else 1
+
+            ring_pts = []
+            curr = far2
+            for _ in range(m + 1):
+                ring_pts.append(curve1.pointN(curr))
+                if curr == far1:
+                    break
+                curr = (curr + step + m) % m
+
+            full_pts = arc_pts + ring_pts + [arc_pts[0]]
         else:
-            for i in range(n1 - 1, seg1_idx, -1):
-                l1_pts.append(curve1.pointN(i))
+            # Segment 1 points
+            a1, b1 = curve1.pointN(seg1_idx), curve1.pointN(seg1_idx + 1)
+            sa1 = (a1.x() - v.x()) * u1x + (a1.y() - v.y()) * u1y
+            sb1 = (b1.x() - v.x()) * u1x + (b1.y() - v.y()) * u1y
 
-        # Segment 2 points
-        a2, b2 = curve2.pointN(seg2_idx), curve2.pointN(seg2_idx + 1)
-        sa2 = (a2.x() - v.x()) * u2x + (a2.y() - v.y()) * u2y
-        sb2 = (b2.x() - v.x()) * u2x + (b2.y() - v.y()) * u2y
+            # Line 1 topological chain towards t1:
+            # If sa1 >= sb1, b1 is closer to V so we keep prefix 0 -> seg1_idx (a1).
+            # If sb1 > sa1, a1 is closer to V so we keep suffix n1 - 1 down to seg1_idx + 1 (b1).
+            l1_pts = []
+            if sa1 >= sb1:
+                for i in range(0, seg1_idx + 1):
+                    l1_pts.append(curve1.pointN(i))
+            else:
+                for i in range(n1 - 1, seg1_idx, -1):
+                    l1_pts.append(curve1.pointN(i))
 
-        # Line 2 topological chain from t2 towards far end:
-        # If sa2 >= sb2, b2 is closer to V so from t2 we connect to a2 (seg2_idx) down to 0.
-        # If sb2 > sa2, a2 is closer to V so from t2 we connect to b2 (seg2_idx + 1) up to n2 - 1.
-        l2_pts = []
-        if sa2 >= sb2:
-            for i in range(seg2_idx, -1, -1):
-                l2_pts.append(curve2.pointN(i))
-        else:
-            for i in range(seg2_idx + 1, n2):
-                l2_pts.append(curve2.pointN(i))
+            # Segment 2 points
+            a2, b2 = curve2.pointN(seg2_idx), curve2.pointN(seg2_idx + 1)
+            sa2 = (a2.x() - v.x()) * u2x + (a2.y() - v.y()) * u2y
+            sb2 = (b2.x() - v.x()) * u2x + (b2.y() - v.y()) * u2y
 
-        # Stitch all points
-        full_pts = l1_pts + arc_pts + l2_pts
+            # Line 2 topological chain from t2 towards far end:
+            # If sa2 >= sb2, b2 is closer to V so from t2 we connect to a2 (seg2_idx) down to 0.
+            # If sb2 > sa2, a2 is closer to V so from t2 we connect to b2 (seg2_idx + 1) up to n2 - 1.
+            l2_pts = []
+            if sa2 >= sb2:
+                for i in range(seg2_idx, -1, -1):
+                    l2_pts.append(curve2.pointN(i))
+            else:
+                for i in range(seg2_idx + 1, n2):
+                    l2_pts.append(curve2.pointN(i))
+
+            # Stitch all points
+            full_pts = l1_pts + arc_pts + l2_pts
 
         clean_pts = []
         for pt in full_pts:

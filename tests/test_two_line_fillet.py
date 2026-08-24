@@ -534,6 +534,67 @@ class TestTwoLineFillet(unittest.TestCase):
         self.assertAlmostEqual(pts[-1].x(), 10.0, places=4)
         self.assertAlmostEqual(pts[-1].y(), 0.0, places=4)
 
+    def test_closed_polyline_fillet_all_corners_and_directions(self):
+        # 1. CCW closed rectangle: (0,0) -> (10,0) -> (10,10) -> (0,10) -> (0,0)
+        ccw_pts = [QgsPoint(0, 0), QgsPoint(10, 0), QgsPoint(10, 10), QgsPoint(0, 10), QgsPoint(0, 0)]
+        geom_ccw = QgsGeometry(QgsLineString(ccw_pts))
+
+        for corner in range(4):
+            segA = (corner - 1 + 4) % 4
+            segB = corner
+            midA = QgsPoint((ccw_pts[segA].x() + ccw_pts[(segA + 1) % 4].x()) / 2, (ccw_pts[segA].y() + ccw_pts[(segA + 1) % 4].y()) / 2)
+            midB = QgsPoint((ccw_pts[segB].x() + ccw_pts[(segB + 1) % 4].x()) / 2, (ccw_pts[segB].y() + ccw_pts[(segB + 1) % 4].y()) / 2)
+
+            res_fwd = GeometryEngine.fillet_or_chamfer_two_lines(
+                geom_ccw, segA, midA, geom_ccw, segB, midB, mode="fillet", radius=2.0, segments_count=8
+            )
+            self.assertIsNotNone(res_fwd, f"Failed CCW corner {corner} forward")
+            g_fwd, v, t1, t2 = res_fwd
+            pts_fwd = g_fwd.asPolyline()
+            self.assertEqual(len(pts_fwd), 13, f"CCW corner {corner} forward point count mismatch")
+            self.assertAlmostEqual(pts_fwd[0].x(), pts_fwd[-1].x(), places=4)
+            self.assertAlmostEqual(pts_fwd[0].y(), pts_fwd[-1].y(), places=4)
+
+            res_rev = GeometryEngine.fillet_or_chamfer_two_lines(
+                geom_ccw, segB, midB, geom_ccw, segA, midA, mode="fillet", radius=2.0, segments_count=8
+            )
+            self.assertIsNotNone(res_rev, f"Failed CCW corner {corner} reverse")
+            g_rev, v, t1, t2 = res_rev
+            pts_rev = g_rev.asPolyline()
+            self.assertEqual(len(pts_rev), 13, f"CCW corner {corner} reverse point count mismatch")
+            self.assertAlmostEqual(pts_rev[0].x(), pts_rev[-1].x(), places=4)
+            self.assertAlmostEqual(pts_rev[0].y(), pts_rev[-1].y(), places=4)
+
+        # 2. CW closed rectangle: (0,0) -> (0,10) -> (10,10) -> (10,0) -> (0,0)
+        cw_pts = [QgsPoint(0, 0), QgsPoint(0, 10), QgsPoint(10, 10), QgsPoint(10, 0), QgsPoint(0, 0)]
+        geom_cw = QgsGeometry(QgsLineString(cw_pts))
+
+        for corner in range(4):
+            segA = (corner - 1 + 4) % 4
+            segB = corner
+            midA = QgsPoint((cw_pts[segA].x() + cw_pts[(segA + 1) % 4].x()) / 2, (cw_pts[segA].y() + cw_pts[(segA + 1) % 4].y()) / 2)
+            midB = QgsPoint((cw_pts[segB].x() + cw_pts[(segB + 1) % 4].x()) / 2, (cw_pts[segB].y() + cw_pts[(segB + 1) % 4].y()) / 2)
+
+            res_cw_fwd = GeometryEngine.fillet_or_chamfer_two_lines(
+                geom_cw, segA, midA, geom_cw, segB, midB, mode="fillet", radius=2.0, segments_count=8
+            )
+            self.assertIsNotNone(res_cw_fwd, f"Failed CW corner {corner} forward")
+            g_cw_fwd, v, t1, t2 = res_cw_fwd
+            pts_cw_fwd = g_cw_fwd.asPolyline()
+            self.assertEqual(len(pts_cw_fwd), 13, f"CW corner {corner} forward point count mismatch")
+            self.assertAlmostEqual(pts_cw_fwd[0].x(), pts_cw_fwd[-1].x(), places=4)
+            self.assertAlmostEqual(pts_cw_fwd[0].y(), pts_cw_fwd[-1].y(), places=4)
+
+            res_cw_rev = GeometryEngine.fillet_or_chamfer_two_lines(
+                geom_cw, segB, midB, geom_cw, segA, midA, mode="fillet", radius=2.0, segments_count=8
+            )
+            self.assertIsNotNone(res_cw_rev, f"Failed CW corner {corner} reverse")
+            g_cw_rev, v, t1, t2 = res_cw_rev
+            pts_cw_rev = g_cw_rev.asPolyline()
+            self.assertEqual(len(pts_cw_rev), 13, f"CW corner {corner} reverse point count mismatch")
+            self.assertAlmostEqual(pts_cw_rev[0].x(), pts_cw_rev[-1].x(), places=4)
+            self.assertAlmostEqual(pts_cw_rev[0].y(), pts_cw_rev[-1].y(), places=4)
+
 
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(TestTwoLineFillet)
