@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
-  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.15" plugin_id="fillet">
+  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.16" plugin_id="fillet">
     <description>Interactive Fillet, Chamfer, Corner Restoration &amp; CAD Rotation tools for QGIS with instant Batch Fillet/Chamfer for selected features.</description>
     <about>Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Edge Corner Restoration (Unfillet / Unchamfer), and 3-Point CAD Rotation map tools for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.</about>
-    <version>1.0.0.15</version>
+    <version>1.0.0.16</version>
     <qgis_minimum_version>3.16</qgis_minimum_version>
     <qgis_maximum_version>4.99</qgis_maximum_version>
     <file_name>fillet.zip</file_name>
@@ -14,7 +14,8 @@
     <experimental>False</experimental>
     <deprecated>False</deprecated>
     <tags>cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation, geometry, digitizing, curve, batch, qgis4</tags>
-    <change_log>1.0.0.15:
+    <change_log>1.0.0.16:
+- Removed drop shadow effects from floating CAD HUD canvas widgets to match native QGIS flat CAD panel styling.
 - Added auto-dismissal timers (4-5s duration) to all QGIS message bar notification strips.
 - Enabled CAD Rotate tool and toolbar button strictly when editable layer has selected features (with dynamic selectionChanged tracking).
 - Positioned CAD Rotate action on Advanced Digitizing Toolbar directly after standard Rotate Feature action.

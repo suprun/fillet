@@ -304,19 +304,12 @@ class FilletCanvasWidget(QFrame):
 
     def _apply_style(self):
         shape_panel = getattr(QFrame.Shape, "StyledPanel", getattr(QFrame, "StyledPanel", None))
-        shadow_raised = getattr(QFrame.Shadow, "Raised", getattr(QFrame, "Raised", None))
+        shadow_plain = getattr(QFrame.Shadow, "Plain", getattr(QFrame, "Plain", None))
         if shape_panel is not None:
             self.setFrameShape(shape_panel)
-        if shadow_raised is not None:
-            self.setFrameShadow(shadow_raised)
+        if shadow_plain is not None:
+            self.setFrameShadow(shadow_plain)
         self.setAutoFillBackground(True)
-
-        # Drop shadow effect for floating on canvas
-        shadow = QGraphicsDropShadowEffect(self)
-        shadow.setBlurRadius(8)
-        shadow.setColor(QColor(0, 0, 0, 70))
-        shadow.setOffset(0, 2)
-        self.setGraphicsEffect(shadow)
 
     def _update_lock_icon(self, btn: QToolButton):
         if btn.isChecked():
