@@ -1664,6 +1664,236 @@ class GeometryEngine:
             return QgsGeometry(sr_abstract)
         return QgsGeometry(geom)
 
+    @classmethod
+    def offset_segment_in_curve(
+        cls,
+        curve: QgsLineString,
+        segment_idx: int,
+        distance: float,
+        mode: str = "extend",
+    ) -> Optional[QgsLineString]:
+        """
+        Offsets a single segment (segment_idx) in curve by distance along its normal vector.
+        Supports:
+          - mode="extend": extends/trims adjacent segments to intersect the shifted line.
+          - mode="step": inserts two perpendicular connector segments (jog).
+        """
+        if not curve or curve.numPoints() < 2:
+            return None
+
+        num_pts = curve.numPoints()
+        is_closed = curve.isClosed() or (num_pts > 2 and curve.pointN(0) == curve.pointN(num_pts - 1))
+        effective_count = num_pts - 1 if is_closed else num_pts
+
+        if not is_closed and (segment_idx < 0 or segment_idx >= num_pts - 1):
+            return None
+        if is_closed and (segment_idx < 0 or segment_idx >= effective_count):
+            return None
+
+        if abs(distance) < cls.EPSILON:
+            return curve.clone()
+
+        i = segment_idx
+        v_i = curve.pointN(i)
+        v_next = curve.pointN((i + 1) % effective_count if is_closed else i + 1)
+
+        dx = v_next.x() - v_i.x()
+        dy = v_next.y() - v_i.y()
+        length = math.hypot(dx, dy)
+        if length < cls.EPSILON:
+            return None
+
+        # Unit normal vector (left normal)
+        nx = -dy / length
+        ny = dx / length
+
+        # Shifted endpoints of the segment
+        p1 = QgsPoint(v_i.x() + distance * nx, v_i.y() + distance * ny)
+        p2 = QgsPoint(v_next.x() + distance * nx, v_next.y() + distance * ny)
+
+        if mode == "step":
+            # Insert rectangular step / jog
+            if not is_closed:
+                new_pts = (
+                    [curve.pointN(k) for k in range(0, i + 1)]
+                    + [p1, p2]
+                    + [curve.pointN(k) for k in range(i + 1, num_pts)]
+                )
+            else:
+                if i == effective_count - 1:
+                    new_pts = (
+                        [curve.pointN(k) for k in range(effective_count)]
+                        + [p1, p2, curve.pointN(0)]
+                    )
+                else:
+                    new_pts = (
+                        [curve.pointN(k) for k in range(0, i + 1)]
+                        + [p1, p2]
+                        + [curve.pointN(k) for k in range(i + 1, num_pts)]
+                    )
+
+            res = QgsLineString()
+            for pt in new_pts:
+                res.addVertex(pt)
+            return res
+
+        # mode == "extend" (CAD Stretch / Extend & Trim adjacent edges)
+        # 1. Compute new start vertex V'_i
+        if i > 0:
+            v_prev = curve.pointN(i - 1)
+            v_prime_i = cls.compute_line_intersection(v_prev, v_i, p1, p2)
+            if v_prime_i is None:
+                v_prime_i = p1
+        elif is_closed:
+            v_prev = curve.pointN(effective_count - 1)
+            v_prime_i = cls.compute_line_intersection(v_prev, v_i, p1, p2)
+            if v_prime_i is None:
+                v_prime_i = p1
+        else:
+            v_prime_i = p1
+
+        # 2. Compute new end vertex V'_{i+1}
+        if not is_closed:
+            if i + 1 < num_pts - 1:
+                v_after = curve.pointN(i + 2)
+                v_prime_next = cls.compute_line_intersection(p1, p2, v_next, v_after)
+                if v_prime_next is None:
+                    v_prime_next = p2
+            else:
+                v_prime_next = p2
+        else:
+            next_next_idx = (i + 2) % effective_count
+            v_after = curve.pointN(next_next_idx)
+            v_prime_next = cls.compute_line_intersection(p1, p2, v_next, v_after)
+            if v_prime_next is None:
+                v_prime_next = p2
+
+        # 3. Update vertices in the ring / polyline
+        new_pts = [curve.pointN(k) for k in range(num_pts)]
+        if not is_closed:
+            new_pts[i] = v_prime_i
+            new_pts[i + 1] = v_prime_next
+        else:
+            if i == 0:
+                new_pts[0] = v_prime_i
+                new_pts[1] = v_prime_next
+                new_pts[num_pts - 1] = v_prime_i
+            elif i == effective_count - 1:
+                new_pts[i] = v_prime_i
+                new_pts[0] = v_prime_next
+                new_pts[num_pts - 1] = v_prime_next
+            else:
+                new_pts[i] = v_prime_i
+                new_pts[i + 1] = v_prime_next
+
+        res = QgsLineString()
+        for pt in new_pts:
+            res.addVertex(pt)
+        return res
+
+    @classmethod
+    def offset_segment(
+        cls,
+        geom: QgsGeometry,
+        part_idx: int,
+        ring_idx: int,
+        segment_idx: int,
+        distance: float,
+        mode: str = "extend",
+    ) -> Optional[QgsGeometry]:
+        """
+        Offsets the specified segment in geom by distance.
+        Works across Polygons, MultiPolygons, LineStrings, and MultiLineStrings.
+        """
+        if geom.isEmpty() or geom.isNull():
+            return None
+
+        if abs(distance) < cls.EPSILON:
+            return QgsGeometry(geom)
+
+        geom_type = geom.type()
+        is_multi = geom.isMultipart()
+
+        if geom_type == QgsWkbTypes.GeometryType.LineGeometry:
+            if not is_multi:
+                curve = geom.constGet()
+                if not curve:
+                    return None
+                new_curve = cls.offset_segment_in_curve(curve, segment_idx, distance, mode)
+                return QgsGeometry(new_curve) if new_curve else None
+            else:
+                multi = geom.constGet()
+                if not multi or part_idx >= multi.numGeometries():
+                    return None
+                new_multi = QgsMultiLineString()
+                for p in range(multi.numGeometries()):
+                    line = multi.geometryN(p)
+                    if p == part_idx:
+                        new_line = cls.offset_segment_in_curve(line, segment_idx, distance, mode)
+                        new_multi.addGeometry(new_line if new_line else line.clone())
+                    else:
+                        new_multi.addGeometry(line.clone())
+                return QgsGeometry(new_multi)
+
+        elif geom_type == QgsWkbTypes.GeometryType.PolygonGeometry:
+            if not is_multi:
+                poly = geom.constGet()
+                if not poly:
+                    return None
+                new_poly = QgsPolygon()
+                ext_ring = poly.exteriorRing()
+                if ext_ring is None:
+                    return None
+
+                if ring_idx == 0:
+                    new_ext = cls.offset_segment_in_curve(ext_ring, segment_idx, distance, mode)
+                    new_poly.setExteriorRing(new_ext if new_ext else ext_ring.clone())
+                else:
+                    new_poly.setExteriorRing(ext_ring.clone())
+
+                for r in range(poly.numInteriorRings()):
+                    int_ring = poly.interiorRing(r)
+                    if ring_idx == r + 1:
+                        new_int = cls.offset_segment_in_curve(int_ring, segment_idx, distance, mode)
+                        new_poly.addInteriorRing(new_int if new_int else int_ring.clone())
+                    else:
+                        new_poly.addInteriorRing(int_ring.clone())
+
+                return QgsGeometry(new_poly)
+            else:
+                multi = geom.constGet()
+                if not multi or part_idx >= multi.numGeometries():
+                    return None
+                new_multi = QgsMultiPolygon()
+                for p in range(multi.numGeometries()):
+                    poly = multi.geometryN(p)
+                    if p == part_idx:
+                        new_poly = QgsPolygon()
+                        ext_ring = poly.exteriorRing()
+                        if ext_ring is None:
+                            new_multi.addGeometry(poly.clone())
+                            continue
+                        if ring_idx == 0:
+                            new_ext = cls.offset_segment_in_curve(ext_ring, segment_idx, distance, mode)
+                            new_poly.setExteriorRing(new_ext if new_ext else ext_ring.clone())
+                        else:
+                            new_poly.setExteriorRing(ext_ring.clone())
+
+                        for r in range(poly.numInteriorRings()):
+                            int_ring = poly.interiorRing(r)
+                            if ring_idx == r + 1:
+                                new_int = cls.offset_segment_in_curve(int_ring, segment_idx, distance, mode)
+                                new_poly.addInteriorRing(new_int if new_int else int_ring.clone())
+                            else:
+                                new_poly.addInteriorRing(int_ring.clone())
+                        new_multi.addGeometry(new_poly)
+                    else:
+                        new_multi.addGeometry(poly.clone())
+
+                return QgsGeometry(new_multi)
+
+        return None
+
     # Alias for backwards compatibility
     batch_process_geometry = batch_apply_geometry
 

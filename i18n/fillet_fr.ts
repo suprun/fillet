@@ -358,5 +358,45 @@
             <source>Кут:</source>
             <translation>Angle :</translation>
         </message>
+        <message>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>Décalage d'arête CAD (Edge Offset)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Outil CAD interactif pour le décalage parallèle d'un segment de polygone ou de polyligne</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть ребро (оберіть відрізок)</source>
+            <translation>1. Spécifier l'arête (sélectionner le segment)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
+            <translation>2. Spécifier le décalage ou cliquer pour confirmer</translation>
+        </message>
+        <message>
+            <source>Режим зсуву:</source>
+            <translation>Mode de décalage :</translation>
+        </message>
+        <message>
+            <source>Подовження (Extend)</source>
+            <translation>Prolonger (Extend)</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Décrochement (Step)</translation>
+        </message>
+        <message>
+            <source>Зсув ребра</source>
+            <translation>Décalage d'arête</translation>
+        </message>
+        <message>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Verrouiller la distance / calcul libre</translation>
+        </message>
+        <message>
+            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
+            <translation>Créer une nouvelle entité avec l'arête décalée au lieu de modifier l'original</translation>
+        </message>
     </context>
 </TS>

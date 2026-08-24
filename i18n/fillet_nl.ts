@@ -358,5 +358,45 @@
             <source>Кут:</source>
             <translation>Hoek:</translation>
         </message>
+        <message>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>CAD Randverschuiving (Edge Offset)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Interactieve CAD-tool voor parallelle verschuiving van een segment van een polygoon of polylijn</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть ребро (оберіть відрізок)</source>
+            <translation>1. Rand opgeven (selecteer segment)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
+            <translation>2. Verschuiving opgeven of klikken om te bevestigen</translation>
+        </message>
+        <message>
+            <source>Режим зсуву:</source>
+            <translation>Verschuivingsmodus:</translation>
+        </message>
+        <message>
+            <source>Подовження (Extend)</source>
+            <translation>Verlengen (Extend)</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Trede (Step)</translation>
+        </message>
+        <message>
+            <source>Зсув ребра</source>
+            <translation>Randverschuiving</translation>
+        </message>
+        <message>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Afstand vergrendelen / vrije berekening</translation>
+        </message>
+        <message>
+            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
+            <translation>Maak een nieuw object met verschoven rand in plaats van het origineel te wijzigen</translation>
+        </message>
     </context>
 </TS>

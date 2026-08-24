@@ -358,5 +358,45 @@
             <source>Кут:</source>
             <translation>角度:</translation>
         </message>
+        <message>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>CAD 边平行偏移 (Edge Offset)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>用于多边形或折线线段平行偏移的交互式 CAD 工具</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть ребро (оберіть відрізок)</source>
+            <translation>1. 指定边（选择线段）</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
+            <translation>2. 指定偏移量或点击以确认</translation>
+        </message>
+        <message>
+            <source>Режим зсуву:</source>
+            <translation>偏移模式：</translation>
+        </message>
+        <message>
+            <source>Подовження (Extend)</source>
+            <translation>延伸 (Extend)</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>阶梯 (Step)</translation>
+        </message>
+        <message>
+            <source>Зсув ребра</source>
+            <translation>边平行偏移</translation>
+        </message>
+        <message>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>锁定距离 / 自由计算</translation>
+        </message>
+        <message>
+            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
+            <translation>创建包含偏移边的新要素而不是修改原始要素</translation>
+        </message>
     </context>
 </TS>

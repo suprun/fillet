@@ -358,5 +358,45 @@
             <source>Кут:</source>
             <translation>Szög:</translation>
         </message>
+        <message>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>CAD Éleltolás (Edge Offset)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Interaktív CAD eszköz sokszög- vagy vonallánc-szakasz párhuzamos eltolásához</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть ребро (оберіть відрізок)</source>
+            <translation>1. Él megadása (szakasz kijelölése)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
+            <translation>2. Eltolás megadása vagy kattintás a megerősítéshez</translation>
+        </message>
+        <message>
+            <source>Режим зсуву:</source>
+            <translation>Eltolási mód:</translation>
+        </message>
+        <message>
+            <source>Подовження (Extend)</source>
+            <translation>Meghosszabbítás (Extend)</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Lépcső (Step)</translation>
+        </message>
+        <message>
+            <source>Зсув ребра</source>
+            <translation>Éleltolás</translation>
+        </message>
+        <message>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Távolság zárolása / szabad számítás</translation>
+        </message>
+        <message>
+            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
+            <translation>Új elem létrehozása az eltolt éllel az eredeti módosítása helyett</translation>
+        </message>
     </context>
 </TS>

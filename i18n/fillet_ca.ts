@@ -358,5 +358,45 @@
             <source>Кут:</source>
             <translation>Angle:</translation>
         </message>
+        <message>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>Desplaçament de vora CAD (Edge Offset)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Eina CAD interactiva per al desplaçament paral·lel d'un segment de polígon o polilínia</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть ребро (оберіть відрізок)</source>
+            <translation>1. Especifiqueu la vora (seleccioneu el segment)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
+            <translation>2. Especifiqueu el desplaçament o feu clic per confirmar</translation>
+        </message>
+        <message>
+            <source>Режим зсуву:</source>
+            <translation>Mode de desplaçament:</translation>
+        </message>
+        <message>
+            <source>Подовження (Extend)</source>
+            <translation>Extendre (Extend)</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Esglaó (Step)</translation>
+        </message>
+        <message>
+            <source>Зсув ребра</source>
+            <translation>Desplaçament de vora</translation>
+        </message>
+        <message>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Bloqueja la distància / càlcul lliure</translation>
+        </message>
+        <message>
+            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
+            <translation>Crea un element nou amb la vora desplaçada en lloc de modificar l'original</translation>
+        </message>
     </context>
 </TS>

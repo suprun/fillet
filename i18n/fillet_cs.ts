@@ -358,5 +358,45 @@
             <source>Кут:</source>
             <translation>Úhel:</translation>
         </message>
+        <message>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>CAD Odsazení hrany (Edge Offset)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Interaktivní CAD nástroj pro paralelní odsazení segmentu polygonu nebo křivky</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть ребро (оберіть відрізок)</source>
+            <translation>1. Určete hranu (vyberte segment)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
+            <translation>2. Určete odsazení nebo klikněte pro potvrzení</translation>
+        </message>
+        <message>
+            <source>Режим зсуву:</source>
+            <translation>Režim odsazení:</translation>
+        </message>
+        <message>
+            <source>Подовження (Extend)</source>
+            <translation>Prodloužit (Extend)</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Schod (Step)</translation>
+        </message>
+        <message>
+            <source>Зсув ребра</source>
+            <translation>Odsazení hrany</translation>
+        </message>
+        <message>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Uzamknout vzdálenost / volný výpočet</translation>
+        </message>
+        <message>
+            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
+            <translation>Vytvořit nový prvek s posunutou hranou místo úpravy původního</translation>
+        </message>
     </context>
 </TS>

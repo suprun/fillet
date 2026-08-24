@@ -358,5 +358,45 @@
             <source>Кут:</source>
             <translation>Ángulo:</translation>
         </message>
+        <message>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>Desprazamento de bordo CAD (Edge Offset)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Ferramenta CAD interactiva para o desprazamento paralelo dun segmento de polígono ou poliliña</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть ребро (оберіть відрізок)</source>
+            <translation>1. Especificar o bordo (seleccionar o segmento)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
+            <translation>2. Especificar o desprazamento ou premer para confirmar</translation>
+        </message>
+        <message>
+            <source>Режим зсуву:</source>
+            <translation>Modo de desprazamento:</translation>
+        </message>
+        <message>
+            <source>Подовження (Extend)</source>
+            <translation>Estender (Extend)</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Esgrazo (Step)</translation>
+        </message>
+        <message>
+            <source>Зсув ребра</source>
+            <translation>Desprazamento de bordo</translation>
+        </message>
+        <message>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Bloquear a distancia / cálculo libre</translation>
+        </message>
+        <message>
+            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
+            <translation>Crear un novo elemento co bordo desprazado en vez de modificar o orixinal</translation>
+        </message>
     </context>
 </TS>

@@ -358,5 +358,45 @@
             <source>Кут:</source>
             <translation>Ъгъл:</translation>
         </message>
+        <message>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>CAD Отместване на ръб (Edge Offset)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Интерактивен CAD инструмент за успоредно отместване на сегмент от полигон или полилиния</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть ребро (оберіть відрізок)</source>
+            <translation>1. Посочете ръб (изберете сегмент)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
+            <translation>2. Посочете отместване или щракнете за потвърждение</translation>
+        </message>
+        <message>
+            <source>Режим зсуву:</source>
+            <translation>Режим на отместване:</translation>
+        </message>
+        <message>
+            <source>Подовження (Extend)</source>
+            <translation>Удължаване (Extend)</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Стъпало (Step)</translation>
+        </message>
+        <message>
+            <source>Зсув ребра</source>
+            <translation>Отместване на ръб</translation>
+        </message>
+        <message>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Заключване на разстоянието / свободно изчисление</translation>
+        </message>
+        <message>
+            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
+            <translation>Създаване на нов обект с отместен ръб вместо модифициране на оригиналния</translation>
+        </message>
     </context>
 </TS>

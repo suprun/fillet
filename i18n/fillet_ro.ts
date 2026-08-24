@@ -358,5 +358,45 @@
             <source>Кут:</source>
             <translation>Unghi:</translation>
         </message>
+        <message>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>Decalare margine CAD (Edge Offset)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Instrument CAD interactiv pentru decalarea paralelă a unui segment de poligon sau polilinie</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть ребро (оберіть відрізок)</source>
+            <translation>1. Specificați marginea (selectați segmentul)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
+            <translation>2. Specificați decalajul sau faceți clic pentru a confirma</translation>
+        </message>
+        <message>
+            <source>Режим зсуву:</source>
+            <translation>Mod decalare:</translation>
+        </message>
+        <message>
+            <source>Подовження (Extend)</source>
+            <translation>Extindere (Extend)</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Treaptă (Step)</translation>
+        </message>
+        <message>
+            <source>Зсув ребра</source>
+            <translation>Decalare margine</translation>
+        </message>
+        <message>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Blocare distanță / calcul liber</translation>
+        </message>
+        <message>
+            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
+            <translation>Creați o nouă entitate cu marginea decalată în loc de a o modifica pe cea originală</translation>
+        </message>
     </context>
 </TS>

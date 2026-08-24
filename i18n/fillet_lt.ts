@@ -358,5 +358,45 @@
             <source>Кут:</source>
             <translation>Kampas:</translation>
         </message>
+        <message>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>CAD Kraštinės poslinkis (Edge Offset)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Interaktyvus CAD įrankis poligono ar polilinijos segmento lygiagrečiam poslinkiui</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть ребро (оберіть відрізок)</source>
+            <translation>1. Nurodykite kraštinę (pasirinkite segmentą)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
+            <translation>2. Nurodykite poslinkį arba spustelėkite patvirtinimui</translation>
+        </message>
+        <message>
+            <source>Режим зсуву:</source>
+            <translation>Poslinkio režimas:</translation>
+        </message>
+        <message>
+            <source>Подовження (Extend)</source>
+            <translation>Pratęsti (Extend)</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Pakopa (Step)</translation>
+        </message>
+        <message>
+            <source>Зсув ребра</source>
+            <translation>Kraštinės poslinkis</translation>
+        </message>
+        <message>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Užrakinti atstumą / laisvas skaičiavimas</translation>
+        </message>
+        <message>
+            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
+            <translation>Sukurti naują objektą su pastumta kraštine vietoj originalo modifikavimo</translation>
+        </message>
     </context>
 </TS>

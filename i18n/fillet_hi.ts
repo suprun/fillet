@@ -358,5 +358,45 @@
             <source>Кут:</source>
             <translation>कोण:</translation>
         </message>
+        <message>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>CAD किनारा ऑफ़सेट (Edge Offset)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>बहुभुज या पॉलीलाइन खंड के समानांतर ऑफ़सेट के लिए इंटरैक्टिव CAD उपकरण</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть ребро (оберіть відрізок)</source>
+            <translation>1. किनारा निर्दिष्ट करें (खंड चुनें)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
+            <translation>2. ऑफ़सेट निर्दिष्ट करें या पुष्टि करने के लिए क्लिक करें</translation>
+        </message>
+        <message>
+            <source>Режим зсуву:</source>
+            <translation>ऑफ़सेट मोड:</translation>
+        </message>
+        <message>
+            <source>Подовження (Extend)</source>
+            <translation>विस्तार (Extend)</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>चरण (Step)</translation>
+        </message>
+        <message>
+            <source>Зсув ребра</source>
+            <translation>किनारा ऑफ़सेट</translation>
+        </message>
+        <message>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>दूरी लॉक करें / निःशुल्क गणना</translation>
+        </message>
+        <message>
+            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
+            <translation>मूल को संशोधित करने के बजाय स्थानांतरित किनारे के साथ एक नई सुविधा बनाएं</translation>
+        </message>
     </context>
 </TS>

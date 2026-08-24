@@ -358,5 +358,45 @@
             <source>Кут:</source>
             <translation>Kulma:</translation>
         </message>
+        <message>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>CAD Reunan siirtymä (Edge Offset)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Interaktiivinen CAD-työkalu monikulmion tai murtoviivan segmentin rinnakkaissiirtoon</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть ребро (оберіть відрізок)</source>
+            <translation>1. Määritä reuna (valitse segmentti)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
+            <translation>2. Määritä siirtymä tai napsauta vahvistaaksesi</translation>
+        </message>
+        <message>
+            <source>Режим зсуву:</source>
+            <translation>Siirtymätila:</translation>
+        </message>
+        <message>
+            <source>Подовження (Extend)</source>
+            <translation>Pidennä (Extend)</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Porras (Step)</translation>
+        </message>
+        <message>
+            <source>Зсув ребра</source>
+            <translation>Reunan siirtymä</translation>
+        </message>
+        <message>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Lukitse etäisyys / vapaa laskenta</translation>
+        </message>
+        <message>
+            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
+            <translation>Luo uusi kohde siirretyllä reunalla alkuperäisen muokkaamisen sijaan</translation>
+        </message>
     </context>
 </TS>

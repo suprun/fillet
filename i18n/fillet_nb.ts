@@ -358,5 +358,45 @@
             <source>Кут:</source>
             <translation>Vinkel:</translation>
         </message>
+        <message>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>CAD Kantforskyvning (Edge Offset)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Interaktivt CAD-verktøy for parallell forskyvning av et polygon- eller polylinjesegment</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть ребро (оберіть відрізок)</source>
+            <translation>1. Angi kant (velg segment)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
+            <translation>2. Angi forskyvning eller klikk for å bekrefte</translation>
+        </message>
+        <message>
+            <source>Режим зсуву:</source>
+            <translation>Forskyvningsmodus:</translation>
+        </message>
+        <message>
+            <source>Подовження (Extend)</source>
+            <translation>Forleng (Extend)</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Trinn (Step)</translation>
+        </message>
+        <message>
+            <source>Зсув ребра</source>
+            <translation>Kantforskyvning</translation>
+        </message>
+        <message>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Lås avstand / fri beregning</translation>
+        </message>
+        <message>
+            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
+            <translation>Opprett et nytt objekt med forskjøvet kant i stedet for å endre originalen</translation>
+        </message>
     </context>
 </TS>

@@ -358,5 +358,45 @@
             <source>Кут:</source>
             <translation>Leņķis:</translation>
         </message>
+        <message>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>CAD Malas nobīde (Edge Offset)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Interaktīvs CAD rīks poligona vai polilīnijas segmenta paralēlai nobīdei</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть ребро (оберіть відрізок)</source>
+            <translation>1. Norādiet malu (izvēlieties segmentu)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
+            <translation>2. Norādiet nobīdi vai noklikšķiniet, lai apstiprinātu</translation>
+        </message>
+        <message>
+            <source>Режим зсуву:</source>
+            <translation>Nobīdes režīms:</translation>
+        </message>
+        <message>
+            <source>Подовження (Extend)</source>
+            <translation>Pagarināt (Extend)</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Pakāpiens (Step)</translation>
+        </message>
+        <message>
+            <source>Зсув ребра</source>
+            <translation>Malas nobīde</translation>
+        </message>
+        <message>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Bloķēt attālumu / brīvs aprēķins</translation>
+        </message>
+        <message>
+            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
+            <translation>Izveidot jaunu objektu ar nobīdītu malu, nevis modificēt oriģinālu</translation>
+        </message>
     </context>
 </TS>
