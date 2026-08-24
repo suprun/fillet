@@ -230,6 +230,48 @@ class TestCADRotateTool(unittest.TestCase):
         self.assertIsNone(tool.pivot_point)
         self.assertFalse(widget.isVisible())
 
+    def test_rotate_baseline_rendering(self):
+        from qgis.gui import QgsMapMouseEvent
+        from qgis.PyQt.QtCore import QEvent, QPointF, Qt
+        from qgis.PyQt.QtGui import QMouseEvent
+
+        layer = QgsVectorLayer("Polygon?crs=EPSG:3857", "temp_poly", "memory")
+        feat = QgsFeature()
+        geom = QgsGeometry.fromPolygonXY([[QgsPointXY(0, 0), QgsPointXY(10, 0), QgsPointXY(10, 10), QgsPointXY(0, 10)]])
+        feat.setGeometry(geom)
+        layer.dataProvider().addFeatures([feat])
+        layer.startEditing()
+        layer.selectByIds([1])
+        self.canvas.setCurrentLayer(layer)
+
+        widget = RotationCanvasWidget(self.canvas)
+        tool = RotateMapTool(self.canvas, widget)
+        tool.activate()
+
+        # Step 1: Set Pivot at (0, 0)
+        tool.pivot_point = QgsPointXY(0, 0)
+        tool.state = RotateMapTool.STATE_SET_REFERENCE
+
+        evt_move = getattr(QEvent.Type, "MouseMove", getattr(QEvent, "MouseMove", 5))
+        no_btn = getattr(Qt.MouseButton, "NoButton", getattr(Qt, "NoButton", 0))
+        no_mod = getattr(Qt.KeyboardModifier, "NoModifier", getattr(Qt, "NoModifier", 0))
+
+        # Move mouse to (100, 100) using QPointF for Qt5/Qt6 compatibility
+        try:
+            native_evt = QMouseEvent(evt_move, QPointF(100.0, 100.0), no_btn, no_btn, no_mod)
+        except Exception:
+            # Fallback for Qt6 positional signatures
+            native_evt = QMouseEvent(evt_move, QPointF(100.0, 100.0), QPointF(100.0, 100.0), no_btn, no_btn, no_mod)
+
+        move_evt = QgsMapMouseEvent(self.canvas, native_evt)
+        tool.canvasMoveEvent(move_evt)
+
+        # Baseline rubberband should be active with 2 vertices and not inf
+        self.assertEqual(tool.baseline_rubberband.numberOfVertices(), 2)
+        p0 = tool.baseline_rubberband.getPoint(0, 0)
+        self.assertFalse(math.isinf(p0.x()))
+        self.assertFalse(math.isinf(p0.y()))
+
 
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(TestCADRotateTool)

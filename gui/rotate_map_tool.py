@@ -200,23 +200,45 @@ class RotateMapTool(QgsMapToolEdit):
 
         elif self.state == self.STATE_SET_REFERENCE:
             if self.pivot_point:
-                # Show dynamic baseline from pivot to current cursor point
+                # Show dynamic baseline from pivot to current cursor point (using canvas CRS, layer=None)
                 self.baseline_rubberband.setToGeometry(
                     QgsGeometry.fromPolylineXY([self.pivot_point, map_pt]),
-                    layer,
+                    None,
                 )
+
+                if self.widget.is_angle_locked:
+                    dx = map_pt.x() - self.pivot_point.x()
+                    dy = map_pt.y() - self.pivot_point.y()
+                    dist = math.hypot(dx, dy)
+                    if dist > 1e-6:
+                        base_rad = math.atan2(dy, dx)
+                        rot_rad = base_rad + math.radians(self.widget.angle)
+                        target_pt = QgsPointXY(
+                            self.pivot_point.x() + dist * math.cos(rot_rad),
+                            self.pivot_point.y() + dist * math.sin(rot_rad),
+                        )
+                        self.target_ray_rubberband.setToGeometry(
+                            QgsGeometry.fromPolylineXY([self.pivot_point, target_pt]),
+                            None,
+                        )
+                        self._update_preview(self.widget.angle)
+                        self._update_angle_arc(target_pt, self.widget.angle, base_point=map_pt)
+                else:
+                    self.target_ray_rubberband.reset(QgsWkbTypes.GeometryType.LineGeometry)
+                    self.angle_arc_rubberband.reset(QgsWkbTypes.GeometryType.LineGeometry)
+                    self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
 
         elif self.state == self.STATE_ROTATING:
             if self.pivot_point and self.ref_point:
-                # Show baseline ray
+                # Show baseline ray (using canvas CRS, layer=None)
                 self.baseline_rubberband.setToGeometry(
                     QgsGeometry.fromPolylineXY([self.pivot_point, self.ref_point]),
-                    layer,
+                    None,
                 )
-                # Show target ray
+                # Show target ray (using canvas CRS, layer=None)
                 self.target_ray_rubberband.setToGeometry(
                     QgsGeometry.fromPolylineXY([self.pivot_point, map_pt]),
-                    layer,
+                    None,
                 )
 
                 # Calculate rotation angle
@@ -272,7 +294,7 @@ class RotateMapTool(QgsMapToolEdit):
 
         if self.state == self.STATE_SET_PIVOT:
             self.pivot_point = map_pt
-            self.pivot_marker.setToGeometry(QgsGeometry.fromPointXY(self.pivot_point), layer)
+            self.pivot_marker.setToGeometry(QgsGeometry.fromPointXY(self.pivot_point), None)
             self.state = self.STATE_SET_REFERENCE
             self.widget.set_step(RotationCanvasWidget.STEP_REFERENCE)
 
@@ -281,11 +303,14 @@ class RotateMapTool(QgsMapToolEdit):
                 self.ref_point = map_pt
                 self.baseline_rubberband.setToGeometry(
                     QgsGeometry.fromPolylineXY([self.pivot_point, self.ref_point]),
-                    layer,
+                    None,
                 )
-                self.state = self.STATE_ROTATING
-                self.widget.set_step(RotationCanvasWidget.STEP_ROTATING)
-                self._update_preview(self.current_angle)
+                if self.widget.is_angle_locked:
+                    self.commit_rotation()
+                else:
+                    self.state = self.STATE_ROTATING
+                    self.widget.set_step(RotationCanvasWidget.STEP_ROTATING)
+                    self._update_preview(self.current_angle)
 
         elif self.state == self.STATE_ROTATING:
             self.commit_rotation()
@@ -341,20 +366,21 @@ class RotateMapTool(QgsMapToolEdit):
         else:
             self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
 
-    def _update_angle_arc(self, target_pt: QgsPointXY, angle_deg: float):
+    def _update_angle_arc(self, target_pt: QgsPointXY, angle_deg: float, base_point: Optional[QgsPointXY] = None):
         """Draws an arc from reference direction to target direction."""
-        if not self.pivot_point or not self.ref_point:
+        ref_pt = base_point or self.ref_point
+        if not self.pivot_point or not ref_pt:
             return
 
         r = min(
-            GeometryEngine.distance(self.pivot_point, self.ref_point),
+            GeometryEngine.distance(self.pivot_point, ref_pt),
             GeometryEngine.distance(self.pivot_point, target_pt),
         )
         if r < 1e-4:
             self.angle_arc_rubberband.reset(QgsWkbTypes.GeometryType.LineGeometry)
             return
 
-        base_angle_rad = math.atan2(self.ref_point.y() - self.pivot_point.y(), self.ref_point.x() - self.pivot_point.x())
+        base_angle_rad = math.atan2(ref_pt.y() - self.pivot_point.y(), ref_pt.x() - self.pivot_point.x())
         delta_rad = math.radians(angle_deg)
 
         num_segments = max(4, int(abs(angle_deg) / 5.0))
