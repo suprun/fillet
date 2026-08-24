@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
-  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.18" plugin_id="fillet">
+  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.19" plugin_id="fillet">
     <description>Interactive Fillet, Chamfer &amp; Corner Restoration tools for QGIS with instant Batch Fillet/Chamfer for selected features.</description>
     <about>Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), and Two-Edge Corner Restoration (Unfillet / Unchamfer) map tools for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.</about>
-    <version>1.0.0.18</version>
+    <version>1.0.0.19</version>
     <qgis_minimum_version>3.16</qgis_minimum_version>
     <qgis_maximum_version>4.99</qgis_maximum_version>
     <file_name>fillet.zip</file_name>
@@ -14,7 +14,10 @@
     <experimental>False</experimental>
     <deprecated>False</deprecated>
     <tags>cad, editing, fillet, chamfer, unfillet, corner, restore, geometry, digitizing, curve, batch, merge, qgis4</tags>
-    <change_log>1.0.0.18:
+    <change_log>1.0.0.19:
+- Fixed critical multipart geometry incompatibility error on singlepart line layers by using QgsMergeAttributesDialog.
+- Added automatic feature deletion of the second line and robust undoStack tracking upon merge confirmation.
+1.0.0.18:
 - Guaranteed merged feature geometry application after confirming QGIS native Merge Selected Features dialog.
 - Added automatic clamping of fillet and chamfer to the physical line lengths to prevent overshoot on short segments.
 - Implemented full 2D cursor drag projection for Chamfer mode (supporting both synchronized linked and independent unlinked distances).

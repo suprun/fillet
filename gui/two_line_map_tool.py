@@ -484,13 +484,15 @@ class TwoLineMapTool(QgsMapToolEdit):
             layer.triggerRepaint()
             return
 
-        # Safe launch of QGIS native merge dialog
+        # Safe launch of QGIS native merge attributes dialog
         initial_fids = set(layer.allFeatureIds())
+        initial_undo_count = layer.undoStack().count() if layer.undoStack() else 0
         layer.selectByIds([fid1, fid2])
 
-        merge_action = self.iface.mainWindow().findChild(QAction, "mActionMergeFeatures")
+        # Prefer mActionMergeFeatureAttributes to prevent multipart errors on singlepart line layers
+        merge_action = self.iface.mainWindow().findChild(QAction, "mActionMergeFeatureAttributes")
         if not merge_action:
-            merge_action = self.iface.mainWindow().findChild(QAction, "mActionMergeFeatureAttributes")
+            merge_action = self.iface.mainWindow().findChild(QAction, "mActionMergeFeatures")
 
         if merge_action:
             # Execute QGIS native dialog
@@ -498,23 +500,37 @@ class TwoLineMapTool(QgsMapToolEdit):
 
             # Check if merge was confirmed by user (OK) or cancelled (Cancel)
             current_fids = set(layer.allFeatureIds())
+            current_undo_count = layer.undoStack().count() if layer.undoStack() else 0
             added_fids = current_fids - initial_fids
             selected_ids = layer.selectedFeatureIds()
 
-            if len(current_fids) < len(initial_fids) or added_fids or (fid2 not in current_fids and fid1 in current_fids):
-                # User confirmed OK: determine target feature ID
+            is_confirmed = (
+                current_undo_count > initial_undo_count
+                or len(current_fids) < len(initial_fids)
+                or bool(added_fids)
+                or (fid2 not in current_fids and fid1 in current_fids)
+            )
+
+            if is_confirmed:
+                # User confirmed OK: determine target feature ID and feature to delete
                 if added_fids:
                     target_id = list(added_fids)[0]
+                    delete_id = None
                 elif selected_ids and selected_ids[0] in current_fids:
                     target_id = selected_ids[0]
+                    delete_id = fid2 if target_id == fid1 else fid1
                 else:
                     target_id = fid1 if fid1 in current_fids else fid2
+                    delete_id = fid2 if target_id == fid1 else fid1
 
+                layer.beginEditCommand(self.tr("Скруглення / фаска двох ліній з об'єднанням"))
                 if target_id in current_fids:
-                    layer.beginEditCommand(self.tr("Оновлення геометрії з'єднання"))
                     layer.changeGeometry(target_id, new_geom)
-                    layer.endEditCommand()
-                    layer.triggerRepaint()
+                if delete_id and delete_id in current_fids:
+                    layer.deleteFeature(delete_id)
+                layer.endEditCommand()
+                layer.removeSelection()
+                layer.triggerRepaint()
             else:
                 # User cancelled (Cancel): do not modify geometry, layer remains clean
                 layer.removeSelection()
@@ -524,6 +540,7 @@ class TwoLineMapTool(QgsMapToolEdit):
             layer.changeGeometry(fid1, new_geom)
             layer.deleteFeature(fid2)
             layer.endEditCommand()
+            layer.removeSelection()
             layer.triggerRepaint()
 
     def _clear_preview(self):
