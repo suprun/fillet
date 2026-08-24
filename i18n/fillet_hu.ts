@@ -55,12 +55,28 @@
             <translation>{} elem feldolgozva.</translation>
         </message>
         <message>
-            <source>CAD Обертання (Rotate)</source>
-            <translation>CAD Forgatás</translation>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Adja meg az első sarokélt</translation>
         </message>
         <message>
-            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
-            <translation>Interaktív CAD geometriai forgatóeszköz forgáspont-kijelöléssel</translation>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Adja meg a szomszédos második élt</translation>
+        </message>
+        <message>
+            <source>ПКМ / Esc — скасувати / крок назад</source>
+            <translation>Jobb gomb / Esc — Mégse / Visszalépés</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Adja meg a forgási középpontot (Pivot)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Adja meg a referencia alapvonalat</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Adja meg a cél forgási szöget</translation>
         </message>
     </context>
     <context>
@@ -182,52 +198,6 @@
         <message>
             <source>Відновлення кута</source>
             <translation>Sarok visszaállítása</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotationCanvasWidget</name>
-        <message>
-            <source>1. Вкажіть центр обертання</source>
-            <translation>1. Forgáspont megadása</translation>
-        </message>
-        <message>
-            <source>2. Вкажіть базовий орієнтир</source>
-            <translation>2. Referencia-irány megadása</translation>
-        </message>
-        <message>
-            <source>3. Вкажіть цільовий кут</source>
-            <translation>3. Forgatási szög megadása</translation>
-        </message>
-        <message>
-            <source>Кут (Angle):</source>
-            <translation>Szög:</translation>
-        </message>
-        <message>
-            <source>Блокувати кут / інтерактивне обертання</source>
-            <translation>Szög zárolása / interaktív forgatás</translation>
-        </message>
-        <message>
-            <source>Крок кута:</source>
-            <translation>Igazítási lépésköz:</translation>
-        </message>
-        <message>
-            <source>Вільний (Free)</source>
-            <translation>Szabad</translation>
-        </message>
-        <message>
-            <source>Зберегти копію (Copy)</source>
-            <translation>Másolat mentése</translation>
-        </message>
-        <message>
-            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
-            <translation>Elforgatott másolatot készít a kijelölt elemekről, megőrizve az eredetit</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotateMapTool</name>
-        <message>
-            <source>CAD Rotate Feature(s)</source>
-            <translation>CAD Elemek elforgatása</translation>
         </message>
     </context>
 </TS>

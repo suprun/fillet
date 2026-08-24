@@ -9,7 +9,7 @@ from typing import Optional
 
 from qgis.core import QgsSettings
 from qgis.gui import QgsDoubleSpinBox, QgsMapCanvas
-from qgis.PyQt.QtCore import QEvent, QPoint, QRegularExpression, QSize, Qt, QTimer, pyqtSignal
+from qgis.PyQt.QtCore import QCoreApplication, QEvent, QPoint, QRegularExpression, QSize, Qt, QTimer, pyqtSignal
 from qgis.PyQt.QtGui import (
     QColor,
     QCursor,
@@ -46,6 +46,9 @@ class RotationCanvasWidget(QFrame):
     STEP_PIVOT = 0
     STEP_REFERENCE = 1
     STEP_ROTATING = 2
+
+    def tr(self, message: str) -> str:
+        return QCoreApplication.translate("FilletPlugin", message)
 
     def __init__(self, canvas: QgsMapCanvas):
         super().__init__(canvas)

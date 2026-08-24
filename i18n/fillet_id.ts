@@ -55,12 +55,28 @@
             <translation>Diproses {} fitur.</translation>
         </message>
         <message>
-            <source>CAD Обертання (Rotate)</source>
-            <translation>CAD Putar</translation>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Tentukan tepi sudut pertama</translation>
         </message>
         <message>
-            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
-            <translation>Alat rotasi geometri CAD interaktif dengan pemilihan titik poros</translation>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Tentukan tepi kedua yang berdekatan</translation>
+        </message>
+        <message>
+            <source>ПКМ / Esc — скасувати / крок назад</source>
+            <translation>Klik kanan / Esc — batal / langkah mundur</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Tentukan pusat rotasi (Pivot)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Tentukan garis dasar referensi</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Tentukan sudut rotasi target</translation>
         </message>
     </context>
     <context>
@@ -182,52 +198,6 @@
         <message>
             <source>Відновлення кута</source>
             <translation>Pulihkan Sudut</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotationCanvasWidget</name>
-        <message>
-            <source>1. Вкажіть центр обертання</source>
-            <translation>1. Tentukan titik poros</translation>
-        </message>
-        <message>
-            <source>2. Вкажіть базовий орієнтир</source>
-            <translation>2. Tentukan arah referensi</translation>
-        </message>
-        <message>
-            <source>3. Вкажіть цільовий кут</source>
-            <translation>3. Tentukan sudut rotasi</translation>
-        </message>
-        <message>
-            <source>Кут (Angle):</source>
-            <translation>Sudut:</translation>
-        </message>
-        <message>
-            <source>Блокувати кут / інтерактивне обертання</source>
-            <translation>Kunci sudut / rotasi interaktif</translation>
-        </message>
-        <message>
-            <source>Крок кута:</source>
-            <translation>Langkah snap:</translation>
-        </message>
-        <message>
-            <source>Вільний (Free)</source>
-            <translation>Bebas</translation>
-        </message>
-        <message>
-            <source>Зберегти копію (Copy)</source>
-            <translation>Simpan salinan</translation>
-        </message>
-        <message>
-            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
-            <translation>Membuat salinan fitur terpilih yang diputar, mempertahankan aslinya</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotateMapTool</name>
-        <message>
-            <source>CAD Rotate Feature(s)</source>
-            <translation>CAD Putar Fitur</translation>
         </message>
     </context>
 </TS>

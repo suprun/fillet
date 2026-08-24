@@ -55,12 +55,28 @@
             <translation>تمت معالجة {} معلم (معالم).</translation>
         </message>
         <message>
-            <source>CAD Обертання (Rotate)</source>
-            <translation>CAD تدوير</translation>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. حدد حافة الزاوية الأولى</translation>
         </message>
         <message>
-            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
-            <translation>أداة تدوير هندسي تفاعلية CAD مع تحديد نقطة الارتكاز</translation>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. حدد الحافة المجاورة الثانية</translation>
+        </message>
+        <message>
+            <source>ПКМ / Esc — скасувати / крок назад</source>
+            <translation>زر الفأرة الأيمن / Esc — إلغاء / خطوة للخلف</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. حدد مركز الدوران (نقطة الارتكاز)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. حدد خط الأساس المرجعي</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. حدد زاوية الدوران المستهدفة</translation>
         </message>
     </context>
     <context>
@@ -182,52 +198,6 @@
         <message>
             <source>Відновлення кута</source>
             <translation>استعادة الزاوية</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotationCanvasWidget</name>
-        <message>
-            <source>1. Вкажіть центр обертання</source>
-            <translation>1. حدد نقطة الارتكاز</translation>
-        </message>
-        <message>
-            <source>2. Вкажіть базовий орієнтир</source>
-            <translation>2. حدد اتجاه المرجع</translation>
-        </message>
-        <message>
-            <source>3. Вкажіть цільовий кут</source>
-            <translation>3. حدد زاوية التدوير</translation>
-        </message>
-        <message>
-            <source>Кут (Angle):</source>
-            <translation>الزاوية:</translation>
-        </message>
-        <message>
-            <source>Блокувати кут / інтерактивне обертання</source>
-            <translation>قفل الزاوية / التدوير التفاعلي</translation>
-        </message>
-        <message>
-            <source>Крок кута:</source>
-            <translation>خطوة الانجذاب:</translation>
-        </message>
-        <message>
-            <source>Вільний (Free)</source>
-            <translation>حر</translation>
-        </message>
-        <message>
-            <source>Зберегти копію (Copy)</source>
-            <translation>حفظ نسخة</translation>
-        </message>
-        <message>
-            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
-            <translation>ينشئ نسخة مدورة من المعالم المحددة مع الحفاظ على الأصل</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotateMapTool</name>
-        <message>
-            <source>CAD Rotate Feature(s)</source>
-            <translation>CAD تدوير المعالم</translation>
         </message>
     </context>
 </TS>

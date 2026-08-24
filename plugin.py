@@ -27,6 +27,7 @@ try:
     from .core.geometry_engine import GeometryEngine
     from .gui.canvas_widget import FilletCanvasWidget
     from .gui.map_tool import FilletMapTool
+    from .gui.restore_canvas_widget import RestoreCanvasWidget
     from .gui.restore_map_tool import RestoreMapTool
     from .gui.rotate_map_tool import RotateMapTool
     from .gui.rotation_canvas_widget import RotationCanvasWidget
@@ -35,6 +36,7 @@ except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
     from gui.canvas_widget import FilletCanvasWidget
     from gui.map_tool import FilletMapTool
+    from gui.restore_canvas_widget import RestoreCanvasWidget
     from gui.restore_map_tool import RestoreMapTool
     from gui.rotate_map_tool import RotateMapTool
     from gui.rotation_canvas_widget import RotationCanvasWidget
@@ -61,6 +63,7 @@ class FilletPlugin:
         self.restore_map_tool: Optional[RestoreMapTool] = None
         self.rotate_map_tool: Optional[RotateMapTool] = None
         self.canvas_widget: Optional[FilletCanvasWidget] = None
+        self.restore_canvas_widget: Optional[RestoreCanvasWidget] = None
         self.rotation_widget: Optional[RotationCanvasWidget] = None
         self.dock_widget: Optional[QDockWidget] = None
         self.settings_widget: Optional[FilletSettingsWidget] = None
@@ -129,7 +132,9 @@ class FilletPlugin:
         self.dock_widget.visibilityChanged.connect(self.on_dock_visibility_changed)
 
         # 3. Create interactive Corner Restore (Unfillet/Unchamfer) CAD Map Tool (available in QGIS 3.x and QGIS 4.x)
-        self.restore_map_tool = RestoreMapTool(self.canvas)
+        self.restore_canvas_widget = RestoreCanvasWidget(self.canvas)
+        self.restore_canvas_widget.hide()
+        self.restore_map_tool = RestoreMapTool(self.canvas, self.restore_canvas_widget)
 
         restore_icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionRestoreCorners.svg")
         self.restore_action = QAction(
@@ -389,6 +394,16 @@ class FilletPlugin:
             self.canvas_widget.deleteLater()
             self.canvas_widget = None
 
+        if self.restore_canvas_widget:
+            try:
+                self.canvas.removeEventFilter(self.restore_canvas_widget)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            self.restore_canvas_widget.hide()
+            self.restore_canvas_widget.setParent(None)
+            self.restore_canvas_widget.deleteLater()
+            self.restore_canvas_widget = None
+
         if self.rotation_widget:
             try:
                 self.canvas.removeEventFilter(self.rotation_widget)
@@ -474,6 +489,8 @@ class FilletPlugin:
         if self.restore_action:
             is_restore_active = tool == self.restore_map_tool
             self.restore_action.setChecked(is_restore_active)
+            if not is_restore_active and self.restore_canvas_widget:
+                self.restore_canvas_widget.hide()
 
         if self.rotate_action:
             is_rotate_active = tool == self.rotate_map_tool
@@ -561,6 +578,8 @@ class FilletPlugin:
 
                 if self.restore_map_tool and self.canvas.mapTool() == self.restore_map_tool:
                     self.canvas.unsetMapTool(self.restore_map_tool)
+                    if self.restore_canvas_widget:
+                        self.restore_canvas_widget.hide()
                     if self.restore_action:
                         self.restore_action.setChecked(False)
 

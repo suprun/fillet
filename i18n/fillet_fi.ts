@@ -55,12 +55,28 @@
             <translation>Käsitelty {} kohdetta.</translation>
         </message>
         <message>
-            <source>CAD Обертання (Rotate)</source>
-            <translation>CAD Kierrä</translation>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Määritä ensimmäinen kulmasärmä</translation>
         </message>
         <message>
-            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
-            <translation>Interaktiivinen CAD-geometrioiden pyöritystyökalu kääntöpisteen valinnalla</translation>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Määritä viereinen toinen särmä</translation>
+        </message>
+        <message>
+            <source>ПКМ / Esc — скасувати / крок назад</source>
+            <translation>Oikea napsautus / Esc — peruuta / askel taaksepäin</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Määritä kiertokeskipiste</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Määritä viiteperusviiva</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Määritä tavoitekiertokulma</translation>
         </message>
     </context>
     <context>
@@ -182,52 +198,6 @@
         <message>
             <source>Відновлення кута</source>
             <translation>Palauta kulma</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotationCanvasWidget</name>
-        <message>
-            <source>1. Вкажіть центр обертання</source>
-            <translation>1. Määritä kääntöpiste</translation>
-        </message>
-        <message>
-            <source>2. Вкажіть базовий орієнтир</source>
-            <translation>2. Määritä viitesuunta</translation>
-        </message>
-        <message>
-            <source>3. Вкажіть цільовий кут</source>
-            <translation>3. Määritä pyörityskulma</translation>
-        </message>
-        <message>
-            <source>Кут (Angle):</source>
-            <translation>Kulma:</translation>
-        </message>
-        <message>
-            <source>Блокувати кут / інтерактивне обертання</source>
-            <translation>Lukitse kulma / interaktiivinen pyöritys</translation>
-        </message>
-        <message>
-            <source>Крок кута:</source>
-            <translation>Tartunnan askel:</translation>
-        </message>
-        <message>
-            <source>Вільний (Free)</source>
-            <translation>Vapaa</translation>
-        </message>
-        <message>
-            <source>Зберегти копію (Copy)</source>
-            <translation>Tallenna kopio</translation>
-        </message>
-        <message>
-            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
-            <translation>Luo valituista kohteista kierretyn kopion säilyttäen alkuperäisen</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotateMapTool</name>
-        <message>
-            <source>CAD Rotate Feature(s)</source>
-            <translation>CAD Kohteiden pyöritys</translation>
         </message>
     </context>
 </TS>

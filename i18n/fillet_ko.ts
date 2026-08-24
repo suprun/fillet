@@ -55,12 +55,28 @@
             <translation>{} 개 객체를 처리했습니다.</translation>
         </message>
         <message>
-            <source>CAD Обертання (Rotate)</source>
-            <translation>CAD 회전</translation>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. 첫 번째 모서리 가장자리 지정</translation>
         </message>
         <message>
-            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
-            <translation>회전 중심점 선택 기능이 있는 대화형 CAD 지오메트리 회전 도구</translation>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. 인접한 두 번째 가장자리 지정</translation>
+        </message>
+        <message>
+            <source>ПКМ / Esc — скасувати / крок назад</source>
+            <translation>우클릭 / Esc — 취소 / 뒤로 가기</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. 회전 중심 (피벗) 지정</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. 기준선 지정</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. 목표 회전 각도 지정</translation>
         </message>
     </context>
     <context>
@@ -182,52 +198,6 @@
         <message>
             <source>Відновлення кута</source>
             <translation>모서리 복원</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotationCanvasWidget</name>
-        <message>
-            <source>1. Вкажіть центр обертання</source>
-            <translation>1. 회전 중심점 지정</translation>
-        </message>
-        <message>
-            <source>2. Вкажіть базовий орієнтир</source>
-            <translation>2. 기준 방향 지정</translation>
-        </message>
-        <message>
-            <source>3. Вкажіть цільовий кут</source>
-            <translation>3. 회전 각도 지정</translation>
-        </message>
-        <message>
-            <source>Кут (Angle):</source>
-            <translation>각도:</translation>
-        </message>
-        <message>
-            <source>Блокувати кут / інтерактивне обертання</source>
-            <translation>각도 고정 / 대화형 회전</translation>
-        </message>
-        <message>
-            <source>Крок кута:</source>
-            <translation>스냅 단계:</translation>
-        </message>
-        <message>
-            <source>Вільний (Free)</source>
-            <translation>자유</translation>
-        </message>
-        <message>
-            <source>Зберегти копію (Copy)</source>
-            <translation>사본 유지</translation>
-        </message>
-        <message>
-            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
-            <translation>원본을 유지하면서 선택한 피처의 회전된 사본을 만듭니다.</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotateMapTool</name>
-        <message>
-            <source>CAD Rotate Feature(s)</source>
-            <translation>CAD 피처 회전</translation>
         </message>
     </context>
 </TS>

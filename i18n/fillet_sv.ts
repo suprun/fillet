@@ -55,12 +55,28 @@
             <translation>Bearbetade {} objekt.</translation>
         </message>
         <message>
-            <source>CAD Обертання (Rotate)</source>
-            <translation>CAD Rotera</translation>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Ange första hörnkant</translation>
         </message>
         <message>
-            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
-            <translation>Interaktivt CAD-verktyg för rotation av geometrier med val av vridpunkt</translation>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Ange angränsande andra kant</translation>
+        </message>
+        <message>
+            <source>ПКМ / Esc — скасувати / крок назад</source>
+            <translation>Högerklick / Esc — avbryt / steg tillbaka</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Ange rotationscentrum (Pivot)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Ange referensbaslinje</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Ange målrotationsvinkel</translation>
         </message>
     </context>
     <context>
@@ -182,52 +198,6 @@
         <message>
             <source>Відновлення кута</source>
             <translation>Återställ hörn</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotationCanvasWidget</name>
-        <message>
-            <source>1. Вкажіть центр обертання</source>
-            <translation>1. Ange vridpunkt</translation>
-        </message>
-        <message>
-            <source>2. Вкажіть базовий орієнтир</source>
-            <translation>2. Ange referensriktning</translation>
-        </message>
-        <message>
-            <source>3. Вкажіть цільовий кут</source>
-            <translation>3. Ange rotationsvinkel</translation>
-        </message>
-        <message>
-            <source>Кут (Angle):</source>
-            <translation>Vinkel:</translation>
-        </message>
-        <message>
-            <source>Блокувати кут / інтерактивне обертання</source>
-            <translation>Lås vinkel / interaktiv rotation</translation>
-        </message>
-        <message>
-            <source>Крок кута:</source>
-            <translation>Fäststeg:</translation>
-        </message>
-        <message>
-            <source>Вільний (Free)</source>
-            <translation>Fri</translation>
-        </message>
-        <message>
-            <source>Зберегти копію (Copy)</source>
-            <translation>Spara kopia</translation>
-        </message>
-        <message>
-            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
-            <translation>Skapar en roterad kopia av markerade objekt och behåller originalet</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotateMapTool</name>
-        <message>
-            <source>CAD Rotate Feature(s)</source>
-            <translation>CAD Rotera objekt</translation>
         </message>
     </context>
 </TS>

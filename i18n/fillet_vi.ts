@@ -55,12 +55,28 @@
             <translation>Đã xử lý {} đối tượng.</translation>
         </message>
         <message>
-            <source>CAD Обертання (Rotate)</source>
-            <translation>CAD Xoay</translation>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Chỉ định cạnh góc đầu tiên</translation>
         </message>
         <message>
-            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
-            <translation>Công cụ xoay hình học CAD tương tác với lựa chọn điểm trục xoay</translation>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Chỉ định cạnh liền kề thứ hai</translation>
+        </message>
+        <message>
+            <source>ПКМ / Esc — скасувати / крок назад</source>
+            <translation>Nhấp chuột phải / Esc — hủy / quay lại một bước</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Chỉ định tâm xoay (Điểm tựa)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Chỉ định đường cơ sở tham chiếu</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Chỉ định góc xoay mục tiêu</translation>
         </message>
     </context>
     <context>
@@ -182,52 +198,6 @@
         <message>
             <source>Відновлення кута</source>
             <translation>Khôi phục góc</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotationCanvasWidget</name>
-        <message>
-            <source>1. Вкажіть центр обертання</source>
-            <translation>1. Chỉ định điểm trục xoay</translation>
-        </message>
-        <message>
-            <source>2. Вкажіть базовий орієнтир</source>
-            <translation>2. Chỉ định hướng tham chiếu</translation>
-        </message>
-        <message>
-            <source>3. Вкажіть цільовий кут</source>
-            <translation>3. Chỉ định góc xoay</translation>
-        </message>
-        <message>
-            <source>Кут (Angle):</source>
-            <translation>Góc:</translation>
-        </message>
-        <message>
-            <source>Блокувати кут / інтерактивне обертання</source>
-            <translation>Khóa góc / xoay tương tác</translation>
-        </message>
-        <message>
-            <source>Крок кута:</source>
-            <translation>Bước bắt dính:</translation>
-        </message>
-        <message>
-            <source>Вільний (Free)</source>
-            <translation>Tự do</translation>
-        </message>
-        <message>
-            <source>Зберегти копію (Copy)</source>
-            <translation>Lưu bản sao</translation>
-        </message>
-        <message>
-            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
-            <translation>Tạo bản sao đã xoay của các đối tượng được chọn, giữ nguyên bản gốc</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotateMapTool</name>
-        <message>
-            <source>CAD Rotate Feature(s)</source>
-            <translation>CAD Xoay đối tượng</translation>
         </message>
     </context>
 </TS>

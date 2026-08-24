@@ -55,12 +55,28 @@
             <translation>{} फ़ीचर संसाधित किए गए।</translation>
         </message>
         <message>
-            <source>CAD Обертання (Rotate)</source>
-            <translation>CAD घुमाएँ</translation>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. पहला कोना किनारा निर्दिष्ट करें</translation>
         </message>
         <message>
-            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
-            <translation>घूर्णन बिंदु चयन के साथ इंटरैक्टिव सीएडी ज्यामिति रोटेशन उपकरण</translation>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. आसन्न दूसरा किनारा निर्दिष्ट करें</translation>
+        </message>
+        <message>
+            <source>ПКМ / Esc — скасувати / крок назад</source>
+            <translation>दायाँ क्लिक / Esc — रद्द करें / एक कदम पीछे</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. घूर्णन केंद्र (धुरी) निर्दिष्ट करें</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. संदर्भ आधार रेखा निर्दिष्ट करें</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. लक्ष्य घूर्णन कोण निर्दिष्ट करें</translation>
         </message>
     </context>
     <context>
@@ -182,52 +198,6 @@
         <message>
             <source>Відновлення кута</source>
             <translation>कोना पुनर्स्थापित करें</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotationCanvasWidget</name>
-        <message>
-            <source>1. Вкажіть центр обертання</source>
-            <translation>1. घूर्णन बिंदु निर्दिष्ट करें</translation>
-        </message>
-        <message>
-            <source>2. Вкажіть базовий орієнтир</source>
-            <translation>2. संदर्भ दिशा निर्दिष्ट करें</translation>
-        </message>
-        <message>
-            <source>3. Вкажіть цільовий кут</source>
-            <translation>3. घूर्णन कोण निर्दिष्ट करें</translation>
-        </message>
-        <message>
-            <source>Кут (Angle):</source>
-            <translation>कोण:</translation>
-        </message>
-        <message>
-            <source>Блокувати кут / інтерактивне обертання</source>
-            <translation>कोण लॉक करें / इंटरैक्टिव रोटेशन</translation>
-        </message>
-        <message>
-            <source>Крок кута:</source>
-            <translation>स्नैप चरण:</translation>
-        </message>
-        <message>
-            <source>Вільний (Free)</source>
-            <translation>मुक्त</translation>
-        </message>
-        <message>
-            <source>Зберегти копію (Copy)</source>
-            <translation>प्रतिलिपि सहेजें</translation>
-        </message>
-        <message>
-            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
-            <translation>मूल को बनाए रखते हुए चयनित सुविधाओं की एक घूर्णन प्रतिलिपि बनाता है</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotateMapTool</name>
-        <message>
-            <source>CAD Rotate Feature(s)</source>
-            <translation>CAD सुविधाएँ घुमाएँ</translation>
         </message>
     </context>
 </TS>

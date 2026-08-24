@@ -55,12 +55,28 @@
             <translation>ประมวลผลแล้ว {} ฟีเจอร์</translation>
         </message>
         <message>
-            <source>CAD Обертання (Rotate)</source>
-            <translation>CAD หมุน</translation>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. ระบุขอบมุมแรก</translation>
         </message>
         <message>
-            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
-            <translation>เครื่องมือหมุนรูปทรง CAD แบบโต้ตอบพร้อมการเลือกจุดศูนย์กลาง</translation>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. ระบุขอบที่อยู่ติดกันอันที่สอง</translation>
+        </message>
+        <message>
+            <source>ПКМ / Esc — скасувати / крок назад</source>
+            <translation>คลิกขวา / Esc — ยกเลิก / ย้อนกลับหนึ่งขั้นตอน</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. ระบุจุดศูนย์กลางการหมุน</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. ระบุเส้นฐานอ้างอิง</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. ระบุมุมการหมุนเป้าหมาย</translation>
         </message>
     </context>
     <context>
@@ -182,52 +198,6 @@
         <message>
             <source>Відновлення кута</source>
             <translation>กู้คืนมุม</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotationCanvasWidget</name>
-        <message>
-            <source>1. Вкажіть центр обертання</source>
-            <translation>1. ระบุจุดศูนย์กลางการหมุน</translation>
-        </message>
-        <message>
-            <source>2. Вкажіть базовий орієнтир</source>
-            <translation>2. ระบุทิศทางอ้างอิง</translation>
-        </message>
-        <message>
-            <source>3. Вкажіть цільовий кут</source>
-            <translation>3. ระบุมุมการหมุน</translation>
-        </message>
-        <message>
-            <source>Кут (Angle):</source>
-            <translation>มุม:</translation>
-        </message>
-        <message>
-            <source>Блокувати кут / інтерактивне обертання</source>
-            <translation>ล็อกมุม / การหมุนแบบโต้ตอบ</translation>
-        </message>
-        <message>
-            <source>Крок кута:</source>
-            <translation>ขั้นการสแน็ป:</translation>
-        </message>
-        <message>
-            <source>Вільний (Free)</source>
-            <translation>อิสระ</translation>
-        </message>
-        <message>
-            <source>Зберегти копію (Copy)</source>
-            <translation>บันทึกสำเนา</translation>
-        </message>
-        <message>
-            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
-            <translation>สร้างสำเนาที่หมุนแล้วของฟีเจอร์ที่เลือก โดยยังคงรักษาฟีเจอร์เดิมไว้</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotateMapTool</name>
-        <message>
-            <source>CAD Rotate Feature(s)</source>
-            <translation>CAD หมุนฟีเจอร์</translation>
         </message>
     </context>
 </TS>

@@ -55,12 +55,28 @@
             <translation>S-au procesat {} element(e).</translation>
         </message>
         <message>
-            <source>CAD Обертання (Rotate)</source>
-            <translation>CAD Rotire</translation>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Specificați prima margine a colțului</translation>
         </message>
         <message>
-            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
-            <translation>Instrument CAD interactiv de rotire a geometriilor cu selectarea punctului pivot</translation>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Specificați a doua margine adiacentă</translation>
+        </message>
+        <message>
+            <source>ПКМ / Esc — скасувати / крок назад</source>
+            <translation>Clic dreapta / Esc — anulare / pas înapoi</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Specificați centrul de rotație (Pivot)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Specificați linia de bază de referință</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Specificați unghiul de rotație țintă</translation>
         </message>
     </context>
     <context>
@@ -182,52 +198,6 @@
         <message>
             <source>Відновлення кута</source>
             <translation>Restaurare colț</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotationCanvasWidget</name>
-        <message>
-            <source>1. Вкажіть центр обертання</source>
-            <translation>1. Specificați punctul pivot</translation>
-        </message>
-        <message>
-            <source>2. Вкажіть базовий орієнтир</source>
-            <translation>2. Specificați direcția de referință</translation>
-        </message>
-        <message>
-            <source>3. Вкажіть цільовий кут</source>
-            <translation>3. Specificați unghiul de rotire</translation>
-        </message>
-        <message>
-            <source>Кут (Angle):</source>
-            <translation>Unghi:</translation>
-        </message>
-        <message>
-            <source>Блокувати кут / інтерактивне обертання</source>
-            <translation>Blocare unghi / rotire interactivă</translation>
-        </message>
-        <message>
-            <source>Крок кута:</source>
-            <translation>Pas de acroșare:</translation>
-        </message>
-        <message>
-            <source>Вільний (Free)</source>
-            <translation>Liber</translation>
-        </message>
-        <message>
-            <source>Зберегти копію (Copy)</source>
-            <translation>Păstrează o copie</translation>
-        </message>
-        <message>
-            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
-            <translation>Creează o copie rotită a entităților selectate, păstrând originalul</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotateMapTool</name>
-        <message>
-            <source>CAD Rotate Feature(s)</source>
-            <translation>CAD Rotire entitate/entități</translation>
         </message>
     </context>
 </TS>

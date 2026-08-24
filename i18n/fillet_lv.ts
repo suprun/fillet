@@ -55,12 +55,28 @@
             <translation>Apstrādāti {} objekti.</translation>
         </message>
         <message>
-            <source>CAD Обертання (Rotate)</source>
-            <translation>CAD Pagriezt</translation>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Norādiet pirmo stūra malu</translation>
         </message>
         <message>
-            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
-            <translation>Interaktīvs CAD ģeometriju pagriešanas rīks ar pagrieziena punkta izvēli</translation>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Norādiet blakus esošo otro malu</translation>
+        </message>
+        <message>
+            <source>ПКМ / Esc — скасувати / крок назад</source>
+            <translation>Labais klikšķis / Esc — atcelt / soli atpakaļ</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Norādiet rotācijas centru</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Norādiet atsauces bāzes līniju</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Norādiet mērķa rotācijas leņķi</translation>
         </message>
     </context>
     <context>
@@ -182,52 +198,6 @@
         <message>
             <source>Відновлення кута</source>
             <translation>Atjaunot stūri</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotationCanvasWidget</name>
-        <message>
-            <source>1. Вкажіть центр обертання</source>
-            <translation>1. Norādiet pagrieziena punktu</translation>
-        </message>
-        <message>
-            <source>2. Вкажіть базовий орієнтир</source>
-            <translation>2. Norādiet atsauces virzienu</translation>
-        </message>
-        <message>
-            <source>3. Вкажіть цільовий кут</source>
-            <translation>3. Norādiet pagrieziena leņķi</translation>
-        </message>
-        <message>
-            <source>Кут (Angle):</source>
-            <translation>Leņķis:</translation>
-        </message>
-        <message>
-            <source>Блокувати кут / інтерактивне обертання</source>
-            <translation>Bloķēt leņķi / interaktīva pagriešana</translation>
-        </message>
-        <message>
-            <source>Крок кута:</source>
-            <translation>Piesaistes solis:</translation>
-        </message>
-        <message>
-            <source>Вільний (Free)</source>
-            <translation>Brīvs</translation>
-        </message>
-        <message>
-            <source>Зберегти копію (Copy)</source>
-            <translation>Saglabāt kopiju</translation>
-        </message>
-        <message>
-            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
-            <translation>Izveido atlasīto objektu pagrieztu kopiju, saglabājot oriģinālu</translation>
-        </message>
-    </context>
-    <context>
-        <name>RotateMapTool</name>
-        <message>
-            <source>CAD Rotate Feature(s)</source>
-            <translation>CAD Objektu pagriešana</translation>
         </message>
     </context>
 </TS>

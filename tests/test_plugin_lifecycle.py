@@ -313,6 +313,14 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
         r_tool = self.plugin.restore_map_tool
         self.plugin.toggle_restore_tool(True)
         self.assertEqual(canvas.mapTool(), r_tool)
+        self.assertIsNotNone(self.plugin.restore_canvas_widget)
+        self.assertEqual(self.plugin.restore_canvas_widget._current_step, 1)
+
+        # Test step advance
+        self.plugin.restore_canvas_widget.set_step(2)
+        self.assertEqual(self.plugin.restore_canvas_widget._current_step, 2)
+        r_tool._cancel_operation()
+        self.assertEqual(self.plugin.restore_canvas_widget._current_step, 1)
 
         last_seg = len(f_geom.asPolyline()) - 2
         r_tool.first_segment_match = SegmentMatch(
