@@ -3,6 +3,38 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>1. Вкажіть першу лінію</source>
+            <translation>1. Especifique a primeira linha</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу лінію</source>
+            <translation>2. Especifique a segunda linha</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній (Merge)</source>
+            <translation>Concordância / Chanfro de duas linhas (Mesclar)</translation>
+        </message>
+        <message>
+            <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
+            <translation>Unir duas linhas com concordância ou chanfro e mesclar feições</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній з об'єднанням</source>
+            <translation>Concordância / chanfro de duas linhas com mesclagem</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска лінії</source>
+            <translation>Concordância / chanfro de linha</translation>
+        </message>
+        <message>
+            <source>Завжди використовувати атрибути першого об'єкта</source>
+            <translation>Sempre usar atributos da primeira feição</translation>
+        </message>
+        <message>
+            <source>При об'єднанні двох ліній автоматично зберігати атрибути першого об'єкта без показу діалогу QGIS</source>
+            <translation>Ao mesclar duas linhas, manter automaticamente os atributos da primeira feição sem mostrar o diálogo do QGIS</translation>
+        </message>
+        <message>
             <source>Fillet / Chamfer (Пакетна обробка)</source>
             <translation>Fillet / Chamfer (Processamento em lote)</translation>
         </message>

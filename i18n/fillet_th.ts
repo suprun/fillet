@@ -3,6 +3,38 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>1. Вкажіть першу лінію</source>
+            <translation>1. ระบุเส้นแรก</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу лінію</source>
+            <translation>2. ระบุเส้นที่สอง</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній (Merge)</source>
+            <translation>ลบมุมมน / ลบมุมเหลี่ยม 2 เส้น (รวม)</translation>
+        </message>
+        <message>
+            <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
+            <translation>เชื่อมต่อ 2 เส้นด้วยการลบมุมมนหรือเหลี่ยมและรวมฟีเจอร์</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній з об'єднанням</source>
+            <translation>ลบมุมมน / ลบมุมเหลี่ยม 2 เส้นพร้อมรวม</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска лінії</source>
+            <translation>ลบมุมมน / ลบมุมเหลี่ยมเส้น</translation>
+        </message>
+        <message>
+            <source>Завжди використовувати атрибути першого об'єкта</source>
+            <translation>ใช้แอตทริบิวต์ของฟีเจอร์แรกเสมอ</translation>
+        </message>
+        <message>
+            <source>При об'єднанні двох ліній автоматично зберігати атрибути першого об'єкта без показу діалогу QGIS</source>
+            <translation>เมื่อรวม 2 เส้น จะรักษาแอตทริบิวต์ของฟีเจอร์แรกโดยอัตโนมัติโดยไม่แสดงกล่องโต้ตอบ QGIS</translation>
+        </message>
+        <message>
             <source>Fillet / Chamfer (Пакетна обробка)</source>
             <translation>ลบมุมมน / ลบมุมเหลี่ยม (แบบกลุ่ม)</translation>
         </message>

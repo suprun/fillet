@@ -3,6 +3,38 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>1. Вкажіть першу лінію</source>
+            <translation>1. Наведите прву линију</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу лінію</source>
+            <translation>2. Наведите другу линију</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній (Merge)</source>
+            <translation>Заобљење / Закошење две линије (Споји)</translation>
+        </message>
+        <message>
+            <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
+            <translation>Повежите две линије заобљењем или закошењем и спојите објекте</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній з об'єднанням</source>
+            <translation>Заобљење / закошење две линије са спајањем</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска лінії</source>
+            <translation>Заобљење / закошење линије</translation>
+        </message>
+        <message>
+            <source>Завжди використовувати атрибути першого об'єкта</source>
+            <translation>Увек користи атрибуте првог објекта</translation>
+        </message>
+        <message>
+            <source>При об'єднанні двох ліній автоматично зберігати атрибути першого об'єкта без показу діалогу QGIS</source>
+            <translation>При спајању две линије аутоматски задржи атрибуте првог објекта без приказивања QGIS дијалога</translation>
+        </message>
+        <message>
             <source>Fillet / Chamfer (Пакетна обробка)</source>
             <translation>Заобљење / Закошење (Пакетна обрада)</translation>
         </message>

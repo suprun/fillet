@@ -3,6 +3,38 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>1. Вкажіть першу лінію</source>
+            <translation>1. Määrake esimene joon</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу лінію</source>
+            <translation>2. Määrake teine joon</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній (Merge)</source>
+            <translation>Kahe joone ümardamine / faasimine (Ühenda)</translation>
+        </message>
+        <message>
+            <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
+            <translation>Ühendage kaks joont ümardamise või faasimisega ja liitke objektid</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній з об'єднанням</source>
+            <translation>Kahe joone ümardamine / faasimine ühendamisega</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска лінії</source>
+            <translation>Joone ümardamine / faasimine</translation>
+        </message>
+        <message>
+            <source>Завжди використовувати атрибути першого об'єкта</source>
+            <translation>Kasuta alati esimese objekti atribuute</translation>
+        </message>
+        <message>
+            <source>При об'єднанні двох ліній автоматично зберігати атрибути першого об'єкта без показу діалогу QGIS</source>
+            <translation>Kahe joone ühendamisel säilita automaatselt esimese objekti atribuudid ilma QGIS dialoogi kuvamata</translation>
+        </message>
+        <message>
             <source>Fillet / Chamfer (Пакетна обробка)</source>
             <translation>Ümardamine / Faasimine (Pakktöötlus)</translation>
         </message>

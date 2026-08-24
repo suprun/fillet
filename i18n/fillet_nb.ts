@@ -3,6 +3,38 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>1. Вкажіть першу лінію</source>
+            <translation>1. Angi første linje</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу лінію</source>
+            <translation>2. Angi andre linje</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній (Merge)</source>
+            <translation>Tolinjers avrunding / avfasing (Slå sammen)</translation>
+        </message>
+        <message>
+            <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
+            <translation>Koble sammen to linjer med avrunding eller avfasing og slå sammen objekter</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній з об'єднанням</source>
+            <translation>Tolinjers avrunding / avfasing med sammenslåing</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска лінії</source>
+            <translation>Linjeavrunding / avfasing</translation>
+        </message>
+        <message>
+            <source>Завжди використовувати атрибути першого об'єкта</source>
+            <translation>Bruk alltid attributter fra det første objektet</translation>
+        </message>
+        <message>
+            <source>При об'єднанні двох ліній автоматично зберігати атрибути першого об'єкта без показу діалогу QGIS</source>
+            <translation>Ved sammenslåing av to linjer, behold automatisk attributter fra det første objektet uten å vise QGIS-dialog</translation>
+        </message>
+        <message>
             <source>Fillet / Chamfer (Пакетна обробка)</source>
             <translation>Avrunding / Avfasing (Bunkebearbeiding)</translation>
         </message>

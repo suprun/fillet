@@ -3,6 +3,38 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>1. Вкажіть першу лінію</source>
+            <translation>1. 最初の線を指定</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу лінію</source>
+            <translation>2. 2番目の線を指定</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній (Merge)</source>
+            <translation>2線フィレット / 面取り (結合)</translation>
+        </message>
+        <message>
+            <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
+            <translation>フィレットまたは面取りで2つの線を結合し、地物をマージ</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній з об'єднанням</source>
+            <translation>2線フィレット / 面取り (結合)</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска лінії</source>
+            <translation>線のフィレット / 面取り</translation>
+        </message>
+        <message>
+            <source>Завжди використовувати атрибути першого об'єкта</source>
+            <translation>常に最初の地物の属性を使用</translation>
+        </message>
+        <message>
+            <source>При об'єднанні двох ліній автоматично зберігати атрибути першого об'єкта без показу діалогу QGIS</source>
+            <translation>2つの線を結合する際、QGISダイアログを表示せずに最初の地物の属性を自動的に保持</translation>
+        </message>
+        <message>
             <source>Fillet / Chamfer (Пакетна обробка)</source>
             <translation>フィレット / 面取り (バッチ処理)</translation>
         </message>

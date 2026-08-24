@@ -1073,7 +1073,197 @@ class GeometryEngine:
 
                 return (QgsGeometry(new_multi), v_sharp_res) if v_sharp_res else None
 
-        return None
+    @classmethod
+    def fillet_or_chamfer_two_lines(
+        cls,
+        geom1: QgsGeometry,
+        seg1_idx: int,
+        click_pt1: Union[QgsPoint, QgsPointXY],
+        geom2: QgsGeometry,
+        seg2_idx: int,
+        click_pt2: Union[QgsPoint, QgsPointXY],
+        mode: str = "fillet",
+        radius: float = 1.0,
+        dist1: float = 1.0,
+        dist2: float = 1.0,
+        segments_count: int = 12,
+        use_true_curve: bool = False,
+    ) -> Optional[Tuple[QgsGeometry, QgsPoint, QgsPoint, QgsPoint]]:
+        """
+        Performs CAD Fillet or Chamfer between two line geometries, trimming/extending them
+        and stitching them into a single continuous QgsLineString geometry.
+
+        Returns: (new_geometry, v_intersection, t1, t2) or None
+        """
+        if not geom1 or geom1.isEmpty() or not geom2 or geom2.isEmpty():
+            return None
+
+        curve1 = geom1.constGet()
+        curve2 = geom2.constGet()
+        if not curve1 or not curve2:
+            return None
+
+        if isinstance(curve1, QgsMultiLineString):
+            curve1 = curve1.geometryN(0) if curve1.numGeometries() > 0 else None
+        if isinstance(curve2, QgsMultiLineString):
+            curve2 = curve2.geometryN(0) if curve2.numGeometries() > 0 else None
+
+        if not isinstance(curve1, QgsLineString) or not isinstance(curve2, QgsLineString):
+            return None
+
+        n1 = curve1.numPoints()
+        n2 = curve2.numPoints()
+        if n1 < 2 or n2 < 2:
+            return None
+        if seg1_idx < 0 or seg1_idx >= n1 - 1 or seg2_idx < 0 or seg2_idx >= n2 - 1:
+            return None
+
+        a1, b1 = curve1.pointN(seg1_idx), curve1.pointN(seg1_idx + 1)
+        a2, b2 = curve2.pointN(seg2_idx), curve2.pointN(seg2_idx + 1)
+
+        v = cls.compute_line_intersection(a1, b1, a2, b2)
+        if not v:
+            return None
+
+        # Line 1 ray direction
+        d1x = b1.x() - a1.x()
+        d1y = b1.y() - a1.y()
+        len1 = math.hypot(d1x, d1y)
+        if len1 < cls.EPSILON:
+            return None
+        ud1x, ud1y = d1x / len1, d1y / len1
+
+        t_click1 = (click_pt1.x() - v.x()) * ud1x + (click_pt1.y() - v.y()) * ud1y
+        if abs(t_click1) < 1e-6:
+            p0 = curve1.pointN(0)
+            pn1 = curve1.pointN(n1 - 1)
+            t0 = (p0.x() - v.x()) * ud1x + (p0.y() - v.y()) * ud1y
+            t_end = (pn1.x() - v.x()) * ud1x + (pn1.y() - v.y()) * ud1y
+            t_click1 = t0 if abs(t0) > abs(t_end) else t_end
+
+        u1x = ud1x if t_click1 > 0 else -ud1x
+        u1y = ud1y if t_click1 > 0 else -ud1y
+
+        # Line 2 ray direction
+        d2x = b2.x() - a2.x()
+        d2y = b2.y() - a2.y()
+        len2 = math.hypot(d2x, d2y)
+        if len2 < cls.EPSILON:
+            return None
+        ud2x, ud2y = d2x / len2, d2y / len2
+
+        t_click2 = (click_pt2.x() - v.x()) * ud2x + (click_pt2.y() - v.y()) * ud2y
+        if abs(t_click2) < 1e-6:
+            p0 = curve2.pointN(0)
+            pn2 = curve2.pointN(n2 - 1)
+            t0 = (p0.x() - v.x()) * ud2x + (p0.y() - v.y()) * ud2y
+            t_end = (pn2.x() - v.x()) * ud2x + (pn2.y() - v.y()) * ud2y
+            t_click2 = t0 if abs(t0) > abs(t_end) else t_end
+
+        u2x = ud2x if t_click2 > 0 else -ud2x
+        u2y = ud2y if t_click2 > 0 else -ud2y
+
+        # Angle between rays
+        dot = u1x * u2x + u1y * u2y
+        dot = max(-1.0, min(1.0, dot))
+        angle = math.acos(dot)
+        if angle < 1e-6 or angle > (math.pi - 1e-6):
+            return None
+
+        half_angle = angle / 2.0
+        tan_half = math.tan(half_angle)
+        sin_half = math.sin(half_angle)
+
+        if mode == "fillet":
+            if radius <= 0:
+                t1 = v
+                t2 = v
+                arc_pts = [v]
+            else:
+                tangent_dist = radius / tan_half
+                t1 = QgsPoint(v.x() + tangent_dist * u1x, v.y() + tangent_dist * u1y)
+                t2 = QgsPoint(v.x() + tangent_dist * u2x, v.y() + tangent_dist * u2y)
+
+                bx, by, blen = cls.normalize_vector(u1x + u2x, u1y + u2y)
+                center_dist = radius / sin_half
+                cx = v.x() + center_dist * bx
+                cy = v.y() + center_dist * by
+
+                arc_mid = QgsPoint(cx - radius * bx, cy - radius * by)
+                arc_pts = cls.segmentize_arc_3p(t1, arc_mid, t2, segments_count)
+        elif mode == "chamfer":
+            d1 = dist1 if dist1 > 0 else 0.0
+            d2 = dist2 if dist2 > 0 else d1
+            if d1 <= 0 and d2 <= 0:
+                t1 = v
+                t2 = v
+                arc_pts = [v]
+            else:
+                t1 = QgsPoint(v.x() + d1 * u1x, v.y() + d1 * u1y)
+                t2 = QgsPoint(v.x() + d2 * u2x, v.y() + d2 * u2y)
+                arc_pts = [t1, t2]
+        else:
+            return None
+
+        # Line 1 chain towards t1
+        s_t1 = (t1.x() - v.x()) * u1x + (t1.y() - v.y()) * u1y
+        s1_0 = (curve1.pointN(0).x() - v.x()) * u1x + (curve1.pointN(0).y() - v.y()) * u1y
+        s1_end = (curve1.pointN(n1 - 1).x() - v.x()) * u1x + (curve1.pointN(n1 - 1).y() - v.y()) * u1y
+
+        l1_pts = []
+        if s1_0 >= s1_end:
+            for i in range(n1):
+                pt = curve1.pointN(i)
+                s = (pt.x() - v.x()) * u1x + (pt.y() - v.y()) * u1y
+                if s > s_t1 + 1e-6:
+                    l1_pts.append(pt)
+                else:
+                    break
+        else:
+            for i in range(n1 - 1, -1, -1):
+                pt = curve1.pointN(i)
+                s = (pt.x() - v.x()) * u1x + (pt.y() - v.y()) * u1y
+                if s > s_t1 + 1e-6:
+                    l1_pts.append(pt)
+                else:
+                    break
+
+        # Line 2 chain from t2 towards far end
+        s_t2 = (t2.x() - v.x()) * u2x + (t2.y() - v.y()) * u2y
+        s2_0 = (curve2.pointN(0).x() - v.x()) * u2x + (curve2.pointN(0).y() - v.y()) * u2y
+        s2_end = (curve2.pointN(n2 - 1).x() - v.x()) * u2x + (curve2.pointN(n2 - 1).y() - v.y()) * u2y
+
+        l2_pts = []
+        if s2_end >= s2_0:
+            for i in range(n2):
+                pt = curve2.pointN(i)
+                s = (pt.x() - v.x()) * u2x + (pt.y() - v.y()) * u2y
+                if s > s_t2 + 1e-6:
+                    l2_pts.append(pt)
+        else:
+            for i in range(n2 - 1, -1, -1):
+                pt = curve2.pointN(i)
+                s = (pt.x() - v.x()) * u2x + (pt.y() - v.y()) * u2y
+                if s > s_t2 + 1e-6:
+                    l2_pts.append(pt)
+
+        # Stitch all points
+        full_pts = l1_pts + arc_pts + l2_pts
+
+        clean_pts = []
+        for pt in full_pts:
+            if not clean_pts or cls.distance(clean_pts[-1], pt) > 1e-7:
+                clean_pts.append(pt)
+
+        if len(clean_pts) < 2:
+            return None
+
+        res_line = QgsLineString()
+        for pt in clean_pts:
+            res_line.addVertex(pt)
+
+        return QgsGeometry(res_line), v, t1, t2
 
     # Alias for backwards compatibility
     batch_process_geometry = batch_apply_geometry
+

@@ -3,6 +3,38 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>1. Вкажіть першу лінію</source>
+            <translation>1. Καθορίστε την πρώτη γραμμή</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу лінію</source>
+            <translation>2. Καθορίστε τη δεύτερη γραμμή</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній (Merge)</source>
+            <translation>Στρογγυλοποίηση / Λοξότμηση δύο γραμμών (Συγχώνευση)</translation>
+        </message>
+        <message>
+            <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
+            <translation>Σύνδεση δύο γραμμών με στρογγυλοποίηση ή λοξότμηση και συγχώνευση οντοτήτων</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній з об'єднанням</source>
+            <translation>Στρογγυλοποίηση / λοξότμηση δύο γραμμών με συγχώνευση</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска лінії</source>
+            <translation>Στρογγυλοποίηση / λοξότμηση γραμμής</translation>
+        </message>
+        <message>
+            <source>Завжди використовувати атрибути першого об'єкта</source>
+            <translation>Να χρησιμοποιούνται πάντα τα γνωρίσματα της πρώτης οντότητας</translation>
+        </message>
+        <message>
+            <source>При об'єднанні двох ліній автоматично зберігати атрибути першого об'єкта без показу діалогу QGIS</source>
+            <translation>Κατά τη συγχώνευση δύο γραμμών, αυτόματη διατήρηση των γνωρισμάτων της πρώτης οντότητας χωρίς εμφάνιση του διαλόγου QGIS</translation>
+        </message>
+        <message>
             <source>Fillet / Chamfer (Пакетна обробка)</source>
             <translation>Στρογγυλοποίηση / Λοξότμηση (Μαζική επεξεργασία)</translation>
         </message>

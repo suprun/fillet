@@ -3,6 +3,38 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>1. Вкажіть першу лінію</source>
+            <translation>1. Wskaż pierwszą linię</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу лінію</source>
+            <translation>2. Wskaż drugą linię</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній (Merge)</source>
+            <translation>Zaokrąglenie / Fazowanie dwóch linii (Połącz)</translation>
+        </message>
+        <message>
+            <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
+            <translation>Połącz dwie linie zaokrągleniem lub fazowaniem i scal obiekty</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній з об'єднанням</source>
+            <translation>Zaokrąglenie / fazowanie dwóch linii z połączeniem</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска лінії</source>
+            <translation>Zaokrąglenie / fazowanie linii</translation>
+        </message>
+        <message>
+            <source>Завжди використовувати атрибути першого об'єкта</source>
+            <translation>Zawsze używaj atrybutów pierwszego obiektu</translation>
+        </message>
+        <message>
+            <source>При об'єднанні двох ліній автоматично зберігати атрибути першого об'єкта без показу діалогу QGIS</source>
+            <translation>Podczas łączenia dwóch linii automatycznie zachowaj atrybuty pierwszego obiektu bez wyświetlania okna dialogowego QGIS</translation>
+        </message>
+        <message>
             <source>Fillet / Chamfer (Пакетна обробка)</source>
             <translation>Fillet / Chamfer (Przetwarzanie wsadowe)</translation>
         </message>

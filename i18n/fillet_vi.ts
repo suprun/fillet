@@ -3,6 +3,38 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>1. Вкажіть першу лінію</source>
+            <translation>1. Chỉ định đường đầu tiên</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу лінію</source>
+            <translation>2. Chỉ định đường thứ hai</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній (Merge)</source>
+            <translation>Bo tròn / Vát góc hai đường (Hợp nhất)</translation>
+        </message>
+        <message>
+            <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
+            <translation>Nối hai đường bằng bo tròn hoặc vát góc và hợp nhất đối tượng</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній з об'єднанням</source>
+            <translation>Bo tròn / vát góc hai đường với hợp nhất</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска лінії</source>
+            <translation>Bo tròn / vát góc đường</translation>
+        </message>
+        <message>
+            <source>Завжди використовувати атрибути першого об'єкта</source>
+            <translation>Luôn sử dụng thuộc tính của đối tượng đầu tiên</translation>
+        </message>
+        <message>
+            <source>При об'єднанні двох ліній автоматично зберігати атрибути першого об'єкта без показу діалогу QGIS</source>
+            <translation>Khi hợp nhất hai đường, tự động giữ các thuộc tính của đối tượng đầu tiên mà không hiển thị hộp thoại QGIS</translation>
+        </message>
+        <message>
             <source>Fillet / Chamfer (Пакетна обробка)</source>
             <translation>Bo tròn / Vát góc (Hàng loạt)</translation>
         </message>

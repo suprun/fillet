@@ -3,6 +3,38 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>1. Вкажіть першу лінію</source>
+            <translation>1. 指定第一條線</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу лінію</source>
+            <translation>2. 指定第二條線</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній (Merge)</source>
+            <translation>雙線圓角 / 倒角 (合併)</translation>
+        </message>
+        <message>
+            <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
+            <translation>透過圓角或倒角連接兩條線並合併圖徵</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній з об'єднанням</source>
+            <translation>雙線圓角 / 倒角並合併</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска лінії</source>
+            <translation>線圓角 / 倒角</translation>
+        </message>
+        <message>
+            <source>Завжди використовувати атрибути першого об'єкта</source>
+            <translation>始終使用第一個圖徵的屬性</translation>
+        </message>
+        <message>
+            <source>При об'єднанні двох ліній автоматично зберігати атрибути першого об'єкта без показу діалогу QGIS</source>
+            <translation>合併兩條線時，自動保留第一個圖徵的屬性而不顯示 QGIS 對話方塊</translation>
+        </message>
+        <message>
             <source>Fillet / Chamfer (Пакетна обробка)</source>
             <translation>圓角 / 倒角 (批次處理)</translation>
         </message>

@@ -108,6 +108,23 @@ class TestTranslations(unittest.TestCase):
             "For batch processing, layer must be editable and contain selected features"
         )
 
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Скруглення / фаска двох ліній (Merge)"),
+            "Two-Line Fillet / Chamfer (Merge)"
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "1. Вкажіть першу лінію"),
+            "1. Specify first line"
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "2. Вкажіть другу лінію"),
+            "2. Specify second line"
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Завжди використовувати атрибути першого об'єкта"),
+            "Always use attributes of first feature"
+        )
+
         QCoreApplication.removeTranslator(translator_en)
 
         # Test French
@@ -147,6 +164,33 @@ class TestTranslations(unittest.TestCase):
             self.assertEqual(hud.x() + hud.width(), canvas.width())
             self.assertLessEqual(hud.x() + hud.width(), 800)
             self.assertGreaterEqual(hud.x(), 0)
+        finally:
+            QCoreApplication.removeTranslator(translator_en)
+            canvas.deleteLater()
+
+    def test_two_line_hud_autosizing(self):
+        from qgis.gui import QgsMapCanvas
+        from gui.two_line_canvas_widget import TwoLineCanvasWidget
+
+        canvas = QgsMapCanvas()
+        canvas.resize(800, 600)
+
+        en_qm = os.path.join(self.i18n_dir, "fillet_en.qm")
+        translator_en = QTranslator()
+        self.assertTrue(translator_en.load(en_qm))
+        QCoreApplication.installTranslator(translator_en)
+
+        try:
+            hud = TwoLineCanvasWidget(canvas)
+            hud.set_step(TwoLineCanvasWidget.STEP_FIRST_LINE)
+            self.assertEqual(hud.lbl_step.text(), "1. Specify first line")
+            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
+            self.assertEqual(hud.x() + hud.width(), canvas.width())
+
+            hud.set_step(TwoLineCanvasWidget.STEP_SECOND_LINE)
+            self.assertEqual(hud.lbl_step.text(), "2. Specify second line")
+            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
+            self.assertEqual(hud.x() + hud.width(), canvas.width())
         finally:
             QCoreApplication.removeTranslator(translator_en)
             canvas.deleteLater()

@@ -31,6 +31,8 @@ try:
     from .gui.restore_canvas_widget import RestoreCanvasWidget
     from .gui.restore_map_tool import RestoreMapTool
     from .gui.settings_widget import FilletSettingsWidget
+    from .gui.two_line_canvas_widget import TwoLineCanvasWidget
+    from .gui.two_line_map_tool import TwoLineMapTool
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
     from gui.canvas_widget import FilletCanvasWidget
@@ -38,6 +40,8 @@ except (ImportError, ValueError):
     from gui.restore_canvas_widget import RestoreCanvasWidget
     from gui.restore_map_tool import RestoreMapTool
     from gui.settings_widget import FilletSettingsWidget
+    from gui.two_line_canvas_widget import TwoLineCanvasWidget
+    from gui.two_line_map_tool import TwoLineMapTool
 
 
 class FilletPlugin:
@@ -53,9 +57,12 @@ class FilletPlugin:
         self._init_translator()
 
         self.action: Optional[QAction] = None
+        self.two_line_action: Optional[QAction] = None
         self.restore_action: Optional[QAction] = None
         self.batch_action: Optional[QAction] = None
         self.map_tool: Optional[FilletMapTool] = None
+        self.two_line_map_tool: Optional[TwoLineMapTool] = None
+        self.two_line_canvas_widget: Optional[TwoLineCanvasWidget] = None
         self.restore_map_tool: Optional[RestoreMapTool] = None
         self.restore_canvas_widget: Optional[RestoreCanvasWidget] = None
         self.canvas_widget: Optional[FilletCanvasWidget] = None
@@ -149,9 +156,30 @@ class FilletPlugin:
         self.restore_action.setToolTip(self.tr("Інструмент відновлення гострих кутів (видалення скруглень та фасок)"))
         self.restore_action.triggered.connect(self.toggle_restore_tool)
 
+        # 4. Create interactive Two-Line Fillet/Chamfer CAD Map Tool (available in QGIS 3.x and QGIS 4.x)
+        self.two_line_canvas_widget = TwoLineCanvasWidget(self.canvas)
+        self.two_line_canvas_widget.hide()
+        self.two_line_map_tool = TwoLineMapTool(
+            self.canvas,
+            settings_provider=self.settings_widget,
+            widget=self.two_line_canvas_widget,
+            iface=self.iface,
+        )
+
+        two_line_icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionTwoLineFillet.svg")
+        self.two_line_action = QAction(
+            QIcon(two_line_icon_path),
+            self.tr("Скруглення / фаска двох ліній (Merge)"),
+            self.iface.mainWindow(),
+        )
+        self.two_line_action.setCheckable(True)
+        self.two_line_action.setObjectName("actionTwoLineFillet")
+        self.two_line_action.setToolTip(self.tr("З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів"))
+        self.two_line_action.triggered.connect(self.toggle_two_line_tool)
+
         adv_tb = self.iface.advancedDigitizeToolBar()
 
-        # 4. Create interactive Fillet / Chamfer MapTool ONLY in QGIS 3.x (native in QGIS 4.0+)
+        # 5. Create interactive Fillet / Chamfer MapTool ONLY in QGIS 3.x (native in QGIS 4.0+)
         if not self.is_qgis_4():
             self.canvas_widget = FilletCanvasWidget(self.canvas)
             self.canvas_widget.hide()
@@ -178,7 +206,7 @@ class FilletPlugin:
                 self.iface.addVectorToolBarIcon(self.action)
             self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.action)
 
-        # 5. Insert restore_action and batch_action on toolbar
+        # 6. Insert two_line_action, restore_action and batch_action on toolbar
         if adv_tb:
             anchor_act = self.action
             if not anchor_act:
@@ -194,12 +222,23 @@ class FilletPlugin:
                 try:
                     idx = actions_now.index(anchor_act)
                     if idx + 1 < len(actions_now):
-                        adv_tb.insertAction(actions_now[idx + 1], self.restore_action)
+                        adv_tb.insertAction(actions_now[idx + 1], self.two_line_action)
                     else:
-                        adv_tb.addAction(self.restore_action)
-                except ValueError:
-                    adv_tb.addAction(self.restore_action)
+                        adv_tb.addAction(self.two_line_action)
+                except (ValueError, IndexError):
+                    adv_tb.addAction(self.two_line_action)
             else:
+                adv_tb.addAction(self.two_line_action)
+
+            # Insert restore_action after two_line_action
+            actions_now = adv_tb.actions()
+            try:
+                idx = actions_now.index(self.two_line_action)
+                if idx + 1 < len(actions_now):
+                    adv_tb.insertAction(actions_now[idx + 1], self.restore_action)
+                else:
+                    adv_tb.addAction(self.restore_action)
+            except (ValueError, IndexError):
                 adv_tb.addAction(self.restore_action)
 
             # Insert batch_action after restore_action
@@ -210,12 +249,14 @@ class FilletPlugin:
                     adv_tb.insertAction(actions_now[idx + 1], self.batch_action)
                 else:
                     adv_tb.addAction(self.batch_action)
-            except ValueError:
+            except (ValueError, IndexError):
                 adv_tb.addAction(self.batch_action)
         else:
+            self.iface.addVectorToolBarIcon(self.two_line_action)
             self.iface.addVectorToolBarIcon(self.restore_action)
             self.iface.addVectorToolBarIcon(self.batch_action)
 
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.two_line_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.restore_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.batch_action)
 
@@ -279,7 +320,21 @@ class FilletPlugin:
             self.restore_action.deleteLater()
             self.restore_action = None
 
-        # 4. Clean up batch action
+        # 4. Clean up two line action
+        if self.two_line_action:
+            try:
+                self.two_line_action.triggered.disconnect(self.toggle_two_line_tool)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            if self.iface.advancedDigitizeToolBar():
+                self.iface.advancedDigitizeToolBar().removeAction(self.two_line_action)
+            self.iface.removeVectorToolBarIcon(self.two_line_action)
+            self.iface.removePluginVectorMenu(self.tr("Fillet & Chamfer"), self.two_line_action)
+            self.two_line_action.setParent(None)
+            self.two_line_action.deleteLater()
+            self.two_line_action = None
+
+        # 5. Clean up batch action
         if self.batch_action:
             try:
                 self.batch_action.triggered.disconnect(self.toggle_batch_panel)
@@ -293,7 +348,7 @@ class FilletPlugin:
             self.batch_action.deleteLater()
             self.batch_action = None
 
-        # 5. Clean up map tools
+        # 6. Clean up map tools
         if self.map_tool:
             if self.canvas and self.canvas.mapTool() == self.map_tool:
                 self.canvas.unsetMapTool(self.map_tool)
@@ -303,6 +358,16 @@ class FilletPlugin:
                 self.map_tool.deactivate()
             self.map_tool.deleteLater()
             self.map_tool = None
+
+        if self.two_line_map_tool:
+            if self.canvas and self.canvas.mapTool() == self.two_line_map_tool:
+                self.canvas.unsetMapTool(self.two_line_map_tool)
+            if hasattr(self.two_line_map_tool, "cleanup"):
+                self.two_line_map_tool.cleanup()
+            else:
+                self.two_line_map_tool.deactivate()
+            self.two_line_map_tool.deleteLater()
+            self.two_line_map_tool = None
 
         if self.restore_map_tool:
             if self.canvas and self.canvas.mapTool() == self.restore_map_tool:
@@ -314,7 +379,7 @@ class FilletPlugin:
             self.restore_map_tool.deleteLater()
             self.restore_map_tool = None
 
-        # 6. Clean up canvas widgets
+        # 7. Clean up canvas widgets
         if self.canvas_widget:
             try:
                 self.canvas.removeEventFilter(self.canvas_widget)
@@ -324,6 +389,16 @@ class FilletPlugin:
             self.canvas_widget.setParent(None)
             self.canvas_widget.deleteLater()
             self.canvas_widget = None
+
+        if self.two_line_canvas_widget:
+            try:
+                self.canvas.removeEventFilter(self.two_line_canvas_widget)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            self.two_line_canvas_widget.hide()
+            self.two_line_canvas_widget.setParent(None)
+            self.two_line_canvas_widget.deleteLater()
+            self.two_line_canvas_widget = None
 
         if self.restore_canvas_widget:
             try:
@@ -335,7 +410,7 @@ class FilletPlugin:
             self.restore_canvas_widget.deleteLater()
             self.restore_canvas_widget = None
 
-        # 7. Clean up settings widget and dock widget
+        # 8. Clean up settings widget and dock widget
         if self.settings_widget:
             try:
                 self.settings_widget.applyToSelectedRequested.disconnect(self.apply_to_selected_features)
@@ -363,7 +438,7 @@ class FilletPlugin:
                 old_dock.setParent(None)
                 old_dock.deleteLater()
 
-        # 8. Remove translator
+        # 9. Remove translator
         if self.translator:
             QCoreApplication.removeTranslator(self.translator)
             self.translator = None
@@ -380,6 +455,14 @@ class FilletPlugin:
         else:
             if self.canvas and self.canvas.mapTool() == self.map_tool:
                 self.canvas.unsetMapTool(self.map_tool)
+
+    def toggle_two_line_tool(self, checked: bool):
+        if checked:
+            if self.two_line_map_tool:
+                self.canvas.setMapTool(self.two_line_map_tool)
+        else:
+            if self.canvas and self.canvas.mapTool() == self.two_line_map_tool:
+                self.canvas.unsetMapTool(self.two_line_map_tool)
 
     def toggle_restore_tool(self, checked: bool):
         if checked:
@@ -403,6 +486,12 @@ class FilletPlugin:
             self.action.setChecked(is_active)
             if not is_active and self.canvas_widget:
                 self.canvas_widget.hide()
+
+        if self.two_line_action:
+            is_two_line_active = tool == self.two_line_map_tool
+            self.two_line_action.setChecked(is_two_line_active)
+            if not is_two_line_active and self.two_line_canvas_widget:
+                self.two_line_canvas_widget.hide()
 
         if self.restore_action:
             is_restore_active = tool == self.restore_map_tool
@@ -442,6 +531,7 @@ class FilletPlugin:
             in (QgsWkbTypes.GeometryType.LineGeometry, QgsWkbTypes.GeometryType.PolygonGeometry)
         )
         is_editable = bool(is_supported_geom and layer.isEditable())
+        is_line_editable = bool(is_vector and layer.geometryType() == QgsWkbTypes.GeometryType.LineGeometry and layer.isEditable())
 
         if is_vector and is_supported_geom:
             if self.settings_widget and hasattr(self.settings_widget, "adapt_to_crs"):
@@ -451,6 +541,8 @@ class FilletPlugin:
 
         if self.action:
             self.action.setEnabled(is_editable)
+        if self.two_line_action:
+            self.two_line_action.setEnabled(is_line_editable)
         if self.restore_action:
             self.restore_action.setEnabled(is_editable)
         if self.batch_action:
@@ -474,6 +566,14 @@ class FilletPlugin:
                     self.restore_canvas_widget.hide()
                 if self.restore_action:
                     self.restore_action.setChecked(False)
+
+        if not is_line_editable and self.canvas:
+            if self.two_line_map_tool and self.canvas.mapTool() == self.two_line_map_tool:
+                self.canvas.unsetMapTool(self.two_line_map_tool)
+                if self.two_line_canvas_widget:
+                    self.two_line_canvas_widget.hide()
+                if self.two_line_action:
+                    self.two_line_action.setChecked(False)
 
     def apply_to_selected_features(self):
         """Batch apply fillet or chamfer to all corners of selected features."""

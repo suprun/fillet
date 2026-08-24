@@ -3,6 +3,38 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>1. Вкажіть першу лінію</source>
+            <translation>1. Norādiet pirmo līniju</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу лінію</source>
+            <translation>2. Norādiet otro līniju</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній (Merge)</source>
+            <translation>Divu līniju noapaļošana / nolīdzināšana (Apvienot)</translation>
+        </message>
+        <message>
+            <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
+            <translation>Savienojiet divas līnijas ar noapaļošanu vai nolīdzināšanu un apvienojiet objektus</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній з об'єднанням</source>
+            <translation>Divu līniju noapaļošana / nolīdzināšana ar apvienošanu</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска лінії</source>
+            <translation>Līnijas noapaļošana / nolīdzināšana</translation>
+        </message>
+        <message>
+            <source>Завжди використовувати атрибути першого об'єкта</source>
+            <translation>Vienmēr izmantot pirmā objekta atribūtus</translation>
+        </message>
+        <message>
+            <source>При об'єднанні двох ліній автоматично зберігати атрибути першого об'єкта без показу діалогу QGIS</source>
+            <translation>Apvienojot divas līnijas, automātiski saglabāt pirmā objekta atribūtus, nerādot QGIS dialogu</translation>
+        </message>
+        <message>
             <source>Fillet / Chamfer (Пакетна обробка)</source>
             <translation>Noapaļošana / Nolīdzināšana (Partija)</translation>
         </message>

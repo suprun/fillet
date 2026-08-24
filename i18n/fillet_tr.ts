@@ -3,6 +3,38 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>1. Вкажіть першу лінію</source>
+            <translation>1. İlk çizgiyi belirtin</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу лінію</source>
+            <translation>2. İkinci çizgiyi belirtin</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній (Merge)</source>
+            <translation>İki Çizgili Yuvarlat / Pah Kır (Birleştir)</translation>
+        </message>
+        <message>
+            <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
+            <translation>İki çizgiyi yuvarlatma veya pah ile bağlayın ve detayları birleştirin</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній з об'єднанням</source>
+            <translation>Birleştirme ile iki çizgili yuvarlat / pah kır</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска лінії</source>
+            <translation>Çizgi yuvarlatma / pah kırma</translation>
+        </message>
+        <message>
+            <source>Завжди використовувати атрибути першого об'єкта</source>
+            <translation>Her zaman ilk detayın özniteliklerini kullan</translation>
+        </message>
+        <message>
+            <source>При об'єднанні двох ліній автоматично зберігати атрибути першого об'єкта без показу діалогу QGIS</source>
+            <translation>İki çizgiyi birleştirirken, QGIS iletişim kutusunu göstermeden otomatik olarak ilk detayın özniteliklerini koru</translation>
+        </message>
+        <message>
             <source>Fillet / Chamfer (Пакетна обробка)</source>
             <translation>Yuvarlat / Pah Kır (Toplu)</translation>
         </message>

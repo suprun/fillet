@@ -3,6 +3,38 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>1. Вкажіть першу лінію</source>
+            <translation>1. Määritä ensimmäinen viiva</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу лінію</source>
+            <translation>2. Määritä toinen viiva</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній (Merge)</source>
+            <translation>Kahden viivan pyöristys / viiste (Yhdistä)</translation>
+        </message>
+        <message>
+            <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
+            <translation>Yhdistä kaksi viivaa pyöristyksellä tai viisteellä ja sulauta kohteet</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній з об'єднанням</source>
+            <translation>Kahden viivan pyöristys / viiste yhdistämisellä</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска лінії</source>
+            <translation>Viivan pyöristys / viiste</translation>
+        </message>
+        <message>
+            <source>Завжди використовувати атрибути першого об'єкта</source>
+            <translation>Käytä aina ensimmäisen kohteen attribuutteja</translation>
+        </message>
+        <message>
+            <source>При об'єднанні двох ліній автоматично зберігати атрибути першого об'єкта без показу діалогу QGIS</source>
+            <translation>Kun yhdistät kaksi viivaa, säilytä ensimmäisen kohteen attribuutit automaattisesti näyttämättä QGIS-valintaikkunaa</translation>
+        </message>
+        <message>
             <source>Fillet / Chamfer (Пакетна обробка)</source>
             <translation>Pyöristys / Viiste (Eräajo)</translation>
         </message>

@@ -3,6 +3,38 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>1. Вкажіть першу лінію</source>
+            <translation>1. Nurodykite pirmąją liniją</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу лінію</source>
+            <translation>2. Nurodykite antrąją liniją</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній (Merge)</source>
+            <translation>Dviejų linijų užapvalinimas / nusklembimas (Sujungti)</translation>
+        </message>
+        <message>
+            <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
+            <translation>Sujunkite dvi linijas užapvalinimu arba nusklembimu ir sujunkite objektus</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній з об'єднанням</source>
+            <translation>Dviejų linijų užapvalinimas / nusklembimas sujungiant</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска лінії</source>
+            <translation>Linijos užapvalinimas / nusklembimas</translation>
+        </message>
+        <message>
+            <source>Завжди використовувати атрибути першого об'єкта</source>
+            <translation>Visada naudoti pirmojo objekto atributus</translation>
+        </message>
+        <message>
+            <source>При об'єднанні двох ліній автоматично зберігати атрибути першого об'єкта без показу діалогу QGIS</source>
+            <translation>Jungiant dvi linijas, automatiškai išsaugoti pirmojo objekto atributus nerodant QGIS dialogo</translation>
+        </message>
+        <message>
             <source>Fillet / Chamfer (Пакетна обробка)</source>
             <translation>Užapvalinimas / Nusklembimas (Paketinis)</translation>
         </message>

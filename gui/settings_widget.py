@@ -12,6 +12,7 @@ from qgis.PyQt.QtGui import (
 )
 from qgis.PyQt.QtWidgets import (
     QButtonGroup,
+    QCheckBox,
     QDoubleSpinBox,
     QGridLayout,
     QGroupBox,
@@ -198,6 +199,11 @@ class FilletSettingsWidget(QWidget):
         self.btn_apply_selected.setToolTip(self.tr("Застосувати скруглення або фаску до всіх вершин виділених об'єктів"))
         main_layout.addWidget(self.btn_apply_selected)
 
+        # Merge options
+        self.chk_always_first = QCheckBox(self.tr("Завжди використовувати атрибути першого об'єкта"), self)
+        self.chk_always_first.setToolTip(self.tr("При об'єднанні двох ліній автоматично зберігати атрибути першого об'єкта без показу діалогу QGIS"))
+        main_layout.addWidget(self.chk_always_first)
+
         # Bottom stretch to prevent elements stretching vertically
         main_layout.addStretch()
 
@@ -233,6 +239,7 @@ class FilletSettingsWidget(QWidget):
         # Save settings on any parameter change
         self.parametersChanged.connect(self._save_settings)
         self.btn_link.toggled.connect(lambda _: self._save_settings())
+        self.chk_always_first.toggled.connect(lambda _: self._save_settings())
 
         # Configure numeric validators on lineEdits
         self._configure_numeric_validators()
@@ -348,6 +355,9 @@ class FilletSettingsWidget(QWidget):
             self.btn_link.setChecked(is_linked)
             self._update_link_icon()
 
+            # Load merge attributes option
+            self.chk_always_first.setChecked(s.value("plugins/fillet/merge_always_first_feature", False, type=bool))
+
             self._update_stacked_index()
             self.spin_dist2.setEnabled(not self.btn_link.isChecked())
         finally:
@@ -363,6 +373,7 @@ class FilletSettingsWidget(QWidget):
         s.setValue("plugins/fillet/batch_dist1", self.spin_dist1.value())
         s.setValue("plugins/fillet/batch_dist2", self.spin_dist2.value())
         s.setValue("plugins/fillet/batch_equal_dist", self.btn_link.isChecked())
+        s.setValue("plugins/fillet/merge_always_first_feature", self.chk_always_first.isChecked())
 
     def _update_stacked_index(self):
         if self.mode == self.MODE_FILLET:

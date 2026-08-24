@@ -3,6 +3,38 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>1. Вкажіть першу лінію</source>
+            <translation>1. 첫 번째 선 지정</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу лінію</source>
+            <translation>2. 두 번째 선 지정</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній (Merge)</source>
+            <translation>2선 필렛 / 챔퍼 (병합)</translation>
+        </message>
+        <message>
+            <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
+            <translation>필렛 또는 챔퍼로 두 선을 연결하고 피처 병합</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній з об'єднанням</source>
+            <translation>병합을 포함한 2선 필렛 / 챔퍼</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска лінії</source>
+            <translation>선 필렛 / 챔퍼</translation>
+        </message>
+        <message>
+            <source>Завжди використовувати атрибути першого об'єкта</source>
+            <translation>항상 첫 번째 피처의 속성 사용</translation>
+        </message>
+        <message>
+            <source>При об'єднанні двох ліній автоматично зберігати атрибути першого об'єкта без показу діалогу QGIS</source>
+            <translation>두 선을 병합할 때 QGIS 대화 상자를 표시하지 않고 첫 번째 피처의 속성을 자동으로 유지</translation>
+        </message>
+        <message>
             <source>Fillet / Chamfer (Пакетна обробка)</source>
             <translation>필렛 / 챔퍼 (배치 처리)</translation>
         </message>

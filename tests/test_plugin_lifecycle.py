@@ -141,7 +141,7 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
             self.assertFalse(self.plugin.restore_action.isEnabled())
         self.assertFalse(self.plugin.batch_action.isEnabled())
 
-        # 2. Start editing -> enabled
+        # 2. Start editing -> enabled for Polygon
         layer.startEditing()
         if self.plugin.action:
             self.assertTrue(self.plugin.action.isEnabled())
@@ -149,11 +149,24 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
             self.assertTrue(self.plugin.restore_action.isEnabled())
         self.assertTrue(self.plugin.batch_action.isEnabled())
         self.assertTrue(self.plugin.settings_widget.btn_apply_selected.isEnabled())
+        # Two-line action is disabled for polygons
+        if self.plugin.two_line_action:
+            self.assertFalse(self.plugin.two_line_action.isEnabled())
+
+        # Now test with line layer
+        line_layer = QgsVectorLayer("LineString?crs=EPSG:4326", "temp_lines", "memory")
+        line_layer.startEditing()
+        canvas.setCurrentLayer(line_layer)
+        self.iface.currentLayerChanged.emit(line_layer)
+        if self.plugin.two_line_action:
+            self.assertTrue(self.plugin.two_line_action.isEnabled())
 
         # 3. Roll back (stop editing) -> disabled
-        layer.rollBack()
+        line_layer.rollBack()
         if self.plugin.action:
             self.assertFalse(self.plugin.action.isEnabled())
+        if self.plugin.two_line_action:
+            self.assertFalse(self.plugin.two_line_action.isEnabled())
         if self.plugin.restore_action:
             self.assertFalse(self.plugin.restore_action.isEnabled())
         self.assertFalse(self.plugin.batch_action.isEnabled())
@@ -177,6 +190,17 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
             self.assertNotEqual(canvas.mapTool(), self.plugin.map_tool)
             self.assertFalse(self.plugin.action.isChecked())
             self.assertFalse(self.plugin.action.isEnabled())
+
+        # Test Two-Line tool deactivation
+        layer.startEditing()
+        self.plugin.toggle_two_line_tool(True)
+        self.assertEqual(canvas.mapTool(), self.plugin.two_line_map_tool)
+        self.assertTrue(self.plugin.two_line_action.isChecked())
+
+        layer.rollBack()
+        self.assertNotEqual(canvas.mapTool(), self.plugin.two_line_map_tool)
+        self.assertFalse(self.plugin.two_line_action.isChecked())
+        self.assertFalse(self.plugin.two_line_action.isEnabled())
 
         # Test Restore tool deactivation
         layer.startEditing()

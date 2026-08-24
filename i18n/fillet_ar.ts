@@ -3,6 +3,38 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>1. Вкажіть першу лінію</source>
+            <translation>1. حدد الخط الأول</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу лінію</source>
+            <translation>2. حدد الخط الثاني</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній (Merge)</source>
+            <translation>تسطيح / شطب خطين (دمج)</translation>
+        </message>
+        <message>
+            <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
+            <translation>ربط خطين بتسطيح أو شطب ودمج المعالم</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній з об'єднанням</source>
+            <translation>تسطيح / شطب خطين مع الدمج</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска лінії</source>
+            <translation>تسطيح / شطب الخط</translation>
+        </message>
+        <message>
+            <source>Завжди використовувати атрибути першого об'єкта</source>
+            <translation>استخدم دائما سمات المعلم الأول</translation>
+        </message>
+        <message>
+            <source>При об'єднанні двох ліній автоматично зберігати атрибути першого об'єкта без показу діалогу QGIS</source>
+            <translation>عند دمج خطين، احتفظ تلقائيا بسمات المعلم الأول دون إظهار مربع حوار QGIS</translation>
+        </message>
+        <message>
             <source>Fillet / Chamfer (Пакетна обробка)</source>
             <translation>تسطيح / شطب (مجموعة)</translation>
         </message>

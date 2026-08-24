@@ -3,6 +3,38 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>1. Вкажіть першу лінію</source>
+            <translation>1. पहली रेखा निर्दिष्ट करें</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу лінію</source>
+            <translation>2. दूसरी रेखा निर्दिष्ट करें</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній (Merge)</source>
+            <translation>दो-रेखा फिलेट / चैम्फर (मर्ज)</translation>
+        </message>
+        <message>
+            <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
+            <translation>फिलेट या चैम्फर के साथ दो रेखाओं को जोड़ें और सुविधाओं को मर्ज करें</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска двох ліній з об'єднанням</source>
+            <translation>मर्ज के साथ दो-रेखा फिलेट / चैम्फर</translation>
+        </message>
+        <message>
+            <source>Скруглення / фаска лінії</source>
+            <translation>रेखा फिलेट / चैम्फर</translation>
+        </message>
+        <message>
+            <source>Завжди використовувати атрибути першого об'єкта</source>
+            <translation>हमेशा पहली सुविधा की विशेषताओं का उपयोग करें</translation>
+        </message>
+        <message>
+            <source>При об'єднанні двох ліній автоматично зберігати атрибути першого об'єкта без показу діалогу QGIS</source>
+            <translation>दो रेखाओं को मर्ज करते समय, QGIS संवाद दिखाए बिना पहली सुविधा के गुणों को स्वचालित रूप से बनाए रखें</translation>
+        </message>
+        <message>
             <source>Fillet / Chamfer (Пакетна обробка)</source>
             <translation>फिलेट / चैम्फर (बैच)</translation>
         </message>
