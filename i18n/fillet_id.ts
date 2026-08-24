@@ -70,9 +70,10 @@
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
             <translation>Alat interaktif untuk memulihkan sudut tajam (menghapus fillet dan chamfer)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletSettingsWidget</name>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Untuk pemrosesan batch, layer harus dapat diedit dan berisi fitur yang dipilih</translation>
+        </message>
         <message>
             <source>Параметри Fillet / Chamfer</source>
             <translation>Pengaturan Fillet / Chamfer</translation>
@@ -129,9 +130,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Terapkan fillet atau chamfer ke semua simpul dari fitur yang dipilih</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletCanvasWidget</name>
         <message>
             <source>Fillet</source>
             <translation>Fillet</translation>
@@ -176,9 +174,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Jarak terpisah (d1 ≠ d2)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletMapTool</name>
         <message>
             <source>Скруглення вершини</source>
             <translation>Fillet simpul</translation>

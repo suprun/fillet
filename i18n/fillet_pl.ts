@@ -70,9 +70,10 @@
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
             <translation>Interaktywne narzędzie do przywracania ostrych narożników (usuwa zaokrąglenia i ścięcia)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletSettingsWidget</name>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>W przypadku przetwarzania wsadowego warstwa musi być edytowalna i zawierać zaznaczone obiekty</translation>
+        </message>
         <message>
             <source>Параметри Fillet / Chamfer</source>
             <translation>Ustawienia Fillet / Chamfer</translation>
@@ -129,9 +130,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Zastosuj zaokrąglenie lub ścięcie do wszystkich wierzchołków zaznaczonych obiektów</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletCanvasWidget</name>
         <message>
             <source>Fillet</source>
             <translation>Fillet</translation>
@@ -176,9 +174,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Odległości niezależne (d1 ≠ d2)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletMapTool</name>
         <message>
             <source>Скруглення вершини</source>
             <translation>Zaokrąglenie wierzchołka</translation>

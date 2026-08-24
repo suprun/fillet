@@ -70,9 +70,10 @@
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
             <translation>เครื่องมือแบบโต้ตอบเพื่อกู้คืนมุมแหลม (ลบมุมมนและมุมเหลี่ยม)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletSettingsWidget</name>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>สำหรับการประมวลผลแบบกลุ่ม เลเยอร์จะต้องแก้ไขได้และมีฟีเจอร์ที่เลือก</translation>
+        </message>
         <message>
             <source>Параметри Fillet / Chamfer</source>
             <translation>การตั้งค่ามุมมน / มุมเหลี่ยม</translation>
@@ -129,9 +130,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>ใช้การลบมุมมนหรือมุมเหลี่ยมกับจุดยอดทั้งหมดของฟีเจอร์ที่เลือก</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletCanvasWidget</name>
         <message>
             <source>Fillet</source>
             <translation>ลบมุมมน</translation>
@@ -176,9 +174,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>แยกอิสระระยะทาง (d1 ≠ d2)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletMapTool</name>
         <message>
             <source>Скруглення вершини</source>
             <translation>ลบมุมมนจุดยอด</translation>

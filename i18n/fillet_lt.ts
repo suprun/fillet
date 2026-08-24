@@ -70,9 +70,10 @@
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
             <translation>Interaktyvus įrankis aštriems kampams atkurti (pašalina apvalinimus ir nusklembimus)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletSettingsWidget</name>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Paketiniam apdorojimui sluoksnis turi būti redaguojamas ir turėti pasirinktų objektų</translation>
+        </message>
         <message>
             <source>Параметри Fillet / Chamfer</source>
             <translation>Užapvalinimo / nusklembimo nustatymai</translation>
@@ -129,9 +130,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Taikyti užapvalinimą arba nusklembimą visoms pasirinktų objektų viršūnėms</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletCanvasWidget</name>
         <message>
             <source>Fillet</source>
             <translation>Užapvalinimas</translation>
@@ -176,9 +174,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Atstumai nepriklausomi (d1 ≠ d2)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletMapTool</name>
         <message>
             <source>Скруглення вершини</source>
             <translation>Viršūnės užapvalinimas</translation>

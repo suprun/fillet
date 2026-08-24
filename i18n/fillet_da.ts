@@ -70,9 +70,10 @@
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
             <translation>Interaktivt værktøj til at gendanne skarpe hjørner (fjerner afrundinger og affasninger)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletSettingsWidget</name>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Til batchbehandling skal laget være redigerbart og indeholde markerede objekter</translation>
+        </message>
         <message>
             <source>Параметри Fillet / Chamfer</source>
             <translation>Indstillinger for afrunding / affasning</translation>
@@ -129,9 +130,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Anvend afrunding eller affasning på alle knudepunkter i de valgte objekter</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletCanvasWidget</name>
         <message>
             <source>Fillet</source>
             <translation>Afrunding</translation>
@@ -176,9 +174,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Uafhængige afstande (d1 ≠ d2)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletMapTool</name>
         <message>
             <source>Скруглення вершини</source>
             <translation>Knudepunktsafrunding</translation>

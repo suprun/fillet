@@ -39,10 +39,10 @@ class TestTranslations(unittest.TestCase):
         self.assertTrue(translator.load(de_qm))
         QCoreApplication.installTranslator(translator)
 
-        res = QCoreApplication.translate("FilletSettingsWidget", "Параметри скруглення")
+        res = QCoreApplication.translate("FilletPlugin", "Параметри скруглення")
         self.assertEqual(res, "Abrundungsparameter")
 
-        res_lock = QCoreApplication.translate("FilletCanvasWidget", "Блокувати / розблокувати радіус")
+        res_lock = QCoreApplication.translate("FilletPlugin", "Блокувати / розблокувати радіус")
         self.assertEqual(res_lock, "Radius sperren / entsperren")
 
         QCoreApplication.removeTranslator(translator)
@@ -66,6 +66,48 @@ class TestTranslations(unittest.TestCase):
             "2. Specify adjacent second edge"
         )
 
+        # Test Dock Panel translations in English
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Параметри Fillet / Chamfer"),
+            "Fillet / Chamfer Settings"
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Режим операції"),
+            "Operation Mode"
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Радіус (R):"),
+            "Radius (R):"
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Кількість сегментів дуги:"),
+            "Arc segments count:"
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Параметри фаски"),
+            "Chamfer Parameters"
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Відстань 1 (d1):"),
+            "Distance 1 (d1):"
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Відстань 2 (d2):"),
+            "Distance 2 (d2):"
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Застосувати до виділених об'єктів"),
+            "Apply to Selected Features"
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Застосувати скруглення або фаску до всіх вершин виділених об'єктів"),
+            "Apply fillet or chamfer to all vertices of selected features"
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти"),
+            "For batch processing, layer must be editable and contain selected features"
+        )
+
         QCoreApplication.removeTranslator(translator_en)
 
         # Test French
@@ -74,10 +116,40 @@ class TestTranslations(unittest.TestCase):
         self.assertTrue(translator_fr.load(fr_qm))
         QCoreApplication.installTranslator(translator_fr)
 
-        res_fr = QCoreApplication.translate("FilletSettingsWidget", "Режим операції")
+        res_fr = QCoreApplication.translate("FilletPlugin", "Режим операції")
         self.assertEqual(res_fr, "Mode d'opération")
 
         QCoreApplication.removeTranslator(translator_fr)
+
+    def test_restore_hud_autosizing(self):
+        from qgis.gui import QgsMapCanvas
+        from gui.restore_canvas_widget import RestoreCanvasWidget
+
+        canvas = QgsMapCanvas()
+        canvas.resize(800, 600)
+
+        # Install English translator
+        en_qm = os.path.join(self.i18n_dir, "fillet_en.qm")
+        translator_en = QTranslator()
+        self.assertTrue(translator_en.load(en_qm))
+        QCoreApplication.installTranslator(translator_en)
+
+        try:
+            hud = RestoreCanvasWidget(canvas)
+            hud.set_step(RestoreCanvasWidget.STEP_FIRST_EDGE)
+            self.assertEqual(hud.lbl_step.text(), "1. Specify first corner edge")
+            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
+            self.assertEqual(hud.x() + hud.width(), canvas.width())
+
+            hud.set_step(RestoreCanvasWidget.STEP_SECOND_EDGE)
+            self.assertEqual(hud.lbl_step.text(), "2. Specify adjacent second edge")
+            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
+            self.assertEqual(hud.x() + hud.width(), canvas.width())
+            self.assertLessEqual(hud.x() + hud.width(), 800)
+            self.assertGreaterEqual(hud.x(), 0)
+        finally:
+            QCoreApplication.removeTranslator(translator_en)
+            canvas.deleteLater()
 
 
 if __name__ == "__main__":

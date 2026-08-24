@@ -70,9 +70,10 @@
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
             <translation>Interaktívny nástroj na obnovu ostrých rohov (odstráni zaoblenia a skosenia)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletSettingsWidget</name>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Pre dávkové spracovanie musí byť vrstva upraviteľná a obsahovať vybrané prvky</translation>
+        </message>
         <message>
             <source>Параметри Fillet / Chamfer</source>
             <translation>Nastavenia zaoblenia / skosenia</translation>
@@ -129,9 +130,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Použiť zaoblenie alebo skosenie na všetky lomové body vybraných prvkov</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletCanvasWidget</name>
         <message>
             <source>Fillet</source>
             <translation>Zaoblenie</translation>
@@ -176,9 +174,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Oddelené vzdialenosti (d1 ≠ d2)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletMapTool</name>
         <message>
             <source>Скруглення вершини</source>
             <translation>Zaoblenie vrcholu</translation>

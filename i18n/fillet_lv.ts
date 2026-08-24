@@ -70,9 +70,10 @@
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
             <translation>Interaktīvs rīks asu stūru atjaunošanai (noņem noapaļojumus un nolīdzinājumus)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletSettingsWidget</name>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Pakešapstrādei slānim jābūt rediģējamam un jāsatur atlasītie objekti</translation>
+        </message>
         <message>
             <source>Параметри Fillet / Chamfer</source>
             <translation>Noapaļošanas / nolīdzināšanas iestatījumi</translation>
@@ -129,9 +130,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Lietot noapaļošanu vai nolīdzināšanu visām atlasīto objektu virsotnēm</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletCanvasWidget</name>
         <message>
             <source>Fillet</source>
             <translation>Noapaļot</translation>
@@ -176,9 +174,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Attālumi atsevišķi (d1 ≠ d2)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletMapTool</name>
         <message>
             <source>Скруглення вершини</source>
             <translation>Virsotnes noapaļošana</translation>

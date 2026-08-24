@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
-  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.13" plugin_id="fillet">
+  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.14" plugin_id="fillet">
     <description>Interactive Fillet, Chamfer &amp; Corner Restoration tools for QGIS with instant Batch Fillet/Chamfer for selected features.</description>
     <about>Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), and Two-Edge Corner Restoration (Unfillet / Unchamfer) map tools for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.</about>
-    <version>1.0.0.13</version>
+    <version>1.0.0.14</version>
     <qgis_minimum_version>3.16</qgis_minimum_version>
     <qgis_maximum_version>4.99</qgis_maximum_version>
     <file_name>fillet.zip</file_name>
@@ -14,7 +14,10 @@
     <experimental>False</experimental>
     <deprecated>False</deprecated>
     <tags>cad, editing, fillet, chamfer, unfillet, corner, restore, geometry, digitizing, curve, batch, qgis4</tags>
-    <change_log>1.0.0.13:
+    <change_log>1.0.0.14:
+- Fixed complete translation resolution across 40 languages for the batch settings dock panel.
+- Added dynamic auto-sizing and repositioning to Corner Restoration HUD panel to ensure hints are never clipped.
+1.0.0.13:
 - Added floating CAD HUD step-by-step hints and step-back workflow for Two-Edge Corner Restoration (Unfillet / Unchamfer) tool.
 - Added auto-dismissal timers (4-5s duration) to all QGIS message bar notification strips.
 - Removed drop shadow effects from floating canvas widgets to match native QGIS flat CAD panel styling.

@@ -70,9 +70,10 @@
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
             <translation>नुकीले कोनों को पुनर्स्थापित करने के लिए इंटरैक्टिव टूल (फिलेट और चैम्फर हटाता है)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletSettingsWidget</name>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>बैच प्रसंस्करण के लिए, परत संपादन योग्य होनी चाहिए और इसमें चयनित सुविधाएं होनी चाहिए</translation>
+        </message>
         <message>
             <source>Параметри Fillet / Chamfer</source>
             <translation>फिलेट / चैम्फर सेटिंग्स</translation>
@@ -129,9 +130,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>चयनित फ़ीचर्स के सभी शीर्षों पर फिलेट या चैम्फर लागू करें</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletCanvasWidget</name>
         <message>
             <source>Fillet</source>
             <translation>फिलेट</translation>
@@ -176,9 +174,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>अलग-अलग दूरियां (d1 ≠ d2)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletMapTool</name>
         <message>
             <source>Скруглення вершини</source>
             <translation>शीर्ष फिलेट</translation>

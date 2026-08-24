@@ -70,9 +70,10 @@
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
             <translation>Herramienta interactiva para restaurar esquinas afiladas (elimina redondeos y chaflanes)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletSettingsWidget</name>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Para el procesamiento por lotes, la capa debe ser editable y contener entidades seleccionadas</translation>
+        </message>
         <message>
             <source>Параметри Fillet / Chamfer</source>
             <translation>Parámetros de Fillet / Chamfer</translation>
@@ -129,9 +130,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Aplicar empalme o chaflán a todos los vértices de las entidades seleccionadas</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletCanvasWidget</name>
         <message>
             <source>Fillet</source>
             <translation>Fillet</translation>
@@ -176,9 +174,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Distancias independientes (d1 ≠ d2)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletMapTool</name>
         <message>
             <source>Скруглення вершини</source>
             <translation>Empalme de vértice</translation>

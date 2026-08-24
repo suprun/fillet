@@ -70,9 +70,10 @@
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
             <translation>Interaktives Werkzeug zur Wiederherstellung scharfer Ecken (entfernt Rundungen und Fasen)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletSettingsWidget</name>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Für die Stapelverarbeitung muss der Layer bearbeitbar sein und ausgewählte Objekte enthalten</translation>
+        </message>
         <message>
             <source>Параметри Fillet / Chamfer</source>
             <translation>Fillet / Chamfer Einstellungen</translation>
@@ -129,9 +130,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Abrundung oder Fase auf alle Stützpunkte der ausgewählten Objekte anwenden</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletCanvasWidget</name>
         <message>
             <source>Fillet</source>
             <translation>Fillet</translation>
@@ -176,9 +174,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Abstände getrennt (d1 ≠ d2)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletMapTool</name>
         <message>
             <source>Скруглення вершини</source>
             <translation>Stützpunkt-Abrundung</translation>

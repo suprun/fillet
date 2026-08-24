@@ -70,9 +70,10 @@
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
             <translation>Keskin köşeleri geri yüklemek için etkileşimli araç (yuvarlatmaları ve pahları kaldırır)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletSettingsWidget</name>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Toplu işlem için katman düzenlenebilir olmalı ve seçili detayları içermelidir</translation>
+        </message>
         <message>
             <source>Параметри Fillet / Chamfer</source>
             <translation>Yuvarlat / Pah Kır Ayarları</translation>
@@ -129,9 +130,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Seçili detayların tüm düğüm noktalarına yuvarlatma veya pah kırma uygula</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletCanvasWidget</name>
         <message>
             <source>Fillet</source>
             <translation>Yuvarlat</translation>
@@ -176,9 +174,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Mesafeler ayrı (d1 ≠ d2)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletMapTool</name>
         <message>
             <source>Скруглення вершини</source>
             <translation>Düğüm Yuvarlatma</translation>

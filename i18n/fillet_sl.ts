@@ -70,9 +70,10 @@
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
             <translation>Interaktivno orodje za obnovo ostrih vogalov (odstrani zaokrožitve in posnetke)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletSettingsWidget</name>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Za paketno obdelavo mora biti sloj mogoče urejati in vsebovati izbrane gradnike</translation>
+        </message>
         <message>
             <source>Параметри Fillet / Chamfer</source>
             <translation>Nastavitve zaokrožitve / posnetega roba</translation>
@@ -129,9 +130,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Uveljavi zaokrožitev ali posneti rob na vseh točkah izbranih gradnikov</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletCanvasWidget</name>
         <message>
             <source>Fillet</source>
             <translation>Zaokrožitev</translation>
@@ -176,9 +174,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Ločeni razdalji (d1 ≠ d2)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletMapTool</name>
         <message>
             <source>Скруглення вершини</source>
             <translation>Zaokrožitev točke</translation>

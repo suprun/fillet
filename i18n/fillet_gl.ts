@@ -70,9 +70,10 @@
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
             <translation>Ferramenta interactiva para restaurar esquinas afiadas (elimina redondeos e chafráns)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletSettingsWidget</name>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Para o procesamento por lotes, a capa debe ser editable e conter entidades seleccionadas</translation>
+        </message>
         <message>
             <source>Параметри Fillet / Chamfer</source>
             <translation>Axustes de arredondamento / chafrán</translation>
@@ -129,9 +130,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Aplicar arredondamento ou chafrán a todos os vértices das entidades seleccionadas</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletCanvasWidget</name>
         <message>
             <source>Fillet</source>
             <translation>Arredondamento</translation>
@@ -176,9 +174,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Distancias separadas (d1 ≠ d2)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletMapTool</name>
         <message>
             <source>Скруглення вершини</source>
             <translation>Arredondamento de vértice</translation>

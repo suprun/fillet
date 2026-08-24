@@ -70,9 +70,10 @@
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
             <translation>Izkina zorrotzak leheneratzeko tresna interaktiboa (biribiltzeak eta xaflaketak kentzen ditu)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletSettingsWidget</name>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Loteak prozesatzeko, geruzak editagarria izan behar du eta hautatutako entitateak eduki behar ditu</translation>
+        </message>
         <message>
             <source>Параметри Fillet / Chamfer</source>
             <translation>Biribiltze / xaflaketa ezarpenak</translation>
@@ -129,9 +130,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Aplikatu biribiltzea edo xaflaketa hautatutako entitateen erpin guztiei</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletCanvasWidget</name>
         <message>
             <source>Fillet</source>
             <translation>Biribiltzea</translation>
@@ -176,9 +174,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Distantzia independenteak (d1 ≠ d2)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletMapTool</name>
         <message>
             <source>Скруглення вершини</source>
             <translation>Erpinaren biribiltzea</translation>

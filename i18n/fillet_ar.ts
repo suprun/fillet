@@ -70,9 +70,10 @@
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
             <translation>أداة تفاعلية لاستعادة الزوايا الحادة (تزيل الاستدارة والشطب)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletSettingsWidget</name>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>للمعالجة الدفعية، يجب أن تكون الطبقة قابلة للتحرير وتحتوي على معالم محددة</translation>
+        </message>
         <message>
             <source>Параметри Fillet / Chamfer</source>
             <translation>إعدادات التسطيح / الشطب</translation>
@@ -129,9 +130,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>تطبيق التسطيح أو الشطب على جميع رؤوس المعالم المحددة</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletCanvasWidget</name>
         <message>
             <source>Fillet</source>
             <translation>تسطيح</translation>
@@ -176,9 +174,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>المسافات منفصلة (d1 ≠ d2)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletMapTool</name>
         <message>
             <source>Скруглення вершини</source>
             <translation>تسطيح الرأس</translation>

@@ -70,9 +70,10 @@
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
             <translation>Interaktív eszköz éles sarkok visszaállítására (lekerekítések és letörések eltávolítása)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletSettingsWidget</name>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>A kötegelt feldolgozáshoz a rétegnek szerkeszthetőnek kell lennie és kijelölt elemeket kell tartalmaznia</translation>
+        </message>
         <message>
             <source>Параметри Fillet / Chamfer</source>
             <translation>Lekerekítés / Letörés beállítások</translation>
@@ -129,9 +130,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Lekerekítés vagy letörés alkalmazása a kijelölt elemek minden töréspontjára</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletCanvasWidget</name>
         <message>
             <source>Fillet</source>
             <translation>Lekerekítés</translation>
@@ -176,9 +174,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Különálló távolságok (d1 ≠ d2)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletMapTool</name>
         <message>
             <source>Скруглення вершини</source>
             <translation>Töréspont lekerekítése</translation>

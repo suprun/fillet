@@ -70,9 +70,10 @@
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
             <translation>Interaktiivinen työkalu terävien kulmien palauttamiseen (poistaa pyöristykset ja viisteet)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletSettingsWidget</name>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Eräkäsittelyä varten tason on oltava muokattavissa ja sisällettävä valittuja kohteita</translation>
+        </message>
         <message>
             <source>Параметри Fillet / Chamfer</source>
             <translation>Pyöristys / Viiste -asetukset</translation>
@@ -129,9 +130,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Käytä pyöristystä tai viistettä valittujen kohteiden kaikkiin taitteisiin</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletCanvasWidget</name>
         <message>
             <source>Fillet</source>
             <translation>Pyöristys</translation>
@@ -176,9 +174,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Erilliset etäisyydet (d1 ≠ d2)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletMapTool</name>
         <message>
             <source>Скруглення вершини</source>
             <translation>Taitteen pyöristys</translation>

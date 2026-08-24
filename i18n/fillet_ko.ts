@@ -70,9 +70,10 @@
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
             <translation>날카로운 모서리 복원을 위한 대화형 도구 (필렛 및 챔퍼 제거)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletSettingsWidget</name>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>일괄 처리를 위해서는 레이어가 편집 가능하고 선택된 객체를 포함해야 합니다</translation>
+        </message>
         <message>
             <source>Параметри Fillet / Chamfer</source>
             <translation>필렛 / 챔퍼 설정</translation>
@@ -129,9 +130,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>선택한 객체의 모든 꼭짓점에 필렛 또는 챔퍼 적용</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletCanvasWidget</name>
         <message>
             <source>Fillet</source>
             <translation>필렛</translation>
@@ -176,9 +174,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>거리 개별 설정 (d1 ≠ d2)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletMapTool</name>
         <message>
             <source>Скруглення вершини</source>
             <translation>꼭짓점 필렛</translation>

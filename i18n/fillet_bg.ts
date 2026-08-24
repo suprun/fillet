@@ -70,9 +70,10 @@
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
             <translation>Интерактивен инструмент за възстановяване на остри ъгли (премахва закръгления и фаски)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletSettingsWidget</name>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>За пакетна обработка слоят трябва да бъде в режим на редактиране и да съдържа избрани обекти</translation>
+        </message>
         <message>
             <source>Параметри Fillet / Chamfer</source>
             <translation>Параметри на Закръгляване / Фаска</translation>
@@ -129,9 +130,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Приложи закръгляване или фаска към всички върхове на избраните обекти</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletCanvasWidget</name>
         <message>
             <source>Fillet</source>
             <translation>Закръгляване</translation>
@@ -176,9 +174,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Разделни разстояния (d1 ≠ d2)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletMapTool</name>
         <message>
             <source>Скруглення вершини</source>
             <translation>Закръгляване на връх</translation>

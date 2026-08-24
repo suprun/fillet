@@ -45,7 +45,6 @@ class RestoreCanvasWidget(QFrame):
         wa_show = getattr(Qt.WidgetAttribute, "WA_ShowWithoutActivating", getattr(Qt, "WA_ShowWithoutActivating", None))
         if wa_show is not None:
             self.setAttribute(wa_show, True)
-        self.setMinimumWidth(230)
 
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(8, 8, 8, 8)
@@ -53,11 +52,12 @@ class RestoreCanvasWidget(QFrame):
 
         # Step indicator label
         self.lbl_step = QLabel(self)
+        self.lbl_step.setWordWrap(False)
         step_font = self.lbl_step.font()
         step_font.setBold(True)
         step_font.setPointSize(max(8, step_font.pointSize() - 1))
         self.lbl_step.setFont(step_font)
-        self.lbl_step.setStyleSheet("color: #1e3a8a; background-color: #dbeafe; border-radius: 4px; padding: 3px 6px;")
+        self.lbl_step.setStyleSheet("color: #1e3a8a; background-color: #dbeafe; border-radius: 4px; padding: 4px 8px;")
         self.set_step(self.STEP_FIRST_EDGE)
         main_layout.addWidget(self.lbl_step)
 
@@ -76,11 +76,17 @@ class RestoreCanvasWidget(QFrame):
             self.lbl_step.setText(self.tr("1. Вкажіть перше ребро кута"))
         elif step == self.STEP_SECOND_EDGE:
             self.lbl_step.setText(self.tr("2. Вкажіть суміжне друге ребро"))
+        self.reposition_to_default()
 
     def reposition_to_default(self):
-        """Positions the widget firmly at top-right corner of the map canvas."""
+        """Positions the widget firmly at top-right corner of the map canvas without clipping."""
+        self.lbl_step.adjustSize()
         self.adjustSize()
-        self.resize(self.minimumSizeHint())
+        hint = self.sizeHint()
+        lbl_hint = self.lbl_step.sizeHint()
+        w = max(hint.width(), lbl_hint.width() + 20)
+        h = max(hint.height(), lbl_hint.height() + 16)
+        self.resize(w, h)
         self.adjustSize()
         x = max(0, self.canvas.width() - self.width())
         y = 0

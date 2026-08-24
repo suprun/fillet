@@ -70,9 +70,10 @@
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
             <translation>Διαδραστικό εργαλείο για την επαναφορά αιχμηρών γωνιών (αφαιρεί στρογγυλοποιήσεις και λοξοτομές)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletSettingsWidget</name>
+        <message>
+            <source>Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти</source>
+            <translation>Για ομαδική επεξεργασία, το επίπεδο πρέπει να είναι επεξεργάσιμο και να περιέχει επιλεγμένα στοιχεία</translation>
+        </message>
         <message>
             <source>Параметри Fillet / Chamfer</source>
             <translation>Ρυθμίσεις Στρογγυλοποίησης / Λοξότμησης</translation>
@@ -129,9 +130,6 @@
             <source>Застосувати скруглення або фаску до всіх вершин виділених об'єктів</source>
             <translation>Εφαρμογή στρογγυλοποίησης ή λοξότμησης σε όλες τις κορυφές των επιλεγμένων στοιχείων</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletCanvasWidget</name>
         <message>
             <source>Fillet</source>
             <translation>Στρογγυλοποίηση</translation>
@@ -176,9 +174,6 @@
             <source>Відстані роздільні (d1 ≠ d2)</source>
             <translation>Ανεξάρτητες αποστάσεις (d1 ≠ d2)</translation>
         </message>
-    </context>
-    <context>
-        <name>FilletMapTool</name>
         <message>
             <source>Скруглення вершини</source>
             <translation>Στρογγυλοποίηση κορυφής</translation>
