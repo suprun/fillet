@@ -274,5 +274,41 @@
             <source>CAD Rotate Feature(s)</source>
             <translation>CAD Objektų pasukimas</translation>
         </message>
+        <message>
+            <source>CAD Дзеркало (Mirror)</source>
+            <translation>CAD Veidrodis</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
+            <translation>Interaktyvus CAD įrankis geometrijoms veidrodiškai atspindėti pagal 2 taškų ašį</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть першу точку осі</source>
+            <translation>1. Nurodykite pirmąjį ašies tašką</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу точку осі</source>
+            <translation>2. Nurodykite antrąjį ašies tašką</translation>
+        </message>
+        <message>
+            <source>Прив'язка осі:</source>
+            <translation>Ašies pritraukimas:</translation>
+        </message>
+        <message>
+            <source>90° (Орто)</source>
+            <translation>90° (Orto)</translation>
+        </message>
+        <message>
+            <source>Створює дзеркальну копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Sukuria pasirinktų objektų veidrodinę kopiją, išlaikant originalą</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне копіювання</source>
+            <translation>CAD Veidrodinė kopija</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне відображення</source>
+            <translation>CAD Veidrodinis atspindys</translation>
+        </message>
     </context>
 </TS>

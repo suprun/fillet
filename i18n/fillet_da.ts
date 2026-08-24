@@ -274,5 +274,41 @@
             <source>CAD Rotate Feature(s)</source>
             <translation>CAD Roter objekt(er)</translation>
         </message>
+        <message>
+            <source>CAD Дзеркало (Mirror)</source>
+            <translation>CAD Spejling</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
+            <translation>Interaktivt CAD-værktøj til at spejle geometrier over en 2-punkts akse</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть першу точку осі</source>
+            <translation>1. Angiv første aksepunkt</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу точку осі</source>
+            <translation>2. Angiv andet aksepunkt</translation>
+        </message>
+        <message>
+            <source>Прив'язка осі:</source>
+            <translation>Aksesnap:</translation>
+        </message>
+        <message>
+            <source>90° (Орто)</source>
+            <translation>90° (Ortho)</translation>
+        </message>
+        <message>
+            <source>Створює дзеркальну копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Opretter en spejlet kopi af de valgte elementer og bevarer originalen</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне копіювання</source>
+            <translation>CAD Spejlkopi</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне відображення</source>
+            <translation>CAD Spejling</translation>
+        </message>
     </context>
 </TS>

@@ -28,6 +28,8 @@ try:
     from .core.geometry_engine import GeometryEngine
     from .gui.canvas_widget import FilletCanvasWidget
     from .gui.map_tool import FilletMapTool
+    from .gui.mirror_canvas_widget import MirrorCanvasWidget
+    from .gui.mirror_map_tool import MirrorMapTool
     from .gui.restore_canvas_widget import RestoreCanvasWidget
     from .gui.restore_map_tool import RestoreMapTool
     from .gui.rotate_map_tool import RotateMapTool
@@ -38,6 +40,8 @@ except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
     from gui.canvas_widget import FilletCanvasWidget
     from gui.map_tool import FilletMapTool
+    from gui.mirror_canvas_widget import MirrorCanvasWidget
+    from gui.mirror_map_tool import MirrorMapTool
     from gui.restore_canvas_widget import RestoreCanvasWidget
     from gui.restore_map_tool import RestoreMapTool
     from gui.rotate_map_tool import RotateMapTool
@@ -62,6 +66,7 @@ class FilletPlugin:
         self.two_line_action: Optional[QAction] = None
         self.restore_action: Optional[QAction] = None
         self.rotate_action: Optional[QAction] = None
+        self.mirror_action: Optional[QAction] = None
         self.batch_action: Optional[QAction] = None
         self.map_tool: Optional[FilletMapTool] = None
         self.two_line_map_tool: Optional[TwoLineMapTool] = None
@@ -69,6 +74,8 @@ class FilletPlugin:
         self.restore_canvas_widget: Optional[RestoreCanvasWidget] = None
         self.rotate_map_tool: Optional[RotateMapTool] = None
         self.rotation_widget: Optional[RotationCanvasWidget] = None
+        self.mirror_map_tool: Optional[MirrorMapTool] = None
+        self.mirror_widget: Optional[MirrorCanvasWidget] = None
         self.canvas_widget: Optional[FilletCanvasWidget] = None
         self.dock_widget: Optional[QDockWidget] = None
         self.settings_widget: Optional[FilletSettingsWidget] = None
@@ -198,9 +205,25 @@ class FilletPlugin:
         self.rotate_action.setToolTip(self.tr("Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)"))
         self.rotate_action.triggered.connect(self.toggle_rotate_tool)
 
+        # 7. Create interactive CAD 2-Point Mirror Map Tool (available in QGIS 3.x and QGIS 4.x)
+        self.mirror_widget = MirrorCanvasWidget(self.canvas)
+        self.mirror_widget.hide()
+        self.mirror_map_tool = MirrorMapTool(self.canvas, self.mirror_widget)
+
+        mirror_icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionMirrorCAD.svg")
+        self.mirror_action = QAction(
+            QIcon(mirror_icon_path),
+            self.tr("CAD Дзеркало (Mirror)"),
+            self.iface.mainWindow(),
+        )
+        self.mirror_action.setCheckable(True)
+        self.mirror_action.setObjectName("actionMirrorCAD")
+        self.mirror_action.setToolTip(self.tr("Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок"))
+        self.mirror_action.triggered.connect(self.toggle_mirror_tool)
+
         adv_tb = self.iface.advancedDigitizeToolBar()
 
-        # 7. Create interactive Fillet / Chamfer MapTool ONLY in QGIS 3.x (native in QGIS 4.0+)
+        # 8. Create interactive Fillet / Chamfer MapTool ONLY in QGIS 3.x (native in QGIS 4.0+)
         if not self.is_qgis_4():
             self.map_tool = FilletMapTool(self.canvas, self.canvas_widget)
 
@@ -225,7 +248,7 @@ class FilletPlugin:
                 self.iface.addVectorToolBarIcon(self.action)
             self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.action)
 
-        # 8. Insert rotate_action on toolbar (after standard Rotate Feature action / 4th place)
+        # 9. Insert rotate_action and mirror_action on toolbar (after standard Rotate Feature action / 4th & 5th place)
         if adv_tb:
             rotate_feature_act = None
             for act in adv_tb.actions():
@@ -248,10 +271,22 @@ class FilletPlugin:
                 adv_tb.insertAction(actions_now[3], self.rotate_action)
             else:
                 adv_tb.addAction(self.rotate_action)
+
+            # Insert mirror_action after rotate_action
+            actions_now = adv_tb.actions()
+            try:
+                idx = actions_now.index(self.rotate_action)
+                if idx + 1 < len(actions_now):
+                    adv_tb.insertAction(actions_now[idx + 1], self.mirror_action)
+                else:
+                    adv_tb.addAction(self.mirror_action)
+            except (ValueError, IndexError):
+                adv_tb.addAction(self.mirror_action)
         else:
             self.iface.addVectorToolBarIcon(self.rotate_action)
+            self.iface.addVectorToolBarIcon(self.mirror_action)
 
-        # 9. Insert two_line_action, restore_action and batch_action on toolbar
+        # 10. Insert two_line_action, restore_action and batch_action on toolbar
         if adv_tb:
             anchor_act = self.action
             if not anchor_act:
@@ -304,6 +339,7 @@ class FilletPlugin:
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.two_line_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.restore_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.rotate_action)
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.mirror_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.batch_action)
 
         if self.canvas:
@@ -384,7 +420,21 @@ class FilletPlugin:
             self.rotate_action.deleteLater()
             self.rotate_action = None
 
-        # 5. Clean up two line action
+        # 5. Clean up mirror action
+        if self.mirror_action:
+            try:
+                self.mirror_action.triggered.disconnect(self.toggle_mirror_tool)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            if self.iface.advancedDigitizeToolBar():
+                self.iface.advancedDigitizeToolBar().removeAction(self.mirror_action)
+            self.iface.removeVectorToolBarIcon(self.mirror_action)
+            self.iface.removePluginVectorMenu(self.tr("Fillet & Chamfer"), self.mirror_action)
+            self.mirror_action.setParent(None)
+            self.mirror_action.deleteLater()
+            self.mirror_action = None
+
+        # 6. Clean up two line action
         if self.two_line_action:
             try:
                 self.two_line_action.triggered.disconnect(self.toggle_two_line_tool)
@@ -398,7 +448,7 @@ class FilletPlugin:
             self.two_line_action.deleteLater()
             self.two_line_action = None
 
-        # 6. Clean up batch action
+        # 7. Clean up batch action
         if self.batch_action:
             try:
                 self.batch_action.triggered.disconnect(self.toggle_batch_panel)
@@ -412,7 +462,7 @@ class FilletPlugin:
             self.batch_action.deleteLater()
             self.batch_action = None
 
-        # 7. Clean up map tools
+        # 8. Clean up map tools
         if self.map_tool:
             if self.canvas and self.canvas.mapTool() == self.map_tool:
                 self.canvas.unsetMapTool(self.map_tool)
@@ -453,7 +503,17 @@ class FilletPlugin:
             self.rotate_map_tool.deleteLater()
             self.rotate_map_tool = None
 
-        # 8. Clean up canvas widgets
+        if self.mirror_map_tool:
+            if self.canvas and self.canvas.mapTool() == self.mirror_map_tool:
+                self.canvas.unsetMapTool(self.mirror_map_tool)
+            if hasattr(self.mirror_map_tool, "cleanup"):
+                self.mirror_map_tool.cleanup()
+            else:
+                self.mirror_map_tool.deactivate()
+            self.mirror_map_tool.deleteLater()
+            self.mirror_map_tool = None
+
+        # 9. Clean up canvas widgets
         if self.canvas_widget:
             try:
                 self.canvas.removeEventFilter(self.canvas_widget)
@@ -484,7 +544,17 @@ class FilletPlugin:
             self.rotation_widget.deleteLater()
             self.rotation_widget = None
 
-        # 9. Clean up settings widget and dock widget
+        if self.mirror_widget:
+            try:
+                self.canvas.removeEventFilter(self.mirror_widget)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            self.mirror_widget.hide()
+            self.mirror_widget.setParent(None)
+            self.mirror_widget.deleteLater()
+            self.mirror_widget = None
+
+        # 10. Clean up settings widget and dock widget
         if self.settings_widget:
             try:
                 self.settings_widget.applyToSelectedRequested.disconnect(self.apply_to_selected_features)
@@ -512,7 +582,7 @@ class FilletPlugin:
                 old_dock.setParent(None)
                 old_dock.deleteLater()
 
-        # 10. Remove translator
+        # 11. Remove translator
         if self.translator:
             QCoreApplication.removeTranslator(self.translator)
             self.translator = None
@@ -554,6 +624,14 @@ class FilletPlugin:
             if self.canvas and self.canvas.mapTool() == self.rotate_map_tool:
                 self.canvas.unsetMapTool(self.rotate_map_tool)
 
+    def toggle_mirror_tool(self, checked: bool):
+        if checked:
+            if self.mirror_map_tool:
+                self.canvas.setMapTool(self.mirror_map_tool)
+        else:
+            if self.canvas and self.canvas.mapTool() == self.mirror_map_tool:
+                self.canvas.unsetMapTool(self.mirror_map_tool)
+
     def toggle_batch_panel(self, checked: bool):
         if self.dock_widget:
             self.dock_widget.setVisible(checked)
@@ -586,6 +664,12 @@ class FilletPlugin:
             self.rotate_action.setChecked(is_rotate_active)
             if not is_rotate_active and self.rotation_widget:
                 self.rotation_widget.hide()
+
+        if self.mirror_action:
+            is_mirror_active = tool == self.mirror_map_tool
+            self.mirror_action.setChecked(is_mirror_active)
+            if not is_mirror_active and self.mirror_widget:
+                self.mirror_widget.hide()
 
     def _on_current_layer_changed(self, layer=None):
         self.update_action_state()
@@ -627,6 +711,7 @@ class FilletPlugin:
         is_line_editable = bool(is_vector and layer.geometryType() == QgsWkbTypes.GeometryType.LineGeometry and layer.isEditable())
         has_selection = bool(layer.selectedFeatureCount() > 0) if is_vector else False
         is_rotate_enabled = bool(is_editable and has_selection)
+        is_mirror_enabled = bool(is_editable and has_selection)
 
         if is_vector and is_supported_geom:
             if self.settings_widget and hasattr(self.settings_widget, "adapt_to_crs"):
@@ -642,6 +727,8 @@ class FilletPlugin:
             self.restore_action.setEnabled(is_editable)
         if self.rotate_action:
             self.rotate_action.setEnabled(is_rotate_enabled)
+        if self.mirror_action:
+            self.mirror_action.setEnabled(is_mirror_enabled)
         if self.batch_action:
             self.batch_action.setEnabled(is_editable)
 
@@ -671,6 +758,14 @@ class FilletPlugin:
                     self.rotation_widget.hide()
                 if self.rotate_action:
                     self.rotate_action.setChecked(False)
+
+        if not is_mirror_enabled and self.canvas:
+            if self.mirror_map_tool and self.canvas.mapTool() == self.mirror_map_tool:
+                self.canvas.unsetMapTool(self.mirror_map_tool)
+                if self.mirror_widget:
+                    self.mirror_widget.hide()
+                if self.mirror_action:
+                    self.mirror_action.setChecked(False)
 
         if not is_line_editable and self.canvas:
             if self.two_line_map_tool and self.canvas.mapTool() == self.two_line_map_tool:

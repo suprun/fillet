@@ -274,5 +274,41 @@
             <source>CAD Rotate Feature(s)</source>
             <translation>CAD หมุนฟีเจอร์</translation>
         </message>
+        <message>
+            <source>CAD Дзеркало (Mirror)</source>
+            <translation>CAD กระจก</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
+            <translation>เครื่องมือ CAD แบบโต้ตอบเพื่อสะท้อนรูปทรงเรขาคณิตตามแกน 2 จุด</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть першу точку осі</source>
+            <translation>1. ระบุจุดแกนแรก</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу точку осі</source>
+            <translation>2. ระบุจุดแกนที่สอง</translation>
+        </message>
+        <message>
+            <source>Прив'язка осі:</source>
+            <translation>การสน็อปแกน:</translation>
+        </message>
+        <message>
+            <source>90° (Орто)</source>
+            <translation>90° (ฉาก)</translation>
+        </message>
+        <message>
+            <source>Створює дзеркальну копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>สร้างสำเนาสะท้อนของฟีเจอร์ที่เลือกโดยคงต้นฉบับไว้</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне копіювання</source>
+            <translation>การทำสำเนากระจก CAD</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне відображення</source>
+            <translation>การสะท้อนกระจก CAD</translation>
+        </message>
     </context>
 </TS>

@@ -274,5 +274,41 @@
             <source>CAD Rotate Feature(s)</source>
             <translation>CAD 旋轉圖徵</translation>
         </message>
+        <message>
+            <source>CAD Дзеркало (Mirror)</source>
+            <translation>CAD 鏡像</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
+            <translation>基於2點軸線進行幾何鏡像的互動式 CAD 工具</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть першу точку осі</source>
+            <translation>1. 指定軸線的第一個點</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу точку осі</source>
+            <translation>2. 指定軸線的第二個點</translation>
+        </message>
+        <message>
+            <source>Прив'язка осі:</source>
+            <translation>軸線貼齊：</translation>
+        </message>
+        <message>
+            <source>90° (Орто)</source>
+            <translation>90° (正交)</translation>
+        </message>
+        <message>
+            <source>Створює дзеркальну копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>建立所選圖徵的鏡像複本並保留原始圖徵</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне копіювання</source>
+            <translation>CAD 鏡像複製</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне відображення</source>
+            <translation>CAD 鏡像</translation>
+        </message>
     </context>
 </TS>

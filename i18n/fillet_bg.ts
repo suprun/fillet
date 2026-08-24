@@ -274,5 +274,41 @@
             <source>CAD Rotate Feature(s)</source>
             <translation>CAD Завъртане на обекти</translation>
         </message>
+        <message>
+            <source>CAD Дзеркало (Mirror)</source>
+            <translation>CAD Огледално</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
+            <translation>Интерактивен CAD инструмент за огледално отразяване на геометрии спрямо 2-точкова ос</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть першу точку осі</source>
+            <translation>1. Посочете първата точка на оста</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу точку осі</source>
+            <translation>2. Посочете втората точка на оста</translation>
+        </message>
+        <message>
+            <source>Прив'язка осі:</source>
+            <translation>Прилепване към оста:</translation>
+        </message>
+        <message>
+            <source>90° (Орто)</source>
+            <translation>90° (Орто)</translation>
+        </message>
+        <message>
+            <source>Створює дзеркальну копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Създава огледално копие на избраните обекти, запазвайки оригинала</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне копіювання</source>
+            <translation>CAD Огледално копиране</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне відображення</source>
+            <translation>CAD Огледално отразяване</translation>
+        </message>
     </context>
 </TS>

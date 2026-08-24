@@ -274,5 +274,41 @@
             <source>CAD Rotate Feature(s)</source>
             <translation>CAD 피처 회전</translation>
         </message>
+        <message>
+            <source>CAD Дзеркало (Mirror)</source>
+            <translation>CAD 대칭</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
+            <translation>2점 축을 기준으로 지오메트리를 대칭 반사하는 대화형 CAD 도구</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть першу точку осі</source>
+            <translation>1. 첫 번째 축 점 지정</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу точку осі</source>
+            <translation>2. 두 번째 축 점 지정</translation>
+        </message>
+        <message>
+            <source>Прив'язка осі:</source>
+            <translation>축 스냅:</translation>
+        </message>
+        <message>
+            <source>90° (Орто)</source>
+            <translation>90° (직교)</translation>
+        </message>
+        <message>
+            <source>Створює дзеркальну копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>원본을 유지하면서 선택한 피처의 대칭 복사본을 생성합니다</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне копіювання</source>
+            <translation>CAD 대칭 복사</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне відображення</source>
+            <translation>CAD 대칭</translation>
+        </message>
     </context>
 </TS>

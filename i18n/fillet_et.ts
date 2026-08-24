@@ -274,5 +274,41 @@
             <source>CAD Rotate Feature(s)</source>
             <translation>CAD Objektide pööramine</translation>
         </message>
+        <message>
+            <source>CAD Дзеркало (Mirror)</source>
+            <translation>CAD Peegeldus</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
+            <translation>Interaktiivne CAD-tööriist geomeetriate peegeldamiseks piki 2-punktilist telge</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть першу точку осі</source>
+            <translation>1. Määrake telje esimene punkt</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу точку осі</source>
+            <translation>2. Määrake telje teine punkt</translation>
+        </message>
+        <message>
+            <source>Прив'язка осі:</source>
+            <translation>Telje haaramine:</translation>
+        </message>
+        <message>
+            <source>90° (Орто)</source>
+            <translation>90° (Rist)</translation>
+        </message>
+        <message>
+            <source>Створює дзеркальну копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Loob valitud objektidest peegeldatud koopia, säilitades originaali</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне копіювання</source>
+            <translation>CAD Peegelkopeerimine</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне відображення</source>
+            <translation>CAD Peegeldus</translation>
+        </message>
     </context>
 </TS>

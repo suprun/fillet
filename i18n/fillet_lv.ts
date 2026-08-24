@@ -274,5 +274,41 @@
             <source>CAD Rotate Feature(s)</source>
             <translation>CAD Objektu pagriešana</translation>
         </message>
+        <message>
+            <source>CAD Дзеркало (Mirror)</source>
+            <translation>CAD Spogulis</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
+            <translation>Interaktīvs CAD rīks ģeometriju spoguļošanai ap 2 punktu asi</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть першу точку осі</source>
+            <translation>1. Norādiet pirmo ass punktu</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу точку осі</source>
+            <translation>2. Norādiet otro ass punktu</translation>
+        </message>
+        <message>
+            <source>Прив'язка осі:</source>
+            <translation>Ass pielipšana:</translation>
+        </message>
+        <message>
+            <source>90° (Орто)</source>
+            <translation>90° (Orto)</translation>
+        </message>
+        <message>
+            <source>Створює дзеркальну копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Izveido atlasīto objektu spoguļkopiju, saglabājot oriģinālu</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне копіювання</source>
+            <translation>CAD Spoguļkopija</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне відображення</source>
+            <translation>CAD Spoguļošana</translation>
+        </message>
     </context>
 </TS>

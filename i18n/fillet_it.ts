@@ -274,5 +274,41 @@
             <source>CAD Rotate Feature(s)</source>
             <translation>CAD Ruota elemento/i</translation>
         </message>
+        <message>
+            <source>CAD Дзеркало (Mirror)</source>
+            <translation>Specchia CAD</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
+            <translation>Strumento CAD interattivo per specchiare geometrie rispetto a un asse a 2 punti</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть першу точку осі</source>
+            <translation>1. Specificare il primo punto dell'asse</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу точку осі</source>
+            <translation>2. Specificare il secondo punto dell'asse</translation>
+        </message>
+        <message>
+            <source>Прив'язка осі:</source>
+            <translation>Snap asse:</translation>
+        </message>
+        <message>
+            <source>90° (Орто)</source>
+            <translation>90° (Orto)</translation>
+        </message>
+        <message>
+            <source>Створює дзеркальну копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Crea una copia specchiata degli elementi selezionati mantenendo l'originale</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне копіювання</source>
+            <translation>Copia speculare CAD</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне відображення</source>
+            <translation>Specchiatura CAD</translation>
+        </message>
     </context>
 </TS>

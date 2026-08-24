@@ -2,19 +2,21 @@
 name=Fillet & Chamfer for QGIS 3.x (Interactive & Batch)
 qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
-description=Interactive Fillet, Chamfer, Two-Line Merge, Corner Restoration & CAD Rotation suite for QGIS.
-about=Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), and Interactive CAD Rotation Tool for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.
-version=1.0.0.25
+description=Interactive Fillet, Chamfer, Two-Line Merge, Corner Restoration, CAD Rotation & Mirror suite for QGIS.
+about=Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), Interactive CAD Rotation, and CAD Mirror Tool for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.
+version=1.0.0.26
 author=suprun
 email=suprun.serhiy+qgis@gmail.com
 homepage=https://github.com/suprun/fillet
 repository=https://github.com/suprun/fillet
 tracker=https://github.com/suprun/fillet/issues
-tags=cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation, geometry, digitizing, curve, batch, merge, qgis4
+tags=cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation, mirror, symmetry, geometry, digitizing, curve, batch, merge, qgis4
 icon=icon.png
 experimental=False
 deprecated=False
-changelog=1.0.0.25:
+changelog=1.0.0.26:
+    - Integrated interactive CAD 2-Point Mirror Tool with floating HUD, axis angle snap presets (Free, 15, 45, 90 Ortho), and duplicate copy mode.
+    1.0.0.25:
     - Positioned CAD Rotate tool action in 4th place on Advanced Digitize toolbar next to native Rotate Feature.
     1.0.0.24:
     - Integrated interactive CAD 3-Point Rotation Tool with floating CAD HUD, angle snap presets, and duplicate copy mode into toolkit.

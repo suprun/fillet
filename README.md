@@ -27,7 +27,8 @@ The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grad
 2. **Two-Line Fillet / Chamfer Tool with Merge (QGIS 3.x & QGIS 4.x)**: Select any two intersecting or non-intersecting line features or segments to connect them with a fillet arc or chamfer bevel, automatically merging geometries and preserving feature attributes.
 3. **Interactive Corner Restoration Tool / Unfillet & Unchamfer (QGIS 3.x & QGIS 4.x)**: A dedicated CAD Two-Edge selection tool allowing you to select two adjacent straight edges, remove intermediate arc chords or bevel segments, and reconstruct the exact sharp intersection corner ($V_{\text{sharp}}$).
 4. **Interactive CAD 3-Point Rotation Tool (QGIS 3.x & QGIS 4.x)**: Precise CAD rotation tool for selected features using interactive 3-step pivot center, reference baseline, and target angle with angle snap presets and copy mode.
-5. **Batch Processing Dock Panel (QGIS 3.x & QGIS 4.x)**: A dedicated dock widget to round or bevel all vertices across selected features and complex polygon rings with a single click.
+5. **Interactive CAD 2-Point Mirror Tool (QGIS 3.x & QGIS 4.x)**: Interactive CAD mirror tool reflecting selected features across a 2-point symmetry axis line with axis angle snapping (`Free`, `15°`, `45°`, `90° (Ortho)`) and duplicate copy mode.
+6. **Batch Processing Dock Panel (QGIS 3.x & QGIS 4.x)**: A dedicated dock widget to round or bevel all vertices across selected features and complex polygon rings with a single click.
 
 ---
 
@@ -77,7 +78,17 @@ The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grad
 
 ---
 
-### 5. ⚡ Batch Processing Dock Panel (QGIS 3.x & QGIS 4.x)
+### 5. 🪞 Interactive CAD 2-Point Mirror Tool (QGIS 3.x & QGIS 4.x)
+- **2-Point CAD Workflow**:
+  - **Step 1**: Click first point of symmetry mirror axis $P_1$ with native snapping.
+  - **Step 2**: Move cursor to position second axis point $P_2$, viewing the live projected symmetry axis line and real-time preview of mirrored geometries.
+  - Left-click $P_2$ to apply the mirror reflection.
+- **Axis Snap Steps**: Free, 15°, 45°, 90° (Ortho / horizontal & vertical constraint).
+- **Copy Mode**: Option to create mirrored duplicate features while preserving the original.
+
+---
+
+### 6. ⚡ Batch Processing Dock Panel (QGIS 3.x & QGIS 4.x)
 - Dockable panel in the main window for rapid batch processing.
 - Automatically processes all vertices of all parts in selected features (`LineString`, `Polygon`, `MultiLineString`, `MultiPolygon`).
 - Supports exterior rings as well as all interior hole rings.
@@ -86,7 +97,7 @@ The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grad
 
 ---
 
-### 6. 🛡️ Edit-Mode Safety & Native Transactions
+### 7. 🛡️ Edit-Mode Safety & Native Transactions
 - All toolbar action buttons and tools are **automatically enabled only when an active vector layer is in Edit Mode** (`layer.isEditable() == True`).
 - If editing is toggled off while a tool is active, the tool automatically unsets and closes on-canvas widgets to prevent unintended changes.
 - Full native Undo/Redo (`Ctrl+Z` / `Ctrl+Y`) transaction support for all interactive and batch operations.
@@ -95,13 +106,13 @@ The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grad
 
 ## 📦 Compatibility Matrix
 
-| QGIS Version | Platform | UI Framework | Fillet & Chamfer Tool | Corner Restore Tool | Batch Dock Widget | Test Status |
-| :--- | :--- | :--- | :---: | :---: | :---: | :---: |
-| **QGIS 3.16 LTR** | Windows / Linux / macOS | Qt5 / PyQt5 | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
-| **QGIS 3.28 LTR** | Windows / Linux / macOS | Qt5 / PyQt5 | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
-| **QGIS 3.34 LTR** | Windows / Linux / macOS | Qt5 / PyQt5 | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
-| **QGIS 3.40 LTR** | Windows / Linux / macOS | Qt5 / PyQt5 | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
-| **QGIS 4.0.x** | Windows / Linux / macOS | Qt6 / PyQt6 | *Native QGIS 4 tool* | ✅ Included | ✅ Included | ✅ Passed |
+| QGIS Version | Platform | UI Framework | Fillet/Chamfer | Corner Restore | CAD Rotate | CAD Mirror | Batch Dock | Test Status |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **QGIS 3.16 LTR** | Windows / Linux / macOS | Qt5 / PyQt5 | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
+| **QGIS 3.28 LTR** | Windows / Linux / macOS | Qt5 / PyQt5 | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
+| **QGIS 3.34 LTR** | Windows / Linux / macOS | Qt5 / PyQt5 | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
+| **QGIS 3.40 LTR** | Windows / Linux / macOS | Qt5 / PyQt5 | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
+| **QGIS 4.0.x** | Windows / Linux / macOS | Qt6 / PyQt6 | *Native QGIS 4* | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
 
 ---
 

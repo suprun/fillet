@@ -274,5 +274,41 @@
             <source>CAD Rotate Feature(s)</source>
             <translation>CAD Elemek elforgatása</translation>
         </message>
+        <message>
+            <source>CAD Дзеркало (Mirror)</source>
+            <translation>CAD Tükrözés</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
+            <translation>Interaktív CAD eszköz geometriák 2 pontos tengely menti tükrözésére</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть першу точку осі</source>
+            <translation>1. Adja meg a tengely első pontját</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу точку осі</source>
+            <translation>2. Adja meg a tengely második pontját</translation>
+        </message>
+        <message>
+            <source>Прив'язка осі:</source>
+            <translation>Tengelyigazítás:</translation>
+        </message>
+        <message>
+            <source>90° (Орто)</source>
+            <translation>90° (Merőleges)</translation>
+        </message>
+        <message>
+            <source>Створює дзеркальну копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Létrehozza a kijelölt elemek tükrözött másolatát, megtartva az eredetit</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне копіювання</source>
+            <translation>CAD Tükörmásolás</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне відображення</source>
+            <translation>CAD Tükrözés</translation>
+        </message>
     </context>
 </TS>

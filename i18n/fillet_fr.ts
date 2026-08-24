@@ -274,5 +274,41 @@
             <source>CAD Rotate Feature(s)</source>
             <translation>CAD Rotation d'entité(s)</translation>
         </message>
+        <message>
+            <source>CAD Дзеркало (Mirror)</source>
+            <translation>Miroir CAD</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
+            <translation>Outil CAD interactif pour refléter les géométries par rapport à un axe à 2 points</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть першу точку осі</source>
+            <translation>1. Spécifiez le premier point d'axe</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу точку осі</source>
+            <translation>2. Spécifiez le deuxième point d'axe</translation>
+        </message>
+        <message>
+            <source>Прив'язка осі:</source>
+            <translation>Accrochage d'axe :</translation>
+        </message>
+        <message>
+            <source>90° (Орто)</source>
+            <translation>90° (Ortho)</translation>
+        </message>
+        <message>
+            <source>Створює дзеркальну копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Crée une copie miroir des entités sélectionnées en conservant l'original</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне копіювання</source>
+            <translation>Copie miroir CAD</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне відображення</source>
+            <translation>Miroir CAD</translation>
+        </message>
     </context>
 </TS>

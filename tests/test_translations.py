@@ -10,6 +10,7 @@ import unittest
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from qgis.core import QgsApplication
+from qgis.gui import QgsMapCanvas
 from qgis.PyQt.QtCore import QCoreApplication, QTranslator
 
 app = QgsApplication([], False)
@@ -256,6 +257,55 @@ class TestTranslations(unittest.TestCase):
         finally:
             QCoreApplication.removeTranslator(translator_en)
             canvas.deleteLater()
+
+    def test_mirror_hud_translations_and_autosizing(self):
+        """Verify CAD Mirror HUD step texts, labels, and auto-sizing in English."""
+        from gui.mirror_canvas_widget import MirrorCanvasWidget
+
+        canvas = QgsMapCanvas()
+        canvas.resize(800, 600)
+
+        en_qm = os.path.join(self.i18n_dir, "fillet_en.qm")
+        translator_en = QTranslator()
+        self.assertTrue(translator_en.load(en_qm))
+        QCoreApplication.installTranslator(translator_en)
+
+        try:
+            hud = MirrorCanvasWidget(canvas)
+            hud.set_step(MirrorCanvasWidget.STEP_FIRST_POINT)
+            self.assertEqual(hud.lbl_step.text(), "1. Specify first axis point")
+            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
+            self.assertEqual(hud.x() + hud.width(), canvas.width())
+
+            hud.set_step(MirrorCanvasWidget.STEP_SECOND_POINT)
+            self.assertEqual(hud.lbl_step.text(), "2. Specify second axis point")
+            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
+            self.assertEqual(hud.x() + hud.width(), canvas.width())
+
+            self.assertEqual(
+                QCoreApplication.translate("FilletPlugin", "CAD Дзеркало (Mirror)"),
+                "CAD Mirror"
+            )
+            self.assertEqual(
+                QCoreApplication.translate("FilletPlugin", "Прив'язка осі:"),
+                "Axis snap:"
+            )
+            self.assertEqual(
+                QCoreApplication.translate("FilletPlugin", "90° (Орто)"),
+                "90° (Ortho)"
+            )
+            self.assertEqual(
+                QCoreApplication.translate("FilletPlugin", "CAD Дзеркальне відображення"),
+                "CAD Mirror"
+            )
+            self.assertEqual(
+                QCoreApplication.translate("FilletPlugin", "CAD Дзеркальне копіювання"),
+                "CAD Mirror Copy"
+            )
+        finally:
+            QCoreApplication.removeTranslator(translator_en)
+            canvas.deleteLater()
+
 
 
 if __name__ == "__main__":

@@ -1369,6 +1369,134 @@ class GeometryEngine:
         rotated.rotate(-angle_degrees_ccw, center_pt)
         return rotated
 
+    @classmethod
+    def mirror_point(
+        cls,
+        p: Union[QgsPoint, QgsPointXY],
+        p1: Union[QgsPoint, QgsPointXY],
+        p2: Union[QgsPoint, QgsPointXY],
+    ) -> QgsPoint:
+        """
+        Reflects a point p across the infinite axis line passing through p1 and p2.
+        """
+        dx = p2.x() - p1.x()
+        dy = p2.y() - p1.y()
+        len_sq = dx * dx + dy * dy
+        is_3d = getattr(p, "is3D", lambda: False)()
+        is_m = getattr(p, "isMeasure", lambda: False)()
+        z_val = p.z() if is_3d else 0.0
+        m_val = p.m() if is_m else 0.0
+
+        if len_sq < 1e-12:
+            if is_3d and is_m:
+                return QgsPoint(p.x(), p.y(), z_val, m_val)
+            elif is_3d:
+                return QgsPoint(p.x(), p.y(), z_val)
+            elif is_m:
+                return QgsPoint(QgsWkbTypes.Type.PointM, p.x(), p.y(), 0.0, m_val)
+            else:
+                return QgsPoint(p.x(), p.y())
+
+        vx = p.x() - p1.x()
+        vy = p.y() - p1.y()
+
+        length = math.sqrt(len_sq)
+        ux, uy = dx / length, dy / length
+        nx, ny = -uy, ux
+
+        dist = vx * nx + vy * ny
+        mx = p.x() - 2.0 * dist * nx
+        my = p.y() - 2.0 * dist * ny
+
+        if is_3d and is_m:
+            return QgsPoint(mx, my, z_val, m_val)
+        elif is_3d:
+            return QgsPoint(mx, my, z_val)
+        elif is_m:
+            return QgsPoint(QgsWkbTypes.Type.PointM, mx, my, 0.0, m_val)
+        else:
+            return QgsPoint(mx, my)
+
+    @classmethod
+    def _mirror_abstract_geometry(cls, abstract_geom, p1, p2):
+        """Recursively mirrors an abstract geometry (QgsAbstractGeometry subclass)."""
+        if abstract_geom is None or abstract_geom.isEmpty():
+            return abstract_geom.clone() if abstract_geom else None
+
+        wkb_type = abstract_geom.wkbType()
+        flat_type = QgsWkbTypes.flatType(wkb_type)
+
+        if flat_type == QgsWkbTypes.Type.Point:
+            return cls.mirror_point(abstract_geom, p1, p2)
+
+        elif flat_type == QgsWkbTypes.Type.LineString or flat_type == QgsWkbTypes.Type.CircularString:
+            if flat_type == QgsWkbTypes.Type.LineString:
+                ls = QgsLineString()
+                for i in range(abstract_geom.numPoints()):
+                    m_pt = cls.mirror_point(abstract_geom.pointN(i), p1, p2)
+                    ls.addVertex(m_pt)
+                return ls
+            else:
+                clone = abstract_geom.clone()
+                for i in range(clone.numPoints()):
+                    m_pt = cls.mirror_point(clone.pointN(i), p1, p2)
+                    clone.moveVertex(QgsVertexId(0, 0, i), m_pt)
+                return clone
+
+        elif flat_type == QgsWkbTypes.Type.Polygon:
+            poly = QgsPolygon()
+            ext_ring = abstract_geom.exteriorRing()
+            if ext_ring:
+                m_ext = cls._mirror_abstract_geometry(ext_ring, p1, p2)
+                poly.setExteriorRing(m_ext)
+            for r_idx in range(abstract_geom.numInteriorRings()):
+                int_ring = abstract_geom.interiorRing(r_idx)
+                m_int = cls._mirror_abstract_geometry(int_ring, p1, p2)
+                poly.addInteriorRing(m_int)
+            return poly
+
+        elif QgsWkbTypes.isMultiType(wkb_type) or abstract_geom.isMultipart():
+            geom_col = abstract_geom.createEmptyWithSameType()
+            part_count = abstract_geom.partCount() if hasattr(abstract_geom, "partCount") else abstract_geom.numGeometries()
+            for part_idx in range(part_count):
+                sub_geom = abstract_geom.geometryN(part_idx)
+                m_sub = cls._mirror_abstract_geometry(sub_geom, p1, p2)
+                if m_sub:
+                    geom_col.addGeometry(m_sub)
+            return geom_col
+
+        else:
+            clone = abstract_geom.clone()
+            for i in range(clone.nCoordinates()):
+                pt = clone.vertexAt(QgsVertexId(0, 0, i))
+                m_pt = cls.mirror_point(pt, p1, p2)
+                clone.moveVertex(QgsVertexId(0, 0, i), m_pt)
+            return clone
+
+    @classmethod
+    def mirror_geometry(
+        cls,
+        geom: QgsGeometry,
+        p1: Union[QgsPoint, QgsPointXY],
+        p2: Union[QgsPoint, QgsPointXY],
+    ) -> QgsGeometry:
+        """
+        Reflects a QgsGeometry across the axis line passing through p1 and p2.
+        """
+        if geom.isEmpty() or geom.isNull():
+            return QgsGeometry(geom)
+
+        dx = p2.x() - p1.x()
+        dy = p2.y() - p1.y()
+        if dx * dx + dy * dy < 1e-12:
+            return QgsGeometry(geom)
+
+        abstract_geom = geom.constGet()
+        mirrored_abstract = cls._mirror_abstract_geometry(abstract_geom, p1, p2)
+        if mirrored_abstract:
+            return QgsGeometry(mirrored_abstract)
+        return QgsGeometry(geom)
+
     # Alias for backwards compatibility
     batch_process_geometry = batch_apply_geometry
 

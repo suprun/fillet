@@ -274,5 +274,41 @@
             <source>CAD Rotate Feature(s)</source>
             <translation>CAD Περιστροφή στοιχείων</translation>
         </message>
+        <message>
+            <source>CAD Дзеркало (Mirror)</source>
+            <translation>Κάτοπτρο CAD</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
+            <translation>Διαδραστικό εργαλείο CAD για κατοπτρισμό γεωμετριών κατά μήκος ενός άξονα 2 σημείων</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть першу точку осі</source>
+            <translation>1. Καθορίστε το πρώτο σημείο άξονα</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу точку осі</source>
+            <translation>2. Καθορίστε το δεύτερο σημείο άξονα</translation>
+        </message>
+        <message>
+            <source>Прив'язка осі:</source>
+            <translation>Προσκόλληση άξονα:</translation>
+        </message>
+        <message>
+            <source>90° (Орто)</source>
+            <translation>90° (Ορθογώνιο)</translation>
+        </message>
+        <message>
+            <source>Створює дзеркальну копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Δημιουργεί ένα κατοπτρικό αντίγραφο των επιλεγμένων στοιχείων, διατηρώντας το αρχικό</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне копіювання</source>
+            <translation>Κατοπτρική αντιγραφή CAD</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне відображення</source>
+            <translation>Κατοπτρισμός CAD</translation>
+        </message>
     </context>
 </TS>

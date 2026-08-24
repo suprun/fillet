@@ -274,5 +274,41 @@
             <source>CAD Rotate Feature(s)</source>
             <translation>CAD Xoay đối tượng</translation>
         </message>
+        <message>
+            <source>CAD Дзеркало (Mirror)</source>
+            <translation>CAD Đối xứng</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
+            <translation>Công cụ CAD tương tác để phản chiếu hình học qua trục 2 điểm</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть першу точку осі</source>
+            <translation>1. Chỉ định điểm trục đầu tiên</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу точку осі</source>
+            <translation>2. Chỉ định điểm trục thứ hai</translation>
+        </message>
+        <message>
+            <source>Прив'язка осі:</source>
+            <translation>Bắt dính trục:</translation>
+        </message>
+        <message>
+            <source>90° (Орто)</source>
+            <translation>90° (Trực giao)</translation>
+        </message>
+        <message>
+            <source>Створює дзеркальну копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Tạo bản sao đối xứng của các đối tượng được chọn và giữ nguyên bản gốc</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне копіювання</source>
+            <translation>Sao chép đối xứng CAD</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне відображення</source>
+            <translation>Đối xứng CAD</translation>
+        </message>
     </context>
 </TS>

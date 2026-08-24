@@ -232,6 +232,21 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
         self.assertFalse(self.plugin.rotate_action.isChecked())
         self.assertFalse(self.plugin.rotate_action.isEnabled())
 
+        # Test Mirror tool deactivation (requires editing AND selection)
+        layer.selectAll()
+        layer.startEditing()
+        self.plugin.update_action_state()
+        self.assertTrue(self.plugin.mirror_action.isEnabled())
+
+        self.plugin.toggle_mirror_tool(True)
+        self.assertEqual(canvas.mapTool(), self.plugin.mirror_map_tool)
+        self.assertTrue(self.plugin.mirror_action.isChecked())
+
+        layer.rollBack()
+        self.assertNotEqual(canvas.mapTool(), self.plugin.mirror_map_tool)
+        self.assertFalse(self.plugin.mirror_action.isChecked())
+        self.assertFalse(self.plugin.mirror_action.isEnabled())
+
     def test_map_tool_preview_in_all_modes(self):
         """Verify that _update_preview works without errors in fillet and chamfer modes."""
         if self.plugin.is_qgis_4():

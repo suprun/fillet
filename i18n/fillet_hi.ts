@@ -274,5 +274,41 @@
             <source>CAD Rotate Feature(s)</source>
             <translation>CAD सुविधाएँ घुमाएँ</translation>
         </message>
+        <message>
+            <source>CAD Дзеркало (Mirror)</source>
+            <translation>CAD दर्पण (Mirror)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
+            <translation>2-बिंदु अक्ष पर ज्यामिति को प्रतिबिंबित करने के लिए इंटरैक्टिव CAD उपकरण</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть першу точку осі</source>
+            <translation>1. पहला अक्ष बिंदु निर्दिष्ट करें</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу точку осі</source>
+            <translation>2. दूसरा अक्ष बिंदु निर्दिष्ट करें</translation>
+        </message>
+        <message>
+            <source>Прив'язка осі:</source>
+            <translation>अक्ष स्नैप:</translation>
+        </message>
+        <message>
+            <source>90° (Орто)</source>
+            <translation>90° (लंबवत)</translation>
+        </message>
+        <message>
+            <source>Створює дзеркальну копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>मूल को बनाए रखते हुए चयनित सुविधाओं की एक दर्पण प्रतिलिपि बनाता है</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне копіювання</source>
+            <translation>CAD दर्पण प्रतिलिपि (Mirror Copy)</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне відображення</source>
+            <translation>CAD दर्पण (Mirror)</translation>
+        </message>
     </context>
 </TS>

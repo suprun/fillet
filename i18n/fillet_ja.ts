@@ -274,5 +274,41 @@
             <source>CAD Rotate Feature(s)</source>
             <translation>CAD 地物の回転</translation>
         </message>
+        <message>
+            <source>CAD Дзеркало (Mirror)</source>
+            <translation>CAD ミラー</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
+            <translation>2点軸を基準にジオメトリを反転するインタラクティブなCADツール</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть першу точку осі</source>
+            <translation>1. 軸の最初の点を指定</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу точку осі</source>
+            <translation>2. 軸の2番目の点を指定</translation>
+        </message>
+        <message>
+            <source>Прив'язка осі:</source>
+            <translation>軸スナップ:</translation>
+        </message>
+        <message>
+            <source>90° (Орто)</source>
+            <translation>90° (直交)</translation>
+        </message>
+        <message>
+            <source>Створює дзеркальну копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>元の地物を保持したまま、選択した地物のミラーコピーを作成します</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне копіювання</source>
+            <translation>CAD ミラーコピー</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне відображення</source>
+            <translation>CAD ミラーリング</translation>
+        </message>
     </context>
 </TS>

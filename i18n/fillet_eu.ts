@@ -274,5 +274,41 @@
             <source>CAD Rotate Feature(s)</source>
             <translation>CAD Elementuen biraketa</translation>
         </message>
+        <message>
+            <source>CAD Дзеркало (Mirror)</source>
+            <translation>CAD Ispilua</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
+            <translation>2 puntuko ardatz baten inguruan geometriak islatzeko CAD tresna interaktiboa</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть першу точку осі</source>
+            <translation>1. Zehaztu ardatzaren lehen puntua</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть другу точку осі</source>
+            <translation>2. Zehaztu ardatzaren bigarren puntua</translation>
+        </message>
+        <message>
+            <source>Прив'язка осі:</source>
+            <translation>Ardatz atxikimendua:</translation>
+        </message>
+        <message>
+            <source>90° (Орто)</source>
+            <translation>90° (Orto)</translation>
+        </message>
+        <message>
+            <source>Створює дзеркальну копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Hautatutako elementuen ispilu-kopia bat sortzen du jatorrizkoa mantenduz</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне копіювання</source>
+            <translation>CAD Ispilu-kopia</translation>
+        </message>
+        <message>
+            <source>CAD Дзеркальне відображення</source>
+            <translation>CAD Ispilatzea</translation>
+        </message>
     </context>
 </TS>
