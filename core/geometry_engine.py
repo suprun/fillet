@@ -1174,11 +1174,16 @@ class GeometryEngine:
         tan_half = math.tan(half_angle)
         sin_half = math.sin(half_angle)
 
-        # Maximum extents of line 1 and line 2 along rays u1 and u2 from intersection v
-        s1_all = [(curve1.pointN(i).x() - v.x()) * u1x + (curve1.pointN(i).y() - v.y()) * u1y for i in range(n1)]
-        s2_all = [(curve2.pointN(i).x() - v.x()) * u2x + (curve2.pointN(i).y() - v.y()) * u2y for i in range(n2)]
-        max_len1 = max(0.0, max(s1_all))
-        max_len2 = max(0.0, max(s2_all))
+        # Maximum extents along rays u1 and u2 from intersection v restricted strictly to the selected segments
+        a1, b1 = curve1.pointN(seg1_idx), curve1.pointN(seg1_idx + 1)
+        sa1 = (a1.x() - v.x()) * u1x + (a1.y() - v.y()) * u1y
+        sb1 = (b1.x() - v.x()) * u1x + (b1.y() - v.y()) * u1y
+        max_len1 = max(0.0, max(sa1, sb1))
+
+        a2, b2 = curve2.pointN(seg2_idx), curve2.pointN(seg2_idx + 1)
+        sa2 = (a2.x() - v.x()) * u2x + (a2.y() - v.y()) * u2y
+        sb2 = (b2.x() - v.x()) * u2x + (b2.y() - v.y()) * u2y
+        max_len2 = max(0.0, max(sa2, sb2))
 
         if max_len1 < 1e-6 or max_len2 < 1e-6:
             return None

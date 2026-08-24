@@ -595,6 +595,60 @@ class TestTwoLineFillet(unittest.TestCase):
             self.assertAlmostEqual(pts_cw_rev[0].x(), pts_cw_rev[-1].x(), places=4)
             self.assertAlmostEqual(pts_cw_rev[0].y(), pts_cw_rev[-1].y(), places=4)
 
+    def test_complex_polyline_oversized_clamping(self):
+        """Verify that oversized radius or chamfer distances are clamped strictly to selected segment endpoints."""
+        poly1 = [
+            QgsPoint(0, 10),
+            QgsPoint(10, 12),
+            QgsPoint(12, 5),
+            QgsPoint(20, 6),
+            QgsPoint(25, -5),
+            QgsPoint(30, -15),
+            QgsPoint(45, -5),
+            QgsPoint(50, 0),
+        ]
+        geom1 = QgsGeometry(QgsLineString(poly1))
+
+        poly2 = [
+            QgsPoint(60, 5),
+            QgsPoint(70, 0),
+            QgsPoint(75, 10),
+        ]
+        geom2 = QgsGeometry(QgsLineString(poly2))
+
+        # Selected segments: seg 6 of line 1 (from (45, -5) to (50, 0)), seg 0 of line 2 (from (60, 5) to (70, 0))
+        click1 = QgsPoint(47, -2.5)
+        click2 = QgsPoint(65, 2.5)
+
+        # 1. Fillet with huge radius (R = 1000.0) -> must clamp within segment 1 endpoints
+        res_fillet = GeometryEngine.fillet_or_chamfer_two_lines(
+            geom1, 6, click1,
+            geom2, 0, click2,
+            mode="fillet",
+            radius=1000.0,
+        )
+        self.assertIsNotNone(res_fillet)
+        g_fillet, v, t1, t2 = res_fillet
+        self.assertFalse(g_fillet.isEmpty())
+        # T1 must not overshoot the start of segment 6: (45, -5)
+        self.assertGreaterEqual(t1.x(), 44.99)
+        self.assertGreaterEqual(t1.y(), -5.01)
+
+        # 2. Chamfer with huge distances (dist = 1000.0) -> must clamp within segment 1 endpoints
+        res_chamfer = GeometryEngine.fillet_or_chamfer_two_lines(
+            geom1, 6, click1,
+            geom2, 0, click2,
+            mode="chamfer",
+            dist1=1000.0,
+            dist2=1000.0,
+        )
+        self.assertIsNotNone(res_chamfer)
+        g_chamfer, v, t1, t2 = res_chamfer
+        self.assertFalse(g_chamfer.isEmpty())
+        # T1 must not overshoot (45, -5)
+        self.assertGreaterEqual(t1.x(), 44.99)
+        self.assertGreaterEqual(t1.y(), -5.01)
+
 
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(TestTwoLineFillet)
