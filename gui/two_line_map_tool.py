@@ -39,6 +39,8 @@ _Key_Backspace = getattr(Qt.Key, "Key_Backspace", getattr(Qt, "Key_Backspace", 0
 _Key_Return = getattr(Qt.Key, "Key_Return", getattr(Qt, "Key_Return", 0x01000004))
 _Key_Enter = getattr(Qt.Key, "Key_Enter", getattr(Qt, "Key_Enter", 0x01000005))
 _Key_Space = getattr(Qt.Key, "Key_Space", getattr(Qt, "Key_Space", 0x20))
+_Key_Shift = getattr(Qt.Key, "Key_Shift", getattr(Qt, "Key_Shift", 0x01000020))
+_ShiftModifier = getattr(Qt.KeyboardModifier, "ShiftModifier", getattr(Qt, "ShiftModifier", 0x02000000))
 _Key_L = getattr(Qt.Key, "Key_L", getattr(Qt, "Key_L", 0x4C))
 _Key_F = getattr(Qt.Key, "Key_F", getattr(Qt, "Key_F", 0x46))
 _Key_C = getattr(Qt.Key, "Key_C", getattr(Qt, "Key_C", 0x43))
@@ -180,6 +182,7 @@ class TwoLineMapTool(QgsMapToolEdit):
     def deactivate(self):
         self._clear_preview()
         if self.widget:
+            self.widget.set_shift_override(False)
             self.widget.set_two_line_mode(False)
             self.widget.hide()
         super().deactivate()
@@ -222,13 +225,82 @@ class TwoLineMapTool(QgsMapToolEdit):
             if layer:
                 self._update_preview(layer, self.first_segment_match, self.current_segment_match)
 
+    def _update_interactive_radius(self, layer: QgsVectorLayer, map_point: QgsPointXY, shift_pressed: bool = False):
+        """Calculates radius or chamfer distances from cursor point during Step 3."""
+        if not (self.first_segment_match and self.current_segment_match and self.v_sharp and self.widget):
+            return
+
+        layer_pt = self.toLayerCoordinates(layer, map_point)
+        cursor_pt = QgsPoint(layer_pt.x(), layer_pt.y())
+        dist = GeometryEngine.distance(self.v_sharp, cursor_pt)
+
+        is_geo = layer.crs().isGeographic() if layer and layer.crs().isValid() else False
+        min_limit = 1e-6 if is_geo else 0.0001
+        min_clamp = 1e-6 if is_geo else 0.001
+
+        if self.widget.mode == FilletCanvasWidget.MODE_FILLET:
+            rounded_dist = max(min_limit, round(dist, 6 if is_geo else (4 if dist < 1.0 else 3)))
+            if not self.widget.is_radius_locked:
+                self.widget.set_radius(rounded_dist, block_signals=True)
+        else:
+            m1 = self.first_segment_match
+            m2 = self.current_segment_match
+
+            # Ray 1 direction from v_sharp
+            d1x = m1.p2.x() - m1.p1.x()
+            d1y = m1.p2.y() - m1.p1.y()
+            len1 = math.hypot(d1x, d1y)
+            ud1x, ud1y = (d1x / len1, d1y / len1) if len1 > 1e-9 else (1.0, 0.0)
+            t_click1 = (m1.point.x() - self.v_sharp.x()) * ud1x + (m1.point.y() - self.v_sharp.y()) * ud1y
+            u1x = ud1x if t_click1 > 0 else -ud1x
+            u1y = ud1y if t_click1 > 0 else -ud1y
+
+            # Ray 2 direction from v_sharp
+            d2x = m2.p2.x() - m2.p1.x()
+            d2y = m2.p2.y() - m2.p1.y()
+            len2 = math.hypot(d2x, d2y)
+            ud2x, ud2y = (d2x / len2, d2y / len2) if len2 > 1e-9 else (1.0, 0.0)
+            t_click2 = (m2.point.x() - self.v_sharp.x()) * ud2x + (m2.point.y() - self.v_sharp.y()) * ud2y
+            u2x = ud2x if t_click2 > 0 else -ud2x
+            u2y = ud2y if t_click2 > 0 else -ud2y
+
+            is_eff_linked = self.widget.get_effective_is_linked(shift_pressed)
+            if is_eff_linked:
+                # Symmetrical linked chamfer: both distances scale identically
+                rounded_dist = max(min_limit, round(dist, 6 if is_geo else (4 if dist < 1.0 else 3)))
+                if not self.widget.is_dist1_locked:
+                    self.widget.set_distance1(rounded_dist, block_signals=True)
+                if not self.widget.is_dist2_locked:
+                    self.widget.set_distance2(rounded_dist, block_signals=True)
+            else:
+                # Asymmetrical unlinked chamfer: cursor position independently projects on rays
+                wx = cursor_pt.x() - self.v_sharp.x()
+                wy = cursor_pt.y() - self.v_sharp.y()
+                proj1 = wx * u1x + wy * u1y
+                proj2 = wx * u2x + wy * u2y
+                d1 = max(min_clamp, abs(proj1))
+                d2 = max(min_clamp, abs(proj2))
+                rounded_d1 = round(d1, 6 if is_geo else (4 if d1 < 1.0 else 3))
+                rounded_d2 = round(d2, 6 if is_geo else (4 if d2 < 1.0 else 3))
+                if not self.widget.is_dist1_locked:
+                    self.widget.set_distance1(rounded_d1, block_signals=True)
+                if not self.widget.is_dist2_locked:
+                    self.widget.set_distance2(rounded_d2, block_signals=True)
+
+        self._update_preview(layer, self.first_segment_match, self.current_segment_match)
+
     def canvasMoveEvent(self, event: QgsMapMouseEvent):
         layer = self.current_vector_layer()
         if not layer:
             self._clear_preview()
             return
 
+        shift_pressed = bool(_ShiftModifier is not None and (event.modifiers() & _ShiftModifier))
+        if self.widget:
+            self.widget.set_shift_override(shift_pressed)
+
         map_point = event.mapPoint()
+        self.last_mouse_point = map_point
 
         if self.step == self.STEP_FIRST_LINE:
             # Step 1: Hovering over first line
@@ -276,67 +348,7 @@ class TwoLineMapTool(QgsMapToolEdit):
 
         elif self.step == self.STEP_SET_RADIUS:
             # Step 3: Interactive cursor drag to adjust radius / chamfer distance
-            if self.first_segment_match and self.current_segment_match and self.v_sharp:
-                layer_pt = self.toLayerCoordinates(layer, map_point)
-                cursor_pt = QgsPoint(layer_pt.x(), layer_pt.y())
-                dist = GeometryEngine.distance(self.v_sharp, cursor_pt)
-
-                # Geographic vs projected precision and clamp limits
-                is_geo = layer.crs().isGeographic() if layer and layer.crs().isValid() else False
-                min_limit = 1e-6 if is_geo else 0.0001
-                min_clamp = 1e-6 if is_geo else 0.001
-
-                # Update widget value based on distance
-                if self.widget:
-                    if self.widget.mode == FilletCanvasWidget.MODE_FILLET:
-                        # Smooth radius scaling based on cursor distance
-                        rounded_dist = max(min_limit, round(dist, 6 if is_geo else (4 if dist < 1.0 else 3)))
-                        if not self.widget.is_radius_locked:
-                            self.widget.set_radius(rounded_dist, block_signals=True)
-                    else:
-                        # Chamfer mode: 2D projection onto both rays
-                        m1 = self.first_segment_match
-                        m2 = self.current_segment_match
-
-                        # Ray 1 direction from v_sharp
-                        d1x = m1.p2.x() - m1.p1.x()
-                        d1y = m1.p2.y() - m1.p1.y()
-                        len1 = math.hypot(d1x, d1y)
-                        ud1x, ud1y = (d1x / len1, d1y / len1) if len1 > 1e-9 else (1.0, 0.0)
-                        t_click1 = (m1.point.x() - self.v_sharp.x()) * ud1x + (m1.point.y() - self.v_sharp.y()) * ud1y
-                        u1x = ud1x if t_click1 > 0 else -ud1x
-                        u1y = ud1y if t_click1 > 0 else -ud1y
-
-                        # Ray 2 direction from v_sharp
-                        d2x = m2.p2.x() - m2.p1.x()
-                        d2y = m2.p2.y() - m2.p1.y()
-                        len2 = math.hypot(d2x, d2y)
-                        ud2x, ud2y = (d2x / len2, d2y / len2) if len2 > 1e-9 else (1.0, 0.0)
-                        t_click2 = (m2.point.x() - self.v_sharp.x()) * ud2x + (m2.point.y() - self.v_sharp.y()) * ud2y
-                        u2x = ud2x if t_click2 > 0 else -ud2x
-                        u2y = ud2y if t_click2 > 0 else -ud2y
-
-                        if self.widget.is_linked:
-                            # Symmetrical linked chamfer: both distances scale identically
-                            rounded_dist = max(min_limit, round(dist, 6 if is_geo else (4 if dist < 1.0 else 3)))
-                            if not self.widget.is_dist1_locked:
-                                self.widget.set_distance1(rounded_dist, block_signals=True)
-                        else:
-                            # Asymmetrical unlinked chamfer: cursor position independently projects on rays
-                            wx = cursor_pt.x() - self.v_sharp.x()
-                            wy = cursor_pt.y() - self.v_sharp.y()
-                            proj1 = wx * u1x + wy * u1y
-                            proj2 = wx * u2x + wy * u2y
-                            d1 = max(min_clamp, abs(proj1))
-                            d2 = max(min_clamp, abs(proj2))
-                            rounded_d1 = round(d1, 6 if is_geo else (4 if d1 < 1.0 else 3))
-                            rounded_d2 = round(d2, 6 if is_geo else (4 if d2 < 1.0 else 3))
-                            if not self.widget.is_dist1_locked:
-                                self.widget.set_distance1(rounded_d1, block_signals=True)
-                            if not self.widget.is_dist2_locked:
-                                self.widget.set_distance2(rounded_d2, block_signals=True)
-
-                self._update_preview(layer, self.first_segment_match, self.current_segment_match)
+            self._update_interactive_radius(layer, map_point, shift_pressed)
 
         # Keep focus on the HUD panel's numeric stepper if focus moved away
         if self.widget:
@@ -558,8 +570,27 @@ class TwoLineMapTool(QgsMapToolEdit):
                 event.accept()
                 return
 
+        elif key == _Key_Shift:
+            if self.widget:
+                self.widget.set_shift_override(True)
+                if self.step == self.STEP_SET_RADIUS and getattr(self, "last_mouse_point", None):
+                    layer = self.current_vector_layer()
+                    if layer:
+                        self._update_interactive_radius(layer, self.last_mouse_point, shift_pressed=True)
+
         else:
             super().keyPressEvent(event)
+
+    def keyReleaseEvent(self, event):
+        key = event.key()
+        if key == _Key_Shift:
+            if self.widget:
+                self.widget.set_shift_override(False)
+                if self.step == self.STEP_SET_RADIUS and getattr(self, "last_mouse_point", None):
+                    layer = self.current_vector_layer()
+                    if layer:
+                        self._update_interactive_radius(layer, self.last_mouse_point, shift_pressed=False)
+        super().keyReleaseEvent(event)
 
     def _handle_step_back(self):
         """Step back through CAD workflow or clear selection."""

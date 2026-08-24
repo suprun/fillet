@@ -59,6 +59,9 @@ class FilletCanvasWidget(QFrame):
         self._is_two_line_mode = False
         self._icons_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources", "icons")
         self._last_focused_spin = None
+        self._base_is_linked = True
+        self._shift_pressed = False
+        self._is_updating_shift_override = False
 
         self._init_ui()
         self._apply_style()
@@ -367,7 +370,8 @@ class FilletCanvasWidget(QFrame):
             self.btn_lock_dist1.setChecked(s.value("plugins/fillet/lock_dist1", True, type=bool))
             self.spin_dist2.setValue(float(s.value("plugins/fillet/dist2", constants.DEFAULT_DIST2_METRIC)))
             self.btn_lock_dist2.setChecked(s.value("plugins/fillet/lock_dist2", True, type=bool))
-            self.btn_link.setChecked(s.value("plugins/fillet/link_dist", constants.DEFAULT_LINK_DISTANCES, type=bool))
+            self._base_is_linked = s.value("plugins/fillet/link_dist", constants.DEFAULT_LINK_DISTANCES, type=bool)
+            self.btn_link.setChecked(self._base_is_linked)
 
             self._update_link_icon()
             self._update_lock_icon(self.btn_lock_radius)
@@ -378,7 +382,7 @@ class FilletCanvasWidget(QFrame):
             self._is_loading = False
 
     def _save_settings(self):
-        if getattr(self, "_is_loading", False):
+        if getattr(self, "_is_loading", False) or getattr(self, "_is_updating_shift_override", False):
             return
         s = QgsSettings()
         s.setValue("plugins/fillet/mode", self.mode)
@@ -390,7 +394,7 @@ class FilletCanvasWidget(QFrame):
         s.setValue("plugins/fillet/lock_dist1", self.btn_lock_dist1.isChecked())
         s.setValue("plugins/fillet/dist2", self.spin_dist2.value())
         s.setValue("plugins/fillet/lock_dist2", self.btn_lock_dist2.isChecked())
-        s.setValue("plugins/fillet/link_dist", self.btn_link.isChecked())
+        s.setValue("plugins/fillet/link_dist", self._base_is_linked)
 
     def _on_radio_mode_toggled(self):
         mode = self.mode
@@ -442,16 +446,46 @@ class FilletCanvasWidget(QFrame):
 
     def _on_link_toggled(self, checked: bool):
         self._update_link_icon()
+        if not self._is_updating_shift_override:
+            self._base_is_linked = checked
+            self._shift_pressed = False
         self.spin_dist2.setEnabled(not checked)
         self.btn_lock_dist2.setEnabled(not checked)
         if checked:
             self.spin_dist2.setValue(self.spin_dist1.value())
             self.btn_lock_dist2.setChecked(self.btn_lock_dist1.isChecked())
             self._last_focused_spin = self.spin_dist1
-            self.focus_primary_input()
+            if not self._is_updating_shift_override:
+                self.focus_primary_input()
         else:
-            self.btn_lock_dist2.setChecked(False)
+            if not self._is_updating_shift_override:
+                self.btn_lock_dist2.setChecked(False)
         self.parametersChanged.emit()
+
+    def set_shift_override(self, shift_pressed: bool):
+        """Temporarily inverts Link distances button and controls on Shift press/release."""
+        if self._shift_pressed == shift_pressed:
+            return
+        self._shift_pressed = shift_pressed
+        target_linked = not self._base_is_linked if shift_pressed else self._base_is_linked
+
+        self._is_updating_shift_override = True
+        try:
+            self.btn_link.setChecked(target_linked)
+            self._update_link_icon()
+            self.spin_dist2.setEnabled(not target_linked)
+            self.btn_lock_dist2.setEnabled(not target_linked)
+            if target_linked:
+                self.spin_dist2.setValue(self.spin_dist1.value())
+                self.btn_lock_dist2.setChecked(self.btn_lock_dist1.isChecked())
+        finally:
+            self._is_updating_shift_override = False
+        self.parametersChanged.emit()
+
+    def get_effective_is_linked(self, shift_pressed: bool = False) -> bool:
+        """Returns effective link state taking into account Shift key inversion."""
+        self.set_shift_override(shift_pressed)
+        return not self._base_is_linked if shift_pressed else self._base_is_linked
 
     def _on_lock_dist1_toggled(self, checked: bool):
         self._update_lock_icon(self.btn_lock_dist1)
@@ -533,6 +567,7 @@ class FilletCanvasWidget(QFrame):
         evt_resize = getattr(QEvent.Type, "Resize", getattr(QEvent, "Resize", None))
         evt_focus_in = getattr(QEvent.Type, "FocusIn", getattr(QEvent, "FocusIn", None))
         evt_key_press = getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", None))
+        evt_key_release = getattr(QEvent.Type, "KeyRelease", getattr(QEvent, "KeyRelease", None))
 
         if obj == self.canvas and event.type() == evt_resize:
             self.reposition_to_default()
@@ -546,6 +581,10 @@ class FilletCanvasWidget(QFrame):
                     QTimer.singleShot(0, lambda s=spin: self._select_all_spin(s))
         elif event.type() == evt_key_press:
             key = event.key()
+            key_shift = getattr(Qt.Key, "Key_Shift", getattr(Qt, "Key_Shift", 0x01000020))
+            if key == key_shift:
+                self.set_shift_override(True)
+
             key_tab = getattr(Qt.Key, "Key_Tab", getattr(Qt, "Key_Tab", 0x01000001))
             key_backtab = getattr(Qt.Key, "Key_Backtab", getattr(Qt, "Key_Backtab", 0x01000002))
             key_return = getattr(Qt.Key, "Key_Return", getattr(Qt, "Key_Return", 0x01000004))
@@ -567,6 +606,11 @@ class FilletCanvasWidget(QFrame):
                     if self._handle_spin_key_press(spin, event):
                         return True
                     break
+        elif event.type() == evt_key_release:
+            key = event.key()
+            key_shift = getattr(Qt.Key, "Key_Shift", getattr(Qt, "Key_Shift", 0x01000020))
+            if key == key_shift:
+                self.set_shift_override(False)
 
         return super().eventFilter(obj, event)
 

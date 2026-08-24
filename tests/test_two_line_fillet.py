@@ -681,6 +681,60 @@ class TestTwoLineFillet(unittest.TestCase):
         tool.keyPressEvent(QKeyEvent(evt_type, key_space, no_mod))
         self.assertEqual(widget.is_radius_locked, initial_locked)
 
+    def test_chamfer_shift_override_widget_and_tools(self):
+        from gui.canvas_widget import FilletCanvasWidget
+        from gui.two_line_map_tool import TwoLineMapTool
+        from qgis.PyQt.QtCore import QEvent, Qt
+        from qgis.PyQt.QtGui import QKeyEvent
+
+        widget = FilletCanvasWidget(canvas)
+        widget.mode = FilletCanvasWidget.MODE_CHAMFER
+
+        # Base state: linked is True
+        widget.btn_link.setChecked(True)
+        self.assertTrue(widget.is_linked)
+        self.assertTrue(widget._base_is_linked)
+
+        # Invert with Shift override (True -> False)
+        widget.set_shift_override(True)
+        self.assertFalse(widget.is_linked)
+        self.assertTrue(widget.spin_dist2.isEnabled())
+
+        # Release Shift (False -> True)
+        widget.set_shift_override(False)
+        self.assertTrue(widget.is_linked)
+        self.assertFalse(widget.spin_dist2.isEnabled())
+
+        # Change base state to unlinked (False)
+        widget.btn_link.setChecked(False)
+        self.assertFalse(widget.is_linked)
+        self.assertFalse(widget._base_is_linked)
+
+        # Invert with Shift override (False -> True)
+        widget.set_shift_override(True)
+        self.assertTrue(widget.is_linked)
+        self.assertFalse(widget.spin_dist2.isEnabled())
+
+        # Release Shift (True -> False)
+        widget.set_shift_override(False)
+        self.assertFalse(widget.is_linked)
+        self.assertTrue(widget.spin_dist2.isEnabled())
+
+        # Test tool key events
+        tool = TwoLineMapTool(canvas, widget)
+        evt_press = getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", 6))
+        evt_release = getattr(QEvent.Type, "KeyRelease", getattr(QEvent, "KeyRelease", 7))
+        key_shift = getattr(Qt.Key, "Key_Shift", getattr(Qt, "Key_Shift", 0x01000020))
+        shift_mod = getattr(Qt.KeyboardModifier, "ShiftModifier", getattr(Qt, "ShiftModifier", 0x02000000))
+        no_mod = getattr(Qt.KeyboardModifier, "NoModifier", getattr(Qt, "NoModifier", 0))
+
+        # Baseline is unlinked (False)
+        self.assertFalse(widget.is_linked)
+        tool.keyPressEvent(QKeyEvent(evt_press, key_shift, shift_mod))
+        self.assertTrue(widget.is_linked)
+        tool.keyReleaseEvent(QKeyEvent(evt_release, key_shift, no_mod))
+        self.assertFalse(widget.is_linked)
+
 
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(TestTwoLineFillet)

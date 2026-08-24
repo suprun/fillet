@@ -39,6 +39,8 @@ _Key_Enter = getattr(Qt.Key, "Key_Enter", getattr(Qt, "Key_Enter", 0x01000005))
 _Key_Escape = getattr(Qt.Key, "Key_Escape", getattr(Qt, "Key_Escape", 0x01000000))
 _Key_Tab = getattr(Qt.Key, "Key_Tab", getattr(Qt, "Key_Tab", 0x01000001))
 _Key_Space = getattr(Qt.Key, "Key_Space", getattr(Qt, "Key_Space", 0x20))
+_Key_Shift = getattr(Qt.Key, "Key_Shift", getattr(Qt, "Key_Shift", 0x01000020))
+_ShiftModifier = getattr(Qt.KeyboardModifier, "ShiftModifier", getattr(Qt, "ShiftModifier", 0x02000000))
 
 try:
     from ..core.geometry_engine import GeometryEngine
@@ -106,6 +108,7 @@ class FilletMapTool(QgsMapToolEdit):
 
     def deactivate(self):
         if isinstance(self.widget, FilletCanvasWidget):
+            self.widget.set_shift_override(False)
             self.widget.hide()
         self.state = self.STATE_HOVER
         self._clear_preview()
@@ -164,12 +167,17 @@ class FilletMapTool(QgsMapToolEdit):
             self._clear_preview()
             return
 
+        shift_pressed = bool(_ShiftModifier is not None and (event.modifiers() & _ShiftModifier))
+        if isinstance(self.widget, FilletCanvasWidget):
+            self.widget.set_shift_override(shift_pressed)
+
         mode = (
             self.widget.mode
             if isinstance(self.widget, FilletCanvasWidget)
             else FilletCanvasWidget.MODE_FILLET
         )
         map_point = event.mapPoint()
+        self.last_mouse_point = map_point
 
         # Regular FILLET and CHAMFER vertex hover / adjust workflow
         if self.state == self.STATE_HOVER:
@@ -187,7 +195,7 @@ class FilletMapTool(QgsMapToolEdit):
 
         elif self.state == self.STATE_ADJUSTING:
             if self.current_match and isinstance(self.widget, FilletCanvasWidget):
-                self._update_values_from_point(layer, map_point)
+                self._update_values_from_point(layer, map_point, shift_pressed)
             self._update_preview()
 
         # Keep focus on the HUD panel's numeric stepper if focus moved away
@@ -204,7 +212,7 @@ class FilletMapTool(QgsMapToolEdit):
             if not is_on_panel:
                 self.widget.focus_primary_input()
 
-    def _update_values_from_point(self, layer: QgsVectorLayer, map_point: QgsPointXY):
+    def _update_values_from_point(self, layer: QgsVectorLayer, map_point: QgsPointXY, shift_pressed: bool = False):
         """Calculates distance/radius from cursor point and updates active parameters in HUD widget."""
         if not self.current_match or not isinstance(self.widget, FilletCanvasWidget):
             return
@@ -231,16 +239,19 @@ class FilletMapTool(QgsMapToolEdit):
             if not self.widget.is_radius_locked:
                 self.widget.set_radius(rounded_dist, block_signals=True)
         elif self.widget.mode == FilletCanvasWidget.MODE_CHAMFER:
+            is_eff_linked = self.widget.get_effective_is_linked(shift_pressed)
             if p_prev and v and p_next:
                 u1x, u1y, len1 = GeometryEngine.normalize_vector(p_prev.x() - v.x(), p_prev.y() - v.y())
                 u2x, u2y, len2 = GeometryEngine.normalize_vector(p_next.x() - v.x(), p_next.y() - v.y())
-                if self.widget.is_linked:
+                if is_eff_linked:
                     # Isosceles chamfer: strictly bounded by shorter edge
                     max_d = min(len1, len2) * 0.9999
                     dist = min(dist, max_d)
                     rounded_dist = max(min_limit, round(dist, 6 if is_geo else (4 if dist < 1.0 else 3)))
                     if not self.widget.is_dist1_locked:
                         self.widget.set_distance1(rounded_dist, block_signals=True)
+                    if not self.widget.is_dist2_locked:
+                        self.widget.set_distance2(rounded_dist, block_signals=True)
                 else:
                     wx = layer_point.x() - v.x()
                     wy = layer_point.y() - v.y()
@@ -500,8 +511,29 @@ class FilletMapTool(QgsMapToolEdit):
                 self.widget.toggle_active_lock()
                 event.accept()
 
+        elif key == _Key_Shift:
+            if isinstance(self.widget, FilletCanvasWidget):
+                self.widget.set_shift_override(True)
+                if self.state == self.STATE_ADJUSTING and getattr(self, "last_mouse_point", None):
+                    layer = self.current_vector_layer()
+                    if layer:
+                        self._update_values_from_point(layer, self.last_mouse_point, shift_pressed=True)
+                        self._update_preview()
+
         else:
             super().keyPressEvent(event)
+
+    def keyReleaseEvent(self, event):
+        key = event.key()
+        if key == _Key_Shift:
+            if isinstance(self.widget, FilletCanvasWidget):
+                self.widget.set_shift_override(False)
+                if self.state == self.STATE_ADJUSTING and getattr(self, "last_mouse_point", None):
+                    layer = self.current_vector_layer()
+                    if layer:
+                        self._update_values_from_point(layer, self.last_mouse_point, shift_pressed=False)
+                        self._update_preview()
+        super().keyReleaseEvent(event)
 
     def _clear_preview(self):
         self.snap_indicator.setVisible(False)
