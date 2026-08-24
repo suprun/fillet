@@ -26,7 +26,7 @@ from qgis.gui import (
 )
 from qgis.PyQt.QtCore import QCoreApplication, QEvent, QObject, Qt
 from qgis.PyQt.QtGui import QColor, QCursor
-from qgis.PyQt.QtWidgets import QAction, QApplication, QDialog
+from qgis.PyQt.QtWidgets import QAbstractButton, QAction, QApplication, QDialog
 
 # Safe cross-version Qt5 / Qt6 constants
 _CrossCursor = getattr(Qt.CursorShape, "CrossCursor", getattr(Qt, "CrossCursor", None))
@@ -58,6 +58,7 @@ class _MergeDialogWatcher(QObject):
         super().__init__()
         self.dialog_detected = False
         self.accepted = False
+        self._disabled_buttons = []
 
     def eventFilter(self, obj, event):
         if isinstance(obj, QDialog):
@@ -67,12 +68,34 @@ class _MergeDialogWatcher(QObject):
             evt_close = getattr(QEvent.Type, "Close", getattr(QEvent, "Close", 19))
             if evt_type == evt_show:
                 self.dialog_detected = True
+                # Disable 'Remove feature from selection' button on this specific dialog instance
+                for btn in obj.findChildren(QAbstractButton):
+                    name = btn.objectName().lower()
+                    text = btn.text().lower()
+                    tip = btn.toolTip().lower()
+                    if (
+                        "remove" in name
+                        or "remove" in tip
+                        or "remove" in text
+                        or "видалити" in text
+                        or "видалити" in tip
+                    ):
+                        if btn.isEnabled():
+                            btn.setEnabled(False)
+                            self._disabled_buttons.append(btn)
             elif evt_type in (evt_hide, evt_close):
                 self.dialog_detected = True
                 res = obj.result()
                 accepted_code = getattr(getattr(QDialog, "DialogCode", QDialog), "Accepted", 1)
                 if res == accepted_code:
                     self.accepted = True
+                # Restore button state if dialog instance is reused
+                for btn in self._disabled_buttons:
+                    try:
+                        btn.setEnabled(True)
+                    except (RuntimeError, TypeError):
+                        pass
+                self._disabled_buttons.clear()
         return False
 
 

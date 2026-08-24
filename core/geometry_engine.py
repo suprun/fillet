@@ -1219,47 +1219,37 @@ class GeometryEngine:
         else:
             return None
 
-        # Line 1 chain towards t1
-        s_t1 = (t1.x() - v.x()) * u1x + (t1.y() - v.y()) * u1y
-        s1_0 = (curve1.pointN(0).x() - v.x()) * u1x + (curve1.pointN(0).y() - v.y()) * u1y
-        s1_end = (curve1.pointN(n1 - 1).x() - v.x()) * u1x + (curve1.pointN(n1 - 1).y() - v.y()) * u1y
+        # Segment 1 points
+        a1, b1 = curve1.pointN(seg1_idx), curve1.pointN(seg1_idx + 1)
+        sa1 = (a1.x() - v.x()) * u1x + (a1.y() - v.y()) * u1y
+        sb1 = (b1.x() - v.x()) * u1x + (b1.y() - v.y()) * u1y
 
+        # Line 1 topological chain towards t1:
+        # If sa1 >= sb1, b1 is closer to V so we keep prefix 0 -> seg1_idx (a1).
+        # If sb1 > sa1, a1 is closer to V so we keep suffix n1 - 1 down to seg1_idx + 1 (b1).
         l1_pts = []
-        if s1_0 >= s1_end:
-            for i in range(n1):
-                pt = curve1.pointN(i)
-                s = (pt.x() - v.x()) * u1x + (pt.y() - v.y()) * u1y
-                if s > s_t1 + 1e-6:
-                    l1_pts.append(pt)
-                else:
-                    break
+        if sa1 >= sb1:
+            for i in range(0, seg1_idx + 1):
+                l1_pts.append(curve1.pointN(i))
         else:
-            for i in range(n1 - 1, -1, -1):
-                pt = curve1.pointN(i)
-                s = (pt.x() - v.x()) * u1x + (pt.y() - v.y()) * u1y
-                if s > s_t1 + 1e-6:
-                    l1_pts.append(pt)
-                else:
-                    break
+            for i in range(n1 - 1, seg1_idx, -1):
+                l1_pts.append(curve1.pointN(i))
 
-        # Line 2 chain from t2 towards far end
-        s_t2 = (t2.x() - v.x()) * u2x + (t2.y() - v.y()) * u2y
-        s2_0 = (curve2.pointN(0).x() - v.x()) * u2x + (curve2.pointN(0).y() - v.y()) * u2y
-        s2_end = (curve2.pointN(n2 - 1).x() - v.x()) * u2x + (curve2.pointN(n2 - 1).y() - v.y()) * u2y
+        # Segment 2 points
+        a2, b2 = curve2.pointN(seg2_idx), curve2.pointN(seg2_idx + 1)
+        sa2 = (a2.x() - v.x()) * u2x + (a2.y() - v.y()) * u2y
+        sb2 = (b2.x() - v.x()) * u2x + (b2.y() - v.y()) * u2y
 
+        # Line 2 topological chain from t2 towards far end:
+        # If sa2 >= sb2, b2 is closer to V so from t2 we connect to a2 (seg2_idx) down to 0.
+        # If sb2 > sa2, a2 is closer to V so from t2 we connect to b2 (seg2_idx + 1) up to n2 - 1.
         l2_pts = []
-        if s2_end >= s2_0:
-            for i in range(n2):
-                pt = curve2.pointN(i)
-                s = (pt.x() - v.x()) * u2x + (pt.y() - v.y()) * u2y
-                if s > s_t2 + 1e-6:
-                    l2_pts.append(pt)
+        if sa2 >= sb2:
+            for i in range(seg2_idx, -1, -1):
+                l2_pts.append(curve2.pointN(i))
         else:
-            for i in range(n2 - 1, -1, -1):
-                pt = curve2.pointN(i)
-                s = (pt.x() - v.x()) * u2x + (pt.y() - v.y()) * u2y
-                if s > s_t2 + 1e-6:
-                    l2_pts.append(pt)
+            for i in range(seg2_idx + 1, n2):
+                l2_pts.append(curve2.pointN(i))
 
         # Stitch all points
         full_pts = l1_pts + arc_pts + l2_pts

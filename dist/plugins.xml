@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
-  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.20" plugin_id="fillet">
+  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.21" plugin_id="fillet">
     <description>Interactive Fillet, Chamfer &amp; Corner Restoration tools for QGIS with instant Batch Fillet/Chamfer for selected features.</description>
     <about>Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), and Two-Edge Corner Restoration (Unfillet / Unchamfer) map tools for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.</about>
-    <version>1.0.0.20</version>
+    <version>1.0.0.21</version>
     <qgis_minimum_version>3.16</qgis_minimum_version>
     <qgis_maximum_version>4.99</qgis_maximum_version>
     <file_name>fillet.zip</file_name>
@@ -14,7 +14,11 @@
     <experimental>False</experimental>
     <deprecated>False</deprecated>
     <tags>cad, editing, fillet, chamfer, unfillet, corner, restore, geometry, digitizing, curve, batch, merge, qgis4</tags>
-    <change_log>1.0.0.20:
+    <change_log>1.0.0.21:
+- Fixed topological chain assembly for intermediate polyline segments, preserving multi-point curve bends without 1D distortion.
+- Eliminated redundant intermediate endpoint vertices when lines are extended to the tangent touch points.
+- Disabled 'Remove feature from selection' button in QgsMergeAttributesDialog during Two-Line merge execution.
+1.0.0.20:
 - Added direct eventFilter dialog result interception to guarantee feature creation after merge attribute confirmation even with default values.
 1.0.0.19:
 - Fixed critical multipart geometry incompatibility error on singlepart line layers by using QgsMergeAttributesDialog.

@@ -395,25 +395,37 @@ class TestTwoLineFillet(unittest.TestCase):
             QgsSettings,
         )
         from qgis.PyQt.QtCore import QEvent, QObject, QVariant, pyqtSignal
-        from qgis.PyQt.QtWidgets import QAction, QDialog, QApplication
+        from qgis.PyQt.QtWidgets import QAction, QDialog, QApplication, QPushButton
         from gui.two_line_map_tool import TwoLineMapTool, _MergeDialogWatcher
 
-        # 1. Test _MergeDialogWatcher on Accepted and Rejected
+        # 1. Test _MergeDialogWatcher on Accepted, Rejected, and Button Disabling
         watcher = _MergeDialogWatcher()
         d_accept = QDialog()
+        btn_remove = QPushButton("Remove feature from selection", d_accept)
+        btn_remove.setObjectName("mButtonRemoveFeature")
+        btn_remove.setToolTip("Remove feature from selection")
+
+        app_inst = QApplication.instance()
+        app_inst.installEventFilter(watcher)
         d_accept.show()
+
+        self.assertFalse(btn_remove.isEnabled())
+
         d_accept.accept()
         d_accept.hide()
-        watcher.eventFilter(d_accept, QEvent(QEvent.Type.Hide if hasattr(QEvent, "Type") else QEvent.Hide))
+        app_inst.removeEventFilter(watcher)
+
+        self.assertTrue(btn_remove.isEnabled())
         self.assertTrue(watcher.dialog_detected)
         self.assertTrue(watcher.accepted)
 
         watcher_reject = _MergeDialogWatcher()
         d_reject = QDialog()
+        app_inst.installEventFilter(watcher_reject)
         d_reject.show()
         d_reject.reject()
         d_reject.hide()
-        watcher_reject.eventFilter(d_reject, QEvent(QEvent.Type.Hide if hasattr(QEvent, "Type") else QEvent.Hide))
+        app_inst.removeEventFilter(watcher_reject)
         self.assertTrue(watcher_reject.dialog_detected)
         self.assertFalse(watcher_reject.accepted)
 
@@ -480,6 +492,47 @@ class TestTwoLineFillet(unittest.TestCase):
                 pass
             tool.widget.deleteLater()
         layer.rollBack()
+
+    def test_extended_lines_have_no_duplicate_intermediate_endpoints(self):
+        # Two short lines: (0, 10)->(5, 10) and (10, 0)->(10, 5)
+        # Extensions meet at (10, 10). Tangent points: (8, 10) and (10, 8).
+        l1 = QgsGeometry(QgsLineString([QgsPoint(0, 10), QgsPoint(5, 10)]))
+        l2 = QgsGeometry(QgsLineString([QgsPoint(10, 0), QgsPoint(10, 5)]))
+
+        res = GeometryEngine.fillet_or_chamfer_two_lines(
+            l1, 0, QgsPoint(2, 10),
+            l2, 0, QgsPoint(10, 2),
+            mode="fillet", radius=2.0, segments_count=8
+        )
+        self.assertIsNotNone(res)
+        geom, v, t1, t2 = res
+        pts = geom.asPolyline()
+        # Old endpoints (5, 10) and (10, 5) must not be in the resulting polyline
+        for p in pts:
+            self.assertFalse(abs(p.x() - 5.0) < 1e-4 and abs(p.y() - 10.0) < 1e-4)
+            self.assertFalse(abs(p.x() - 10.0) < 1e-4 and abs(p.y() - 5.0) < 1e-4)
+
+    def test_multisegment_polyline_intermediate_segment_preserves_topology(self):
+        # Multi-segment line 1: (0, 0) -> (0, 5) -> (5, 10)
+        # Line 2: (10, 0) -> (10, 20)
+        l1_multi = QgsGeometry(QgsLineString([QgsPoint(0, 0), QgsPoint(0, 5), QgsPoint(5, 10)]))
+        l2_multi = QgsGeometry(QgsLineString([QgsPoint(10, 0), QgsPoint(10, 20)]))
+
+        res = GeometryEngine.fillet_or_chamfer_two_lines(
+            l1_multi, 1, QgsPoint(2, 7),
+            l2_multi, 0, QgsPoint(10, 5),
+            mode="fillet", radius=2.0, segments_count=8
+        )
+        self.assertIsNotNone(res)
+        geom, v, t1, t2 = res
+        pts = geom.asPolyline()
+        # Polyline start must preserve (0, 0) -> (0, 5)
+        self.assertAlmostEqual(pts[0].x(), 0.0, places=4)
+        self.assertAlmostEqual(pts[0].y(), 0.0, places=4)
+        self.assertAlmostEqual(pts[1].x(), 0.0, places=4)
+        self.assertAlmostEqual(pts[1].y(), 5.0, places=4)
+        self.assertAlmostEqual(pts[-1].x(), 10.0, places=4)
+        self.assertAlmostEqual(pts[-1].y(), 0.0, places=4)
 
 
 if __name__ == "__main__":
