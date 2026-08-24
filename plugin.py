@@ -225,7 +225,33 @@ class FilletPlugin:
                 self.iface.addVectorToolBarIcon(self.action)
             self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.action)
 
-        # 8. Insert two_line_action, restore_action, rotate_action and batch_action on toolbar
+        # 8. Insert rotate_action on toolbar (after standard Rotate Feature action / 4th place)
+        if adv_tb:
+            rotate_feature_act = None
+            for act in adv_tb.actions():
+                name_lower = act.objectName().lower()
+                if "rotatefeature" in name_lower or act.objectName() == "mActionRotateFeature":
+                    rotate_feature_act = act
+                    break
+
+            actions_now = adv_tb.actions()
+            if rotate_feature_act and rotate_feature_act in actions_now:
+                try:
+                    idx = actions_now.index(rotate_feature_act)
+                    if idx + 1 < len(actions_now):
+                        adv_tb.insertAction(actions_now[idx + 1], self.rotate_action)
+                    else:
+                        adv_tb.addAction(self.rotate_action)
+                except (ValueError, IndexError):
+                    adv_tb.addAction(self.rotate_action)
+            elif len(actions_now) >= 4:
+                adv_tb.insertAction(actions_now[3], self.rotate_action)
+            else:
+                adv_tb.addAction(self.rotate_action)
+        else:
+            self.iface.addVectorToolBarIcon(self.rotate_action)
+
+        # 9. Insert two_line_action, restore_action and batch_action on toolbar
         if adv_tb:
             anchor_act = self.action
             if not anchor_act:
@@ -260,21 +286,10 @@ class FilletPlugin:
             except (ValueError, IndexError):
                 adv_tb.addAction(self.restore_action)
 
-            # Insert rotate_action after restore_action
+            # Insert batch_action after restore_action
             actions_now = adv_tb.actions()
             try:
                 idx = actions_now.index(self.restore_action)
-                if idx + 1 < len(actions_now):
-                    adv_tb.insertAction(actions_now[idx + 1], self.rotate_action)
-                else:
-                    adv_tb.addAction(self.rotate_action)
-            except (ValueError, IndexError):
-                adv_tb.addAction(self.rotate_action)
-
-            # Insert batch_action after rotate_action
-            actions_now = adv_tb.actions()
-            try:
-                idx = actions_now.index(self.rotate_action)
                 if idx + 1 < len(actions_now):
                     adv_tb.insertAction(actions_now[idx + 1], self.batch_action)
                 else:
@@ -284,7 +299,6 @@ class FilletPlugin:
         else:
             self.iface.addVectorToolBarIcon(self.two_line_action)
             self.iface.addVectorToolBarIcon(self.restore_action)
-            self.iface.addVectorToolBarIcon(self.rotate_action)
             self.iface.addVectorToolBarIcon(self.batch_action)
 
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.two_line_action)
