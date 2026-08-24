@@ -174,6 +174,19 @@ class TestScaleRotateTool(unittest.TestCase):
         self.assertTrue(widget.is_scale_locked)
         self.assertTrue(widget.is_angle_locked)
 
+        # Snap mode radio buttons and Shift inversion
+        widget.rb_snap_free.setChecked(True)
+        self.assertFalse(widget.is_snap_enabled)
+        self.assertFalse(widget.combo_snap.isEnabled())
+        self.assertIsNone(widget.get_effective_snap_step(shift_pressed=False))
+        self.assertEqual(widget.get_effective_snap_step(shift_pressed=True), widget.snap_step)
+
+        widget.rb_snap_angle.setChecked(True)
+        self.assertTrue(widget.is_snap_enabled)
+        self.assertTrue(widget.combo_snap.isEnabled())
+        self.assertEqual(widget.get_effective_snap_step(shift_pressed=False), widget.snap_step)
+        self.assertIsNone(widget.get_effective_snap_step(shift_pressed=True))
+
         # Step changes
         widget.set_step(ScaleRotateCanvasWidget.STEP_REFERENCE)
         self.assertEqual(widget._current_step, ScaleRotateCanvasWidget.STEP_REFERENCE)

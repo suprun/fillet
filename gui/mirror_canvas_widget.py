@@ -29,12 +29,14 @@ from qgis.PyQt.QtGui import (
     QTransform,
 )
 from qgis.PyQt.QtWidgets import (
+    QButtonGroup,
     QCheckBox,
     QComboBox,
     QFrame,
     QGridLayout,
     QHBoxLayout,
     QLabel,
+    QRadioButton,
     QSizePolicy,
     QToolButton,
     QVBoxLayout,
@@ -127,16 +129,23 @@ class MirrorCanvasWidget(QFrame):
         grid.addWidget(self.spin_angle, 0, 1)
         grid.addWidget(self.btn_lock_angle, 0, 2)
 
-        # Row 1: Snap step angle
-        self.lbl_snap = QLabel(self.tr("Прив'язка осі:"), self)
+        # Row 1: Radio button for Free (no angle snap)
+        self.rb_snap_free = QRadioButton(self.tr("Вільний (Free)"), self)
+        grid.addWidget(self.rb_snap_free, 1, 0, 1, 3)
+
+        # Row 2: Radio button for Angle Snap + Combobox
+        self.rb_snap_angle = QRadioButton(self.tr("Прив'язка осі:"), self)
         self.combo_snap = QComboBox(self)
-        self.combo_snap.addItem(self.tr("Вільний (Free)"), 0.0)
         self.combo_snap.addItem("15°", 15.0)
         self.combo_snap.addItem("45°", 45.0)
         self.combo_snap.addItem(self.tr("90° (Орто)"), 90.0)
 
-        grid.addWidget(self.lbl_snap, 1, 0)
-        grid.addWidget(self.combo_snap, 1, 1, 1, 2)
+        grid.addWidget(self.rb_snap_angle, 2, 0)
+        grid.addWidget(self.combo_snap, 2, 1, 1, 2)
+
+        self.bg_snap = QButtonGroup(self)
+        self.bg_snap.addButton(self.rb_snap_free)
+        self.bg_snap.addButton(self.rb_snap_angle)
 
         main_layout.addLayout(grid)
 
@@ -152,7 +161,10 @@ class MirrorCanvasWidget(QFrame):
         ibeam_cursor = getattr(Qt.CursorShape, "IBeamCursor", getattr(Qt, "IBeamCursor", None))
         if arrow_cursor is not None:
             self.setCursor(QCursor(arrow_cursor))
+            self.spin_angle.setCursor(QCursor(arrow_cursor))
             self.btn_lock_angle.setCursor(QCursor(arrow_cursor))
+            self.rb_snap_free.setCursor(QCursor(arrow_cursor))
+            self.rb_snap_angle.setCursor(QCursor(arrow_cursor))
             self.combo_snap.setCursor(QCursor(arrow_cursor))
             self.chk_copy.setCursor(QCursor(arrow_cursor))
 
@@ -166,11 +178,14 @@ class MirrorCanvasWidget(QFrame):
         # Tab order
         target_spin = self.spin_angle.lineEdit() if hasattr(self.spin_angle, "lineEdit") and self.spin_angle.lineEdit() else self.spin_angle
         self.setTabOrder(target_spin, self.btn_lock_angle)
-        self.setTabOrder(self.btn_lock_angle, self.combo_snap)
+        self.setTabOrder(self.btn_lock_angle, self.rb_snap_free)
+        self.setTabOrder(self.rb_snap_free, self.rb_snap_angle)
+        self.setTabOrder(self.rb_snap_angle, self.combo_snap)
         self.setTabOrder(self.combo_snap, self.chk_copy)
 
         # Signal connections
         self.spin_angle.valueChanged.connect(self.angleChanged.emit)
+        self.rb_snap_free.toggled.connect(self._on_snap_mode_toggled)
         self.combo_snap.currentIndexChanged.connect(self._on_snap_changed)
 
         self._configure_numeric_validators()
@@ -287,9 +302,14 @@ class MirrorCanvasWidget(QFrame):
             self.lbl_step.setText(self.tr("2. Вкажіть другу точку осі"))
         self.reposition_to_default()
 
+    def _on_snap_mode_toggled(self, checked: bool):
+        is_angle = self.rb_snap_angle.isChecked()
+        self.combo_snap.setEnabled(is_angle)
+        self.stepSnapChanged.emit(self.snap_step if is_angle else 0.0)
+
     def _on_snap_changed(self):
-        step_val = float(self.combo_snap.currentData())
-        self.stepSnapChanged.emit(step_val)
+        if self.is_snap_enabled:
+            self.stepSnapChanged.emit(self.snap_step)
 
     @property
     def angle(self) -> float:
@@ -313,8 +333,23 @@ class MirrorCanvasWidget(QFrame):
         return self.chk_copy.isChecked()
 
     @property
+    def is_snap_enabled(self) -> bool:
+        return self.rb_snap_angle.isChecked()
+
+    @property
     def snap_step(self) -> float:
         return float(self.combo_snap.currentData())
+
+    def get_effective_snap_step(self, shift_pressed: bool = False) -> Optional[float]:
+        """
+        Returns effective snap angle in degrees based on radio button state and Shift modifier:
+        - If 'Angle snap' radio is checked: snap by selected angle, unless Shift is held (temporarily free).
+        - If 'Free' radio is checked: free angle, unless Shift is held (temporarily snap by selected angle).
+        """
+        if self.is_snap_enabled:
+            return None if shift_pressed else self.snap_step
+        else:
+            return self.snap_step if shift_pressed else None
 
     def reposition_to_default(self):
         """Positions the widget firmly at top-right corner of the map canvas."""
@@ -352,15 +387,25 @@ class MirrorCanvasWidget(QFrame):
 
     def _load_settings(self):
         s = QgsSettings()
-        snap_val = float(s.value("plugins/fillet/mirror_snap_step", 0.0))
+        mode = s.value("plugins/fillet/mirror_snap_mode", "free")
+        if mode == "angle":
+            self.rb_snap_angle.setChecked(True)
+        else:
+            self.rb_snap_free.setChecked(True)
+        self.combo_snap.setEnabled(self.rb_snap_angle.isChecked())
+
+        snap_val = float(s.value("plugins/fillet/mirror_snap_step", 15.0))
         idx = self.combo_snap.findData(snap_val)
         if idx >= 0:
             self.combo_snap.setCurrentIndex(idx)
+        else:
+            self.combo_snap.setCurrentIndex(0)  # 15°
         self.chk_copy.setChecked(s.value("plugins/fillet/mirror_copy_mode", False, type=bool))
         self.btn_lock_angle.setChecked(s.value("plugins/fillet/mirror_angle_locked", False, type=bool))
 
     def save_settings(self):
         s = QgsSettings()
+        s.setValue("plugins/fillet/mirror_snap_mode", "angle" if self.rb_snap_angle.isChecked() else "free")
         s.setValue("plugins/fillet/mirror_snap_step", self.snap_step)
         s.setValue("plugins/fillet/mirror_copy_mode", self.is_copy_mode)
         s.setValue("plugins/fillet/mirror_angle_locked", self.is_angle_locked)

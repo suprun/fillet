@@ -20,6 +20,7 @@ from qgis.PyQt.QtGui import (
     QTransform,
 )
 from qgis.PyQt.QtWidgets import (
+    QButtonGroup,
     QCheckBox,
     QComboBox,
     QFrame,
@@ -27,6 +28,7 @@ from qgis.PyQt.QtWidgets import (
     QGridLayout,
     QHBoxLayout,
     QLabel,
+    QRadioButton,
     QSizePolicy,
     QToolButton,
     QVBoxLayout,
@@ -145,17 +147,24 @@ class ScaleRotateCanvasWidget(QFrame):
         grid.addWidget(self.spin_angle, 1, 1)
         grid.addWidget(self.btn_lock_angle, 1, 2)
 
-        # Row 2: Snap step angle
-        self.lbl_snap = QLabel(self.tr("Крок кута:"), self)
+        # Row 2: Radio button for Free (no angle snap)
+        self.rb_snap_free = QRadioButton(self.tr("Вільний (Free)"), self)
+        grid.addWidget(self.rb_snap_free, 2, 0, 1, 3)
+
+        # Row 3: Radio button for Angle Snap + Combobox
+        self.rb_snap_angle = QRadioButton(self.tr("Крок кута:"), self)
         self.combo_snap = QComboBox(self)
-        self.combo_snap.addItem(self.tr("Вільний (Free)"), 0.0)
         self.combo_snap.addItem("5°", 5.0)
         self.combo_snap.addItem("15°", 15.0)
         self.combo_snap.addItem("45°", 45.0)
         self.combo_snap.addItem("90°", 90.0)
 
-        grid.addWidget(self.lbl_snap, 2, 0)
-        grid.addWidget(self.combo_snap, 2, 1, 1, 2)
+        grid.addWidget(self.rb_snap_angle, 3, 0)
+        grid.addWidget(self.combo_snap, 3, 1, 1, 2)
+
+        self.bg_snap = QButtonGroup(self)
+        self.bg_snap.addButton(self.rb_snap_free)
+        self.bg_snap.addButton(self.rb_snap_angle)
 
         main_layout.addLayout(grid)
 
@@ -175,6 +184,8 @@ class ScaleRotateCanvasWidget(QFrame):
             self.btn_lock_scale.setCursor(QCursor(arrow_cursor))
             self.spin_angle.setCursor(QCursor(arrow_cursor))
             self.btn_lock_angle.setCursor(QCursor(arrow_cursor))
+            self.rb_snap_free.setCursor(QCursor(arrow_cursor))
+            self.rb_snap_angle.setCursor(QCursor(arrow_cursor))
             self.combo_snap.setCursor(QCursor(arrow_cursor))
             self.chk_copy.setCursor(QCursor(arrow_cursor))
 
@@ -198,12 +209,15 @@ class ScaleRotateCanvasWidget(QFrame):
         self.setTabOrder(target_scale, self.btn_lock_scale)
         self.setTabOrder(self.btn_lock_scale, target_angle)
         self.setTabOrder(target_angle, self.btn_lock_angle)
-        self.setTabOrder(self.btn_lock_angle, self.combo_snap)
+        self.setTabOrder(self.btn_lock_angle, self.rb_snap_free)
+        self.setTabOrder(self.rb_snap_free, self.rb_snap_angle)
+        self.setTabOrder(self.rb_snap_angle, self.combo_snap)
         self.setTabOrder(self.combo_snap, self.chk_copy)
 
         # Signal connections
         self.spin_scale.valueChanged.connect(self.scaleChanged.emit)
         self.spin_angle.valueChanged.connect(self.angleChanged.emit)
+        self.rb_snap_free.toggled.connect(self._on_snap_mode_toggled)
         self.combo_snap.currentIndexChanged.connect(self._on_snap_changed)
 
         self._configure_numeric_validators()
@@ -355,9 +369,14 @@ class ScaleRotateCanvasWidget(QFrame):
             self.lbl_step.setText(self.tr("3. Вкажіть цільове положення"))
         self.reposition_to_default()
 
+    def _on_snap_mode_toggled(self, checked: bool):
+        is_angle = self.rb_snap_angle.isChecked()
+        self.combo_snap.setEnabled(is_angle)
+        self.stepSnapChanged.emit(self.snap_step if is_angle else 0.0)
+
     def _on_snap_changed(self):
-        step_val = float(self.combo_snap.currentData())
-        self.stepSnapChanged.emit(step_val)
+        if self.is_snap_enabled:
+            self.stepSnapChanged.emit(self.snap_step)
 
     @property
     def scale_factor(self) -> float:
@@ -398,8 +417,23 @@ class ScaleRotateCanvasWidget(QFrame):
         return self.chk_copy.isChecked()
 
     @property
+    def is_snap_enabled(self) -> bool:
+        return self.rb_snap_angle.isChecked()
+
+    @property
     def snap_step(self) -> float:
         return float(self.combo_snap.currentData())
+
+    def get_effective_snap_step(self, shift_pressed: bool = False) -> Optional[float]:
+        """
+        Returns effective snap angle in degrees based on radio button state and Shift modifier:
+        - If 'Angle snap' radio is checked: snap by selected angle, unless Shift is held (temporarily free).
+        - If 'Free' radio is checked: free angle, unless Shift is held (temporarily snap by selected angle).
+        """
+        if self.is_snap_enabled:
+            return None if shift_pressed else self.snap_step
+        else:
+            return self.snap_step if shift_pressed else None
 
     def reposition_to_default(self):
         """Positions the widget firmly at top-right corner of the map canvas."""
@@ -453,13 +487,23 @@ class ScaleRotateCanvasWidget(QFrame):
 
     def _load_settings(self):
         s = QgsSettings()
-        snap_val = float(s.value("plugins/fillet/scale_rotate_snap_step", 0.0))
+        mode = s.value("plugins/fillet/scale_rotate_snap_mode", "free")
+        if mode == "angle":
+            self.rb_snap_angle.setChecked(True)
+        else:
+            self.rb_snap_free.setChecked(True)
+        self.combo_snap.setEnabled(self.rb_snap_angle.isChecked())
+
+        snap_val = float(s.value("plugins/fillet/scale_rotate_snap_step", 15.0))
         idx = self.combo_snap.findData(snap_val)
         if idx >= 0:
             self.combo_snap.setCurrentIndex(idx)
+        else:
+            self.combo_snap.setCurrentIndex(1)  # 15°
         self.chk_copy.setChecked(s.value("plugins/fillet/scale_rotate_copy_mode", False, type=bool))
 
     def save_settings(self):
         s = QgsSettings()
+        s.setValue("plugins/fillet/scale_rotate_snap_mode", "angle" if self.rb_snap_angle.isChecked() else "free")
         s.setValue("plugins/fillet/scale_rotate_snap_step", self.snap_step)
         s.setValue("plugins/fillet/scale_rotate_copy_mode", self.is_copy_mode)

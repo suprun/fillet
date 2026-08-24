@@ -214,11 +214,10 @@ class MirrorMapTool(QgsMapToolEdit):
                 dist = max(1.0, math.hypot(dx, dy))
                 pt = QgsPointXY(self.p1.x() + dist * math.cos(rad), self.p1.y() + dist * math.sin(rad))
             else:
-                snap_step = self.widget.snap_step
-                if event.modifiers() & _ShiftModifier and snap_step == 0.0:
-                    snap_step = 45.0
-                if snap_step > 0.0 and self.p1:
-                    pt = self._apply_angle_snap(self.p1, pt, snap_step)
+                shift_pressed = bool(_ShiftModifier is not None and (event.modifiers() & _ShiftModifier))
+                eff_snap = self.widget.get_effective_snap_step(shift_pressed)
+                if eff_snap is not None and eff_snap > 0.0 and self.p1:
+                    pt = self._apply_angle_snap(self.p1, pt, eff_snap)
 
             if self.p1 and (abs(pt.x() - self.p1.x()) > 1e-9 or abs(pt.y() - self.p1.y()) > 1e-9):
                 self.p2 = pt
@@ -240,11 +239,10 @@ class MirrorMapTool(QgsMapToolEdit):
                 dist = max(1.0, math.hypot(dx, dy))
                 pt = QgsPointXY(self.p1.x() + dist * math.cos(rad), self.p1.y() + dist * math.sin(rad))
             else:
-                snap_step = self.widget.snap_step
-                if event.modifiers() & _ShiftModifier and snap_step == 0.0:
-                    snap_step = 45.0
-                if snap_step > 0.0:
-                    pt = self._apply_angle_snap(self.p1, pt, snap_step)
+                shift_pressed = bool(_ShiftModifier is not None and (event.modifiers() & _ShiftModifier))
+                eff_snap = self.widget.get_effective_snap_step(shift_pressed)
+                if eff_snap is not None and eff_snap > 0.0 and self.p1:
+                    pt = self._apply_angle_snap(self.p1, pt, eff_snap)
 
                 dx = pt.x() - self.p1.x()
                 dy = pt.y() - self.p1.y()

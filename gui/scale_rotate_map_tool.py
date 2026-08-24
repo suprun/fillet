@@ -211,16 +211,14 @@ class ScaleRotateMapTool(QgsMapToolEdit):
                     None,
                 )
 
-                snap_step = self.widget.snap_step
-                modifiers = event.modifiers()
-                if _ShiftModifier is not None and (modifiers & _ShiftModifier):
-                    snap_step = 15.0 if snap_step == 0.0 else snap_step
+                shift_pressed = bool(_ShiftModifier is not None and (event.modifiers() & _ShiftModifier))
+                eff_snap = self.widget.get_effective_snap_step(shift_pressed)
 
                 calc_scale, calc_angle = GeometryEngine.compute_3point_scale_and_rotation(
                     self.origin_point,
                     self.ref_point,
                     map_pt,
-                    snap_step_deg=snap_step if snap_step > 0.0 else None,
+                    snap_step_deg=eff_snap,
                 )
 
                 if self.widget.is_scale_locked:
@@ -296,16 +294,14 @@ class ScaleRotateMapTool(QgsMapToolEdit):
 
         elif self.state == self.STATE_TRANSFORMING:
             if self.origin_point and self.ref_point:
-                snap_step = self.widget.snap_step
-                modifiers = event.modifiers()
-                if _ShiftModifier is not None and (modifiers & _ShiftModifier):
-                    snap_step = 15.0 if snap_step == 0.0 else snap_step
+                shift_pressed = bool(_ShiftModifier is not None and (event.modifiers() & _ShiftModifier))
+                eff_snap = self.widget.get_effective_snap_step(shift_pressed)
 
                 calc_scale, calc_angle = GeometryEngine.compute_3point_scale_and_rotation(
                     self.origin_point,
                     self.ref_point,
                     map_pt,
-                    snap_step_deg=snap_step if snap_step > 0.0 else None,
+                    snap_step_deg=eff_snap,
                 )
                 if not self.widget.is_scale_locked:
                     self.current_scale = calc_scale

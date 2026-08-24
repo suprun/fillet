@@ -247,13 +247,11 @@ class RotateMapTool(QgsMapToolEdit):
                         map_pt,
                     )
 
-                    snap_step = self.widget.snap_step
-                    modifiers = event.modifiers()
-                    if _ShiftModifier is not None and (modifiers & _ShiftModifier):
-                        snap_step = 15.0 if snap_step == 0.0 else snap_step
+                    shift_pressed = bool(_ShiftModifier is not None and (event.modifiers() & _ShiftModifier))
+                    eff_snap = self.widget.get_effective_snap_step(shift_pressed)
 
-                    if snap_step > 0.0:
-                        angle_deg = round(angle_deg / snap_step) * snap_step
+                    if eff_snap is not None and eff_snap > 0.0:
+                        angle_deg = round(angle_deg / eff_snap) * eff_snap
 
                     self.current_angle = angle_deg
                     self.widget.set_angle(angle_deg, block_signals=True)
@@ -325,6 +323,19 @@ class RotateMapTool(QgsMapToolEdit):
                     self._update_preview(self.current_angle)
 
         elif self.state == self.STATE_ROTATING:
+            if not self.widget.is_angle_locked and self.pivot_point and self.ref_point:
+                angle_deg = GeometryEngine.calculate_rotation_angle(
+                    self.pivot_point,
+                    self.ref_point,
+                    map_pt,
+                )
+                shift_pressed = bool(_ShiftModifier is not None and (event.modifiers() & _ShiftModifier))
+                eff_snap = self.widget.get_effective_snap_step(shift_pressed)
+                if eff_snap is not None and eff_snap > 0.0:
+                    angle_deg = round(angle_deg / eff_snap) * eff_snap
+                self.current_angle = angle_deg
+                self.widget.set_angle(angle_deg, block_signals=True)
+
             self.commit_rotation()
 
         # Always restore focus to the numeric stepper after mouse click
