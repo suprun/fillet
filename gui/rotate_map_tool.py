@@ -40,8 +40,11 @@ _DotLine = getattr(Qt.PenStyle, "DotLine", getattr(Qt, "DotLine", 3))
 _LeftButton = getattr(Qt.MouseButton, "LeftButton", getattr(Qt, "LeftButton", 1))
 _RightButton = getattr(Qt.MouseButton, "RightButton", getattr(Qt, "RightButton", 2))
 _Key_Escape = getattr(Qt.Key, "Key_Escape", getattr(Qt, "Key_Escape", 0x01000000))
+_Key_Tab = getattr(Qt.Key, "Key_Tab", getattr(Qt, "Key_Tab", 0x01000001))
+_Key_Backspace = getattr(Qt.Key, "Key_Backspace", getattr(Qt, "Key_Backspace", 0x01000003))
 _Key_Return = getattr(Qt.Key, "Key_Return", getattr(Qt, "Key_Return", 0x01000004))
 _Key_Enter = getattr(Qt.Key, "Key_Enter", getattr(Qt, "Key_Enter", 0x01000005))
+_Key_Space = getattr(Qt.Key, "Key_Space", getattr(Qt, "Key_Space", 0x20))
 _ShiftModifier = getattr(Qt.KeyboardModifier, "ShiftModifier", getattr(Qt, "ShiftModifier", 0x02000000))
 
 try:
@@ -53,26 +56,29 @@ except (ImportError, ValueError):
 
 
 class RotateMapTool(QgsMapToolEdit):
-    """CAD-like 3-point interactive rotation map tool."""
+    """
+    Interactive CAD Rotation Map Tool for QGIS 3.x and 4.x.
+    3-step workflow:
+      1. Click / Snap Pivot Center
+      2. Click / Snap Baseline Reference Point
+      3. Move mouse to select Target Angle (or type numeric angle in HUD), Click to Confirm.
+    """
 
-    STATE_SET_PIVOT = 0
-    STATE_SET_REFERENCE = 1
-    STATE_ROTATING = 2
+    STATE_SET_PIVOT = 1
+    STATE_SET_REFERENCE = 2
+    STATE_ROTATING = 3
 
-    def tr(self, message: str) -> str:
-        return QCoreApplication.translate("FilletPlugin", message)
-
-    def __init__(self, canvas: QgsMapCanvas, widget: Optional[RotationCanvasWidget] = None):
+    def __init__(self, canvas: QgsMapCanvas, widget: RotationCanvasWidget):
         super().__init__(canvas)
         self.canvas = canvas
-        self.widget = widget or RotationCanvasWidget(self.canvas)
+        self.widget = widget
 
         self.state = self.STATE_SET_PIVOT
         self.pivot_point: Optional[QgsPointXY] = None
         self.ref_point: Optional[QgsPointXY] = None
         self.current_angle: float = 0.0
 
-        # Native QGIS snap indicator
+        # Snapping indicator
         self.snap_indicator = QgsSnapIndicator(self.canvas)
 
         # Visual rubberbands
@@ -122,6 +128,9 @@ class RotateMapTool(QgsMapToolEdit):
         super().activate()
         self.reset_state()
         self.widget.show_on_canvas()
+        from qgis.PyQt.QtCore import QTimer
+        QTimer.singleShot(0, self.widget.focus_angle_input)
+        QTimer.singleShot(50, self.widget.focus_angle_input)
 
     def deactivate(self):
         self.widget.save_settings()
@@ -144,26 +153,20 @@ class RotateMapTool(QgsMapToolEdit):
             self.snap_indicator.setMatch(QgsPointLocator.Match())
 
     def reset_state(self):
-        """Resets rotation tool to initial step (select pivot)."""
+        """Resets the tool state to Step 1: Set Pivot."""
         self.state = self.STATE_SET_PIVOT
         self.pivot_point = None
         self.ref_point = None
         self.current_angle = 0.0
         self.widget.set_step(RotationCanvasWidget.STEP_PIVOT)
-        self.widget.set_angle(0.0, block_signals=True)
         self._clear_visuals()
 
     def _clear_visuals(self):
-        if self.pivot_marker:
-            self.pivot_marker.reset(QgsWkbTypes.GeometryType.PointGeometry)
-        if self.baseline_rubberband:
-            self.baseline_rubberband.reset(QgsWkbTypes.GeometryType.LineGeometry)
-        if self.target_ray_rubberband:
-            self.target_ray_rubberband.reset(QgsWkbTypes.GeometryType.LineGeometry)
-        if self.angle_arc_rubberband:
-            self.angle_arc_rubberband.reset(QgsWkbTypes.GeometryType.LineGeometry)
-        if self.preview_rubberband:
-            self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
+        self.pivot_marker.reset(QgsWkbTypes.GeometryType.PointGeometry)
+        self.baseline_rubberband.reset(QgsWkbTypes.GeometryType.LineGeometry)
+        self.target_ray_rubberband.reset(QgsWkbTypes.GeometryType.LineGeometry)
+        self.angle_arc_rubberband.reset(QgsWkbTypes.GeometryType.LineGeometry)
+        self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
         if self.snap_indicator:
             self.snap_indicator.setMatch(QgsPointLocator.Match())
 
@@ -195,12 +198,10 @@ class RotateMapTool(QgsMapToolEdit):
 
         # 2. State handling
         if self.state == self.STATE_SET_PIVOT:
-            # Nothing to render yet, snapping indicator shows active snap point
             pass
 
         elif self.state == self.STATE_SET_REFERENCE:
             if self.pivot_point:
-                # Show dynamic baseline from pivot to current cursor point (using canvas CRS, layer=None)
                 self.baseline_rubberband.setToGeometry(
                     QgsGeometry.fromPolylineXY([self.pivot_point, map_pt]),
                     None,
@@ -230,18 +231,15 @@ class RotateMapTool(QgsMapToolEdit):
 
         elif self.state == self.STATE_ROTATING:
             if self.pivot_point and self.ref_point:
-                # Show baseline ray (using canvas CRS, layer=None)
                 self.baseline_rubberband.setToGeometry(
                     QgsGeometry.fromPolylineXY([self.pivot_point, self.ref_point]),
                     None,
                 )
-                # Show target ray (using canvas CRS, layer=None)
                 self.target_ray_rubberband.setToGeometry(
                     QgsGeometry.fromPolylineXY([self.pivot_point, map_pt]),
                     None,
                 )
 
-                # Calculate rotation angle
                 if not self.widget.is_angle_locked:
                     angle_deg = GeometryEngine.calculate_rotation_angle(
                         self.pivot_point,
@@ -249,7 +247,6 @@ class RotateMapTool(QgsMapToolEdit):
                         map_pt,
                     )
 
-                    # Check angle snap step or Shift key
                     snap_step = self.widget.snap_step
                     modifiers = event.modifiers()
                     if _ShiftModifier is not None and (modifiers & _ShiftModifier):
@@ -265,6 +262,21 @@ class RotateMapTool(QgsMapToolEdit):
 
                 self._update_preview(self.current_angle)
                 self._update_angle_arc(map_pt, self.current_angle)
+
+        # Keep focus on the HUD panel's numeric stepper if focus moved away
+        if self.widget:
+            from qgis.PyQt.QtWidgets import QApplication
+            focused_widget = QApplication.focusWidget()
+            is_on_panel = False
+            if focused_widget:
+                w = focused_widget
+                while w is not None:
+                    if w == self.widget:
+                        is_on_panel = True
+                        break
+                    w = w.parent()
+            if not is_on_panel:
+                self.widget.focus_angle_input()
 
     def canvasPressEvent(self, event: QgsMapMouseEvent):
         if event.button() == _RightButton:
@@ -314,6 +326,11 @@ class RotateMapTool(QgsMapToolEdit):
 
         elif self.state == self.STATE_ROTATING:
             self.commit_rotation()
+
+        # Always restore focus to the numeric stepper after mouse click
+        if self.widget:
+            from qgis.PyQt.QtCore import QTimer
+            QTimer.singleShot(0, self.widget.focus_angle_input)
 
     def _on_widget_angle_changed(self, angle: float):
         if self.state == self.STATE_ROTATING and self.pivot_point:
@@ -399,6 +416,28 @@ class RotateMapTool(QgsMapToolEdit):
 
     def keyPressEvent(self, event):
         key = event.key()
+
+        # If user types digits or math symbols, redirect to numeric stepper
+        if event.text() and (event.text().isdigit() or event.text() in ".-+," or key == _Key_Backspace):
+            if self.widget:
+                from qgis.PyQt.QtWidgets import QApplication
+                focused_widget = QApplication.focusWidget()
+                is_on_panel = False
+                if focused_widget:
+                    w = focused_widget
+                    while w is not None:
+                        if w == self.widget:
+                            is_on_panel = True
+                            break
+                        w = w.parent()
+                if not is_on_panel:
+                    self.widget.focus_angle_input()
+                    focused = QApplication.focusWidget()
+                    if focused:
+                        QApplication.sendEvent(focused, event)
+                    event.accept()
+                    return
+
         if key == _Key_Escape:
             if self.state == self.STATE_ROTATING:
                 self.state = self.STATE_SET_REFERENCE
@@ -414,13 +453,39 @@ class RotateMapTool(QgsMapToolEdit):
             event.accept()
             return
 
-        if key in (_Key_Return, _Key_Enter):
+        elif key in (_Key_Return, _Key_Enter):
             if self.state == self.STATE_ROTATING or (self.pivot_point and self.widget.is_angle_locked):
                 self.commit_rotation()
                 event.accept()
                 return
 
-        super().keyPressEvent(event)
+        elif key == _Key_Tab:
+            if self.widget:
+                from qgis.PyQt.QtWidgets import QApplication
+                focused_widget = QApplication.focusWidget()
+                is_on_panel = False
+                if focused_widget:
+                    w = focused_widget
+                    while w is not None:
+                        if w == self.widget:
+                            is_on_panel = True
+                            break
+                        w = w.parent()
+                if not is_on_panel:
+                    self.widget.focus_angle_input()
+                    event.accept()
+                    return
+                else:
+                    super().keyPressEvent(event)
+
+        elif key == _Key_Space:
+            if self.widget:
+                self.widget.toggle_active_lock()
+                event.accept()
+                return
+
+        else:
+            super().keyPressEvent(event)
 
     def commit_rotation(self):
         """Applies rotation to selected features in a single undoable transaction."""

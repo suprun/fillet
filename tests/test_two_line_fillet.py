@@ -27,6 +27,8 @@ win = QMainWindow()
 canvas = QgsMapCanvas(win)
 
 from core.geometry_engine import GeometryEngine
+from gui.canvas_widget import FilletCanvasWidget
+from gui.two_line_map_tool import TwoLineMapTool
 
 
 class TestTwoLineFillet(unittest.TestCase):
@@ -239,6 +241,7 @@ class TestTwoLineFillet(unittest.TestCase):
 
         tool = TwoLineMapTool(canvas, iface=None)
         tool.activate()
+        tool.widget.mode = FilletCanvasWidget.MODE_FILLET
 
         # Unlock radius on widget so it enters Step 3
         tool.widget.btn_lock_radius.setChecked(False)
@@ -648,6 +651,35 @@ class TestTwoLineFillet(unittest.TestCase):
         # T1 must not overshoot (45, -5)
         self.assertGreaterEqual(t1.x(), 44.99)
         self.assertGreaterEqual(t1.y(), -5.01)
+
+    def test_two_line_focus_and_keyboard_navigation(self):
+        from gui.canvas_widget import FilletCanvasWidget
+        from gui.two_line_map_tool import TwoLineMapTool
+        from qgis.PyQt.QtCore import QEvent, Qt
+        from qgis.PyQt.QtGui import QKeyEvent
+
+        widget = FilletCanvasWidget(canvas)
+        widget.mode = FilletCanvasWidget.MODE_FILLET
+        tool = TwoLineMapTool(canvas, widget)
+        tool.activate()
+
+        # Check widget is in two-line mode
+        self.assertTrue(widget._is_two_line_mode)
+
+        # Tab order test
+        s_rad = widget.spin_radius.lineEdit() if hasattr(widget.spin_radius, "lineEdit") and widget.spin_radius.lineEdit() else widget.spin_radius
+        self.assertIsNotNone(s_rad)
+
+        # Space key toggles lock
+        evt_type = getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", 6))
+        key_space = getattr(Qt.Key, "Key_Space", getattr(Qt, "Key_Space", 0x20))
+        no_mod = getattr(Qt.KeyboardModifier, "NoModifier", getattr(Qt, "NoModifier", 0))
+
+        initial_locked = widget.is_radius_locked
+        tool.keyPressEvent(QKeyEvent(evt_type, key_space, no_mod))
+        self.assertEqual(widget.is_radius_locked, not initial_locked)
+        tool.keyPressEvent(QKeyEvent(evt_type, key_space, no_mod))
+        self.assertEqual(widget.is_radius_locked, initial_locked)
 
 
 if __name__ == "__main__":

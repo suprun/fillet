@@ -34,6 +34,8 @@ _DashLine = getattr(Qt.PenStyle, "DashLine", getattr(Qt, "DashLine", 2))
 _LeftButton = getattr(Qt.MouseButton, "LeftButton", getattr(Qt, "LeftButton", 1))
 _RightButton = getattr(Qt.MouseButton, "RightButton", getattr(Qt, "RightButton", 2))
 _Key_Escape = getattr(Qt.Key, "Key_Escape", getattr(Qt, "Key_Escape", 0x01000000))
+_Key_Tab = getattr(Qt.Key, "Key_Tab", getattr(Qt, "Key_Tab", 0x01000001))
+_Key_Backspace = getattr(Qt.Key, "Key_Backspace", getattr(Qt, "Key_Backspace", 0x01000003))
 _Key_Return = getattr(Qt.Key, "Key_Return", getattr(Qt, "Key_Return", 0x01000004))
 _Key_Enter = getattr(Qt.Key, "Key_Enter", getattr(Qt, "Key_Enter", 0x01000005))
 _Key_Space = getattr(Qt.Key, "Key_Space", getattr(Qt, "Key_Space", 0x20))
@@ -138,14 +140,14 @@ class TwoLineMapTool(QgsMapToolEdit):
         # 2. Geometry preview rubberband
         self.preview_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.LineGeometry)
         self.preview_rubberband.setWidth(4)
-        self.preview_rubberband.setColor(QColor(16, 185, 129, 230))  # Emerald green
+        self.preview_rubberband.setColor(QColor(37, 99, 235, 230))
         if _DashLine is not None:
             self.preview_rubberband.setLineStyle(_DashLine)
 
         # 3. Corner intersection marker rubberband
         self.corner_marker = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
         self.corner_marker.setIcon(QgsRubberBand.IconType.ICON_CROSS)
-        self.corner_marker.setIconSize(10)
+        self.corner_marker.setIconSize(12)
         self.corner_marker.setWidth(2)
         self.corner_marker.setColor(QColor(234, 88, 12, 255))  # Amber
 
@@ -154,7 +156,7 @@ class TwoLineMapTool(QgsMapToolEdit):
         self.tangent_marker.setIcon(QgsRubberBand.IconType.ICON_BOX)
         self.tangent_marker.setIconSize(8)
         self.tangent_marker.setWidth(2)
-        self.tangent_marker.setColor(QColor(16, 185, 129, 255))
+        self.tangent_marker.setColor(QColor(37, 99, 235, 255))
 
         if _CrossCursor is not None:
             self.setCursor(QCursor(_CrossCursor))
@@ -171,6 +173,9 @@ class TwoLineMapTool(QgsMapToolEdit):
             self.widget.set_two_line_mode(True)
             self.widget.set_step(self.STEP_FIRST_LINE)
             self.widget.show_on_canvas()
+            from qgis.PyQt.QtCore import QTimer
+            QTimer.singleShot(0, self.widget.focus_primary_input)
+            QTimer.singleShot(50, self.widget.focus_primary_input)
 
     def deactivate(self):
         self._clear_preview()
@@ -333,6 +338,20 @@ class TwoLineMapTool(QgsMapToolEdit):
 
                 self._update_preview(layer, self.first_segment_match, self.current_segment_match)
 
+        # Keep focus on the HUD panel's numeric stepper if focus moved away
+        if self.widget:
+            focused_widget = QApplication.focusWidget()
+            is_on_panel = False
+            if focused_widget:
+                w = focused_widget
+                while w is not None:
+                    if w == self.widget:
+                        is_on_panel = True
+                        break
+                    w = w.parent()
+            if not is_on_panel:
+                self.widget.focus_primary_input()
+
     def _update_preview(self, layer: QgsVectorLayer, m1: SegmentMatch, m2: SegmentMatch):
         """Calculates and renders rubberband preview connecting two lines."""
         mode = self.widget.mode if self.widget else "fillet"
@@ -458,29 +477,89 @@ class TwoLineMapTool(QgsMapToolEdit):
             # Step 3: Confirm radius and commit
             self._commit_current_preview()
 
+        # Always restore focus to the primary numeric stepper after mouse click
+        if self.widget:
+            from qgis.PyQt.QtCore import QTimer
+            QTimer.singleShot(0, self.widget.focus_primary_input)
+
     def keyPressEvent(self, event):
         key = event.key()
+
+        # If user types digits or math symbols before first click or while hovering, redirect to numeric stepper
+        if event.text() and (event.text().isdigit() or event.text() in ".-+," or key == _Key_Backspace):
+            if self.widget:
+                focused_widget = QApplication.focusWidget()
+                is_on_panel = False
+                if focused_widget:
+                    w = focused_widget
+                    while w is not None:
+                        if w == self.widget:
+                            is_on_panel = True
+                            break
+                        w = w.parent()
+                if not is_on_panel:
+                    self.widget.focus_primary_input()
+                    focused = QApplication.focusWidget()
+                    if focused:
+                        QApplication.sendEvent(focused, event)
+                    event.accept()
+                    return
+
         if key in (_Key_Escape,):
             self._handle_step_back()
             event.accept()
-        elif key in (_Key_Return, _Key_Enter, _Key_Space):
-            if self.step == self.STEP_SET_RADIUS and self.preview_geom:
+            return
+
+        elif key in (_Key_Return, _Key_Enter):
+            if self.step == self.STEP_SET_RADIUS or (self.step == self.STEP_SECOND_LINE and self.preview_geom):
                 self._commit_current_preview()
                 event.accept()
+                return
+
+        elif key == _Key_Tab:
+            if self.widget:
+                focused_widget = QApplication.focusWidget()
+                is_on_panel = False
+                if focused_widget:
+                    w = focused_widget
+                    while w is not None:
+                        if w == self.widget:
+                            is_on_panel = True
+                            break
+                        w = w.parent()
+                if not is_on_panel:
+                    self.widget.focus_primary_input()
+                    event.accept()
+                    return
+                else:
+                    super().keyPressEvent(event)
+
+        elif key == _Key_Space:
+            if self.widget:
+                self.widget.toggle_active_lock()
+                event.accept()
+                return
+
         elif key == _Key_L:
             if self.widget:
                 self.widget.toggle_active_lock()
+                event.accept()
                 return
+
         elif key == _Key_F:
             if self.widget:
                 self.widget.mode = FilletCanvasWidget.MODE_FILLET
+                event.accept()
                 return
+
         elif key == _Key_C:
             if self.widget:
                 self.widget.mode = FilletCanvasWidget.MODE_CHAMFER
+                event.accept()
                 return
 
-        super().keyPressEvent(event)
+        else:
+            super().keyPressEvent(event)
 
     def _handle_step_back(self):
         """Step back through CAD workflow or clear selection."""

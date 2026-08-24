@@ -233,6 +233,24 @@ class TestCADMirrorTool(unittest.TestCase):
         # Should not raise NameError and reset state
         self.assertEqual(tool.state, MirrorMapTool.STATE_FIRST_POINT)
 
+    def test_mirror_space_toggle_lock(self):
+        from qgis.PyQt.QtCore import QEvent, Qt
+        from qgis.PyQt.QtGui import QKeyEvent
+
+        widget = MirrorCanvasWidget(self.canvas)
+        tool = MirrorMapTool(self.canvas, widget)
+        tool.activate()
+
+        evt_type = getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", 6))
+        key_space = getattr(Qt.Key, "Key_Space", getattr(Qt, "Key_Space", 0x20))
+        no_mod = getattr(Qt.KeyboardModifier, "NoModifier", getattr(Qt, "NoModifier", 0))
+
+        self.assertFalse(widget.is_angle_locked)
+        tool.keyPressEvent(QKeyEvent(evt_type, key_space, no_mod))
+        self.assertTrue(widget.is_angle_locked)
+        tool.keyPressEvent(QKeyEvent(evt_type, key_space, no_mod))
+        self.assertFalse(widget.is_angle_locked)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -337,7 +337,17 @@ class RotationCanvasWidget(QFrame):
 
     def focus_angle_input(self):
         self.spin_angle.setFocus()
-        self._select_all_angle()
+        if hasattr(self.spin_angle, "lineEdit") and self.spin_angle.lineEdit():
+            self.spin_angle.lineEdit().setFocus()
+            self.spin_angle.lineEdit().selectAll()
+        else:
+            self.spin_angle.selectAll()
+
+    def focus_primary_input(self):
+        self.focus_angle_input()
+
+    def toggle_active_lock(self):
+        self.btn_lock_angle.toggle()
 
     def _load_settings(self):
         s = QgsSettings()

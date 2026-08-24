@@ -56,6 +56,7 @@ class FilletCanvasWidget(QFrame):
 
         self._drag_pos: Optional[QPoint] = None
         self._user_moved = False
+        self._is_two_line_mode = False
         self._icons_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources", "icons")
         self._last_focused_spin = None
 
@@ -417,18 +418,27 @@ class FilletCanvasWidget(QFrame):
         self.reposition_to_default()
 
     def _update_tab_order(self, mode: str):
+        s_rad = self.spin_radius.lineEdit() if hasattr(self.spin_radius, "lineEdit") and self.spin_radius.lineEdit() else self.spin_radius
+        s_seg = self.spin_segments.lineEdit() if hasattr(self.spin_segments, "lineEdit") and self.spin_segments.lineEdit() else self.spin_segments
+        s_d1 = self.spin_dist1.lineEdit() if hasattr(self.spin_dist1, "lineEdit") and self.spin_dist1.lineEdit() else self.spin_dist1
+        s_d2 = self.spin_dist2.lineEdit() if hasattr(self.spin_dist2, "lineEdit") and self.spin_dist2.lineEdit() else self.spin_dist2
+
         if mode == self.MODE_FILLET:
-            QWidget.setTabOrder(self.spin_radius, self.spin_segments)
-            QWidget.setTabOrder(self.spin_segments, self.btn_lock_radius)
+            QWidget.setTabOrder(s_rad, s_seg)
+            QWidget.setTabOrder(s_seg, self.btn_lock_radius)
             QWidget.setTabOrder(self.btn_lock_radius, self.radio_fillet)
             QWidget.setTabOrder(self.radio_fillet, self.radio_chamfer)
+            if self._is_two_line_mode:
+                QWidget.setTabOrder(self.radio_chamfer, self.chk_always_first)
         else:
-            QWidget.setTabOrder(self.spin_dist1, self.spin_dist2)
-            QWidget.setTabOrder(self.spin_dist2, self.btn_link)
+            QWidget.setTabOrder(s_d1, s_d2)
+            QWidget.setTabOrder(s_d2, self.btn_link)
             QWidget.setTabOrder(self.btn_link, self.btn_lock_dist1)
             QWidget.setTabOrder(self.btn_lock_dist1, self.btn_lock_dist2)
             QWidget.setTabOrder(self.btn_lock_dist2, self.radio_fillet)
             QWidget.setTabOrder(self.radio_fillet, self.radio_chamfer)
+            if self._is_two_line_mode:
+                QWidget.setTabOrder(self.radio_chamfer, self.chk_always_first)
 
     def _on_link_toggled(self, checked: bool):
         self._update_link_icon()
@@ -535,6 +545,23 @@ class FilletCanvasWidget(QFrame):
                             other.lineEdit().deselect()
                     QTimer.singleShot(0, lambda s=spin: self._select_all_spin(s))
         elif event.type() == evt_key_press:
+            key = event.key()
+            key_tab = getattr(Qt.Key, "Key_Tab", getattr(Qt, "Key_Tab", 0x01000001))
+            key_backtab = getattr(Qt.Key, "Key_Backtab", getattr(Qt, "Key_Backtab", 0x01000002))
+            key_return = getattr(Qt.Key, "Key_Return", getattr(Qt, "Key_Return", 0x01000004))
+            key_enter = getattr(Qt.Key, "Key_Enter", getattr(Qt, "Key_Enter", 0x01000005))
+
+            if key in (key_return, key_enter):
+                self.commitRequested.emit()
+                return True
+
+            if key == key_tab:
+                self.focusNextChild()
+                return True
+            elif key == key_backtab:
+                self.focusPreviousChild()
+                return True
+
             for spin in (self.spin_radius, self.spin_segments, self.spin_dist1, self.spin_dist2):
                 if hasattr(spin, "lineEdit") and obj == spin.lineEdit():
                     if self._handle_spin_key_press(spin, event):
@@ -719,6 +746,22 @@ class FilletCanvasWidget(QFrame):
 
     def _on_chk_always_first_toggled(self, checked: bool):
         QgsSettings().setValue("plugins/fillet/merge_always_first_feature", checked)
+
+    def show_on_canvas(self):
+        """Shows and repositions widget on canvas."""
+        self.reposition_to_default()
+        self.show()
+        self.raise_()
+
+    def _select_all_spin(self, spin: QWidget):
+        if hasattr(spin, "lineEdit") and spin.lineEdit():
+            spin.lineEdit().selectAll()
+        elif hasattr(spin, "selectAll"):
+            spin.selectAll()
+
+    def _select_if_focused(self, spin: QWidget):
+        if spin.hasFocus() or (hasattr(spin, "lineEdit") and spin.lineEdit() and spin.lineEdit().hasFocus()):
+            self._select_all_spin(spin)
 
     def set_two_line_mode(self, enabled: bool):
         """Switches the widget between single-vertex mode and two-line join mode."""

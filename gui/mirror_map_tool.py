@@ -36,9 +36,11 @@ _DotLine = getattr(Qt.PenStyle, "DotLine", getattr(Qt, "DotLine", 3))
 _LeftButton = getattr(Qt.MouseButton, "LeftButton", getattr(Qt, "LeftButton", 1))
 _RightButton = getattr(Qt.MouseButton, "RightButton", getattr(Qt, "RightButton", 2))
 _Key_Escape = getattr(Qt.Key, "Key_Escape", getattr(Qt, "Key_Escape", 0x01000000))
+_Key_Tab = getattr(Qt.Key, "Key_Tab", getattr(Qt, "Key_Tab", 0x01000001))
 _Key_Backspace = getattr(Qt.Key, "Key_Backspace", getattr(Qt, "Key_Backspace", 0x01000003))
 _Key_Return = getattr(Qt.Key, "Key_Return", getattr(Qt, "Key_Return", 0x01000004))
 _Key_Enter = getattr(Qt.Key, "Key_Enter", getattr(Qt, "Key_Enter", 0x01000005))
+_Key_Space = getattr(Qt.Key, "Key_Space", getattr(Qt, "Key_Space", 0x20))
 _ShiftModifier = getattr(Qt.KeyboardModifier, "ShiftModifier", getattr(Qt, "ShiftModifier", 0x02000000))
 
 try:
@@ -106,6 +108,9 @@ class MirrorMapTool(QgsMapToolEdit):
         super().activate()
         self.reset_state()
         self.widget.show_on_canvas()
+        from qgis.PyQt.QtCore import QTimer
+        QTimer.singleShot(0, self.widget.focus_angle_input)
+        QTimer.singleShot(50, self.widget.focus_angle_input)
 
     def deactivate(self):
         self.widget.save_settings()
@@ -219,6 +224,11 @@ class MirrorMapTool(QgsMapToolEdit):
                 self.p2 = pt
                 self.commit_mirror()
 
+        # Always restore focus to the numeric stepper after mouse click
+        if self.widget:
+            from qgis.PyQt.QtCore import QTimer
+            QTimer.singleShot(0, self.widget.focus_angle_input)
+
     def canvasMoveEvent(self, event: QgsMapMouseEvent):
         pt = self._get_snapped_point(event)
 
@@ -244,6 +254,21 @@ class MirrorMapTool(QgsMapToolEdit):
 
             self.p2 = pt
             self._update_preview(pt)
+
+        # Keep focus on the HUD panel's numeric stepper if focus moved away
+        if self.widget:
+            from qgis.PyQt.QtWidgets import QApplication
+            focused_widget = QApplication.focusWidget()
+            is_on_panel = False
+            if focused_widget:
+                w = focused_widget
+                while w is not None:
+                    if w == self.widget:
+                        is_on_panel = True
+                        break
+                    w = w.parent()
+            if not is_on_panel:
+                self.widget.focus_angle_input()
 
     def _update_preview(self, p2: QgsPointXY):
         layer = self.currentVectorLayer()
@@ -362,8 +387,63 @@ class MirrorMapTool(QgsMapToolEdit):
 
     def keyPressEvent(self, event):
         key = event.key()
+
+        # If user types digits or math symbols, redirect to angle stepper
+        if event.text() and (event.text().isdigit() or event.text() in ".-+," or key == _Key_Backspace):
+            if self.widget:
+                from qgis.PyQt.QtWidgets import QApplication
+                focused_widget = QApplication.focusWidget()
+                is_on_panel = False
+                if focused_widget:
+                    w = focused_widget
+                    while w is not None:
+                        if w == self.widget:
+                            is_on_panel = True
+                            break
+                        w = w.parent()
+                if not is_on_panel:
+                    self.widget.focus_angle_input()
+                    focused = QApplication.focusWidget()
+                    if focused:
+                        QApplication.sendEvent(focused, event)
+                    event.accept()
+                    return
+
         if key == _Key_Escape or key == _Key_Backspace:
             self._handle_step_back()
+            event.accept()
+            return
+
         elif key in (_Key_Return, _Key_Enter):
             if self.state == self.STATE_SECOND_POINT and self.p1 and self.p2:
                 self.commit_mirror()
+                event.accept()
+                return
+
+        elif key == _Key_Tab:
+            if self.widget:
+                from qgis.PyQt.QtWidgets import QApplication
+                focused_widget = QApplication.focusWidget()
+                is_on_panel = False
+                if focused_widget:
+                    w = focused_widget
+                    while w is not None:
+                        if w == self.widget:
+                            is_on_panel = True
+                            break
+                        w = w.parent()
+                if not is_on_panel:
+                    self.widget.focus_angle_input()
+                    event.accept()
+                    return
+                else:
+                    super().keyPressEvent(event)
+
+        elif key == _Key_Space:
+            if self.widget:
+                self.widget.toggle_active_lock()
+                event.accept()
+                return
+
+        else:
+            super().keyPressEvent(event)
