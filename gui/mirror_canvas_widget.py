@@ -144,10 +144,12 @@ class MirrorCanvasWidget(QFrame):
         self.rb_snap_free = QRadioButton(self.tr("Вільний (Free)"), self)
         self.rb_snap_angle = QRadioButton(self.tr("Кут:"), self)
         self.combo_snap = QComboBox(self)
-        self.combo_snap.setMaximumWidth(85)
+        self.combo_snap.setMaximumWidth(70)
+        self.combo_snap.addItem("5°", 5.0)
         self.combo_snap.addItem("15°", 15.0)
+        self.combo_snap.addItem("30°", 30.0)
         self.combo_snap.addItem("45°", 45.0)
-        self.combo_snap.addItem(self.tr("90° (Орто)"), 90.0)
+        self.combo_snap.addItem("90°", 90.0)
 
         snap_layout.addWidget(self.rb_snap_free)
         snap_layout.addWidget(self.rb_snap_angle)
@@ -161,6 +163,16 @@ class MirrorCanvasWidget(QFrame):
         self.bg_snap.addButton(self.rb_snap_angle)
 
         main_layout.addLayout(grid)
+
+        # Horizontal separator
+        self.sep_copy = QFrame(self)
+        hline = getattr(QFrame.Shape, "HLine", getattr(QFrame, "HLine", None))
+        sunken = getattr(QFrame.Shadow, "Sunken", getattr(QFrame, "Shadow", None))
+        if hline is not None:
+            self.sep_copy.setFrameShape(hline)
+        if sunken is not None:
+            self.sep_copy.setFrameShadow(sunken)
+        main_layout.addWidget(self.sep_copy)
 
         # Checkbox: Copy original feature
         self.chk_copy = QCheckBox(self.tr("Зберегти копію (Copy)"), self)

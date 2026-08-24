@@ -4,7 +4,7 @@ qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
 description=Interactive Fillet, Chamfer, Two-Line Merge, Corner Restoration, CAD Rotation, Mirror & Scale-with-Rotation suite for QGIS.
 about=Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), Interactive CAD Rotation, CAD Mirror Tool, and CAD 3-Point Scale with Rotation Tool for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.
-version=1.0.0.34
+version=1.0.0.35
 author=suprun
 email=suprun.serhiy+qgis@gmail.com
 homepage=https://github.com/suprun/fillet
@@ -14,7 +14,9 @@ tags=cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation,
 icon=icon.png
 experimental=False
 deprecated=False
-changelog=1.0.0.34:
+changelog=1.0.0.35:
+    - Unified angle snap options to [5°, 15°, 30°, 45°, 90°] across all CAD tools and added horizontal separator above Save copy checkbox.
+    1.0.0.34:
     - Redesigned CAD snapping HUD layout (parameter header row and horizontal Free/Angle radio buttons with compact dropdown) and added real-time Shift key dynamic visual inversion.
     1.0.0.33:
     - Added radio button selection for Free vs Angle Snap modes with dynamic dropdown enablement and Shift key snap inversion across Rotation, Mirror, and Scale-with-Rotation CAD tools.
