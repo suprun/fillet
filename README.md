@@ -6,7 +6,7 @@
   <img src="icon.png" alt="Fillet & Chamfer Logo" width="96" height="96" />
 </p>
 
-**Comprehensive CAD editing suite for QGIS: Interactive Fillet (corner rounding), Chamfer (corner beveling), and Two-Edge Corner Restoration (Unfillet / Unchamfer), plus instant Batch Fillet & Chamfer Processing for QGIS 3.x & 4.x.**
+**Comprehensive CAD editing suite for QGIS: Interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), and Interactive CAD Rotation Tool, plus instant Batch Fillet & Chamfer Processing for QGIS 3.x & 4.x.**
 
 [![QGIS Compatibility](https://img.shields.io/badge/QGIS-3.16%20--%204.99-brightgreen.svg?logo=qgis)](https://plugins.qgis.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -21,11 +21,13 @@
 
 ## 🌟 Overview
 
-The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grade corner editing tools into QGIS:
+The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grade digitizing tools into QGIS:
 
 1. **Interactive Fillet & Chamfer CAD Tool (QGIS 3.x)**: Backports the interactive digitizing workflow introduced in QGIS 4.0 directly into the **QGIS 3.x LTR series** (from QGIS 3.16 to 3.44+), complete with an on-canvas CAD HUD widget.
-2. **Interactive Corner Restoration Tool / Unfillet & Unchamfer (QGIS 3.x & QGIS 4.x)**: A dedicated CAD Two-Edge selection tool allowing you to select two adjacent straight edges, remove intermediate arc chords or bevel segments, and reconstruct the exact sharp intersection corner ($V_{\text{sharp}}$).
-3. **Batch Processing Dock Panel (QGIS 3.x & QGIS 4.x)**: A dedicated dock widget to round or bevel all vertices across selected features and complex polygon rings with a single click.
+2. **Two-Line Fillet / Chamfer Tool with Merge (QGIS 3.x & QGIS 4.x)**: Select any two intersecting or non-intersecting line features or segments to connect them with a fillet arc or chamfer bevel, automatically merging geometries and preserving feature attributes.
+3. **Interactive Corner Restoration Tool / Unfillet & Unchamfer (QGIS 3.x & QGIS 4.x)**: A dedicated CAD Two-Edge selection tool allowing you to select two adjacent straight edges, remove intermediate arc chords or bevel segments, and reconstruct the exact sharp intersection corner ($V_{\text{sharp}}$).
+4. **Interactive CAD 3-Point Rotation Tool (QGIS 3.x & QGIS 4.x)**: Precise CAD rotation tool for selected features using interactive 3-step pivot center, reference baseline, and target angle with angle snap presets and copy mode.
+5. **Batch Processing Dock Panel (QGIS 3.x & QGIS 4.x)**: A dedicated dock widget to round or bevel all vertices across selected features and complex polygon rings with a single click.
 
 ---
 
@@ -49,20 +51,33 @@ The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grad
 
 ---
 
-### 2. 📐 Interactive Corner Restoration / Unfillet & Unchamfer (QGIS 3.x & QGIS 4.x)
+### 2. 🔄 Two-Line Fillet / Chamfer with Feature Merge (QGIS 3.x & QGIS 4.x)
+- Connect any two separate line features or two segments of a closed/open polyline with a fillet curve or chamfer bevel.
+- Automatically calculates infinite ray intersections, shortens or extends line segments, and performs seamless topological feature merging.
+- Native integration with QGIS `QgsMergeAttributesDialog` and option to always keep first feature attributes.
+
+---
+
+### 3. 📐 Interactive Corner Restoration / Unfillet & Unchamfer (QGIS 3.x & QGIS 4.x)
 - **CAD Two-Edge Selection Workflow**:
   - **Step 1**: Hover over any straight edge $E_1$ adjacent to the corner (highlighted in amber) and left-click to select.
   - **Step 2**: Hover over the second adjacent straight edge $E_2$. The tool computes the infinite ray intersection $V_{\text{sharp}}$, automatically detects all intermediate arc chords or bevel segments, and renders a live rubberband preview of the reconstructed geometry.
   - **Step 3**: Left-click $E_2$ to commit the sharp corner reconstruction into the layer edit history.
-  - Right-click or press `Escape` at any time to cancel edge selection.
-- **Handles Any Arc Complexity**:
-  - Accurately reconstructs corners regardless of arc discretization density (e.g., 2, 8, 16, 64 chords) and handles polygon closure vertices seamlessly.
-- **Dedicated Toolbar Action**:
-  - Integrated into the *Advanced Digitizing Toolbar* with a custom icon featuring the standard QGIS delete badge.
+  - Right-click or press `Escape` at any time to step back or cancel.
 
 ---
 
-### 3. ⚡ Batch Processing Dock Panel (QGIS 3.x & QGIS 4.x)
+### 4. 🧭 Interactive CAD 3-Point Rotation Tool (QGIS 3.x & QGIS 4.x)
+- **3-Point CAD Workflow**:
+  - **Step 1**: Select pivot / rotation center point with native snapping.
+  - **Step 2**: Select reference baseline direction.
+  - **Step 3**: Rotate interactively to target angle or enter exact numeric degrees in floating HUD.
+- **Angle Snap Steps**: Free, 5°, 15°, 45°, 90°.
+- **Copy Mode**: Option to create rotated duplicate features while preserving the original.
+
+---
+
+### 5. ⚡ Batch Processing Dock Panel (QGIS 3.x & QGIS 4.x)
 - Dockable panel in the main window for rapid batch processing.
 - Automatically processes all vertices of all parts in selected features (`LineString`, `Polygon`, `MultiLineString`, `MultiPolygon`).
 - Supports exterior rings as well as all interior hole rings.
@@ -71,7 +86,7 @@ The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grad
 
 ---
 
-### 4. 🛡️ Edit-Mode Safety & Native Transactions
+### 6. 🛡️ Edit-Mode Safety & Native Transactions
 - All toolbar action buttons and tools are **automatically enabled only when an active vector layer is in Edit Mode** (`layer.isEditable() == True`).
 - If editing is toggled off while a tool is active, the tool automatically unsets and closes on-canvas widgets to prevent unintended changes.
 - Full native Undo/Redo (`Ctrl+Z` / `Ctrl+Y`) transaction support for all interactive and batch operations.

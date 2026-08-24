@@ -1315,6 +1315,60 @@ class GeometryEngine:
 
         return QgsGeometry(res_line), v, t1, t2
 
+    @classmethod
+    def calculate_bearing(
+        cls,
+        center: Union[QgsPoint, QgsPointXY],
+        pt: Union[QgsPoint, QgsPointXY],
+    ) -> float:
+        """
+        Calculates the mathematical angle (in degrees, CCW from positive X-axis)
+        of the vector from center to pt.
+        """
+        dx = pt.x() - center.x()
+        dy = pt.y() - center.y()
+        return math.degrees(math.atan2(dy, dx))
+
+    @classmethod
+    def calculate_rotation_angle(
+        cls,
+        center: Union[QgsPoint, QgsPointXY],
+        base_pt: Union[QgsPoint, QgsPointXY],
+        target_pt: Union[QgsPoint, QgsPointXY],
+    ) -> float:
+        """
+        Calculates the counter-clockwise rotation angle in degrees from base_pt to target_pt around center.
+        Normalized to (-180.0, 180.0].
+        """
+        a_base = math.atan2(base_pt.y() - center.y(), base_pt.x() - center.x())
+        a_target = math.atan2(target_pt.y() - center.y(), target_pt.x() - center.x())
+        delta_deg = math.degrees(a_target - a_base)
+        # Normalize to (-180, 180]
+        while delta_deg <= -180.0:
+            delta_deg += 360.0
+        while delta_deg > 180.0:
+            delta_deg -= 360.0
+        return delta_deg
+
+    @classmethod
+    def rotate_geometry(
+        cls,
+        geom: QgsGeometry,
+        center: Union[QgsPoint, QgsPointXY],
+        angle_degrees_ccw: float,
+    ) -> QgsGeometry:
+        """
+        Rotates a QgsGeometry around center by angle_degrees_ccw (counter-clockwise).
+        """
+        if geom.isEmpty() or geom.isNull() or abs(angle_degrees_ccw) < cls.EPSILON:
+            return QgsGeometry(geom)
+
+        rotated = QgsGeometry(geom)
+        center_pt = QgsPointXY(center.x(), center.y())
+        # QgsGeometry.rotate takes degrees clockwise, so we negate angle_degrees_ccw
+        rotated.rotate(-angle_degrees_ccw, center_pt)
+        return rotated
+
     # Alias for backwards compatibility
     batch_process_geometry = batch_apply_geometry
 

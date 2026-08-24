@@ -226,5 +226,53 @@
             <source>Відновлення кута</source>
             <translation>Obnoviť roh</translation>
         </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Otočiť</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktívny CAD nástroj na otáčanie geometrií s výberom stredu otáčania</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Zadajte stred otáčania</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Zadajte referenčný smer</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Zadajte uhol otáčania</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Uhol:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Zamknúť uhol / interaktívne otáčanie</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Krok prichytávania:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Voľný</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Uložiť kópiu</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Vytvorí otočenú kópiu vybraných prvkov a zachová originál</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Otočenie prvkov</translation>
+        </message>
     </context>
 </TS>

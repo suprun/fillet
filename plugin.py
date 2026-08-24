@@ -30,6 +30,8 @@ try:
     from .gui.map_tool import FilletMapTool
     from .gui.restore_canvas_widget import RestoreCanvasWidget
     from .gui.restore_map_tool import RestoreMapTool
+    from .gui.rotate_map_tool import RotateMapTool
+    from .gui.rotation_canvas_widget import RotationCanvasWidget
     from .gui.settings_widget import FilletSettingsWidget
     from .gui.two_line_map_tool import TwoLineMapTool
 except (ImportError, ValueError):
@@ -38,6 +40,8 @@ except (ImportError, ValueError):
     from gui.map_tool import FilletMapTool
     from gui.restore_canvas_widget import RestoreCanvasWidget
     from gui.restore_map_tool import RestoreMapTool
+    from gui.rotate_map_tool import RotateMapTool
+    from gui.rotation_canvas_widget import RotationCanvasWidget
     from gui.settings_widget import FilletSettingsWidget
     from gui.two_line_map_tool import TwoLineMapTool
 
@@ -57,11 +61,14 @@ class FilletPlugin:
         self.action: Optional[QAction] = None
         self.two_line_action: Optional[QAction] = None
         self.restore_action: Optional[QAction] = None
+        self.rotate_action: Optional[QAction] = None
         self.batch_action: Optional[QAction] = None
         self.map_tool: Optional[FilletMapTool] = None
         self.two_line_map_tool: Optional[TwoLineMapTool] = None
         self.restore_map_tool: Optional[RestoreMapTool] = None
         self.restore_canvas_widget: Optional[RestoreCanvasWidget] = None
+        self.rotate_map_tool: Optional[RotateMapTool] = None
+        self.rotation_widget: Optional[RotationCanvasWidget] = None
         self.canvas_widget: Optional[FilletCanvasWidget] = None
         self.dock_widget: Optional[QDockWidget] = None
         self.settings_widget: Optional[FilletSettingsWidget] = None
@@ -175,9 +182,25 @@ class FilletPlugin:
         self.two_line_action.setToolTip(self.tr("З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів"))
         self.two_line_action.triggered.connect(self.toggle_two_line_tool)
 
+        # 6. Create interactive CAD 3-Point Rotation Map Tool (available in QGIS 3.x and QGIS 4.x)
+        self.rotation_widget = RotationCanvasWidget(self.canvas)
+        self.rotation_widget.hide()
+        self.rotate_map_tool = RotateMapTool(self.canvas, self.rotation_widget)
+
+        rotate_icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionRotateCAD.svg")
+        self.rotate_action = QAction(
+            QIcon(rotate_icon_path),
+            self.tr("CAD Обертання (Rotate)"),
+            self.iface.mainWindow(),
+        )
+        self.rotate_action.setCheckable(True)
+        self.rotate_action.setObjectName("actionRotateCAD")
+        self.rotate_action.setToolTip(self.tr("Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)"))
+        self.rotate_action.triggered.connect(self.toggle_rotate_tool)
+
         adv_tb = self.iface.advancedDigitizeToolBar()
 
-        # 6. Create interactive Fillet / Chamfer MapTool ONLY in QGIS 3.x (native in QGIS 4.0+)
+        # 7. Create interactive Fillet / Chamfer MapTool ONLY in QGIS 3.x (native in QGIS 4.0+)
         if not self.is_qgis_4():
             self.map_tool = FilletMapTool(self.canvas, self.canvas_widget)
 
@@ -202,7 +225,7 @@ class FilletPlugin:
                 self.iface.addVectorToolBarIcon(self.action)
             self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.action)
 
-        # 6. Insert two_line_action, restore_action and batch_action on toolbar
+        # 8. Insert two_line_action, restore_action, rotate_action and batch_action on toolbar
         if adv_tb:
             anchor_act = self.action
             if not anchor_act:
@@ -237,10 +260,21 @@ class FilletPlugin:
             except (ValueError, IndexError):
                 adv_tb.addAction(self.restore_action)
 
-            # Insert batch_action after restore_action
+            # Insert rotate_action after restore_action
             actions_now = adv_tb.actions()
             try:
                 idx = actions_now.index(self.restore_action)
+                if idx + 1 < len(actions_now):
+                    adv_tb.insertAction(actions_now[idx + 1], self.rotate_action)
+                else:
+                    adv_tb.addAction(self.rotate_action)
+            except (ValueError, IndexError):
+                adv_tb.addAction(self.rotate_action)
+
+            # Insert batch_action after rotate_action
+            actions_now = adv_tb.actions()
+            try:
+                idx = actions_now.index(self.rotate_action)
                 if idx + 1 < len(actions_now):
                     adv_tb.insertAction(actions_now[idx + 1], self.batch_action)
                 else:
@@ -250,10 +284,12 @@ class FilletPlugin:
         else:
             self.iface.addVectorToolBarIcon(self.two_line_action)
             self.iface.addVectorToolBarIcon(self.restore_action)
+            self.iface.addVectorToolBarIcon(self.rotate_action)
             self.iface.addVectorToolBarIcon(self.batch_action)
 
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.two_line_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.restore_action)
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.rotate_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.batch_action)
 
         if self.canvas:
@@ -278,6 +314,10 @@ class FilletPlugin:
                 pass  # nosec B110
             try:
                 self._tracked_layer.editingStopped.disconnect(self.update_action_state)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            try:
+                self._tracked_layer.selectionChanged.disconnect(self.update_action_state)
             except (TypeError, RuntimeError):
                 pass  # nosec B110
             self._tracked_layer = None
@@ -316,7 +356,21 @@ class FilletPlugin:
             self.restore_action.deleteLater()
             self.restore_action = None
 
-        # 4. Clean up two line action
+        # 4. Clean up rotate action
+        if self.rotate_action:
+            try:
+                self.rotate_action.triggered.disconnect(self.toggle_rotate_tool)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            if self.iface.advancedDigitizeToolBar():
+                self.iface.advancedDigitizeToolBar().removeAction(self.rotate_action)
+            self.iface.removeVectorToolBarIcon(self.rotate_action)
+            self.iface.removePluginVectorMenu(self.tr("Fillet & Chamfer"), self.rotate_action)
+            self.rotate_action.setParent(None)
+            self.rotate_action.deleteLater()
+            self.rotate_action = None
+
+        # 5. Clean up two line action
         if self.two_line_action:
             try:
                 self.two_line_action.triggered.disconnect(self.toggle_two_line_tool)
@@ -330,7 +384,7 @@ class FilletPlugin:
             self.two_line_action.deleteLater()
             self.two_line_action = None
 
-        # 5. Clean up batch action
+        # 6. Clean up batch action
         if self.batch_action:
             try:
                 self.batch_action.triggered.disconnect(self.toggle_batch_panel)
@@ -344,7 +398,7 @@ class FilletPlugin:
             self.batch_action.deleteLater()
             self.batch_action = None
 
-        # 6. Clean up map tools
+        # 7. Clean up map tools
         if self.map_tool:
             if self.canvas and self.canvas.mapTool() == self.map_tool:
                 self.canvas.unsetMapTool(self.map_tool)
@@ -375,7 +429,17 @@ class FilletPlugin:
             self.restore_map_tool.deleteLater()
             self.restore_map_tool = None
 
-        # 7. Clean up canvas widgets
+        if self.rotate_map_tool:
+            if self.canvas and self.canvas.mapTool() == self.rotate_map_tool:
+                self.canvas.unsetMapTool(self.rotate_map_tool)
+            if hasattr(self.rotate_map_tool, "cleanup"):
+                self.rotate_map_tool.cleanup()
+            else:
+                self.rotate_map_tool.deactivate()
+            self.rotate_map_tool.deleteLater()
+            self.rotate_map_tool = None
+
+        # 8. Clean up canvas widgets
         if self.canvas_widget:
             try:
                 self.canvas.removeEventFilter(self.canvas_widget)
@@ -396,7 +460,17 @@ class FilletPlugin:
             self.restore_canvas_widget.deleteLater()
             self.restore_canvas_widget = None
 
-        # 8. Clean up settings widget and dock widget
+        if self.rotation_widget:
+            try:
+                self.canvas.removeEventFilter(self.rotation_widget)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            self.rotation_widget.hide()
+            self.rotation_widget.setParent(None)
+            self.rotation_widget.deleteLater()
+            self.rotation_widget = None
+
+        # 9. Clean up settings widget and dock widget
         if self.settings_widget:
             try:
                 self.settings_widget.applyToSelectedRequested.disconnect(self.apply_to_selected_features)
@@ -424,7 +498,7 @@ class FilletPlugin:
                 old_dock.setParent(None)
                 old_dock.deleteLater()
 
-        # 9. Remove translator
+        # 10. Remove translator
         if self.translator:
             QCoreApplication.removeTranslator(self.translator)
             self.translator = None
@@ -458,6 +532,14 @@ class FilletPlugin:
             if self.canvas and self.canvas.mapTool() == self.restore_map_tool:
                 self.canvas.unsetMapTool(self.restore_map_tool)
 
+    def toggle_rotate_tool(self, checked: bool):
+        if checked:
+            if self.rotate_map_tool:
+                self.canvas.setMapTool(self.rotate_map_tool)
+        else:
+            if self.canvas and self.canvas.mapTool() == self.rotate_map_tool:
+                self.canvas.unsetMapTool(self.rotate_map_tool)
+
     def toggle_batch_panel(self, checked: bool):
         if self.dock_widget:
             self.dock_widget.setVisible(checked)
@@ -485,6 +567,12 @@ class FilletPlugin:
             if not is_restore_active and self.restore_canvas_widget:
                 self.restore_canvas_widget.hide()
 
+        if self.rotate_action:
+            is_rotate_active = tool == self.rotate_map_tool
+            self.rotate_action.setChecked(is_rotate_active)
+            if not is_rotate_active and self.rotation_widget:
+                self.rotation_widget.hide()
+
     def _on_current_layer_changed(self, layer=None):
         self.update_action_state()
 
@@ -502,11 +590,16 @@ class FilletPlugin:
                     self._tracked_layer.editingStopped.disconnect(self.update_action_state)
                 except (TypeError, RuntimeError):
                     pass  # nosec B110
+                try:
+                    self._tracked_layer.selectionChanged.disconnect(self.update_action_state)
+                except (TypeError, RuntimeError):
+                    pass  # nosec B110
             self._tracked_layer = layer
             if isinstance(layer, QgsVectorLayer):
                 try:
                     layer.editingStarted.connect(self.update_action_state)
                     layer.editingStopped.connect(self.update_action_state)
+                    layer.selectionChanged.connect(self.update_action_state)
                 except (TypeError, RuntimeError):
                     pass  # nosec B110
 
@@ -518,6 +611,8 @@ class FilletPlugin:
         )
         is_editable = bool(is_supported_geom and layer.isEditable())
         is_line_editable = bool(is_vector and layer.geometryType() == QgsWkbTypes.GeometryType.LineGeometry and layer.isEditable())
+        has_selection = bool(layer.selectedFeatureCount() > 0) if is_vector else False
+        is_rotate_enabled = bool(is_editable and has_selection)
 
         if is_vector and is_supported_geom:
             if self.settings_widget and hasattr(self.settings_widget, "adapt_to_crs"):
@@ -531,6 +626,8 @@ class FilletPlugin:
             self.two_line_action.setEnabled(is_line_editable)
         if self.restore_action:
             self.restore_action.setEnabled(is_editable)
+        if self.rotate_action:
+            self.rotate_action.setEnabled(is_rotate_enabled)
         if self.batch_action:
             self.batch_action.setEnabled(is_editable)
 
@@ -552,6 +649,14 @@ class FilletPlugin:
                     self.restore_canvas_widget.hide()
                 if self.restore_action:
                     self.restore_action.setChecked(False)
+
+        if not is_rotate_enabled and self.canvas:
+            if self.rotate_map_tool and self.canvas.mapTool() == self.rotate_map_tool:
+                self.canvas.unsetMapTool(self.rotate_map_tool)
+                if self.rotation_widget:
+                    self.rotation_widget.hide()
+                if self.rotate_action:
+                    self.rotate_action.setChecked(False)
 
         if not is_line_editable and self.canvas:
             if self.two_line_map_tool and self.canvas.mapTool() == self.two_line_map_tool:

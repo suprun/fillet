@@ -226,5 +226,53 @@
             <source>Відновлення кута</source>
             <translation>恢复尖角</translation>
         </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD 旋转</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>具有旋转中心选择功能的交互式 CAD 几何旋转工具</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. 指定旋转中心</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. 指定基准参考方向</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. 指定旋转角度</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>角度:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>锁定角度 / 交互式旋转</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>捕捉步长:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>自由</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>保留副本 (复制)</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>创建所选要素的旋转副本，同时保留原始要素</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD 旋转要素</translation>
+        </message>
     </context>
 </TS>

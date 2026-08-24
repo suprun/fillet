@@ -226,5 +226,53 @@
             <source>Відновлення кута</source>
             <translation>Obnovit roh</translation>
         </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Otočit</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktivní CAD nástroj pro otáčení geometrií s výběrem středu otáčení</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Zadejte střed otáčení</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Zadejte referenční směr</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Zadejte úhel otáčení</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Úhel:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Zamknout úhel / interaktivní otáčení</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Krok přichytávání:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Volný</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Uložit kopii</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Vytvoří otočenou kopii vybraných prvků a zachová originál</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Otočení prvků</translation>
+        </message>
     </context>
 </TS>

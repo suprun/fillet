@@ -226,5 +226,53 @@
             <source>Відновлення кута</source>
             <translation>Przywróć narożnik</translation>
         </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Obróć</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktywne narzędzie CAD do obracania geometrii z wyborem punktu obrotu</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Wskaż punkt obrotu</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Wskaż kierunek referencyjny</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Wskaż kąt obrotu</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Kąt:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Zablokuj kąt / obrót interaktywny</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Krok przyciągania:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Swobodny</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Zachowaj kopię</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Tworzy obróconą kopię zaznaczonych obiektów, zachowując oryginał</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Obracanie obiektów</translation>
+        </message>
     </context>
 </TS>

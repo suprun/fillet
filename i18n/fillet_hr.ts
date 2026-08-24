@@ -226,5 +226,53 @@
             <source>Відновлення кута</source>
             <translation>Vrati kut</translation>
         </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Rotiraj</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktivni CAD alat za rotaciju geometrija s odabirom točke rotacije</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Odredite točku rotacije</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Odredite referentni smjer</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Odredite kut rotacije</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Kut:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Zaključaj kut / interaktivna rotacija</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Korak privlačenja:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Slobodno</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Spremi kopiju</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Stvara rotiranu kopiju odabranih objekata zadržavajući izvornik</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Rotacija objekata</translation>
+        </message>
     </context>
 </TS>

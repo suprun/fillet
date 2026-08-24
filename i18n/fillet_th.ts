@@ -226,5 +226,53 @@
             <source>Відновлення кута</source>
             <translation>กู้คืนมุม</translation>
         </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD หมุน</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>เครื่องมือหมุนรูปทรง CAD แบบโต้ตอบพร้อมการเลือกจุดศูนย์กลาง</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. ระบุจุดศูนย์กลางการหมุน</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. ระบุทิศทางอ้างอิง</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. ระบุมุมการหมุน</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>มุม:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>ล็อกมุม / การหมุนแบบโต้ตอบ</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>ขั้นการสแน็ป:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>อิสระ</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>บันทึกสำเนา</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>สร้างสำเนาที่หมุนแล้วของฟีเจอร์ที่เลือก โดยยังคงรักษาฟีเจอร์เดิมไว้</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD หมุนฟีเจอร์</translation>
+        </message>
     </context>
 </TS>

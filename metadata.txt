@@ -2,19 +2,21 @@
 name=Fillet & Chamfer for QGIS 3.x (Interactive & Batch)
 qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
-description=Interactive Fillet, Chamfer & Corner Restoration tools for QGIS with instant Batch Fillet/Chamfer for selected features.
-about=Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), and Two-Edge Corner Restoration (Unfillet / Unchamfer) map tools for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.
-version=1.0.0.23
+description=Interactive Fillet, Chamfer, Two-Line Merge, Corner Restoration & CAD Rotation suite for QGIS.
+about=Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), and Interactive CAD Rotation Tool for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.
+version=1.0.0.24
 author=suprun
 email=suprun.serhiy+qgis@gmail.com
 homepage=https://github.com/suprun/fillet
 repository=https://github.com/suprun/fillet
 tracker=https://github.com/suprun/fillet/issues
-tags=cad, editing, fillet, chamfer, unfillet, corner, restore, geometry, digitizing, curve, batch, merge, qgis4
+tags=cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation, geometry, digitizing, curve, batch, merge, qgis4
 icon=icon.png
 experimental=False
 deprecated=False
-changelog=1.0.0.23:
+changelog=1.0.0.24:
+    - Integrated interactive CAD 3-Point Rotation Tool with floating CAD HUD, angle snap presets, and duplicate copy mode into toolkit.
+    1.0.0.23:
     - Unified live preview color scheme with polygon tool: Blue (#2563EB) for Fillet and Emerald Green (#059669) for Chamfer.
     1.0.0.22:
     - Implemented cyclic topological ring traversal for closed polylines, fixing corner seam doubling across all orientations (CW/CCW).

@@ -226,5 +226,53 @@
             <source>Відновлення кута</source>
             <translation>Obnovi vogal</translation>
         </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Zavrti</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktivno orodje CAD za vrtenje geometrij z izbiro vrtilne točke</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Določite vrtilno točko</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Določite referenčno smer</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Določite kot vrtenja</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Kot:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Zakleni kot / interaktivno vrtenje</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Korak privlačevanja:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Prosto</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Shrani kopijo</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Ustvari zasukano kopijo izbranih elementov in ohrani izvirnik</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Vrtenje elementov</translation>
+        </message>
     </context>
 </TS>

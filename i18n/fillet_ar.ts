@@ -226,5 +226,53 @@
             <source>Відновлення кута</source>
             <translation>استعادة الزاوية</translation>
         </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD تدوير</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>أداة تدوير هندسي تفاعلية CAD مع تحديد نقطة الارتكاز</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. حدد نقطة الارتكاز</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. حدد اتجاه المرجع</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. حدد زاوية التدوير</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>الزاوية:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>قفل الزاوية / التدوير التفاعلي</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>خطوة الانجذاب:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>حر</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>حفظ نسخة</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>ينشئ نسخة مدورة من المعالم المحددة مع الحفاظ على الأصل</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD تدوير المعالم</translation>
+        </message>
     </context>
 </TS>

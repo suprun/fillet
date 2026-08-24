@@ -226,5 +226,53 @@
             <source>Відновлення кута</source>
             <translation>Köşeyi Geri Yükle</translation>
         </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Döndür</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Dönme merkezi seçimi ile etkileşimli CAD geometri döndürme aracı</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Dönme merkezini belirleyin</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Referans yönünü belirleyin</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Dönme açısını belirleyin</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Açı:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Açıyı kilitle / etkileşimli döndürme</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Yakalama adımı:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Serbest</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Kopyayı sakla</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Orijinali koruyarak seçili nesnelerin döndürülmüş bir kopyasını oluşturur</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Nesne(leri) Döndür</translation>
+        </message>
     </context>
 </TS>

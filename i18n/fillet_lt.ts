@@ -226,5 +226,53 @@
             <source>Відновлення кута</source>
             <translation>Atkurti kampą</translation>
         </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Pasukti</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktyvus CAD geometrijos pasukimo įrankis su sukimosi centro parinkimu</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Nurodykite sukimosi centrą</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Nurodykite atskaitos kryptį</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Nurodykite sukimosi kampą</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Kampas:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Užrakinti kampą / interaktyvus pasukimas</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Pritraukimo žingsnis:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Laisvas</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Išsaugoti kopiją</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Sukuria pasuktą pasirinktų objektų kopiją, išsaugodamas originalą</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Objektų pasukimas</translation>
+        </message>
     </context>
 </TS>

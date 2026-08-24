@@ -226,5 +226,53 @@
             <source>Відновлення кута</source>
             <translation>Taasta nurk</translation>
         </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Pööra</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktiivne CAD-geomeetria pööramise tööriist pöördepunkti valikuga</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Määra pöördepunkt</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Määra võrdlussuund</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Määra pöördenurk</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Nurk:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Lukusta nurk / interaktiivne pööramine</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Haardumissamm:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Vaba</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Salvesta koopia</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Loob valitud objektidest pööratud koopia, säilitades originaali</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Objektide pööramine</translation>
+        </message>
     </context>
 </TS>

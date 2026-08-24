@@ -226,5 +226,53 @@
             <source>Відновлення кута</source>
             <translation>Restaura cantonada</translation>
         </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Gira</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Eina CAD interactiva de rotació de geometries amb selecció del punt pivot</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Especifiqueu el punt pivot</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Especifiqueu la direcció de referència</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Especifiqueu l'angle de rotació</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Angle:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Bloqueja l'angle / rotació interactiva</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Pas d'ajust:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Lliure</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Guarda una còpia</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Crea una còpia girada dels elements seleccionats, conservant l'original</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Rotació d'elements</translation>
+        </message>
     </context>
 </TS>

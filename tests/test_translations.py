@@ -204,6 +204,59 @@ class TestTranslations(unittest.TestCase):
             QCoreApplication.removeTranslator(translator_en)
             canvas.deleteLater()
 
+    def test_rotation_hud_translations_and_autosizing(self):
+        from qgis.gui import QgsMapCanvas
+        from gui.rotation_canvas_widget import RotationCanvasWidget
+
+        canvas = QgsMapCanvas()
+        canvas.resize(800, 600)
+
+        en_qm = os.path.join(self.i18n_dir, "fillet_en.qm")
+        translator_en = QTranslator()
+        self.assertTrue(translator_en.load(en_qm))
+        QCoreApplication.installTranslator(translator_en)
+
+        try:
+            hud = RotationCanvasWidget(canvas)
+            hud.set_step(RotationCanvasWidget.STEP_PIVOT)
+            self.assertEqual(hud.lbl_step.text(), "1. Specify center pivot")
+            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
+            self.assertEqual(hud.x() + hud.width(), canvas.width())
+
+            hud.set_step(RotationCanvasWidget.STEP_REFERENCE)
+            self.assertEqual(hud.lbl_step.text(), "2. Specify reference baseline")
+            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
+            self.assertEqual(hud.x() + hud.width(), canvas.width())
+
+            hud.set_step(RotationCanvasWidget.STEP_ROTATING)
+            self.assertEqual(hud.lbl_step.text(), "3. Specify rotation angle")
+            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
+            self.assertEqual(hud.x() + hud.width(), canvas.width())
+
+            self.assertEqual(
+                QCoreApplication.translate("FilletPlugin", "CAD Обертання (Rotate)"),
+                "CAD Rotate"
+            )
+            self.assertEqual(
+                QCoreApplication.translate("FilletPlugin", "Кут (Angle):"),
+                "Angle:"
+            )
+            self.assertEqual(
+                QCoreApplication.translate("FilletPlugin", "Крок кута:"),
+                "Snap step:"
+            )
+            self.assertEqual(
+                QCoreApplication.translate("FilletPlugin", "Вільний (Free)"),
+                "Free"
+            )
+            self.assertEqual(
+                QCoreApplication.translate("FilletPlugin", "Зберегти копію (Copy)"),
+                "Save copy (Copy)"
+            )
+        finally:
+            QCoreApplication.removeTranslator(translator_en)
+            canvas.deleteLater()
+
 
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(TestTranslations)

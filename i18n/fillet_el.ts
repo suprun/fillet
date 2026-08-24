@@ -226,5 +226,53 @@
             <source>Відновлення кута</source>
             <translation>Επαναφορά γωνίας</translation>
         </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Περιστροφή</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Διαδραστικό εργαλείο περιστροφής CAD με επιλογή σημείου άξονα περιστροφής</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Ορίστε σημείο περιστροφής</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Ορίστε κατεύθυνση αναφοράς</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Ορίστε γωνία περιστροφής</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Γωνία:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Κλείδωμα γωνίας / διαδραστική περιστροφή</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Βήμα προσκόλλησης:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Ελεύθερο</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Διατήρηση αντιγράφου</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Δημιουργεί περιστραμμένο αντίγραφο των επιλεγμένων στοιχείων, διατηρώντας το αρχικό</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Περιστροφή στοιχείων</translation>
+        </message>
     </context>
 </TS>

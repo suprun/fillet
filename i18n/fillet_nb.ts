@@ -226,5 +226,53 @@
             <source>Відновлення кута</source>
             <translation>Gjenopprett hjørne</translation>
         </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Roter</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktivt CAD-verktøy for rotering av geometrier med valg av dreiepunkt</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Angi dreiepunkt</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Angi referanseretning</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Angi rotasjonsvinkel</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Vinkel:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Lås vinkel / interaktiv rotasjon</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Snappetrinn:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Fri</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Lagre kopi</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Oppretter en rotert kopi av valgte objekter og bevarer originalen</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Roter objekt(er)</translation>
+        </message>
     </context>
 </TS>

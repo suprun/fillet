@@ -7,7 +7,7 @@ import unittest
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from qgis.core import QgsApplication, QgsVectorLayer
+from qgis.core import QgsApplication, QgsFeature, QgsGeometry, QgsPointXY, QgsVectorLayer
 from qgis.gui import QgsMapCanvas
 from qgis.PyQt.QtCore import pyqtSignal, QObject
 from qgis.PyQt.QtWidgets import QMainWindow, QDockWidget, QToolBar
@@ -212,6 +212,25 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
         self.assertNotEqual(canvas.mapTool(), self.plugin.restore_map_tool)
         self.assertFalse(self.plugin.restore_action.isChecked())
         self.assertFalse(self.plugin.restore_action.isEnabled())
+
+        # Test Rotate tool deactivation (requires editing AND selection)
+        feat = QgsFeature()
+        geom = QgsGeometry.fromPolylineXY([QgsPointXY(0, 0), QgsPointXY(10, 10)])
+        feat.setGeometry(geom)
+        layer.dataProvider().addFeatures([feat])
+        layer.selectAll()
+        layer.startEditing()
+        self.plugin.update_action_state()
+        self.assertTrue(self.plugin.rotate_action.isEnabled())
+
+        self.plugin.toggle_rotate_tool(True)
+        self.assertEqual(canvas.mapTool(), self.plugin.rotate_map_tool)
+        self.assertTrue(self.plugin.rotate_action.isChecked())
+
+        layer.rollBack()
+        self.assertNotEqual(canvas.mapTool(), self.plugin.rotate_map_tool)
+        self.assertFalse(self.plugin.rotate_action.isChecked())
+        self.assertFalse(self.plugin.rotate_action.isEnabled())
 
     def test_map_tool_preview_in_all_modes(self):
         """Verify that _update_preview works without errors in fillet and chamfer modes."""

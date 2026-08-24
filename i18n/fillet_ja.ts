@@ -226,5 +226,53 @@
             <source>Відновлення кута</source>
             <translation>角を復元</translation>
         </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD 回転</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>回転中心（ピボット）選択付きインタラクティブCADジオメトリ回転ツール</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. 回転中心（ピボット）を指定</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. 基準方向を指定</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. 回転角度を指定</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>角度:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>角度を固定 / インタラクティブ回転</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>スナップ間隔:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>フリー</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>コピーを保持</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>元を保持したまま、選択した地物の回転コピーを作成します</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD 地物の回転</translation>
+        </message>
     </context>
 </TS>

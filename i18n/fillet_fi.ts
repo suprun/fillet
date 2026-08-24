@@ -226,5 +226,53 @@
             <source>Відновлення кута</source>
             <translation>Palauta kulma</translation>
         </message>
+        <message>
+            <source>CAD Обертання (Rotate)</source>
+            <translation>CAD Kierrä</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент обертання геометрій із вибором центру (Pivot)</source>
+            <translation>Interaktiivinen CAD-geometrioiden pyöritystyökalu kääntöpisteen valinnalla</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр обертання</source>
+            <translation>1. Määritä kääntöpiste</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базовий орієнтир</source>
+            <translation>2. Määritä viitesuunta</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільовий кут</source>
+            <translation>3. Määritä pyörityskulma</translation>
+        </message>
+        <message>
+            <source>Кут (Angle):</source>
+            <translation>Kulma:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут / інтерактивне обертання</source>
+            <translation>Lukitse kulma / interaktiivinen pyöritys</translation>
+        </message>
+        <message>
+            <source>Крок кута:</source>
+            <translation>Tartunnan askel:</translation>
+        </message>
+        <message>
+            <source>Вільний (Free)</source>
+            <translation>Vapaa</translation>
+        </message>
+        <message>
+            <source>Зберегти копію (Copy)</source>
+            <translation>Tallenna kopio</translation>
+        </message>
+        <message>
+            <source>Створює повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Luo valituista kohteista kierretyn kopion säilyttäen alkuperäisen</translation>
+        </message>
+        <message>
+            <source>CAD Rotate Feature(s)</source>
+            <translation>CAD Kohteiden pyöritys</translation>
+        </message>
     </context>
 </TS>
