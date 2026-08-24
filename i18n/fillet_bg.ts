@@ -279,6 +279,42 @@
             <translation>CAD Огледално</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>CAD Мащабиране и Завъртане</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Интерактивен CAD инструмент за мащабиране и завъртане на геометрии спрямо референтни точки</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Мащаб:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Заключване на мащаба / свободно изчисление</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Щракнете върху началната точка</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Щракнете върху референтната точка</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Щракнете върху целевия мащаб и ъгъл</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Създава мащабирано и завъртяно копие на избраните обекти, като запазва оригинала</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>CAD Мащабиране и завъртане на обекти</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Интерактивен CAD инструмент за огледално отразяване на геометрии спрямо 2-точкова ос</translation>
         </message>

@@ -279,6 +279,42 @@
             <translation>Specchia CAD</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>Scala e Ruota CAD</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Strumento CAD interattivo per ridimensionare e ruotare geometrie rispetto a punti di riferimento</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Scala:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Blocca scala / calcolo interattivo libero</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Clicca sul punto di origine</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Clicca sul punto di riferimento</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Clicca sulla destinazione di scala e angolo</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Crea una copia ridimensionata e ruotata degli elementi selezionati, lasciando l'originale intatto</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>Scala e ruota elemento/i CAD</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Strumento CAD interattivo per specchiare geometrie rispetto a un asse a 2 punti</translation>
         </message>

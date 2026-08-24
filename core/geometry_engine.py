@@ -20,6 +20,7 @@ from qgis.core import (
     QgsPoint,
     QgsPointXY,
     QgsPolygon,
+    QgsVertexId,
     QgsWkbTypes,
 )
 
@@ -1500,6 +1501,167 @@ class GeometryEngine:
         mirrored_abstract = cls._mirror_abstract_geometry(abstract_geom, p1, p2)
         if mirrored_abstract:
             return QgsGeometry(mirrored_abstract)
+        return QgsGeometry(geom)
+
+    @classmethod
+    def compute_3point_scale_and_rotation(
+        cls,
+        p_origin: Union[QgsPoint, QgsPointXY],
+        p_ref: Union[QgsPoint, QgsPointXY],
+        p_target: Union[QgsPoint, QgsPointXY],
+        snap_step_deg: Optional[float] = None,
+    ) -> Tuple[float, float]:
+        """
+        Calculates (scale_factor, delta_angle_degrees_ccw) from 3 points:
+        p_origin: Center/Pivot point
+        p_ref: Base Reference point
+        p_target: Current Target point
+
+        Returns: (scale_factor, delta_angle_deg) where delta_angle_deg is in (-180, 180].
+        """
+        dx_ref = p_ref.x() - p_origin.x()
+        dy_ref = p_ref.y() - p_origin.y()
+        len_ref = math.hypot(dx_ref, dy_ref)
+
+        dx_tar = p_target.x() - p_origin.x()
+        dy_tar = p_target.y() - p_origin.y()
+        len_tar = math.hypot(dx_tar, dy_tar)
+
+        if len_ref < cls.EPSILON:
+            scale_factor = 1.0
+            delta_deg = 0.0
+        else:
+            scale_factor = len_tar / len_ref
+            a_ref = math.atan2(dy_ref, dx_ref)
+            a_tar = math.atan2(dy_tar, dx_tar)
+            delta_deg = math.degrees(a_tar - a_ref)
+
+            # Snap delta_deg to snap_step_deg if provided
+            if snap_step_deg is not None and snap_step_deg > 0:
+                delta_deg = round(delta_deg / snap_step_deg) * snap_step_deg
+
+            # Normalize to (-180, 180]
+            while delta_deg <= -180.0:
+                delta_deg += 360.0
+            while delta_deg > 180.0:
+                delta_deg -= 360.0
+
+        return scale_factor, delta_deg
+
+    @classmethod
+    def scale_and_rotate_point(
+        cls,
+        p: Union[QgsPoint, QgsPointXY],
+        center: Union[QgsPoint, QgsPointXY],
+        scale_factor: float,
+        angle_degrees_ccw: float,
+    ) -> QgsPoint:
+        """
+        Transforms a point p by scaling by scale_factor and rotating by angle_degrees_ccw
+        around center.
+        """
+        is_3d = getattr(p, "is3D", lambda: False)()
+        is_m = getattr(p, "isMeasure", lambda: False)()
+        z_val = p.z() if is_3d else 0.0
+        m_val = p.m() if is_m else 0.0
+
+        rad = math.radians(angle_degrees_ccw)
+        cos_a = math.cos(rad)
+        sin_a = math.sin(rad)
+
+        dx = p.x() - center.x()
+        dy = p.y() - center.y()
+
+        nx = center.x() + scale_factor * (dx * cos_a - dy * sin_a)
+        ny = center.y() + scale_factor * (dx * sin_a + dy * cos_a)
+
+        if is_3d and is_m:
+            return QgsPoint(nx, ny, z_val, m_val)
+        elif is_3d:
+            return QgsPoint(nx, ny, z_val)
+        elif is_m:
+            return QgsPoint(QgsWkbTypes.Type.PointM, nx, ny, 0.0, m_val)
+        else:
+            return QgsPoint(nx, ny)
+
+    @classmethod
+    def _scale_rotate_abstract_geometry(cls, abstract_geom, center, scale_factor, angle_degrees_ccw):
+        """Recursively scales and rotates an abstract geometry (QgsAbstractGeometry subclass)."""
+        if abstract_geom is None or abstract_geom.isEmpty():
+            return abstract_geom.clone() if abstract_geom else None
+
+        wkb_type = abstract_geom.wkbType()
+        flat_type = QgsWkbTypes.flatType(wkb_type)
+
+        if flat_type == QgsWkbTypes.Type.Point:
+            return cls.scale_and_rotate_point(abstract_geom, center, scale_factor, angle_degrees_ccw)
+
+        elif flat_type == QgsWkbTypes.Type.LineString or flat_type == QgsWkbTypes.Type.CircularString:
+            if flat_type == QgsWkbTypes.Type.LineString:
+                ls = QgsLineString()
+                for i in range(abstract_geom.numPoints()):
+                    sr_pt = cls.scale_and_rotate_point(abstract_geom.pointN(i), center, scale_factor, angle_degrees_ccw)
+                    ls.addVertex(sr_pt)
+                return ls
+            else:
+                clone = abstract_geom.clone()
+                for i in range(clone.numPoints()):
+                    sr_pt = cls.scale_and_rotate_point(clone.pointN(i), center, scale_factor, angle_degrees_ccw)
+                    clone.moveVertex(QgsVertexId(0, 0, i), sr_pt)
+                return clone
+
+        elif flat_type == QgsWkbTypes.Type.Polygon:
+            poly = QgsPolygon()
+            ext_ring = abstract_geom.exteriorRing()
+            if ext_ring:
+                sr_ext = cls._scale_rotate_abstract_geometry(ext_ring, center, scale_factor, angle_degrees_ccw)
+                poly.setExteriorRing(sr_ext)
+            for r_idx in range(abstract_geom.numInteriorRings()):
+                int_ring = abstract_geom.interiorRing(r_idx)
+                sr_int = cls._scale_rotate_abstract_geometry(int_ring, center, scale_factor, angle_degrees_ccw)
+                poly.addInteriorRing(sr_int)
+            return poly
+
+        elif QgsWkbTypes.isMultiType(wkb_type) or abstract_geom.isMultipart():
+            geom_col = abstract_geom.createEmptyWithSameType()
+            part_count = abstract_geom.partCount() if hasattr(abstract_geom, "partCount") else abstract_geom.numGeometries()
+            for part_idx in range(part_count):
+                sub_geom = abstract_geom.geometryN(part_idx)
+                sr_sub = cls._scale_rotate_abstract_geometry(sub_geom, center, scale_factor, angle_degrees_ccw)
+                if sr_sub:
+                    geom_col.addGeometry(sr_sub)
+            return geom_col
+
+        else:
+            clone = abstract_geom.clone()
+            for i in range(clone.nCoordinates()):
+                pt = clone.vertexAt(QgsVertexId(0, 0, i))
+                sr_pt = cls.scale_and_rotate_point(pt, center, scale_factor, angle_degrees_ccw)
+                clone.moveVertex(QgsVertexId(0, 0, i), sr_pt)
+            return clone
+
+    @classmethod
+    def scale_and_rotate_geometry(
+        cls,
+        geom: QgsGeometry,
+        center: Union[QgsPoint, QgsPointXY],
+        scale_factor: float,
+        angle_degrees_ccw: float,
+    ) -> QgsGeometry:
+        """
+        Transforms a QgsGeometry by scaling by scale_factor and rotating by angle_degrees_ccw
+        around center.
+        """
+        if geom.isEmpty() or geom.isNull():
+            return QgsGeometry(geom)
+
+        if abs(scale_factor - 1.0) < cls.EPSILON and abs(angle_degrees_ccw) < cls.EPSILON:
+            return QgsGeometry(geom)
+
+        abstract_geom = geom.constGet()
+        sr_abstract = cls._scale_rotate_abstract_geometry(abstract_geom, center, scale_factor, angle_degrees_ccw)
+        if sr_abstract:
+            return QgsGeometry(sr_abstract)
         return QgsGeometry(geom)
 
     # Alias for backwards compatibility

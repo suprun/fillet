@@ -279,6 +279,42 @@
             <translation>Κάτοπτρο CAD</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>CAD Κλίμακα &amp; Περιστροφή</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Διαδραστικό εργαλείο CAD για κλιμάκωση και περιστροφή γεωμετριών ως προς σημεία αναφοράς</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Κλίμακα:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Κλείδωμα κλίμακας / ελεύθερος υπολογισμός</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Κάντε κλικ στο σημείο προέλευσης</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Κάντε κλικ στο σημείο αναφοράς</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Κάντε κλικ στην τελική κλίμακα &amp; γωνία</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Δημιουργεί ένα κλιμακωμένο και περιστραμμένο αντίγραφο των επιλεγμένων στοιχείων, αφήνοντας το πρωτότυπο ανέπαφο</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>CAD Κλιμάκωση &amp; περιστροφή στοιχείων</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Διαδραστικό εργαλείο CAD για κατοπτρισμό γεωμετριών κατά μήκος ενός άξονα 2 σημείων</translation>
         </message>

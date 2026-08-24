@@ -279,6 +279,42 @@
             <translation>CAD Spegla</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>CAD Skala och Rotera</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Interaktivt CAD-verktyg för att skala och rotera geometrier i förhållande till referenspunkter</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Skala:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Lås skala / fri beräkning</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Klicka på startpunkten</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Klicka på referenspunkten</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Klicka på målskala och vinkel</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Skapar en skalad och roterad kopia av markerade objekt och lämnar originalet intakt</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>CAD Skala och rotera objekt</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Interaktivt CAD-verktyg för att spegla geometrier längs en 2-punktsaxel</translation>
         </message>

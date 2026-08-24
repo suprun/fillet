@@ -279,6 +279,42 @@
             <translation>CAD Zrkadlenie</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>CAD Mierka a Otočenie</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Interaktívny CAD nástroj na zmenu mierky a otočenie geometrií vzhľadom na referenčné body</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Mierka:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Zamknúť mierku / voľný výpočet</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Kliknite na počiatočný bod</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Kliknite na referenčný bod</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Kliknite na cieľovú mierku a uhol</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Vytvorí zmenenú a otočenú kópiu vybraných prvkov a ponechá originál</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>CAD Zmena mierky a otočenie prvkov</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Interaktívny CAD nástroj na zrkadlenie geometrií podľa 2-bodovej osi</translation>
         </message>

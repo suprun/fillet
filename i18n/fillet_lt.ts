@@ -279,6 +279,42 @@
             <translation>CAD Veidrodis</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>CAD Mastelis ir Pasukimas</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Interaktyvus CAD įrankis geometrijų masteliui keisti ir pasukti atskaitos taškų atžvilgiu</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Mastelis:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Užrakinti mastelį / laisvas skaičiavimas</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Spustelėkite pradžios tašką</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Spustelėkite atskaitos tašką</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Spustelėkite tikslinį mastelį ir kampą</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Sukuria pasirinktų objektų mastelio ir pasukimo kopiją, palikdamas originalą</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>CAD Objektų mastelio keitimas ir pasukimas</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Interaktyvus CAD įrankis geometrijoms veidrodiškai atspindėti pagal 2 taškų ašį</translation>
         </message>

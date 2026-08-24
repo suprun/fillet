@@ -279,6 +279,42 @@
             <translation>CAD 대칭</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>CAD 축척 및 회전</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>기준점을 기준으로 지오메트리의 축척을 조절하고 회전하는 대화형 CAD 도구</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>축척:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>축척 잠금 / 자유 대화형 계산</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. 원점(중심점)을 클릭하세요</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. 기준 참조점을 클릭하세요</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. 목표 축척 및 각도를 클릭하세요</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>선택한 피처의 축척 조절 및 회전된 복사본을 생성하고 원본은 유지합니다</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>CAD 피처 축척 및 회전</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>2점 축을 기준으로 지오메트리를 대칭 반사하는 대화형 CAD 도구</translation>
         </message>

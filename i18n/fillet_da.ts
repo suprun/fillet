@@ -279,6 +279,42 @@
             <translation>CAD Spejling</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>CAD Skalér og Rotér</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Interaktivt CAD-værktøj til at skalere og rotere geometrier i forhold til referencepunkter</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Skala:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Lås skala / fri interaktiv beregning</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Klik på startpunktet</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Klik på referencepunktet</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Klik på målskala og vinkel</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Opretter en skaleret og roteret kopi af valgte elementer og efterlader originalen intakt</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>CAD Skalér og rotér element(er)</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Interaktivt CAD-værktøj til at spejle geometrier over en 2-punkts akse</translation>
         </message>

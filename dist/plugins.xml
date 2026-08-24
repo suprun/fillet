@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
-  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.31" plugin_id="fillet">
-    <description>Interactive Fillet, Chamfer, Two-Line Merge, Corner Restoration, CAD Rotation &amp; Mirror suite for QGIS.</description>
-    <about>Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), Interactive CAD Rotation, and CAD Mirror Tool for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.</about>
-    <version>1.0.0.31</version>
+  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.32" plugin_id="fillet">
+    <description>Interactive Fillet, Chamfer, Two-Line Merge, Corner Restoration, CAD Rotation, Mirror &amp; Scale-with-Rotation suite for QGIS.</description>
+    <about>Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), Interactive CAD Rotation, CAD Mirror Tool, and CAD 3-Point Scale with Rotation Tool for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.</about>
+    <version>1.0.0.32</version>
     <qgis_minimum_version>3.16</qgis_minimum_version>
     <qgis_maximum_version>4.99</qgis_maximum_version>
     <file_name>fillet.zip</file_name>
@@ -13,8 +13,10 @@
     <tracker>https://github.com/suprun/fillet/issues</tracker>
     <experimental>False</experimental>
     <deprecated>False</deprecated>
-    <tags>cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation, mirror, symmetry, geometry, digitizing, curve, batch, merge, qgis4</tags>
-    <change_log>1.0.0.31:
+    <tags>cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation, mirror, symmetry, scale, scale-rotate, geometry, digitizing, curve, batch, merge, qgis4</tags>
+    <change_log>1.0.0.32:
+- Added interactive CAD 3-Point Scale with Rotation tool with floating HUD widget, scale and angle locks, angle snap presets, duplicate copy mode, and complete multi-language localization.
+1.0.0.31:
 - Unified tab-order navigation, persistent keyboard focus, automatic text selection, and direct numeric keystroke redirection across Two-Line Fillet/Chamfer, Rotation, and Mirror tools.
 1.0.0.30:
 - Fixed Two-Line Fillet/Chamfer to strictly clamp tangent and chamfer distances to selected segment endpoints, preventing overshoot and backwards loops in complex polylines.

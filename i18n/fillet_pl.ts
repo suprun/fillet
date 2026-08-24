@@ -279,6 +279,42 @@
             <translation>Lustro CAD</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>Skalowanie i Obrót CAD</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Interaktywne narzędzie CAD do skalowania i obracania geometrii względem punktów odniesienia</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Skala:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Zablokuj skalę / swobodne obliczanie</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Kliknij punkt początkowy</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Kliknij punkt odniesienia</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Kliknij punkt docelowy skali i kąta</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Tworzy przeskalowaną i obróconą kopię zaznaczonych obiektów, pozostawiając oryginał</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>Skalowanie i obracanie obiektów CAD</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Interaktywne narzędzie CAD do odbicia lustrzanego geometrii względem osi 2-punktowej</translation>
         </message>

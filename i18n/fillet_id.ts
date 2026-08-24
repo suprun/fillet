@@ -279,6 +279,42 @@
             <translation>Cermin CAD</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>CAD Skala &amp; Putar</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Alat CAD interaktif untuk menskalakan dan memutar geometri relatif terhadap titik referensi</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Skala:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Kunci skala / perhitungan interaktif bebas</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Klik titik asal</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Klik titik referensi</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Klik target skala &amp; sudut</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Membuat salinan fitur terpilih yang diskalakan dan diputar, membiarkan aslinya utuh</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>CAD Skala &amp; Putar Fitur</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Alat CAD interaktif untuk mencerminkan geometri melintasi sumbu 2 titik</translation>
         </message>

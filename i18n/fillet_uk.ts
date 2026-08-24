@@ -279,6 +279,42 @@
             <translation>CAD Дзеркало (Mirror)</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>CAD Масштаб та Обертання (Scale &amp; Rotate)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Масштаб (Scale):</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Блокувати масштаб / вільний розрахунок</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Вкажіть центр масштабування</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Вкажіть базову точку (Ref)</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Вкажіть цільове положення</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>CAD Масштабування та обертання об'єктів</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</translation>
         </message>

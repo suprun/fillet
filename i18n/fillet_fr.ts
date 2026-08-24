@@ -279,6 +279,42 @@
             <translation>Miroir CAD</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>Échelle et Rotation CAD</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Outil CAD interactif pour mettre à l'échelle et faire pivoter les géométries par rapport aux points de référence</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Échelle :</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Verrouiller l'échelle / calcul interactif libre</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Cliquez sur le point d'origine</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Cliquez sur le point de référence</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Cliquez sur la cible d'échelle &amp; rotation</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Crée une copie mise à l'échelle et pivotée des entités sélectionnées, en laissant l'original intact</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>Échelle et rotation d'entité(s) CAD</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Outil CAD interactif pour refléter les géométries par rapport à un axe à 2 points</translation>
         </message>

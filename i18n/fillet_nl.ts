@@ -279,6 +279,42 @@
             <translation>CAD Spiegelen</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>CAD Schalen &amp; Draaien</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Interactieve CAD-tool om geometrieën te schalen en te draaien ten opzichte van referentiepunten</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Schaal:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Schaal vergrendelen / vrije interactieve berekening</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Klik op het oorsprongspunt</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Klik op het referentiepunt</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Klik op doelpunt voor schaal &amp; hoek</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Maakt een geschaalde en gedraaide kopie van geselecteerde objecten, waarbij het origineel behouden blijft</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>CAD object(en) schalen &amp; draaien</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Interactief CAD-hulpmiddel om geometrieën te spiegelen over een 2-punts as</translation>
         </message>

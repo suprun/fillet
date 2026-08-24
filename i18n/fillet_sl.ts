@@ -279,6 +279,42 @@
             <translation>CAD Zrcaljenje</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>CAD Merilo in Vrtenje</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Interaktivno CAD orodje za spreminjanje merila in vrtenje geometrij glede na referenčne točke</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Merilo:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Zakleni merilo / prosto računanje</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Kliknite na izhodiščno točko</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Kliknite na referenčno točko</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Kliknite na ciljno merilo in kot</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Ustvari spremenjeno in zasukano kopijo izbranih elementov, pri čemer izvirnik ostane nespremenjen</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>CAD Spreminjanje merila in vrtenje elementov</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Interaktivno CAD orodje za zrcaljenje geometrij glede na 2-točkovno os</translation>
         </message>

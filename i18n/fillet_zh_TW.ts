@@ -279,6 +279,42 @@
             <translation>CAD 鏡像</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>CAD 縮放與旋轉</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>用於相對於參考點縮放和旋轉幾何圖形的互動式 CAD 工具</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>比例:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>鎖定比例 / 自由互動計算</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. 點擊原點/旋轉中心</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. 點擊基準參考點</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. 點擊目標縮放與角度</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>建立所選圖徵的縮放和旋轉副本，同時保留原始圖徵</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>CAD 縮放與旋轉圖徵</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>基於2點軸線進行幾何鏡像的互動式 CAD 工具</translation>
         </message>

@@ -279,6 +279,42 @@
             <translation>CAD-Spiegeln</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>CAD Skalieren &amp; Drehen</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Interaktives CAD-Werkzeug zum Skalieren und Drehen von Geometrien bezüglich Referenzpunkten</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Maßstab:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Maßstab sperren / freie interaktive Berechnung</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Ursprungspunkt anklicken</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Referenzpunkt anklicken</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Zielpunkt für Maßstab &amp; Drehung anklicken</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Erstellt eine skalierte und gedrehte Kopie der ausgewählten Objekte und belässt das Original</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>CAD-Objekt(e) skalieren &amp; drehen</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Interaktives CAD-Werkzeug zum Spiegeln von Geometrien an einer 2-Punkte-Achse</translation>
         </message>

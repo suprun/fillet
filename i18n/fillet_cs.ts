@@ -279,6 +279,42 @@
             <translation>CAD Zrcadlení</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>CAD Měřítko a Otočení</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Interaktivní CAD nástroj pro změnu měřítka a otočení geometrií vzhledem k referenčním bodům</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Měřítko:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Zamknout měřítko / volný výpočet</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Klikněte na počáteční bod</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Klikněte na referenční bod</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Klikněte na cílové měřítko a úhel</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Vytvoří změněnou a otočenou kopii vybraných prvků a ponechá originál</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>CAD změna měřítka a otočení prvků</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Interaktivní CAD nástroj pro zrcadlení geometrií podle 2bodové osy</translation>
         </message>

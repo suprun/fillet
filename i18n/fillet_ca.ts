@@ -279,6 +279,42 @@
             <translation>Mirall CAD</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>Escalar i Girar CAD</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Eina CAD interactiva per escalar i girar geometries respecte a punts de referència</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Escala:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Bloquejar escala / càlcul lliure</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Feu clic al punt d'origen</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Feu clic al punt de referència</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Feu clic a l'escala i angle objectiu</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Crea una còpia escalada i girada dels elements seleccionats, deixant l'original intacte</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>Escalar i girar element(s) CAD</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Eina CAD interactiva per reflectir geometries respecte d'un eix de 2 punts</translation>
         </message>

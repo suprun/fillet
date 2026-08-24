@@ -279,6 +279,42 @@
             <translation>Espelhar CAD</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>Escala e Rotação CAD</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Ferramenta CAD interativa para dimensionar e girar geometrias em relação a pontos de referência</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Escala:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Bloquear escala / cálculo interativo livre</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Clique no ponto de origem</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Clique no ponto de referência</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Clique no destino de escala e ângulo</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Cria uma cópia dimensionada e girada dos recursos selecionados, mantendo o original</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>Escalar e girar feição(ões) CAD</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Ferramenta CAD interativa para espelhar geometrias em relação a um eixo de 2 pontos</translation>
         </message>

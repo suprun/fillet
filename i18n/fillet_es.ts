@@ -279,6 +279,42 @@
             <translation>Simetría CAD</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>Escalar y Rotar CAD</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Herramienta CAD interactiva para escalar y rotar geometrías respecto a puntos de referencia</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Escala:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Bloquear escala / cálculo interactivo libre</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Haga clic en el punto de origen</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Haga clic en el punto de referencia</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Haga clic en el destino de escala y ángulo</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Crea una copia escalada y rotada de los objetos seleccionados, dejando el original intacto</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>Escalar y rotar objeto(s) CAD</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Herramienta CAD interactiva para reflejar geometrías respecto a un eje de 2 puntos</translation>
         </message>

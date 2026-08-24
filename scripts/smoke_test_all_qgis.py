@@ -12,6 +12,7 @@ TEST_FILES = [
     "tests/test_two_line_fillet.py",
     "tests/test_rotate_tool.py",
     "tests/test_mirror_tool.py",
+    "tests/test_scale_rotate_tool.py",
 ]
 
 def find_qgis_python_executables():

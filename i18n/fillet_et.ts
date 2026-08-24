@@ -279,6 +279,42 @@
             <translation>CAD Peegeldus</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>CAD Mõõtkava ja Pööramine</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Interaktiivne CAD-tööriist geomeetriate skaleerimiseks ja pööramiseks võrdluspunktide suhtes</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Mõõtkava:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Lukusta mõõtkava / vaba arvutus</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Klõpsake alguspunkti</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Klõpsake võrdluspunkti</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Klõpsake sihtmõõtkaval ja -nurgal</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Loob valitud objektidest skaleeritud ja pööratud koopia, jättes originaali puutumata</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>CAD Objektide skaleerimine ja pööramine</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Interaktiivne CAD-tööriist geomeetriate peegeldamiseks piki 2-punktilist telge</translation>
         </message>

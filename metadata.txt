@@ -2,19 +2,21 @@
 name=Fillet & Chamfer for QGIS 3.x (Interactive & Batch)
 qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
-description=Interactive Fillet, Chamfer, Two-Line Merge, Corner Restoration, CAD Rotation & Mirror suite for QGIS.
-about=Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), Interactive CAD Rotation, and CAD Mirror Tool for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.
-version=1.0.0.31
+description=Interactive Fillet, Chamfer, Two-Line Merge, Corner Restoration, CAD Rotation, Mirror & Scale-with-Rotation suite for QGIS.
+about=Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), Interactive CAD Rotation, CAD Mirror Tool, and CAD 3-Point Scale with Rotation Tool for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.
+version=1.0.0.32
 author=suprun
 email=suprun.serhiy+qgis@gmail.com
 homepage=https://github.com/suprun/fillet
 repository=https://github.com/suprun/fillet
 tracker=https://github.com/suprun/fillet/issues
-tags=cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation, mirror, symmetry, geometry, digitizing, curve, batch, merge, qgis4
+tags=cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation, mirror, symmetry, scale, scale-rotate, geometry, digitizing, curve, batch, merge, qgis4
 icon=icon.png
 experimental=False
 deprecated=False
-changelog=1.0.0.31:
+changelog=1.0.0.32:
+    - Added interactive CAD 3-Point Scale with Rotation tool with floating HUD widget, scale and angle locks, angle snap presets, duplicate copy mode, and complete multi-language localization.
+    1.0.0.31:
     - Unified tab-order navigation, persistent keyboard focus, automatic text selection, and direct numeric keystroke redirection across Two-Line Fillet/Chamfer, Rotation, and Mirror tools.
     1.0.0.30:
     - Fixed Two-Line Fillet/Chamfer to strictly clamp tangent and chamfer distances to selected segment endpoints, preventing overshoot and backwards loops in complex polylines.

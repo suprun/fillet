@@ -279,6 +279,42 @@
             <translation>CAD Zrcaljenje</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>CAD Mjerilo i Rotacija</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Interaktivni CAD alat za promjenu mjerila i rotaciju geometrija u odnosu na referentne točke</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Mjerilo:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Zaključaj mjerilo / slobodan izračun</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Kliknite na početnu točku</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Kliknite na referentnu točku</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Kliknite na ciljno mjerilo i kut</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Stvara skaliranu i rotiranu kopiju odabranih objekata, ostavljajući izvornik netaknutim</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>CAD Skaliranje i rotacija objekata</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Interaktivni CAD alat za zrcaljenje geometrija duž osi od 2 točke</translation>
         </message>

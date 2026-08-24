@@ -279,6 +279,42 @@
             <translation>CAD Speiling</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>CAD Skaler og Roter</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Interaktivt CAD-verktøy for å skalere og rotere geometrier i forhold til referansepunkter</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Skala:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Lås skala / fri beregning</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Klikk på startpunktet</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Klikk på referansepunktet</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Klikk på målskala og vinkel</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Oppretter en skalert og rotert kopi av valgte objekter, og lar originalen forbli intakt</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>CAD Skaler og roter objekt(er)</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Interaktivt CAD-verktøy for å speile geometrier over en 2-punkts akse</translation>
         </message>

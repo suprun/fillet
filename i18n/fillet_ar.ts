@@ -279,6 +279,42 @@
             <translation>مرآة CAD</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>تغيير الحجم والتدوير CAD</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>أداة CAD تفاعلية لتغيير حجم الأشكال الهندسية وتدويرها بالنسبة للنقاط المرجعية</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>المقياس:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>قفل المقياس / حساب تفاعلي حر</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. انقر على نقطة الأصل</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. انقر على النقطة المرجعية</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. انقر على المقياس والزاوية المستهدفة</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>ينشئ نسخة مصغرة/مكبرة ومدورة من المعالم المحددة، مع ترك الأصل كما هو</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>تغيير الحجم والتدوير لمعالم CAD</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>أداة CAD تفاعلية لعكس الأشكال الهندسية عبر محور ثنائي النقاط</translation>
         </message>

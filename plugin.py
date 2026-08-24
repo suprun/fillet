@@ -34,6 +34,8 @@ try:
     from .gui.restore_map_tool import RestoreMapTool
     from .gui.rotate_map_tool import RotateMapTool
     from .gui.rotation_canvas_widget import RotationCanvasWidget
+    from .gui.scale_rotate_canvas_widget import ScaleRotateCanvasWidget
+    from .gui.scale_rotate_map_tool import ScaleRotateMapTool
     from .gui.settings_widget import FilletSettingsWidget
     from .gui.two_line_map_tool import TwoLineMapTool
 except (ImportError, ValueError):
@@ -46,6 +48,8 @@ except (ImportError, ValueError):
     from gui.restore_map_tool import RestoreMapTool
     from gui.rotate_map_tool import RotateMapTool
     from gui.rotation_canvas_widget import RotationCanvasWidget
+    from gui.scale_rotate_canvas_widget import ScaleRotateCanvasWidget
+    from gui.scale_rotate_map_tool import ScaleRotateMapTool
     from gui.settings_widget import FilletSettingsWidget
     from gui.two_line_map_tool import TwoLineMapTool
 
@@ -67,6 +71,7 @@ class FilletPlugin:
         self.restore_action: Optional[QAction] = None
         self.rotate_action: Optional[QAction] = None
         self.mirror_action: Optional[QAction] = None
+        self.scale_rotate_action: Optional[QAction] = None
         self.batch_action: Optional[QAction] = None
         self.map_tool: Optional[FilletMapTool] = None
         self.two_line_map_tool: Optional[TwoLineMapTool] = None
@@ -76,6 +81,8 @@ class FilletPlugin:
         self.rotation_widget: Optional[RotationCanvasWidget] = None
         self.mirror_map_tool: Optional[MirrorMapTool] = None
         self.mirror_widget: Optional[MirrorCanvasWidget] = None
+        self.scale_rotate_map_tool: Optional[ScaleRotateMapTool] = None
+        self.scale_rotate_widget: Optional[ScaleRotateCanvasWidget] = None
         self.canvas_widget: Optional[FilletCanvasWidget] = None
         self.dock_widget: Optional[QDockWidget] = None
         self.settings_widget: Optional[FilletSettingsWidget] = None
@@ -221,6 +228,22 @@ class FilletPlugin:
         self.mirror_action.setToolTip(self.tr("Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок"))
         self.mirror_action.triggered.connect(self.toggle_mirror_tool)
 
+        # 7.5. Create interactive CAD 3-Point Scale with Rotation Map Tool (available in QGIS 3.x and QGIS 4.x)
+        self.scale_rotate_widget = ScaleRotateCanvasWidget(self.canvas)
+        self.scale_rotate_widget.hide()
+        self.scale_rotate_map_tool = ScaleRotateMapTool(self.canvas, self.scale_rotate_widget)
+
+        scale_rotate_icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionScaleRotateCAD.svg")
+        self.scale_rotate_action = QAction(
+            QIcon(scale_rotate_icon_path),
+            self.tr("CAD Масштаб та Обертання (Scale & Rotate)"),
+            self.iface.mainWindow(),
+        )
+        self.scale_rotate_action.setCheckable(True)
+        self.scale_rotate_action.setObjectName("actionScaleRotateCAD")
+        self.scale_rotate_action.setToolTip(self.tr("Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок"))
+        self.scale_rotate_action.triggered.connect(self.toggle_scale_rotate_tool)
+
         adv_tb = self.iface.advancedDigitizeToolBar()
 
         # 8. Create interactive Fillet / Chamfer MapTool ONLY in QGIS 3.x (native in QGIS 4.0+)
@@ -248,7 +271,7 @@ class FilletPlugin:
                 self.iface.addVectorToolBarIcon(self.action)
             self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.action)
 
-        # 9. Insert rotate_action and mirror_action on toolbar (after standard Rotate Feature action / 4th & 5th place)
+        # 9. Insert rotate_action, mirror_action and scale_rotate_action on toolbar (after standard Rotate Feature action / 4th, 5th, 6th place)
         if adv_tb:
             rotate_feature_act = None
             for act in adv_tb.actions():
@@ -282,9 +305,21 @@ class FilletPlugin:
                     adv_tb.addAction(self.mirror_action)
             except (ValueError, IndexError):
                 adv_tb.addAction(self.mirror_action)
+
+            # Insert scale_rotate_action after mirror_action
+            actions_now = adv_tb.actions()
+            try:
+                idx = actions_now.index(self.mirror_action)
+                if idx + 1 < len(actions_now):
+                    adv_tb.insertAction(actions_now[idx + 1], self.scale_rotate_action)
+                else:
+                    adv_tb.addAction(self.scale_rotate_action)
+            except (ValueError, IndexError):
+                adv_tb.addAction(self.scale_rotate_action)
         else:
             self.iface.addVectorToolBarIcon(self.rotate_action)
             self.iface.addVectorToolBarIcon(self.mirror_action)
+            self.iface.addVectorToolBarIcon(self.scale_rotate_action)
 
         # 10. Insert two_line_action, restore_action and batch_action on toolbar
         if adv_tb:
@@ -340,6 +375,7 @@ class FilletPlugin:
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.restore_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.rotate_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.mirror_action)
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.scale_rotate_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.batch_action)
 
         if self.canvas:
@@ -434,6 +470,20 @@ class FilletPlugin:
             self.mirror_action.deleteLater()
             self.mirror_action = None
 
+        # 5.5. Clean up scale rotate action
+        if self.scale_rotate_action:
+            try:
+                self.scale_rotate_action.triggered.disconnect(self.toggle_scale_rotate_tool)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            if self.iface.advancedDigitizeToolBar():
+                self.iface.advancedDigitizeToolBar().removeAction(self.scale_rotate_action)
+            self.iface.removeVectorToolBarIcon(self.scale_rotate_action)
+            self.iface.removePluginVectorMenu(self.tr("Fillet & Chamfer"), self.scale_rotate_action)
+            self.scale_rotate_action.setParent(None)
+            self.scale_rotate_action.deleteLater()
+            self.scale_rotate_action = None
+
         # 6. Clean up two line action
         if self.two_line_action:
             try:
@@ -513,6 +563,16 @@ class FilletPlugin:
             self.mirror_map_tool.deleteLater()
             self.mirror_map_tool = None
 
+        if self.scale_rotate_map_tool:
+            if self.canvas and self.canvas.mapTool() == self.scale_rotate_map_tool:
+                self.canvas.unsetMapTool(self.scale_rotate_map_tool)
+            if hasattr(self.scale_rotate_map_tool, "cleanup"):
+                self.scale_rotate_map_tool.cleanup()
+            else:
+                self.scale_rotate_map_tool.deactivate()
+            self.scale_rotate_map_tool.deleteLater()
+            self.scale_rotate_map_tool = None
+
         # 9. Clean up canvas widgets
         if self.canvas_widget:
             try:
@@ -553,6 +613,16 @@ class FilletPlugin:
             self.mirror_widget.setParent(None)
             self.mirror_widget.deleteLater()
             self.mirror_widget = None
+
+        if self.scale_rotate_widget:
+            try:
+                self.canvas.removeEventFilter(self.scale_rotate_widget)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            self.scale_rotate_widget.hide()
+            self.scale_rotate_widget.setParent(None)
+            self.scale_rotate_widget.deleteLater()
+            self.scale_rotate_widget = None
 
         # 10. Clean up settings widget and dock widget
         if self.settings_widget:
@@ -632,6 +702,14 @@ class FilletPlugin:
             if self.canvas and self.canvas.mapTool() == self.mirror_map_tool:
                 self.canvas.unsetMapTool(self.mirror_map_tool)
 
+    def toggle_scale_rotate_tool(self, checked: bool):
+        if checked:
+            if self.scale_rotate_map_tool:
+                self.canvas.setMapTool(self.scale_rotate_map_tool)
+        else:
+            if self.canvas and self.canvas.mapTool() == self.scale_rotate_map_tool:
+                self.canvas.unsetMapTool(self.scale_rotate_map_tool)
+
     def toggle_batch_panel(self, checked: bool):
         if self.dock_widget:
             self.dock_widget.setVisible(checked)
@@ -670,6 +748,12 @@ class FilletPlugin:
             self.mirror_action.setChecked(is_mirror_active)
             if not is_mirror_active and self.mirror_widget:
                 self.mirror_widget.hide()
+
+        if self.scale_rotate_action:
+            is_sr_active = tool == self.scale_rotate_map_tool
+            self.scale_rotate_action.setChecked(is_sr_active)
+            if not is_sr_active and self.scale_rotate_widget:
+                self.scale_rotate_widget.hide()
 
     def _on_current_layer_changed(self, layer=None):
         self.update_action_state()
@@ -712,6 +796,7 @@ class FilletPlugin:
         has_selection = bool(layer.selectedFeatureCount() > 0) if is_vector else False
         is_rotate_enabled = bool(is_editable and has_selection)
         is_mirror_enabled = bool(is_editable and has_selection)
+        is_scale_rotate_enabled = bool(is_editable and has_selection)
 
         if is_vector and is_supported_geom:
             if self.settings_widget and hasattr(self.settings_widget, "adapt_to_crs"):
@@ -729,6 +814,8 @@ class FilletPlugin:
             self.rotate_action.setEnabled(is_rotate_enabled)
         if self.mirror_action:
             self.mirror_action.setEnabled(is_mirror_enabled)
+        if self.scale_rotate_action:
+            self.scale_rotate_action.setEnabled(is_scale_rotate_enabled)
         if self.batch_action:
             self.batch_action.setEnabled(is_editable)
 
@@ -766,6 +853,14 @@ class FilletPlugin:
                     self.mirror_widget.hide()
                 if self.mirror_action:
                     self.mirror_action.setChecked(False)
+
+        if not is_scale_rotate_enabled and self.canvas:
+            if self.scale_rotate_map_tool and self.canvas.mapTool() == self.scale_rotate_map_tool:
+                self.canvas.unsetMapTool(self.scale_rotate_map_tool)
+                if self.scale_rotate_widget:
+                    self.scale_rotate_widget.hide()
+                if self.scale_rotate_action:
+                    self.scale_rotate_action.setChecked(False)
 
         if not is_line_editable and self.canvas:
             if self.two_line_map_tool and self.canvas.mapTool() == self.two_line_map_tool:

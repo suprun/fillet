@@ -279,6 +279,42 @@
             <translation>CAD Aynalama</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>CAD Ölçekle ve Döndür</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Geometrileri referans noktalarına göre ölçeklendirmek ve döndürmek için etkileşimli CAD aracı</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Ölçek:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Ölçeği kilitle / serbest hesaplama</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Başlangıç noktasına tıklayın</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Referans noktasına tıklayın</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Hedef ölçek ve açıya tıklayın</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Orijinali olduğu gibi bırakarak seçilen detayların ölçeklendirilmiş ve döndürülmüş bir kopyasını oluşturur</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>CAD Detay(ları) ölçekle ve döndür</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Geometrileri 2 noktalı eksene göre aynalamak için etkileşimli CAD aracı</translation>
         </message>

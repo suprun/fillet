@@ -61,3 +61,4 @@ desktop.ini
 # QGIS repository
 AGENTS.md
 *.db
+scratch/

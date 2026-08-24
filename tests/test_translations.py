@@ -314,6 +314,50 @@ class TestTranslations(unittest.TestCase):
             QCoreApplication.removeTranslator(translator_en)
             canvas.deleteLater()
 
+    def test_scale_rotate_hud_translations_and_autosizing(self):
+        """Verify CAD Scale & Rotate HUD step texts, labels, and auto-sizing in English."""
+        from gui.scale_rotate_canvas_widget import ScaleRotateCanvasWidget
+
+        canvas = QgsMapCanvas()
+        canvas.resize(800, 600)
+
+        en_qm = os.path.join(self.i18n_dir, "fillet_en.qm")
+        translator_en = QTranslator()
+        self.assertTrue(translator_en.load(en_qm))
+        QCoreApplication.installTranslator(translator_en)
+
+        try:
+            hud = ScaleRotateCanvasWidget(canvas)
+            hud.set_step(ScaleRotateCanvasWidget.STEP_ORIGIN)
+            self.assertEqual(hud.lbl_step.text(), "1. Click origin pivot point")
+            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
+            self.assertEqual(hud.x() + hud.width(), canvas.width())
+
+            hud.set_step(ScaleRotateCanvasWidget.STEP_REFERENCE)
+            self.assertEqual(hud.lbl_step.text(), "2. Click reference base point")
+            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
+            self.assertEqual(hud.x() + hud.width(), canvas.width())
+
+            hud.set_step(ScaleRotateCanvasWidget.STEP_TARGET)
+            self.assertEqual(hud.lbl_step.text(), "3. Click target scale & angle")
+            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
+            self.assertEqual(hud.x() + hud.width(), canvas.width())
+
+            self.assertEqual(
+                QCoreApplication.translate("FilletPlugin", "CAD Масштаб та Обертання (Scale & Rotate)"),
+                "CAD Scale & Rotate"
+            )
+            self.assertEqual(
+                QCoreApplication.translate("FilletPlugin", "Масштаб (Scale):"),
+                "Scale:"
+            )
+            self.assertEqual(
+                QCoreApplication.translate("FilletPlugin", "Блокувати масштаб / вільний розрахунок"),
+                "Lock scale / free interactive calculation"
+            )
+        finally:
+            QCoreApplication.removeTranslator(translator_en)
+            canvas.deleteLater()
 
 
 if __name__ == "__main__":

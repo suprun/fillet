@@ -279,6 +279,42 @@
             <translation>Espello CAD</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>Escalar e Xirar CAD</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Ferramenta CAD interactiva para escalar e xirar xeometrías respecto a puntos de referencia</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Escala:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Bloquear escala / cálculo libre</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Faga clic no punto de orixe</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Faga clic no punto de referencia</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Faga clic na escala e ángulo de destino</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Crea unha copia escalada e xirada dos elementos seleccionados, deixando o orixinal intacto</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>Escalar e xirar elemento(s) CAD</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Ferramenta CAD interactiva para reflectir xeometrías respecto a un eixe de 2 puntos</translation>
         </message>

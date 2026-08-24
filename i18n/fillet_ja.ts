@@ -279,6 +279,42 @@
             <translation>CAD ミラー</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>CAD 拡大縮小・回転</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>基準点を基準にしてジオメトリを拡大縮小および回転するインタラクティブなCADツール</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>倍率:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>倍率をロック / フリー計算</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. 原点（中心）をクリック</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. 基準参照点をクリック</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. 目標の倍率と角度をクリック</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>選択した地物の拡大縮小・回転コピーを作成し、元の地物はそのまま残します</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>CAD 地物の拡大縮小・回転</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>2点軸を基準にジオメトリを反転するインタラクティブなCADツール</translation>
         </message>

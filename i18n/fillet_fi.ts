@@ -279,6 +279,42 @@
             <translation>CAD Peilaus</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>CAD Mittakaava ja Kierto</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Interaktiivinen CAD-työkalu geometrioiden mittakaavan muuttamiseen ja kiertämiseen suhteessa viitepisteisiin</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Mittakaava:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Lukitse mittakaava / vapaa laskenta</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Napsauta aloituspistettä</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Napsauta viitepistettä</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Napsauta tavoitemittakaavaa ja -kulmaa</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Luo valituista kohteista skaalatun ja kierretyn kopion jättäen alkuperäisen ennalleen</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>CAD Mittakaavan muutos ja kierto kohteille</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Interaktiivinen CAD-työkalu geometrioiden peilaamiseen 2-pisteakselin suhteen</translation>
         </message>

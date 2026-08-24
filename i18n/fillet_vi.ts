@@ -279,6 +279,42 @@
             <translation>CAD Đối xứng</translation>
         </message>
         <message>
+            <source>CAD Масштаб та Обертання (Scale &amp; Rotate)</source>
+            <translation>CAD Tỷ lệ &amp; Xoay</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент масштабування та обертання геометрій відносно опорних точок</source>
+            <translation>Công cụ CAD tương tác để chia tỷ lệ và xoay hình học so với các điểm tham chiếu</translation>
+        </message>
+        <message>
+            <source>Масштаб (Scale):</source>
+            <translation>Tỷ lệ:</translation>
+        </message>
+        <message>
+            <source>Блокувати масштаб / вільний розрахунок</source>
+            <translation>Khóa tỷ lệ / tính toán tự do</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть центр масштабування</source>
+            <translation>1. Nhấp vào điểm gốc</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть базову точку (Ref)</source>
+            <translation>2. Nhấp vào điểm tham chiếu</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть цільове положення</source>
+            <translation>3. Nhấp vào tỷ lệ &amp; góc mục tiêu</translation>
+        </message>
+        <message>
+            <source>Створює масштабовану та повернуту копію виділених об'єктів, залишаючи оригінал</source>
+            <translation>Tạo một bản sao được chia tỷ lệ và xoay của các đối tượng đã chọn, giữ nguyên bản gốc</translation>
+        </message>
+        <message>
+            <source>CAD Scale &amp; Rotate Feature(s)</source>
+            <translation>CAD Tỷ lệ &amp; Xoay đối tượng</translation>
+        </message>
+        <message>
             <source>Інтерактивний CAD інструмент дзеркального відображення геометрій відносно осі з 2 точок</source>
             <translation>Công cụ CAD tương tác để phản chiếu hình học qua trục 2 điểm</translation>
         </message>
