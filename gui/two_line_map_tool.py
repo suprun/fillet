@@ -359,12 +359,27 @@ class TwoLineMapTool(QgsMapToolEdit):
             self.v_sharp = v_sharp
             self.preview_geom = new_geom
 
-            self.preview_rubberband.reset(QgsWkbTypes.GeometryType.LineGeometry)
-            self.preview_rubberband.setToGeometry(new_geom, layer)
-            self.preview_rubberband.setColor(QColor(16, 185, 129, 230))
-            self.preview_rubberband.setWidth(4)
+            if mode == "fillet":
+                stroke_color = QColor(37, 99, 235, 230)  # Blue #2563EB
+                fill_color = QColor(37, 99, 235, 65)
+            else:
+                stroke_color = QColor(5, 150, 105, 230)  # Emerald Green #059669
+                fill_color = QColor(5, 150, 105, 65)
+
+            if layer.geometryType() == QgsWkbTypes.GeometryType.PolygonGeometry:
+                self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
+                self.preview_rubberband.setFillColor(fill_color)
+                self.preview_rubberband.setStrokeColor(stroke_color)
+                self.preview_rubberband.setWidth(4)
+            else:
+                self.preview_rubberband.reset(QgsWkbTypes.GeometryType.LineGeometry)
+                self.preview_rubberband.setFillColor(QColor(0, 0, 0, 0))
+                self.preview_rubberband.setColor(stroke_color)
+                self.preview_rubberband.setWidth(4)
+
             if _DashLine is not None:
                 self.preview_rubberband.setLineStyle(_DashLine)
+            self.preview_rubberband.setToGeometry(new_geom, layer)
             self.preview_rubberband.show()
 
             # Intersection point marker
@@ -380,6 +395,7 @@ class TwoLineMapTool(QgsMapToolEdit):
             t1_map = self.toMapCoordinates(layer, t1_xy)
             t2_map = self.toMapCoordinates(layer, t2_xy)
             self.tangent_marker.reset(QgsWkbTypes.GeometryType.PointGeometry)
+            self.tangent_marker.setColor(stroke_color)
             self.tangent_marker.addPoint(t1_map, False)
             self.tangent_marker.addPoint(t2_map, True)
             self.tangent_marker.show()

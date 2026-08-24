@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
-  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.22" plugin_id="fillet">
+  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.23" plugin_id="fillet">
     <description>Interactive Fillet, Chamfer &amp; Corner Restoration tools for QGIS with instant Batch Fillet/Chamfer for selected features.</description>
     <about>Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), and Two-Edge Corner Restoration (Unfillet / Unchamfer) map tools for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.</about>
-    <version>1.0.0.22</version>
+    <version>1.0.0.23</version>
     <qgis_minimum_version>3.16</qgis_minimum_version>
     <qgis_maximum_version>4.99</qgis_maximum_version>
     <file_name>fillet.zip</file_name>
@@ -14,7 +14,9 @@
     <experimental>False</experimental>
     <deprecated>False</deprecated>
     <tags>cad, editing, fillet, chamfer, unfillet, corner, restore, geometry, digitizing, curve, batch, merge, qgis4</tags>
-    <change_log>1.0.0.22:
+    <change_log>1.0.0.23:
+- Unified live preview color scheme with polygon tool: Blue (#2563EB) for Fillet and Emerald Green (#059669) for Chamfer.
+1.0.0.22:
 - Implemented cyclic topological ring traversal for closed polylines, fixing corner seam doubling across all orientations (CW/CCW).
 1.0.0.21:
 - Fixed topological chain assembly for intermediate polyline segments, preserving multi-point curve bends without 1D distortion.
