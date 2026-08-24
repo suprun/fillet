@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>การสะท้อนกระจก CAD</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>มุมแกน:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>ล็อกมุมแกน / การเลือกแบบโต้ตอบ</translation>
+        </message>
     </context>
 </TS>

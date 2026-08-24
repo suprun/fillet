@@ -196,6 +196,21 @@ class TestCADMirrorTool(unittest.TestCase):
 
         layer.rollBack()
 
+    def test_mirror_angle_input_and_locking(self):
+        widget = MirrorCanvasWidget(self.canvas)
+        widget.set_angle(45.0)
+        self.assertAlmostEqual(widget.angle, 45.0)
+
+        widget.btn_lock_angle.setChecked(True)
+        self.assertTrue(widget.is_angle_locked)
+
+        # Tab order test
+        spin_line_edit = widget.spin_angle.lineEdit() if hasattr(widget.spin_angle, "lineEdit") and widget.spin_angle.lineEdit() else widget.spin_angle
+        self.assertEqual(spin_line_edit.nextInFocusChain(), widget.btn_lock_angle)
+
+        widget.btn_lock_angle.setChecked(False)
+        self.assertFalse(widget.is_angle_locked)
+
 
 if __name__ == "__main__":
     unittest.main()

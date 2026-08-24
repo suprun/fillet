@@ -287,6 +287,14 @@ class TestTranslations(unittest.TestCase):
                 "CAD Mirror"
             )
             self.assertEqual(
+                QCoreApplication.translate("FilletPlugin", "Кут осі:"),
+                "Axis angle:"
+            )
+            self.assertEqual(
+                QCoreApplication.translate("FilletPlugin", "Блокувати кут осі / інтерактивне обрання"),
+                "Lock axis angle / interactive pick"
+            )
+            self.assertEqual(
                 QCoreApplication.translate("FilletPlugin", "Прив'язка осі:"),
                 "Axis snap:"
             )

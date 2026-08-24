@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>Mirall CAD</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>Angle d'eix:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>Bloqueja l'angle d'eix / selecció interactiva</translation>
+        </message>
     </context>
 </TS>

@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>CAD Spejling</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>Aksevinkel:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>Lås aksevinkel / interaktivt valg</translation>
+        </message>
     </context>
 </TS>

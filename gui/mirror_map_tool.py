@@ -95,6 +95,7 @@ class MirrorMapTool(QgsMapToolEdit):
             self.setCursor(QCursor(_CrossCursor))
 
         # Connect widget signals
+        self.widget.angleChanged.connect(self._on_widget_angle_changed)
         self.widget.commitRequested.connect(self.commit_mirror)
         self.widget.resetRequested.connect(self.reset_state)
         self.widget.copyModeChanged.connect(self._on_copy_mode_changed)
@@ -124,6 +125,8 @@ class MirrorMapTool(QgsMapToolEdit):
         self.p1 = None
         self.p2 = None
         self.widget.set_step(MirrorCanvasWidget.STEP_FIRST_POINT)
+        if not self.widget.is_angle_locked:
+            self.widget.set_angle(0.0, block_signals=True)
         self._clear_visuals()
 
     def _clear_visuals(self):
@@ -137,16 +140,26 @@ class MirrorMapTool(QgsMapToolEdit):
         if self.state == self.STATE_SECOND_POINT and self.p1 and self.p2:
             self._update_preview(self.p2)
 
+    def _on_widget_angle_changed(self, angle_deg: float):
+        if self.state == self.STATE_SECOND_POINT and self.p1:
+            rad = math.radians(angle_deg)
+            dist = math.hypot(self.p2.x() - self.p1.x(), self.p2.y() - self.p1.y()) if self.p2 else 10.0
+            if dist < 1e-6:
+                dist = 10.0
+            p2 = QgsPointXY(self.p1.x() + dist * math.cos(rad), self.p1.y() + dist * math.sin(rad))
+            self.p2 = p2
+            self._update_preview(p2)
+
     def _get_snapped_point(self, event: QgsMapMouseEvent) -> QgsPointXY:
-        """Extracts snapped coordinate from event or falls back to map point."""
-        match = event.mapPointMatch()
+        """Extracts snapped coordinate from canvas snapping utils or falls back to map point."""
+        match = self.canvas.snappingUtils().snapToMap(event.pos())
         if match.isValid():
             self.snap_indicator.setMatch(match)
             self.snap_indicator.setVisible(True)
             return match.point()
         else:
             self.snap_indicator.setVisible(False)
-            return event.mapPoint()
+            return self.toMapCoordinates(event.pos())
 
     def _apply_angle_snap(self, p1: QgsPointXY, p_raw: QgsPointXY, snap_step: float) -> QgsPointXY:
         """Snaps target point angle relative to p1 to the nearest angular step."""
@@ -187,11 +200,18 @@ class MirrorMapTool(QgsMapToolEdit):
 
         elif self.state == self.STATE_SECOND_POINT:
             # Step 2: Set P2 and commit mirror
-            snap_step = self.widget.snap_step
-            if event.modifiers() & _ShiftModifier and snap_step == 0.0:
-                snap_step = 45.0
-            if snap_step > 0.0 and self.p1:
-                pt = self._apply_angle_snap(self.p1, pt, snap_step)
+            if self.widget.is_angle_locked and self.p1:
+                rad = math.radians(self.widget.angle)
+                dx = pt.x() - self.p1.x()
+                dy = pt.y() - self.p1.y()
+                dist = max(1.0, math.hypot(dx, dy))
+                pt = QgsPointXY(self.p1.x() + dist * math.cos(rad), self.p1.y() + dist * math.sin(rad))
+            else:
+                snap_step = self.widget.snap_step
+                if event.modifiers() & _ShiftModifier and snap_step == 0.0:
+                    snap_step = 45.0
+                if snap_step > 0.0 and self.p1:
+                    pt = self._apply_angle_snap(self.p1, pt, snap_step)
 
             if self.p1 and (abs(pt.x() - self.p1.x()) > 1e-9 or abs(pt.y() - self.p1.y()) > 1e-9):
                 self.p2 = pt
@@ -201,11 +221,24 @@ class MirrorMapTool(QgsMapToolEdit):
         pt = self._get_snapped_point(event)
 
         if self.state == self.STATE_SECOND_POINT and self.p1:
-            snap_step = self.widget.snap_step
-            if event.modifiers() & _ShiftModifier and snap_step == 0.0:
-                snap_step = 45.0
-            if snap_step > 0.0:
-                pt = self._apply_angle_snap(self.p1, pt, snap_step)
+            if self.widget.is_angle_locked:
+                rad = math.radians(self.widget.angle)
+                dx = pt.x() - self.p1.x()
+                dy = pt.y() - self.p1.y()
+                dist = max(1.0, math.hypot(dx, dy))
+                pt = QgsPointXY(self.p1.x() + dist * math.cos(rad), self.p1.y() + dist * math.sin(rad))
+            else:
+                snap_step = self.widget.snap_step
+                if event.modifiers() & _ShiftModifier and snap_step == 0.0:
+                    snap_step = 45.0
+                if snap_step > 0.0:
+                    pt = self._apply_angle_snap(self.p1, pt, snap_step)
+
+                dx = pt.x() - self.p1.x()
+                dy = pt.y() - self.p1.y()
+                if abs(dx) > 1e-9 or abs(dy) > 1e-9:
+                    axis_deg = math.degrees(math.atan2(dy, dx))
+                    self.widget.set_angle(axis_deg, block_signals=True)
 
             self.p2 = pt
             self._update_preview(pt)

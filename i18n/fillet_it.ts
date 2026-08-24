@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>Specchiatura CAD</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>Angolo dell'asse:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>Blocca angolo asse / scelta interattiva</translation>
+        </message>
     </context>
 </TS>

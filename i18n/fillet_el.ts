@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>Κατοπτρισμός CAD</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>Γωνία άξονα:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>Κλείδωμα γωνίας άξονα / διαδραστική επιλογή</translation>
+        </message>
     </context>
 </TS>

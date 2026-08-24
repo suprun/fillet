@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>Pencerminan CAD</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>Sudut sumbu:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>Kunci sudut sumbu / pemilihan interaktif</translation>
+        </message>
     </context>
 </TS>

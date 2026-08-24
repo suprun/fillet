@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>CAD-Spiegelung</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>Achsenwinkel:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>Achsenwinkel sperren / interaktiv wählen</translation>
+        </message>
     </context>
 </TS>

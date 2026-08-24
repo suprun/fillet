@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>CAD Огледално пресликавање</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>Угао осе:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>Закључај угао осе / интерактивни одабир</translation>
+        </message>
     </context>
 </TS>

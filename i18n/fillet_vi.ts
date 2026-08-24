@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>Đối xứng CAD</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>Góc trục:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>Khóa góc trục / chọn tương tác</translation>
+        </message>
     </context>
 </TS>

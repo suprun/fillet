@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>CAD Peilaus</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>Akselikulma:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>Lukitse akselikulma / interaktiivinen valinta</translation>
+        </message>
     </context>
 </TS>

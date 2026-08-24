@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>CAD 대칭</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>축 각도:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>축 각도 고정 / 대화형 선택</translation>
+        </message>
     </context>
 </TS>

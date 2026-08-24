@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>CAD दर्पण (Mirror)</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>अक्ष कोण:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>अक्ष कोण लॉक करें / इंटरैक्टिव चयन</translation>
+        </message>
     </context>
 </TS>

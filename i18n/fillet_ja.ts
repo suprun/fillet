@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>CAD ミラーリング</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>軸角度:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>軸角度をロック / インタラクティブ選択</translation>
+        </message>
     </context>
 </TS>

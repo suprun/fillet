@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>CAD Spoguļošana</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>Ass leņķis:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>Bloķēt ass leņķi / interaktīva izvēle</translation>
+        </message>
     </context>
 </TS>

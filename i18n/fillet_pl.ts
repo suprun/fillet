@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>Odbicie lustrzane CAD</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>Kąt osi:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>Zablokuj kąt osi / wybór interaktywny</translation>
+        </message>
     </context>
 </TS>

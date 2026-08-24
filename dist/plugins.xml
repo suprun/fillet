@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
-  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.26" plugin_id="fillet">
+  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.27" plugin_id="fillet">
     <description>Interactive Fillet, Chamfer, Two-Line Merge, Corner Restoration, CAD Rotation &amp; Mirror suite for QGIS.</description>
     <about>Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), Interactive CAD Rotation, and CAD Mirror Tool for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.</about>
-    <version>1.0.0.26</version>
+    <version>1.0.0.27</version>
     <qgis_minimum_version>3.16</qgis_minimum_version>
     <qgis_maximum_version>4.99</qgis_maximum_version>
     <file_name>fillet.zip</file_name>
@@ -14,7 +14,9 @@
     <experimental>False</experimental>
     <deprecated>False</deprecated>
     <tags>cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation, mirror, symmetry, geometry, digitizing, curve, batch, merge, qgis4</tags>
-    <change_log>1.0.0.26:
+    <change_log>1.0.0.27:
+- Unified system snapping, numeric axis angle input, tab-order navigation, and focus text auto-selection in CAD Mirror and Rotation tools.
+1.0.0.26:
 - Integrated interactive CAD 2-Point Mirror Tool with floating HUD, axis angle snap presets (Free, 15, 45, 90 Ortho), and duplicate copy mode.
 1.0.0.25:
 - Positioned CAD Rotate tool action in 4th place on Advanced Digitize toolbar next to native Rotate Feature.

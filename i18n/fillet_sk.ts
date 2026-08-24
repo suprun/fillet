@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>CAD Zrkadlenie</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>Uhol osi:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>Zamknúť uhol osi / interaktívny výber</translation>
+        </message>
     </context>
 </TS>

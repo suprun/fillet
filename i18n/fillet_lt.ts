@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>CAD Veidrodinis atspindys</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>Ašies kampas:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>Užrakinti ašies kampą / interaktyvus pasirinkimas</translation>
+        </message>
     </context>
 </TS>

@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>Oglindire CAD</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>Unghiul axei:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>Blocare unghi axă / alegere interactivă</translation>
+        </message>
     </context>
 </TS>

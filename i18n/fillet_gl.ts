@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>Espellamento CAD</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>Ángulo do eixe:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>Bloquear o ángulo do eixe / selección interactiva</translation>
+        </message>
     </context>
 </TS>

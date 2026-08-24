@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>CAD Spiegeling</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>Ashoek:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>Ashoek vergrendelen / interactief kiezen</translation>
+        </message>
     </context>
 </TS>

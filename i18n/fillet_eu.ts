@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>CAD Ispilatzea</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>Ardatz angelua:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>Blokeatu ardatzaren angelua / hautapen interaktiboa</translation>
+        </message>
     </context>
 </TS>

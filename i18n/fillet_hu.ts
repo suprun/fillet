@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>CAD Tükrözés</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>Tengelyszög:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>Tengelyszög zárolása / interaktív választás</translation>
+        </message>
     </context>
 </TS>

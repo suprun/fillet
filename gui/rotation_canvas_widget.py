@@ -158,6 +158,12 @@ class RotationCanvasWidget(QFrame):
             self.spin_angle.lineEdit().installEventFilter(self)
             self.spin_angle.lineEdit().returnPressed.connect(self.commitRequested.emit)
 
+        # Tab order
+        target_spin = self.spin_angle.lineEdit() if hasattr(self.spin_angle, "lineEdit") and self.spin_angle.lineEdit() else self.spin_angle
+        self.setTabOrder(target_spin, self.btn_lock_angle)
+        self.setTabOrder(self.btn_lock_angle, self.combo_snap)
+        self.setTabOrder(self.combo_snap, self.chk_copy)
+
         # Signal connections
         self.spin_angle.valueChanged.connect(self.angleChanged.emit)
         self.combo_snap.currentIndexChanged.connect(self._on_snap_changed)
@@ -241,6 +247,23 @@ class RotationCanvasWidget(QFrame):
             if obj == self.spin_angle or (hasattr(self.spin_angle, "lineEdit") and obj == self.spin_angle.lineEdit()):
                 QTimer.singleShot(0, self._select_all_angle)
         elif event.type() == evt_key_press:
+            key = event.key()
+            key_tab = getattr(Qt.Key, "Key_Tab", getattr(Qt, "Key_Tab", 0x01000001))
+            key_backtab = getattr(Qt.Key, "Key_Backtab", getattr(Qt, "Key_Backtab", 0x01000002))
+            key_return = getattr(Qt.Key, "Key_Return", getattr(Qt, "Key_Return", 0x01000004))
+            key_enter = getattr(Qt.Key, "Key_Enter", getattr(Qt, "Key_Enter", 0x01000005))
+
+            if key in (key_return, key_enter):
+                self.commitRequested.emit()
+                return True
+
+            if key == key_tab:
+                self.focusNextChild()
+                return True
+            elif key == key_backtab:
+                self.focusPreviousChild()
+                return True
+
             if hasattr(self.spin_angle, "lineEdit") and obj == self.spin_angle.lineEdit():
                 if self._handle_spin_key_press(event):
                     return True

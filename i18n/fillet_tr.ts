@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>CAD Aynalama</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>Eksen açısı:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>Eksen açısını kilitle / etkileşimli seçim</translation>
+        </message>
     </context>
 </TS>

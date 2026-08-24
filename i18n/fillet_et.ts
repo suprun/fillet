@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>CAD Peegeldus</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>Telje nurk:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>Lukusta telje nurk / interaktiivne valik</translation>
+        </message>
     </context>
 </TS>

@@ -310,5 +310,13 @@
             <source>CAD Дзеркальне відображення</source>
             <translation>انعكاس CAD</translation>
         </message>
+        <message>
+            <source>Кут осі:</source>
+            <translation>زاوية المحور:</translation>
+        </message>
+        <message>
+            <source>Блокувати кут осі / інтерактивне обрання</source>
+            <translation>قفل زاوية المحور / الاختيار التفاعلي</translation>
+        </message>
     </context>
 </TS>
