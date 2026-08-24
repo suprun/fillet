@@ -55,8 +55,6 @@ class RotationCanvasWidget(QFrame):
         self.canvas = canvas
         self.setObjectName("RotationCanvasWidget")
 
-        self._drag_pos: Optional[QPoint] = None
-        self._user_moved = False
         self._icons_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources", "icons")
         self._current_step = self.STEP_PIVOT
 
@@ -324,32 +322,3 @@ class RotationCanvasWidget(QFrame):
         s = QgsSettings()
         s.setValue("plugins/fillet/rotate_snap_step", self.snap_step)
         s.setValue("plugins/fillet/rotate_copy_mode", self.is_copy_mode)
-
-    # Draggable canvas widget support
-    def mousePressEvent(self, event):
-        left_btn = getattr(Qt.MouseButton, "LeftButton", getattr(Qt, "LeftButton", 1))
-        if event.button() == left_btn:
-            pos_accessor = getattr(event, "position", None)
-            local_pos = pos_accessor() if callable(pos_accessor) else event.pos()
-            self._drag_pos = local_pos.toPoint() if hasattr(local_pos, "toPoint") else local_pos
-        super().mousePressEvent(event)
-
-    def mouseMoveEvent(self, event):
-        left_btn_mask = getattr(Qt.MouseButton, "LeftButton", getattr(Qt, "LeftButton", 1))
-        if self._drag_pos is not None and (event.buttons() & left_btn_mask):
-            pos_accessor = getattr(event, "position", None)
-            local_pos = pos_accessor() if callable(pos_accessor) else event.pos()
-            pt = local_pos.toPoint() if hasattr(local_pos, "toPoint") else local_pos
-            delta = pt - self._drag_pos
-            new_pos = self.pos() + delta
-            x = max(0, min(new_pos.x(), self.canvas.width() - self.width()))
-            y = max(0, min(new_pos.y(), self.canvas.height() - self.height()))
-            self.move(x, y)
-            self._user_moved = True
-            event.accept()
-            return
-        super().mouseMoveEvent(event)
-
-    def mouseReleaseEvent(self, event):
-        self._drag_pos = None
-        super().mouseReleaseEvent(event)

@@ -32,8 +32,6 @@ class RestoreCanvasWidget(QFrame):
         self.canvas = canvas
         self.setObjectName("RestoreCanvasWidget")
         self._current_step = self.STEP_FIRST_EDGE
-        self._drag_pos: Optional[QPoint] = None
-        self._user_moved = False
 
         self._init_ui()
         self._apply_style()
@@ -61,9 +59,7 @@ class RestoreCanvasWidget(QFrame):
         step_font.setBold(True)
         step_font.setPointSize(max(8, step_font.pointSize() - 1))
         self.lbl_step.setFont(step_font)
-        self.lbl_step.setStyleSheet(
-            "color: #7c2d12; background-color: #ffedd5; border: 1px solid #fed7aa; border-radius: 4px; padding: 4px 8px;"
-        )
+        self.lbl_step.setStyleSheet("color: #1e3a8a; background-color: #dbeafe; border-radius: 4px; padding: 3px 6px;")
         self.set_step(self.STEP_FIRST_EDGE)
         main_layout.addWidget(self.lbl_step)
 
@@ -101,44 +97,13 @@ class RestoreCanvasWidget(QFrame):
         self.move(x, y)
 
     def show_on_canvas(self):
-        """Shows and repositions widget on canvas."""
-        if not self._user_moved:
-            self.reposition_to_default()
+        """Shows the widget on canvas and repositions to the top-right corner."""
+        self.reposition_to_default()
         self.show()
         self.raise_()
 
     def eventFilter(self, obj, event):
         evt_resize = getattr(QEvent.Type, "Resize", getattr(QEvent, "Resize", None))
         if obj == self.canvas and event.type() == evt_resize:
-            if not self._user_moved:
-                self.reposition_to_default()
+            self.reposition_to_default()
         return super().eventFilter(obj, event)
-
-    # Draggable canvas widget support
-    def mousePressEvent(self, event):
-        left_btn = getattr(Qt.MouseButton, "LeftButton", getattr(Qt, "LeftButton", 1))
-        if event.button() == left_btn:
-            pos_accessor = getattr(event, "position", None)
-            local_pos = pos_accessor() if callable(pos_accessor) else event.pos()
-            self._drag_pos = local_pos.toPoint() if hasattr(local_pos, "toPoint") else local_pos
-        super().mousePressEvent(event)
-
-    def mouseMoveEvent(self, event):
-        left_btn_mask = getattr(Qt.MouseButton, "LeftButton", getattr(Qt, "LeftButton", 1))
-        if self._drag_pos is not None and (event.buttons() & left_btn_mask):
-            pos_accessor = getattr(event, "position", None)
-            local_pos = pos_accessor() if callable(pos_accessor) else event.pos()
-            pt = local_pos.toPoint() if hasattr(local_pos, "toPoint") else local_pos
-            delta = pt - self._drag_pos
-            new_pos = self.pos() + delta
-            x = max(0, min(new_pos.x(), self.canvas.width() - self.width()))
-            y = max(0, min(new_pos.y(), self.canvas.height() - self.height()))
-            self.move(x, y)
-            self._user_moved = True
-            event.accept()
-            return
-        super().mouseMoveEvent(event)
-
-    def mouseReleaseEvent(self, event):
-        self._drag_pos = None
-        super().mouseReleaseEvent(event)
