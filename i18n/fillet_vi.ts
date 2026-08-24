@@ -55,12 +55,20 @@
             <translation>Đã xử lý {} đối tượng.</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Chỉ định cạnh góc đầu tiên</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Chỉ định cạnh thứ hai liền kề</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
             <translation>Khôi phục góc (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Công cụ khôi phục góc nhọn (loại bỏ góc bo và góc vát)</translation>
+            <translation>Công cụ tương tác để khôi phục các góc nhọn (xóa bo tròn và vát mép)</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>Vát góc đỉnh</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>Khôi phục góc</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Khôi phục góc nhọn</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Bước 1: Nhấp vào cạnh đầu tiên của góc</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Bước 2: Nhấp vào cạnh thứ hai liền kề để tái tạo góc</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Nhấp chuột phải hoặc Esc — Hủy</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>Hủy</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Khôi phục góc</translation>

@@ -21,8 +21,24 @@ tb = QToolBar("Digitize", win)
 win.addToolBar(tb)
 
 
+class MockMessageBar(QObject):
+    def __init__(self):
+        super().__init__()
+        self.messages = []
+
+    def pushMessage(self, title, text, level=0, duration=0):
+        self.messages.append((title, text, level, duration))
+
+
 class MockIface(QObject):
     currentLayerChanged = pyqtSignal(object)
+
+    def __init__(self):
+        super().__init__()
+        self._message_bar = MockMessageBar()
+
+    def messageBar(self):
+        return self._message_bar
 
     def mainWindow(self):
         return win
@@ -250,6 +266,24 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
         self.assertAlmostEqual(v_pt.x(), 0.0)
         self.assertAlmostEqual(v_pt.y(), 0.0)
 
+        layer.rollBack()
+
+    def test_message_bar_auto_dismiss_timer(self):
+        """Verify that notification strips are posted with a non-zero duration timer."""
+        # 1. Test warning when no layer / not editable
+        canvas.setCurrentLayer(None)
+        self.plugin.apply_to_selected_features()
+        self.assertTrue(len(self.iface.messageBar().messages) > 0)
+        last_msg = self.iface.messageBar().messages[-1]
+        self.assertGreaterEqual(last_msg[3], 4)  # duration >= 4s
+
+        # 2. Test info when no selected features
+        layer = QgsVectorLayer("LineString?crs=EPSG:4326", "temp_lines", "memory")
+        layer.startEditing()
+        canvas.setCurrentLayer(layer)
+        self.plugin.apply_to_selected_features()
+        last_msg = self.iface.messageBar().messages[-1]
+        self.assertGreaterEqual(last_msg[3], 4)
         layer.rollBack()
 
 

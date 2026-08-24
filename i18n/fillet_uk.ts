@@ -55,6 +55,14 @@
             <translation>Оброблено {} об'єкт(ів).</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Вкажіть перше ребро кута</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Вкажіть суміжне друге ребро</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
             <translation>Відновлення кутів (Unfillet / Unchamfer)</translation>
         </message>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>Фаска вершини</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>Відновлення кута</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Відновлення гострого кута</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Крок 1: Клікніть на перше ребро кута</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>ПКМ або Esc — скасувати</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>Скасувати</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Відновлення кута</translation>

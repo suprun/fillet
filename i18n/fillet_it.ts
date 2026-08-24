@@ -55,12 +55,20 @@
             <translation>Elaborati {} elementi.</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Specificare il primo bordo dell'angolo</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Specificare il secondo bordo adiacente</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Ripristina angoli (Unfillet / Unchamfer)</translation>
+            <translation>Ripristino angoli (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Strumento di ripristino angoli acuti (rimuove raccordi e smussi)</translation>
+            <translation>Strumento interattivo per ripristinare spigoli vivi (rimuove raccordi e smussi)</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>Cimosa vertice</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>Ripristina angolo</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Ripristina angolo acuto</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Passaggio 1: Fai clic sul primo bordo dell'angolo</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Passaggio 2: Fai clic sul secondo bordo adiacente per ricostruire l'angolo</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Tasto destro o Esc — Annulla</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>Annulla</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Ripristina angolo</translation>

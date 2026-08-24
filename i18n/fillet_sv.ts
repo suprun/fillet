@@ -55,12 +55,20 @@
             <translation>Bearbetade {} objekt.</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Ange den första hörnkanten</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Ange intilliggande andra kant</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
             <translation>Återställ hörn (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Verktyg för återställning av skarpa hörn (tar bort avrundningar och fasningar)</translation>
+            <translation>Interaktivt verktyg för att återställa skarpa hörn (tar bort avrundningar och fasningar)</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>Nodfasning</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>Återställ hörn</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Återställ skarpt hörn</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Steg 1: Klicka på hörnets första segment</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Steg 2: Klicka på det intilliggande andra segmentet för att rekonstruera hörnet</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Högerklicka eller Esc — Avbryt</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>Avbryt</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Återställ hörn</translation>

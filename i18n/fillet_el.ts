@@ -55,12 +55,20 @@
             <translation>Επεξεργάστηκαν {} στοιχεία.</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Καθορίστε την πρώτη ακμή της γωνίας</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Καθορίστε τη γειτονική δεύτερη ακμή</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
             <translation>Επαναφορά γωνιών (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Εργαλείο επαναφοράς αιχμηρών γωνιών (αφαιρεί στρογγυλοποιήσεις και λοξοτμήσεις)</translation>
+            <translation>Διαδραστικό εργαλείο για την επαναφορά αιχμηρών γωνιών (αφαιρεί στρογγυλοποιήσεις και λοξοτομές)</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>Λοξότμηση κορυφής</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>Επαναφορά γωνίας</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Επαναφορά αιχμηρής γωνίας</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Βήμα 1: Κάντε κλικ στην πρώτη ακμή της γωνίας</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Βήμα 2: Κάντε κλικ στη γειτονική δεύτερη ακμή για να ανακατασκευάσετε τη γωνία</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Δεξί κλικ ή Esc — Ακύρωση</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>Ακύρωση</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Επαναφορά γωνίας</translation>

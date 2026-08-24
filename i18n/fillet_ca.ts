@@ -55,12 +55,20 @@
             <translation>S'han processat {} entitats.</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Especifiqueu la primera vora de la cantonada</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Especifiqueu la segona vora adjacent</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Restaura cantonades (Unfillet / Unchamfer)</translation>
+            <translation>Restauració de cantonades (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Eina de restauració de cantonades vives (elimina arrodoniments i xamfrans)</translation>
+            <translation>Eina interactiva per restaurar cantonades punxegudes (elimina arrodoniments i xamfrans)</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>Xamfrà de vèrtex</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>Restaura cantonada</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Restaura cantonada viva</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Pas 1: Feu clic a la primera aresta de la cantonada</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Pas 2: Feu clic a la segona aresta adjacent per reconstruir la cantonada</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Clic dret o Esc — Cancel·lar</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>Cancel·lar</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Restaura cantonada</translation>

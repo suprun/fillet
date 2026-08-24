@@ -3,7 +3,7 @@ from typing import Optional
 
 from qgis.core import QgsCoordinateReferenceSystem, QgsSettings
 from qgis.gui import QgsDoubleSpinBox, QgsMapCanvas, QgsSpinBox
-from qgis.PyQt.QtCore import QEvent, QPoint, QRegularExpression, QSize, Qt, QTimer, pyqtSignal
+from qgis.PyQt.QtCore import QCoreApplication, QEvent, QPoint, QRegularExpression, QSize, Qt, QTimer, pyqtSignal
 from qgis.PyQt.QtGui import (
     QColor,
     QCursor,
@@ -44,6 +44,9 @@ class FilletCanvasWidget(QFrame):
     MODE_FILLET = constants.MODE_FILLET
     MODE_CHAMFER = constants.MODE_CHAMFER
     MODE_RESTORE = constants.MODE_RESTORE
+
+    def tr(self, message: str) -> str:
+        return QCoreApplication.translate("FilletPlugin", message)
 
     def __init__(self, canvas: QgsMapCanvas):
         super().__init__(canvas)
@@ -304,19 +307,12 @@ class FilletCanvasWidget(QFrame):
 
     def _apply_style(self):
         shape_panel = getattr(QFrame.Shape, "StyledPanel", getattr(QFrame, "StyledPanel", None))
-        shadow_raised = getattr(QFrame.Shadow, "Raised", getattr(QFrame, "Raised", None))
+        shadow_plain = getattr(QFrame.Shadow, "Plain", getattr(QFrame, "Plain", None))
         if shape_panel is not None:
             self.setFrameShape(shape_panel)
-        if shadow_raised is not None:
-            self.setFrameShadow(shadow_raised)
+        if shadow_plain is not None:
+            self.setFrameShadow(shadow_plain)
         self.setAutoFillBackground(True)
-
-        # Drop shadow effect for floating on canvas
-        shadow = QGraphicsDropShadowEffect(self)
-        shadow.setBlurRadius(8)
-        shadow.setColor(QColor(0, 0, 0, 70))
-        shadow.setOffset(0, 2)
-        self.setGraphicsEffect(shadow)
 
     def _update_lock_icon(self, btn: QToolButton):
         if btn.isChecked():

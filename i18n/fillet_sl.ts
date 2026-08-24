@@ -55,12 +55,20 @@
             <translation>Obdelano {} gradnikov.</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Določite prvi rob vogala</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Določite sosednji drugi rob</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Obnovi vogale (Unfillet / Unchamfer)</translation>
+            <translation>Obnova vogalov (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Orodje za obnovo ostrih vogalov (odstrani zaokrožitve in posnete robove)</translation>
+            <translation>Interaktivno orodje za obnovo ostrih vogalov (odstrani zaokrožitve in posnetke)</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>Posneti rob točke</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>Obnovi vogal</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Obnovi oster vogal</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>1. korak: Kliknite prvi rob vogala</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>2. korak: Kliknite sosednji drugi rob za rekonstrukcijo vogala</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Desni klik ali Esc — Prekliči</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>Prekliči</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Obnovi vogal</translation>

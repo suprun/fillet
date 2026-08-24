@@ -2,7 +2,7 @@ import os
 from typing import Optional
 
 from qgis.core import QgsCoordinateReferenceSystem, QgsSettings
-from qgis.PyQt.QtCore import QEvent, QRegularExpression, QSize, Qt, QTimer, pyqtSignal
+from qgis.PyQt.QtCore import QCoreApplication, QEvent, QRegularExpression, QSize, Qt, QTimer, pyqtSignal
 from qgis.PyQt.QtGui import (
     QCursor,
     QIcon,
@@ -41,6 +41,9 @@ class FilletSettingsWidget(QWidget):
 
     MODE_FILLET = constants.MODE_FILLET
     MODE_CHAMFER = constants.MODE_CHAMFER
+
+    def tr(self, message: str) -> str:
+        return QCoreApplication.translate("FilletPlugin", message)
 
     def __init__(self, parent=None):
         super().__init__(parent)

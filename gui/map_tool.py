@@ -24,7 +24,7 @@ from qgis.gui import (
     QgsRubberBand,
     QgsSnapIndicator,
 )
-from qgis.PyQt.QtCore import Qt, QTimer
+from qgis.PyQt.QtCore import QCoreApplication, Qt, QTimer
 from qgis.PyQt.QtGui import QColor, QCursor
 from qgis.PyQt.QtWidgets import QApplication
 
@@ -52,6 +52,9 @@ from .settings_widget import FilletSettingsWidget
 
 class FilletMapTool(QgsMapToolEdit):
     """Interactive Map Tool for filleting and chamfering vertices in QGIS 4.0 CAD style."""
+
+    def tr(self, message: str) -> str:
+        return QCoreApplication.translate("FilletPlugin", message)
 
     STATE_HOVER = "hover"
     STATE_ADJUSTING = "adjusting"

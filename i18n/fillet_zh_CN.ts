@@ -55,12 +55,20 @@
             <translation>已处理 {} 个要素。</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. 指定第一条角边</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. 指定相邻的第二条边</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
             <translation>恢复尖角 (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>尖锐角恢复工具（移除圆角和倒角）</translation>
+            <translation>恢复尖角的交互式工具（移除圆角和倒角）</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>顶点倒角</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>恢复尖角</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>恢复尖锐角</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>步骤 1：单击角的第一个边</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>步骤 2：单击相邻的第二个边以重建角</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>右键或 Esc — 取消</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>取消</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>恢复尖角</translation>

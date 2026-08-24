@@ -55,12 +55,20 @@
             <translation>S-au procesat {} element(e).</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Specificați prima margine a colțului</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Specificați a doua margine adiacentă</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
             <translation>Restaurare colțuri (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Instrument de restaurare a colțurilor ascuțite (elimină racordările și teșirile)</translation>
+            <translation>Instrument interactiv pentru restaurarea colțurilor ascuțite (elimină racordările și teșirile)</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>Teșire nod</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>Restaurare colț</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Restaurare colț ascuțit</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Pasul 1: Faceți clic pe prima latură a colțului</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Pasul 2: Faceți clic pe a doua latură adiacentă pentru a reconstrui colțul</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Clic dreapta sau Esc — Anulare</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>Anulare</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Restaurare colț</translation>

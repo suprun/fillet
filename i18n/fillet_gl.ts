@@ -55,12 +55,20 @@
             <translation>Procesáronse {} entidades.</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Especificar o primeiro bordo da esquina</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Especificar o segundo bordo adxacente</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Restaurar esquinas (Unfillet / Unchamfer)</translation>
+            <translation>Restauración de esquinas (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Ferramenta de restauración de esquinas vivas (elimina arredondamentos e chafráns)</translation>
+            <translation>Ferramenta interactiva para restaurar esquinas afiadas (elimina redondeos e chafráns)</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>Chafrán de vértice</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>Restaurar esquina</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Restaurar esquina viva</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Paso 1: Prema na primeira aresta da esquina</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Paso 2: Prema na segunda aresta adxacente para reconstruír a esquina</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Botón dereito ou Esc — Cancelar</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>Cancelar</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Restaurar esquina</translation>

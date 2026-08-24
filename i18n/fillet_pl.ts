@@ -55,12 +55,20 @@
             <translation>Przetworzono {} obiekt(ów).</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Wskaż pierwszą krawędź narożnika</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Wskaż przyległą drugą krawędź</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Przywróć narożniki (Unfillet / Unchamfer)</translation>
+            <translation>Przywracanie narożników (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Narzędzie przywracania ostrych narożników (usuwa zaokrąglenia i fazowania)</translation>
+            <translation>Interaktywne narzędzie do przywracania ostrych narożników (usuwa zaokrąglenia i ścięcia)</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>Ścięcie wierzchołka</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>Przywróć narożnik</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Przywróć ostry narożnik</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Krok 1: Kliknij pierwszą krawędź narożnika</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Krok 2: Kliknij sąsiednią drugą krawędź, aby zrekonstruować narożnik</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>PPM lub Esc — Anuluj</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>Anuluj</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Przywróć narożnik</translation>

@@ -55,12 +55,20 @@
             <translation>{} entitate prozesatu dira.</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Zehaztu izkinako lehen ertza</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Zehaztu ondoko bigarren ertza</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Leheneratu izkinak (Unfillet / Unchamfer)</translation>
+            <translation>Izkinak leheneratzea (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Izkina zorrotzak leheneratzeko tresna (biribiltzeak eta xaflaketak kentzen ditu)</translation>
+            <translation>Izkina zorrotzak leheneratzeko tresna interaktiboa (biribiltzeak eta xaflaketak kentzen ditu)</translation>
         </message>
     </context>
     <context>
@@ -182,36 +190,6 @@
         <message>
             <source>Відновлення кута</source>
             <translation>Izkina leheneratu</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Leheneratu izkina zorrotza</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>1. urratsa: Egin klik izkinaren lehen ertzean</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>2. urratsa: Egin klik ondoko bigarren ertzean izkina berreraikitzeko</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Eskuin-klika edo Esc — Utzi</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>Utzi</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>Leheneratu izkina</translation>
         </message>
     </context>
 </TS>

@@ -55,12 +55,20 @@
             <translation>Behandlet {} objekter.</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Angi den første hjørnekanten</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Angi den tilstøtende andre kanten</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
             <translation>Gjenopprett hjørner (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Verktøy for gjenoppretting av skarpe hjørner (fjerner avrundinger og faser)</translation>
+            <translation>Interaktivt verktøy for å gjenopprette skarpe hjørner (fjerner avrundinger og avfasninger)</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>Nodeavfasing</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>Gjenopprett hjørne</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Gjenopprett skarpt hjørne</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Trinn 1: Klikk på det første segmentet av hjørnet</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Trinn 2: Klikk på det tilstøtende andre segmentet for å rekonstruere hjørnet</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Høyreklikk eller Esc — Avbryt</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>Avbryt</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Gjenopprett hjørne</translation>

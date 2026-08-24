@@ -55,12 +55,20 @@
             <translation>{} 件の地物を処理しました。</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. 最初の角のエッジを指定</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. 隣接する2番目のエッジを指定</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>角を復元 (Unfillet / Unchamfer)</translation>
+            <translation>角の復元 (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>鋭角復元ツール（フィレットと面取りを削除）</translation>
+            <translation>鋭角を復元する対話型ツール（フィレットや面取りを削除）</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>頂点の面取り</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>角を復元</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>鋭角を復元</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>ステップ1：角の最初の辺をクリック</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>ステップ2：隣接する2番目の辺をクリックして角を再構築</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>右クリックまたはEsc — キャンセル</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>キャンセル</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>角を復元</translation>

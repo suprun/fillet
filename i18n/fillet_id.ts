@@ -55,12 +55,20 @@
             <translation>Diproses {} fitur.</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Tentukan tepi sudut pertama</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Tentukan tepi kedua yang berdekatan</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Pulihkan Sudut (Unfillet / Unchamfer)</translation>
+            <translation>Pemulihan Sudut (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Alat pemulihan sudut tajam (menghapus fillet dan chamfer)</translation>
+            <translation>Alat interaktif untuk memulihkan sudut tajam (menghapus fillet dan chamfer)</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>Chamfer simpul</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>Pulihkan Sudut</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Pulihkan Sudut Tajam</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Langkah 1: Klik tepi pertama sudut</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Langkah 2: Klik tepi kedua yang berdekatan untuk merekonstruksi sudut</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Klik kanan atau Esc — Batal</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>Batal</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Pulihkan Sudut</translation>

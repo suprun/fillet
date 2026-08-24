@@ -55,12 +55,20 @@
             <translation>{} फ़ीचर संसाधित किए गए।</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. पहला कोना किनारा निर्दिष्ट करें</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. आसन्न दूसरा किनारा निर्दिष्ट करें</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>कोने पुनर्स्थापित करें (Unfillet / Unchamfer)</translation>
+            <translation>कोना पुनर्स्थापन (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>नुकीले कोने पुनर्स्थापना उपकरण (गोलाई और चेंफर हटाता है)</translation>
+            <translation>नुकीले कोनों को पुनर्स्थापित करने के लिए इंटरैक्टिव टूल (फिलेट और चैम्फर हटाता है)</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>शीर्ष चैम्फर</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>कोना पुनर्स्थापित करें</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>नुकीला कोना पुनर्स्थापित करें</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>चरण 1: कोने के पहले किनारे पर क्लिक करें</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>चरण 2: कोने के पुनर्निर्माण के लिए आसन्न दूसरे किनारे पर क्लिक करें</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>दायां क्लिक या Esc — रद्द करें</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>रद्द करें</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>कोना पुनर्स्थापित करें</translation>

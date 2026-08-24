@@ -55,12 +55,20 @@
             <translation>Käsitelty {} kohdetta.</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Määritä ensimmäinen kulmasärmä</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Määritä viereinen toinen särmä</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Palauta kulmat (Unfillet / Unchamfer)</translation>
+            <translation>Kulmien palautus (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Terävien kulmien palautustyökalu (poistaa pyöristykset ja viisteet)</translation>
+            <translation>Interaktiivinen työkalu terävien kulmien palauttamiseen (poistaa pyöristykset ja viisteet)</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>Taitteen viiste</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>Palauta kulma</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Palauta terävä kulma</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Vaihe 1: Napsauta kulman ensimmäistä reunaa</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Vaihe 2: Napsauta viereistä toista reunaa kulman rekonstruoimiseksi</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Oikea painike tai Esc — Peruuta</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>Peruuta</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Palauta kulma</translation>

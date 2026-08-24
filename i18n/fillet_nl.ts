@@ -55,12 +55,20 @@
             <translation>{} object(en) verwerkt.</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Geef de eerste hoekrand op</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Geef de aangrenzende tweede rand op</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
             <translation>Hoeken herstellen (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Gereedschap voor herstel van scherpe hoeken (verwijdert afrondingen en afschuiningen)</translation>
+            <translation>Interactieve tool om scherpe hoeken te herstellen (verwijdert afrondingen en afschuiningen)</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>Hoekpunt afschuinen</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>Hoek herstellen</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Scherpe hoek herstellen</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Stap 1: Klik op de eerste rand van de hoek</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Stap 2: Klik op de aangrenzende tweede rand om de hoek te reconstrueren</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>RMB of Esc — Annuleren</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>Annuleren</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Hoek herstellen</translation>

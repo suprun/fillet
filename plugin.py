@@ -9,6 +9,7 @@ from typing import Optional
 
 from qgis.core import (
     Qgis,
+    QgsApplication,
     QgsGeometry,
     QgsSettings,
     QgsVectorLayer,
@@ -27,12 +28,14 @@ try:
     from .core.geometry_engine import GeometryEngine
     from .gui.canvas_widget import FilletCanvasWidget
     from .gui.map_tool import FilletMapTool
+    from .gui.restore_canvas_widget import RestoreCanvasWidget
     from .gui.restore_map_tool import RestoreMapTool
     from .gui.settings_widget import FilletSettingsWidget
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
     from gui.canvas_widget import FilletCanvasWidget
     from gui.map_tool import FilletMapTool
+    from gui.restore_canvas_widget import RestoreCanvasWidget
     from gui.restore_map_tool import RestoreMapTool
     from gui.settings_widget import FilletSettingsWidget
 
@@ -54,6 +57,7 @@ class FilletPlugin:
         self.batch_action: Optional[QAction] = None
         self.map_tool: Optional[FilletMapTool] = None
         self.restore_map_tool: Optional[RestoreMapTool] = None
+        self.restore_canvas_widget: Optional[RestoreCanvasWidget] = None
         self.canvas_widget: Optional[FilletCanvasWidget] = None
         self.dock_widget: Optional[QDockWidget] = None
         self.settings_widget: Optional[FilletSettingsWidget] = None
@@ -68,11 +72,19 @@ class FilletPlugin:
         return False
 
     def _init_translator(self):
-        locale_name = QgsSettings().value("locale/userLocale", "")
-        if not locale_name:
+        override_flag = QgsSettings().value("locale/overrideFlag", False, type=bool)
+        user_locale = QgsSettings().value("locale/userLocale", "")
+        locale_name = ""
+        if override_flag and user_locale:
+            locale_name = user_locale
+        elif hasattr(QgsApplication, "locale"):
+            locale_name = QgsApplication.locale()
+        elif user_locale:
+            locale_name = user_locale
+        else:
             locale_name = QLocale().name()
 
-        candidates = [locale_name, locale_name.replace("-", "_"), locale_name[:2]]
+        candidates = [locale_name, locale_name.replace("-", "_"), locale_name[:2], "en"]
         i18n_dir = os.path.join(self.plugin_dir, "i18n")
 
         for cand in candidates:
@@ -122,7 +134,9 @@ class FilletPlugin:
         self.dock_widget.visibilityChanged.connect(self.on_dock_visibility_changed)
 
         # 3. Create interactive Corner Restore (Unfillet/Unchamfer) CAD Map Tool (available in QGIS 3.x and QGIS 4.x)
-        self.restore_map_tool = RestoreMapTool(self.canvas)
+        self.restore_canvas_widget = RestoreCanvasWidget(self.canvas)
+        self.restore_canvas_widget.hide()
+        self.restore_map_tool = RestoreMapTool(self.canvas, self.restore_canvas_widget)
 
         restore_icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionRestoreCorners.svg")
         self.restore_action = QAction(
@@ -311,6 +325,16 @@ class FilletPlugin:
             self.canvas_widget.deleteLater()
             self.canvas_widget = None
 
+        if self.restore_canvas_widget:
+            try:
+                self.canvas.removeEventFilter(self.restore_canvas_widget)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            self.restore_canvas_widget.hide()
+            self.restore_canvas_widget.setParent(None)
+            self.restore_canvas_widget.deleteLater()
+            self.restore_canvas_widget = None
+
         # 7. Clean up settings widget and dock widget
         if self.settings_widget:
             try:
@@ -343,6 +367,11 @@ class FilletPlugin:
         if self.translator:
             QCoreApplication.removeTranslator(self.translator)
             self.translator = None
+
+    def _show_message(self, title: str, text: str, level=Qgis.MessageLevel.Info, duration: int = 5):
+        """Displays temporary notification message with auto-dismiss duration timer."""
+        if self.iface and self.iface.messageBar():
+            self.iface.messageBar().pushMessage(title, text, level, duration)
 
     def toggle_tool(self, checked: bool):
         if checked:
@@ -378,6 +407,8 @@ class FilletPlugin:
         if self.restore_action:
             is_restore_active = tool == self.restore_map_tool
             self.restore_action.setChecked(is_restore_active)
+            if not is_restore_active and self.restore_canvas_widget:
+                self.restore_canvas_widget.hide()
 
     def _on_current_layer_changed(self, layer=None):
         self.update_action_state()
@@ -439,6 +470,8 @@ class FilletPlugin:
 
             if self.restore_map_tool and self.canvas.mapTool() == self.restore_map_tool:
                 self.canvas.unsetMapTool(self.restore_map_tool)
+                if self.restore_canvas_widget:
+                    self.restore_canvas_widget.hide()
                 if self.restore_action:
                     self.restore_action.setChecked(False)
 
@@ -446,17 +479,21 @@ class FilletPlugin:
         """Batch apply fillet or chamfer to all corners of selected features."""
         layer = self.canvas.currentLayer()
         if not isinstance(layer, QgsVectorLayer) or not layer.isEditable():
-            self.iface.messageBar().pushWarning(
+            self._show_message(
                 self.tr("Увага"),
                 self.tr("Активний шар повинен бути векторним і перебувати в режимі редагування."),
+                level=Qgis.MessageLevel.Warning,
+                duration=4,
             )
             return
 
         selected_fids = layer.selectedFeatureIds()
         if not selected_fids:
-            self.iface.messageBar().pushInfo(
+            self._show_message(
                 self.tr("Інфо"),
                 self.tr("Немає виділених об'єктів для обробки."),
+                level=Qgis.MessageLevel.Info,
+                duration=4,
             )
             return
 
@@ -487,9 +524,11 @@ class FilletPlugin:
 
         layer.endEditCommand()
         self.canvas.refresh()
-        self.iface.messageBar().pushSuccess(
+        self._show_message(
             self.tr("Успіх"),
             self.tr("Оброблено {} об'єкт(ів).").format(modified_count),
+            level=Qgis.MessageLevel.Success,
+            duration=5,
         )
 
     def _batch_process_geometry(

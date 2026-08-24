@@ -4,7 +4,7 @@ qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
 description=Interactive Fillet, Chamfer & Corner Restoration tools for QGIS with instant Batch Fillet/Chamfer for selected features.
 about=Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), and Two-Edge Corner Restoration (Unfillet / Unchamfer) map tools for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.
-version=1.0.0.12
+version=1.0.0.13
 author=suprun
 email=suprun.serhiy+qgis@gmail.com
 homepage=https://github.com/suprun/fillet
@@ -14,7 +14,13 @@ tags=cad, editing, fillet, chamfer, unfillet, corner, restore, geometry, digitiz
 icon=icon.png
 experimental=False
 deprecated=False
-changelog=1.0.0.12:
+changelog=1.0.0.13:
+    - Added floating CAD HUD step-by-step hints and step-back workflow for Two-Edge Corner Restoration (Unfillet / Unchamfer) tool.
+    - Added auto-dismissal timers (4-5s duration) to all QGIS message bar notification strips.
+    - Removed drop shadow effects from floating canvas widgets to match native QGIS flat CAD panel styling.
+    - Pinned floating canvas HUD panels firmly to the top-right corner of the canvas.
+    - Fixed English and non-Ukrainian UI translations for all CAD actions, toolbar buttons, tooltips, and canvas HUD widgets with QgsApplication.locale() discovery.
+    1.0.0.12:
     - Restricted numeric stepper inputs to digits only and normalized decimal separator (dot/comma) handling across canvas HUD and batch panel.
     - Added interactive CAD Two-Edge Corner Restoration tool (Unfillet / Unchamfer) with real-time intersection preview.
     - Dedicated toolbar button with custom QGIS delete-badge icon for corner reconstruction.

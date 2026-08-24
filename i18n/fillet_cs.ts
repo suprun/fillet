@@ -55,12 +55,20 @@
             <translation>Zpracováno {} prvků.</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Určete první hranu rohu</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Určete sousední druhou hranu</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Obnovit rohy (Unfillet / Unchamfer)</translation>
+            <translation>Obnova rohů (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Nástroj pro obnovu ostrých rohů (odstraní zaoblení a zkosení)</translation>
+            <translation>Interaktivní nástroj pro obnovu ostrých rohů (odstraní zaoblení a zkosení)</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>Zkosení vrcholu</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>Obnovit roh</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Obnovit ostrý roh</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Krok 1: Klikněte na první hranu rohu</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Krok 2: Klikněte na sousední druhou hranu pro rekonstrukci rohu</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Pravé tlačítko nebo Esc — Zrušit</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>Zrušit</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Obnovit roh</translation>

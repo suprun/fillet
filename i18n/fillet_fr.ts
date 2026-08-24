@@ -55,12 +55,20 @@
             <translation>{} entité(s) traitée(s).</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Spécifier le premier bord de l'angle</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Spécifier le deuxième bord adjacent</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Restaurer les angles (Unfillet / Unchamfer)</translation>
+            <translation>Restauration d'angles (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Outil de restauration des angles vifs (supprime les congés et chanfreins)</translation>
+            <translation>Outil interactif pour restaurer les angles vifs (supprime les congés et chanfreins)</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>Chanfrein de sommet</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>Restaurer l'angle</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Restaurer l'angle vif</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Étape 1 : Cliquez sur le premier bord de l'angle</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Étape 2 : Cliquez sur le deuxième bord adjacent pour reconstruire l'angle</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Clic droit ou Échap — Annuler</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>Annuler</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Restaurer l'angle</translation>

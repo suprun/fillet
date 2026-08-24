@@ -55,12 +55,20 @@
             <translation>{} 개 객체를 처리했습니다.</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. 첫 번째 모서리 가장자리 지정</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. 인접한 두 번째 가장자리 지정</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
             <translation>모서리 복원 (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>날카로운 모서리 복원 도구 (필렛 및 챔퍼 제거)</translation>
+            <translation>날카로운 모서리 복원을 위한 대화형 도구 (필렛 및 챔퍼 제거)</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>꼭짓점 챔퍼</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>모서리 복원</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>날카로운 모서리 복원</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>1단계: 모서리의 첫 번째 가장자리를 클릭하세요</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>2단계: 모서리를 재구성하려면 인접한 두 번째 가장자리를 클릭하세요</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>마우스 오른쪽 버튼 또는 Esc — 취소</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>취소</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>모서리 복원</translation>

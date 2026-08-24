@@ -55,12 +55,20 @@
             <translation>Processado(s) {} elemento(s).</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Especificar a primeira aresta do canto</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Especificar a segunda aresta adjacente</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Restaurar cantos (Unfillet / Unchamfer)</translation>
+            <translation>Restauração de cantos (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Ferramenta de restauração de cantos vivos (remove concordâncias e chanfros)</translation>
+            <translation>Ferramenta interativa para restaurar cantos vivos (remove concordâncias e chanfros)</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>Chanfro de vértice</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>Restaurar canto</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Restaurar canto vivo</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Passo 1: Clique na primeira aresta do canto</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Passo 2: Clique na segunda aresta adjacente para reconstruir o canto</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Botão direito ou Esc — Cancelar</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>Cancelar</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Restaurar canto</translation>

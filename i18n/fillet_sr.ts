@@ -55,12 +55,20 @@
             <translation>Обрађено {} објеката.</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Наведите прву ивицу угла</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Наведите суседну другу ивицу</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Врати углове (Unfillet / Unchamfer)</translation>
+            <translation>Враћање углова (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Алат за враћање оштрих углова (уклања заобљења и закошења)</translation>
+            <translation>Интерактивни алат за враћање оштрих углова (уклања заобљења и закошења)</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>Закошење темена</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>Врати угао</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Врати оштар угао</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>Корак 1: Кликните на прву ивицу угла</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>Корак 2: Кликните на суседну другу ивицу за реконструкцију угла</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Десни клик или Esc — Откажи</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>Откажи</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Врати угао</translation>

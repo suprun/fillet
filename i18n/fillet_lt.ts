@@ -55,12 +55,20 @@
             <translation>Apdorota {} objektų.</translation>
         </message>
         <message>
+            <source>1. Вкажіть перше ребро кута</source>
+            <translation>1. Nurodykite pirmąją kampo briauną</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть суміжне друге ребро</source>
+            <translation>2. Nurodykite gretimą antrąją briauną</translation>
+        </message>
+        <message>
             <source>Відновлення кутів (Unfillet / Unchamfer)</source>
-            <translation>Atkurti kampus (Unfillet / Unchamfer)</translation>
+            <translation>Kampų atkūrimas (Unfillet / Unchamfer)</translation>
         </message>
         <message>
             <source>Інструмент відновлення гострих кутів (видалення скруглень та фасок)</source>
-            <translation>Aštrių kampų atkūrimo įrankis (pašalina užapvalinimus ir nusklembimus)</translation>
+            <translation>Interaktyvus įrankis aštriems kampams atkurti (pašalina apvalinimus ir nusklembimus)</translation>
         </message>
     </context>
     <context>
@@ -179,36 +187,6 @@
             <source>Фаска вершини</source>
             <translation>Viršūnės nusklembimas</translation>
         </message>
-        <message>
-            <source>Відновлення кута</source>
-            <translation>Atkurti kampą</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreCanvasWidget</name>
-        <message>
-            <source>Відновлення гострого кута</source>
-            <translation>Atkurti aštrų kampą</translation>
-        </message>
-        <message>
-            <source>Крок 1: Клікніть на перше ребро кута</source>
-            <translation>1 žingsnis: spustelėkite pirmąją kampo briauną</translation>
-        </message>
-        <message>
-            <source>Крок 2: Клікніть на суміжне друге ребро для зведення в кут</source>
-            <translation>2 žingsnis: spustelėkite gretimą antrąją briauną, kad atkurtumėte kampą</translation>
-        </message>
-        <message>
-            <source>ПКМ або Esc — скасувати</source>
-            <translation>Dešinysis mygtukas arba Esc — Atšaukti</translation>
-        </message>
-        <message>
-            <source>Скасувати</source>
-            <translation>Atšaukti</translation>
-        </message>
-    </context>
-    <context>
-        <name>RestoreMapTool</name>
         <message>
             <source>Відновлення кута</source>
             <translation>Atkurti kampą</translation>
