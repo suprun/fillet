@@ -31,7 +31,6 @@ try:
     from .gui.restore_canvas_widget import RestoreCanvasWidget
     from .gui.restore_map_tool import RestoreMapTool
     from .gui.settings_widget import FilletSettingsWidget
-    from .gui.two_line_canvas_widget import TwoLineCanvasWidget
     from .gui.two_line_map_tool import TwoLineMapTool
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
@@ -40,7 +39,6 @@ except (ImportError, ValueError):
     from gui.restore_canvas_widget import RestoreCanvasWidget
     from gui.restore_map_tool import RestoreMapTool
     from gui.settings_widget import FilletSettingsWidget
-    from gui.two_line_canvas_widget import TwoLineCanvasWidget
     from gui.two_line_map_tool import TwoLineMapTool
 
 
@@ -62,7 +60,6 @@ class FilletPlugin:
         self.batch_action: Optional[QAction] = None
         self.map_tool: Optional[FilletMapTool] = None
         self.two_line_map_tool: Optional[TwoLineMapTool] = None
-        self.two_line_canvas_widget: Optional[TwoLineCanvasWidget] = None
         self.restore_map_tool: Optional[RestoreMapTool] = None
         self.restore_canvas_widget: Optional[RestoreCanvasWidget] = None
         self.canvas_widget: Optional[FilletCanvasWidget] = None
@@ -156,12 +153,14 @@ class FilletPlugin:
         self.restore_action.setToolTip(self.tr("Інструмент відновлення гострих кутів (видалення скруглень та фасок)"))
         self.restore_action.triggered.connect(self.toggle_restore_tool)
 
-        # 4. Create interactive Two-Line Fillet/Chamfer CAD Map Tool (available in QGIS 3.x and QGIS 4.x)
-        self.two_line_canvas_widget = TwoLineCanvasWidget(self.canvas)
-        self.two_line_canvas_widget.hide()
+        # 4. Create shared canvas widget for Fillet/Chamfer tools
+        self.canvas_widget = FilletCanvasWidget(self.canvas)
+        self.canvas_widget.hide()
+
+        # 5. Create interactive Two-Line Fillet/Chamfer CAD Map Tool (available in QGIS 3.x and QGIS 4.x)
         self.two_line_map_tool = TwoLineMapTool(
             self.canvas,
-            widget=self.two_line_canvas_widget,
+            widget=self.canvas_widget,
             iface=self.iface,
         )
 
@@ -178,10 +177,8 @@ class FilletPlugin:
 
         adv_tb = self.iface.advancedDigitizeToolBar()
 
-        # 5. Create interactive Fillet / Chamfer MapTool ONLY in QGIS 3.x (native in QGIS 4.0+)
+        # 6. Create interactive Fillet / Chamfer MapTool ONLY in QGIS 3.x (native in QGIS 4.0+)
         if not self.is_qgis_4():
-            self.canvas_widget = FilletCanvasWidget(self.canvas)
-            self.canvas_widget.hide()
             self.map_tool = FilletMapTool(self.canvas, self.canvas_widget)
 
             icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionChamferFillet.svg")
@@ -389,16 +386,6 @@ class FilletPlugin:
             self.canvas_widget.deleteLater()
             self.canvas_widget = None
 
-        if self.two_line_canvas_widget:
-            try:
-                self.canvas.removeEventFilter(self.two_line_canvas_widget)
-            except (TypeError, RuntimeError):
-                pass  # nosec B110
-            self.two_line_canvas_widget.hide()
-            self.two_line_canvas_widget.setParent(None)
-            self.two_line_canvas_widget.deleteLater()
-            self.two_line_canvas_widget = None
-
         if self.restore_canvas_widget:
             try:
                 self.canvas.removeEventFilter(self.restore_canvas_widget)
@@ -483,14 +470,14 @@ class FilletPlugin:
         if self.action:
             is_active = tool == self.map_tool
             self.action.setChecked(is_active)
-            if not is_active and self.canvas_widget:
-                self.canvas_widget.hide()
 
         if self.two_line_action:
             is_two_line_active = tool == self.two_line_map_tool
             self.two_line_action.setChecked(is_two_line_active)
-            if not is_two_line_active and self.two_line_canvas_widget:
-                self.two_line_canvas_widget.hide()
+
+        if self.canvas_widget:
+            if tool != self.map_tool and tool != self.two_line_map_tool:
+                self.canvas_widget.hide()
 
         if self.restore_action:
             is_restore_active = tool == self.restore_map_tool
@@ -537,8 +524,6 @@ class FilletPlugin:
                 self.settings_widget.adapt_to_crs(layer.crs())
             if self.canvas_widget and hasattr(self.canvas_widget, "adapt_to_crs"):
                 self.canvas_widget.adapt_to_crs(layer.crs())
-            if self.two_line_canvas_widget and hasattr(self.two_line_canvas_widget, "adapt_to_crs"):
-                self.two_line_canvas_widget.adapt_to_crs(layer.crs())
 
         if self.action:
             self.action.setEnabled(is_editable)
@@ -571,8 +556,8 @@ class FilletPlugin:
         if not is_line_editable and self.canvas:
             if self.two_line_map_tool and self.canvas.mapTool() == self.two_line_map_tool:
                 self.canvas.unsetMapTool(self.two_line_map_tool)
-                if self.two_line_canvas_widget:
-                    self.two_line_canvas_widget.hide()
+                if self.canvas_widget:
+                    self.canvas_widget.hide()
                 if self.two_line_action:
                     self.two_line_action.setChecked(False)
 

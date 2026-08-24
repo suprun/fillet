@@ -3,16 +3,20 @@
     <context>
         <name>FilletPlugin</name>
         <message>
-            <source>3. Задайте радіус/фаску курсором або зафіксуйте кліком</source>
-            <translation>3. Atur radius/chamfer dengan kursor atau klik untuk konfirmasi</translation>
-        </message>
-        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Tentukan garis pertama</translation>
         </message>
         <message>
             <source>2. Вкажіть другу лінію</source>
             <translation>2. Tentukan garis kedua</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть радіус або клікніть для підтвердження</source>
+            <translation>3. Tentukan radius atau klik untuk konfirmasi</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть фаску або клікніть для підтвердження</source>
+            <translation>3. Tentukan chamfer atau klik untuk konfirmasi</translation>
         </message>
         <message>
             <source>Скруглення / фаска двох ліній (Merge)</source>

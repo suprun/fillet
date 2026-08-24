@@ -15,9 +15,9 @@
     <deprecated>False</deprecated>
     <tags>cad, editing, fillet, chamfer, unfillet, corner, restore, geometry, digitizing, curve, batch, merge, qgis4</tags>
     <change_log>1.0.0.17:
-- Added dedicated floating on-canvas settings panel for Two-Line Fillet/Chamfer tool with Fillet/Chamfer mode switches, numeric controls, lock/link options, step badges, and attribute merge checkbox.
-- Added interactive cursor-driven radius and chamfer adjustment step (Step 3) matching single-feature Fillet/Chamfer CAD workflow.
-- Added transactional rollback when QGIS native feature merge dialog is cancelled by user.
+- Reused FilletCanvasWidget for Two-Line Fillet/Chamfer map tool with 3-step interactive cursor radius/chamfer drag.
+- Added on-canvas merge attribute checkbox and removed duplicate checkbox from batch dock panel.
+- Added safe cancellation handling for QGIS native Merge Features dialog to prevent unconfirmed layer changes.
 1.0.0.16:
 - Fixed TypeError in toMapCoordinates conversion for intersection marker in Two-Line Fillet map tool.
 1.0.0.15:

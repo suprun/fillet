@@ -3,16 +3,20 @@
     <context>
         <name>FilletPlugin</name>
         <message>
-            <source>3. Задайте радіус/фаску курсором або зафіксуйте кліком</source>
-            <translation>3. Setați raza/teșirea cu cursorul sau faceți clic pentru a confirma</translation>
-        </message>
-        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Specificați prima linie</translation>
         </message>
         <message>
             <source>2. Вкажіть другу лінію</source>
             <translation>2. Specificați a doua linie</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть радіус або клікніть для підтвердження</source>
+            <translation>3. Specificați raza sau faceți clic pentru a confirma</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть фаску або клікніть для підтвердження</source>
+            <translation>3. Specificați teșitura sau faceți clic pentru a confirma</translation>
         </message>
         <message>
             <source>Скруглення / фаска двох ліній (Merge)</source>

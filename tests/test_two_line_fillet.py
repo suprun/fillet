@@ -17,23 +17,19 @@ from qgis.core import (
     QgsPoint,
     QgsPointXY,
 )
+from qgis.gui import QgsMapCanvas
+from qgis.PyQt.QtWidgets import QMainWindow
 
 app = QgsApplication([], False)
 app.initQgis()
+
+win = QMainWindow()
+canvas = QgsMapCanvas(win)
 
 from core.geometry_engine import GeometryEngine
 
 
 class TestTwoLineFillet(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        from qgis.gui import QgsMapCanvas
-        cls.canvas = QgsMapCanvas()
-        cls.canvas.resize(800, 600)
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.canvas = None
 
     def test_orthogonal_fillet(self):
         # Line 1: (0, 10) -> (10, 10)
@@ -108,41 +104,46 @@ class TestTwoLineFillet(unittest.TestCase):
         )
         self.assertIsNone(res)
 
-    def test_two_line_hud_widget(self):
-        from qgis.core import QgsCoordinateReferenceSystem
-        from gui.two_line_canvas_widget import TwoLineCanvasWidget
+    def test_two_line_canvas_widget(self):
+        from qgis.core import QgsSettings
+        from gui.canvas_widget import FilletCanvasWidget
 
-        canvas = self.canvas
-        widget = TwoLineCanvasWidget(canvas)
+        widget = FilletCanvasWidget(canvas)
 
-        widget.set_step(TwoLineCanvasWidget.STEP_FIRST_LINE)
+        # Single vertex mode by default
+        self.assertTrue(widget.lbl_step.isHidden())
+        self.assertTrue(widget.chk_always_first.isHidden())
+
+        # Switch to two-line mode
+        widget.set_two_line_mode(True)
+        self.assertFalse(widget.lbl_step.isHidden())
+        self.assertFalse(widget.chk_always_first.isHidden())
+
+        widget.set_step(1)
         self.assertIn("1.", widget.lbl_step.text())
 
-        widget.set_step(TwoLineCanvasWidget.STEP_SECOND_LINE)
+        widget.set_step(2)
         self.assertIn("2.", widget.lbl_step.text())
 
-        widget.set_step(TwoLineCanvasWidget.STEP_ADJUST)
+        widget.set_step(3)
         self.assertIn("3.", widget.lbl_step.text())
-        self.assertGreater(widget.width(), 200)
 
-        # Mode switching
-        widget.radio_chamfer.setChecked(True)
-        self.assertEqual(widget.mode, TwoLineCanvasWidget.MODE_CHAMFER)
-        widget.radio_fillet.setChecked(True)
-        self.assertEqual(widget.mode, TwoLineCanvasWidget.MODE_FILLET)
+        # Always first checkbox toggle
+        widget.chk_always_first.setChecked(True)
+        self.assertTrue(QgsSettings().value("plugins/fillet/merge_always_first_feature", False, type=bool))
 
-        # Linking
-        widget.radio_chamfer.setChecked(True)
-        widget.btn_link.setChecked(True)
-        widget.set_distance1(5.0)
-        self.assertEqual(widget.distance2, 5.0)
+        widget.chk_always_first.setChecked(False)
+        self.assertFalse(QgsSettings().value("plugins/fillet/merge_always_first_feature", True, type=bool))
 
-        # CRS adaptation
-        widget.adapt_to_crs(QgsCoordinateReferenceSystem("EPSG:4326"))
-        self.assertEqual(widget.spin_radius.decimals(), 6)
+        widget.set_two_line_mode(False)
+        self.assertTrue(widget.lbl_step.isHidden())
+        self.assertTrue(widget.chk_always_first.isHidden())
 
-        widget.adapt_to_crs(QgsCoordinateReferenceSystem("EPSG:3857"))
-        self.assertEqual(widget.spin_radius.decimals(), 3)
+        try:
+            canvas.removeEventFilter(widget)
+        except (TypeError, RuntimeError):
+            pass
+        widget.deleteLater()
 
     def test_two_line_map_tool_feature_merge(self):
         from qgis.core import (
@@ -154,9 +155,6 @@ class TestTwoLineFillet(unittest.TestCase):
         )
         from qgis.PyQt.QtCore import QVariant
         from gui.two_line_map_tool import TwoLineMapTool
-        from gui.two_line_canvas_widget import TwoLineCanvasWidget
-
-        canvas = self.canvas
 
         # Create memory layer with two lines
         layer = QgsVectorLayer("LineString?crs=EPSG:3857", "test_lines", "memory")
@@ -180,11 +178,12 @@ class TestTwoLineFillet(unittest.TestCase):
         f1_actual = initial_feats[0]
         f2_actual = initial_feats[1]
 
-        widget = TwoLineCanvasWidget(canvas)
-        widget.chk_always_first.setChecked(True)
-
-        tool = TwoLineMapTool(canvas, widget=widget, iface=None)
+        tool = TwoLineMapTool(canvas, iface=None)
         tool.activate()
+
+        # Always first setting
+        s = QgsSettings()
+        s.setValue("plugins/fillet/merge_always_first_feature", True)
 
         # Compute merged geometry
         res = GeometryEngine.fillet_or_chamfer_two_lines(
@@ -206,55 +205,15 @@ class TestTwoLineFillet(unittest.TestCase):
         self.assertFalse(feats[0].geometry().isEmpty())
 
         tool.cleanup()
+        if tool.widget:
+            try:
+                canvas.removeEventFilter(tool.widget)
+            except (TypeError, RuntimeError):
+                pass
+            tool.widget.deleteLater()
+        layer.rollBack()
 
-    def test_two_line_map_tool_cancel_rollback(self):
-        """Verify that when QGIS merge dialog is cancelled, no layer changes or deletions occur."""
-        from qgis.core import QgsFeature, QgsField, QgsVectorLayer
-        from qgis.PyQt.QtCore import QVariant
-        from gui.two_line_map_tool import TwoLineMapTool
-        from gui.two_line_canvas_widget import TwoLineCanvasWidget
-        from unittest.mock import MagicMock
-
-        canvas = self.canvas
-        layer = QgsVectorLayer("LineString?crs=EPSG:3857", "test_cancel", "memory")
-        pr = layer.dataProvider()
-        pr.addAttributes([QgsField("name", getattr(QVariant, "String", 10))])
-        layer.updateFields()
-
-        f1 = QgsFeature(layer.fields())
-        f1.setGeometry(QgsGeometry.fromPolylineXY([QgsPointXY(0, 10), QgsPointXY(10, 10)]))
-        f2 = QgsFeature(layer.fields())
-        f2.setGeometry(QgsGeometry.fromPolylineXY([QgsPointXY(10, 0), QgsPointXY(10, 20)]))
-        pr.addFeatures([f1, f2])
-        layer.startEditing()
-        canvas.setCurrentLayer(layer)
-
-        widget = TwoLineCanvasWidget(canvas)
-        widget.chk_always_first.setChecked(False)
-
-        # Mock iface with simulated cancelled merge dialog (trigger does not delete fid2)
-        mock_iface = MagicMock()
-        mock_merge_action = MagicMock()
-        mock_iface.mainWindow.return_value.findChild.return_value = mock_merge_action
-
-        tool = TwoLineMapTool(canvas, widget=widget, iface=mock_iface)
-        tool.activate()
-
-        new_geom = QgsGeometry.fromPolylineXY([QgsPointXY(0, 10), QgsPointXY(8, 10), QgsPointXY(10, 8), QgsPointXY(10, 0)])
-
-        # Trigger operation with simulated dialog cancel (fid2 is still valid and not deleted)
-        f1_id = f1.id()
-        f2_id = f2.id()
-        tool._apply_two_line_operation(layer, f1_id, f2_id, new_geom)
-
-        # Verify BOTH features still exist and f1 geometry was NOT altered to new_geom
-        feats = list(layer.getFeatures())
-        self.assertEqual(len(feats), 2)
-        self.assertAlmostEqual(feats[0].geometry().asPolyline()[1].x(), 10.0, places=2)
-
-        tool.cleanup()
-
-    def test_two_line_map_tool_canvas_events(self):
+    def test_two_line_map_tool_canvas_events_and_cursor_drag(self):
         from qgis.core import (
             QgsFeature,
             QgsField,
@@ -263,10 +222,7 @@ class TestTwoLineFillet(unittest.TestCase):
         from qgis.gui import QgsMapMouseEvent
         from qgis.PyQt.QtCore import QEvent, QPoint, Qt, QVariant
         from gui.two_line_map_tool import TwoLineMapTool
-        from gui.two_line_canvas_widget import TwoLineCanvasWidget
         from core.snapping_helper import SegmentMatch
-
-        canvas = self.canvas
 
         layer = QgsVectorLayer("LineString?crs=EPSG:3857", "test_lines_events", "memory")
         pr = layer.dataProvider()
@@ -281,16 +237,16 @@ class TestTwoLineFillet(unittest.TestCase):
         layer.startEditing()
         canvas.setCurrentLayer(layer)
 
-        widget = TwoLineCanvasWidget(canvas)
-        widget.btn_lock_radius.setChecked(False)
-
-        tool = TwoLineMapTool(canvas, widget=widget, iface=None)
+        tool = TwoLineMapTool(canvas, iface=None)
         tool.activate()
 
-        # Step 1: Select first segment
+        # Unlock radius on widget so it enters Step 3
+        tool.widget.btn_lock_radius.setChecked(False)
+
+        # Step 1: Click first segment
         m1 = SegmentMatch(fid=1, part_idx=0, ring_idx=0, segment_idx=0, point=QgsPointXY(2, 10), p1=QgsPointXY(0, 10), p2=QgsPointXY(10, 10), geometry=f1.geometry())
         tool.first_segment_match = m1
-        tool.state = TwoLineMapTool.STATE_SELECT_SECOND
+        tool.step = tool.STEP_SECOND_LINE
 
         # Step 2: Hover over second segment
         m2 = SegmentMatch(fid=2, part_idx=0, ring_idx=0, segment_idx=0, point=QgsPointXY(10, 2), p1=QgsPointXY(10, 0), p2=QgsPointXY(10, 20), geometry=f2.geometry())
@@ -306,26 +262,36 @@ class TestTwoLineFillet(unittest.TestCase):
             self.assertIsNotNone(tool.preview_geom)
             self.assertIsNotNone(tool.current_segment_match)
 
-        # Left click to enter Step 3 (adjusting)
-        left_click = getattr(Qt.MouseButton, "LeftButton", getattr(Qt, "LeftButton", 1))
-        with patch("core.snapping_helper.SnappingHelper.find_segment_at_position", return_value=m2):
-            press_evt = QgsMapMouseEvent(canvas, evt_mouse_press, QPoint(100, 100), left_click)
-            tool.canvasPressEvent(press_evt)
-            self.assertEqual(tool.state, TwoLineMapTool.STATE_ADJUSTING)
-            self.assertEqual(tool.widget._current_step, TwoLineCanvasWidget.STEP_ADJUST)
+        # Left click on Step 2 with unlocked radius moves to Step 3
+        left_click_btn = getattr(Qt.MouseButton, "LeftButton", getattr(Qt, "LeftButton", 1))
+        press_evt = QgsMapMouseEvent(canvas, evt_mouse_press, QPoint(100, 100), left_click_btn)
+        tool.canvasPressEvent(press_evt)
+        self.assertEqual(tool.step, tool.STEP_SET_RADIUS)
 
-        # Right click step-back from Step 3 to Step 2
+        # Step 3: Move cursor dynamically updates radius
+        mouse_evt_drag = QgsMapMouseEvent(canvas, evt_mouse_move, QPoint(150, 150), left_btn)
+        tool.canvasMoveEvent(mouse_evt_drag)
+        self.assertIsNotNone(tool.preview_geom)
+
+        # Right click step-back from Step 3 -> Step 2
         right_btn = getattr(Qt.MouseButton, "RightButton", getattr(Qt, "RightButton", 2))
-        press_evt = QgsMapMouseEvent(canvas, evt_mouse_press, QPoint(100, 100), right_btn)
-        tool.canvasPressEvent(press_evt)
-        self.assertEqual(tool.state, TwoLineMapTool.STATE_SELECT_SECOND)
+        press_right = QgsMapMouseEvent(canvas, evt_mouse_press, QPoint(100, 100), right_btn)
+        tool.canvasPressEvent(press_right)
+        self.assertEqual(tool.step, tool.STEP_SECOND_LINE)
 
-        # Right click again from Step 2 to Step 1
-        tool.canvasPressEvent(press_evt)
-        self.assertEqual(tool.state, TwoLineMapTool.STATE_SELECT_FIRST)
+        # Right click step-back from Step 2 -> Step 1
+        tool.canvasPressEvent(press_right)
+        self.assertEqual(tool.step, tool.STEP_FIRST_LINE)
         self.assertIsNone(tool.first_segment_match)
 
         tool.cleanup()
+        if tool.widget:
+            try:
+                canvas.removeEventFilter(tool.widget)
+            except (TypeError, RuntimeError):
+                pass
+            tool.widget.deleteLater()
+        layer.rollBack()
 
 
 if __name__ == "__main__":

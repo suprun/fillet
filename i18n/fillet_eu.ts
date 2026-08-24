@@ -3,16 +3,20 @@
     <context>
         <name>FilletPlugin</name>
         <message>
-            <source>3. Задайте радіус/фаску курсором або зафіксуйте кліком</source>
-            <translation>3. Ezarri erradioa/xaflaketa kurtsorearekin edo egin klik berresteko</translation>
-        </message>
-        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Zehaztu lehen lerroa</translation>
         </message>
         <message>
             <source>2. Вкажіть другу лінію</source>
             <translation>2. Zehaztu bigarren lerroa</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть радіус або клікніть для підтвердження</source>
+            <translation>3. Zehaztu erradioa edo egin klik berresteko</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть фаску або клікніть для підтвердження</source>
+            <translation>3. Zehaztu txanflana edo egin klik berresteko</translation>
         </message>
         <message>
             <source>Скруглення / фаска двох ліній (Merge)</source>

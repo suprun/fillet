@@ -3,16 +3,20 @@
     <context>
         <name>FilletPlugin</name>
         <message>
-            <source>3. Задайте радіус/фаску курсором або зафіксуйте кліком</source>
-            <translation>3. Nustatykite spindulį / nusklembimą žymekliu arba spustelėkite patvirtinti</translation>
-        </message>
-        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Nurodykite pirmąją liniją</translation>
         </message>
         <message>
             <source>2. Вкажіть другу лінію</source>
             <translation>2. Nurodykite antrąją liniją</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть радіус або клікніть для підтвердження</source>
+            <translation>3. Nurodykite spindulį arba spustelėkite patvirtinti</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть фаску або клікніть для підтвердження</source>
+            <translation>3. Nurodykite nusklembtą kampą arba spustelėkite patvirtinti</translation>
         </message>
         <message>
             <source>Скруглення / фаска двох ліній (Merge)</source>

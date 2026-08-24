@@ -3,16 +3,20 @@
     <context>
         <name>FilletPlugin</name>
         <message>
-            <source>3. Задайте радіус/фаску курсором або зафіксуйте кліком</source>
-            <translation>3. กำหนดรัศมี/ลบมุมเหลี่ยมด้วยเคอร์เซอร์หรือคลิกเพื่อยืนยัน</translation>
-        </message>
-        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. ระบุเส้นแรก</translation>
         </message>
         <message>
             <source>2. Вкажіть другу лінію</source>
             <translation>2. ระบุเส้นที่สอง</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть радіус або клікніть для підтвердження</source>
+            <translation>3. ระบุรัศมีหรือคลิกเพื่อยืนยัน</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть фаску або клікніть для підтвердження</source>
+            <translation>3. ระบุการลบมุมหรือคลิกเพื่อยืนยัน</translation>
         </message>
         <message>
             <source>Скруглення / фаска двох ліній (Merge)</source>

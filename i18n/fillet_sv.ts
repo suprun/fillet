@@ -3,16 +3,20 @@
     <context>
         <name>FilletPlugin</name>
         <message>
-            <source>3. Задайте радіус/фаску курсором або зафіксуйте кліком</source>
-            <translation>3. Ställ in radie/fas med markören eller klicka för att bekräfta</translation>
-        </message>
-        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Ange första linjen</translation>
         </message>
         <message>
             <source>2. Вкажіть другу лінію</source>
             <translation>2. Ange andra linjen</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть радіус або клікніть для підтвердження</source>
+            <translation>3. Ange radie eller klicka för att bekräfta</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть фаску або клікніть для підтвердження</source>
+            <translation>3. Ange fasning eller klicka för att bekräfta</translation>
         </message>
         <message>
             <source>Скруглення / фаска двох ліній (Merge)</source>

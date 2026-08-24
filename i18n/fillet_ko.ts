@@ -3,16 +3,20 @@
     <context>
         <name>FilletPlugin</name>
         <message>
-            <source>3. Задайте радіус/фаску курсором або зафіксуйте кліком</source>
-            <translation>3. 커서로 반경/챔퍼를 설정하거나 클릭하여 확인</translation>
-        </message>
-        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. 첫 번째 선 지정</translation>
         </message>
         <message>
             <source>2. Вкажіть другу лінію</source>
             <translation>2. 두 번째 선 지정</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть радіус або клікніть для підтвердження</source>
+            <translation>3. 반경을 지정하거나 클릭하여 확인</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть фаску або клікніть для підтвердження</source>
+            <translation>3. 모따기 지정 또는 클릭하여 확인</translation>
         </message>
         <message>
             <source>Скруглення / фаска двох ліній (Merge)</source>

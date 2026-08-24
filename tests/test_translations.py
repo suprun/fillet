@@ -170,7 +170,7 @@ class TestTranslations(unittest.TestCase):
 
     def test_two_line_hud_autosizing(self):
         from qgis.gui import QgsMapCanvas
-        from gui.two_line_canvas_widget import TwoLineCanvasWidget
+        from gui.canvas_widget import FilletCanvasWidget
 
         canvas = QgsMapCanvas()
         canvas.resize(800, 600)
@@ -181,16 +181,25 @@ class TestTranslations(unittest.TestCase):
         QCoreApplication.installTranslator(translator_en)
 
         try:
-            hud = TwoLineCanvasWidget(canvas)
-            hud.set_step(TwoLineCanvasWidget.STEP_FIRST_LINE)
-            self.assertEqual(hud.lbl_step.text(), "1. Specify first line")
-            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
-            self.assertEqual(hud.x() + hud.width(), canvas.width())
+            widget = FilletCanvasWidget(canvas)
+            widget.set_two_line_mode(True)
+            widget.mode = FilletCanvasWidget.MODE_FILLET
+            widget.set_step(1)
+            self.assertEqual(widget.lbl_step.text(), "1. Specify first line")
+            self.assertGreaterEqual(widget.width(), widget.lbl_step.sizeHint().width())
+            self.assertEqual(widget.x() + widget.width(), canvas.width())
 
-            hud.set_step(TwoLineCanvasWidget.STEP_SECOND_LINE)
-            self.assertEqual(hud.lbl_step.text(), "2. Specify second line")
-            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
-            self.assertEqual(hud.x() + hud.width(), canvas.width())
+            widget.set_step(2)
+            self.assertEqual(widget.lbl_step.text(), "2. Specify second line")
+            self.assertGreaterEqual(widget.width(), widget.lbl_step.sizeHint().width())
+            self.assertEqual(widget.x() + widget.width(), canvas.width())
+
+            widget.set_step(3)
+            self.assertEqual(widget.lbl_step.text(), "3. Specify radius or click to confirm")
+
+            widget.mode = FilletCanvasWidget.MODE_CHAMFER
+            widget.set_step(3)
+            self.assertEqual(widget.lbl_step.text(), "3. Specify chamfer or click to confirm")
         finally:
             QCoreApplication.removeTranslator(translator_en)
             canvas.deleteLater()

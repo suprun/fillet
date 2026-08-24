@@ -15,6 +15,7 @@ from qgis.PyQt.QtGui import (
 )
 from qgis.PyQt.QtWidgets import (
     QButtonGroup,
+    QCheckBox,
     QFrame,
     QGraphicsDropShadowEffect,
     QGridLayout,
@@ -100,6 +101,17 @@ class FilletCanvasWidget(QFrame):
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(6, 6, 6, 6)
         main_layout.setSpacing(4)
+
+        # Step indicator label for multi-step tools (hidden by default)
+        self.lbl_step = QLabel(self)
+        self.lbl_step.setWordWrap(False)
+        step_font = self.lbl_step.font()
+        step_font.setBold(True)
+        step_font.setPointSize(max(8, step_font.pointSize() - 1))
+        self.lbl_step.setFont(step_font)
+        self.lbl_step.setStyleSheet("color: #1e3a8a; background-color: #dbeafe; border-radius: 4px; padding: 4px 8px;")
+        self.lbl_step.hide()
+        main_layout.addWidget(self.lbl_step)
 
         # Mode selection row
         mode_layout = QHBoxLayout()
@@ -247,6 +259,14 @@ class FilletCanvasWidget(QFrame):
         self.stacked_controls.addWidget(self.widget_chamfer)
 
         main_layout.addWidget(self.stacked_controls)
+
+        # Checkbox for two-line merge attribute handling (hidden by default)
+        self.chk_always_first = QCheckBox(self.tr("Завжди використовувати атрибути першого об'єкта"), self)
+        self.chk_always_first.setToolTip(self.tr("При об'єднанні двох ліній автоматично зберігати атрибути першого об'єкта без показу діалогу QGIS"))
+        self.chk_always_first.setChecked(QgsSettings().value("plugins/fillet/merge_always_first_feature", False, type=bool))
+        self.chk_always_first.toggled.connect(self._on_chk_always_first_toggled)
+        self.chk_always_first.hide()
+        main_layout.addWidget(self.chk_always_first)
 
         # Initial visibility & load persisted settings from user profile
         self._update_mode_visibility(self.MODE_FILLET)
@@ -696,3 +716,32 @@ class FilletCanvasWidget(QFrame):
             self.btn_lock_radius.toggle()
         else:
             self.btn_lock_dist1.toggle()
+
+    def _on_chk_always_first_toggled(self, checked: bool):
+        QgsSettings().setValue("plugins/fillet/merge_always_first_feature", checked)
+
+    def set_two_line_mode(self, enabled: bool):
+        """Switches the widget between single-vertex mode and two-line join mode."""
+        self._is_two_line_mode = enabled
+        if enabled:
+            self.chk_always_first.show()
+            self.lbl_step.show()
+            self.set_step(1)
+        else:
+            self.chk_always_first.hide()
+            self.lbl_step.hide()
+        self.reposition_to_default()
+
+    def set_step(self, step: int):
+        """Sets the step hint text for two-line workflow."""
+        self._current_step = step
+        if step == 1:
+            self.lbl_step.setText(self.tr("1. Вкажіть першу лінію"))
+        elif step == 2:
+            self.lbl_step.setText(self.tr("2. Вкажіть другу лінію"))
+        elif step == 3:
+            if self.mode == self.MODE_CHAMFER:
+                self.lbl_step.setText(self.tr("3. Вкажіть фаску або клікніть для підтвердження"))
+            else:
+                self.lbl_step.setText(self.tr("3. Вкажіть радіус або клікніть для підтвердження"))
+        self.reposition_to_default()

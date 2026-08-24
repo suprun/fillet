@@ -3,16 +3,20 @@
     <context>
         <name>FilletPlugin</name>
         <message>
-            <source>3. Задайте радіус/фаску курсором або зафіксуйте кліком</source>
-            <translation>3. Nastavte polomer/skosenie kurzorom alebo kliknite pre potvrdenie</translation>
-        </message>
-        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Určite prvú líniu</translation>
         </message>
         <message>
             <source>2. Вкажіть другу лінію</source>
             <translation>2. Určite druhú líniu</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть радіус або клікніть для підтвердження</source>
+            <translation>3. Určite polomer alebo kliknite pre potvrdenie</translation>
+        </message>
+        <message>
+            <source>3. Вкажіть фаску або клікніть для підтвердження</source>
+            <translation>3. Určite skosenie alebo kliknite pre potvrdenie</translation>
         </message>
         <message>
             <source>Скруглення / фаска двох ліній (Merge)</source>
