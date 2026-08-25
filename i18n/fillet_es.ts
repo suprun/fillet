@@ -3,6 +3,14 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Залишити вузол #{0} (видалити {1})</source>
+            <translation>Mantener nodo #{0} (eliminar {1})</translation>
+        </message>
+        <message>
+            <source>Злити всі {0} дублів у вершині (залишити 1 вузол)</source>
+            <translation>Fusionar todos los {0} duplicados en el vértice (mantener 1 nodo)</translation>
+        </message>
+        <message>
             <source>CAD Очищення дубльованих вузлів</source>
             <translation>CAD Limpiar nodos duplicados</translation>
         </message>

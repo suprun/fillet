@@ -3,6 +3,14 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Залишити вузол #{0} (видалити {1})</source>
+            <translation>Simpan simpul #{0} (hapus {1})</translation>
+        </message>
+        <message>
+            <source>Злити всі {0} дублів у вершині (залишити 1 вузол)</source>
+            <translation>Gabungkan semua {0} duplikat di titik (simpan 1 simpul)</translation>
+        </message>
+        <message>
             <source>CAD Очищення дубльованих вузлів</source>
             <translation>CAD Bersihkan Node Duplikat</translation>
         </message>

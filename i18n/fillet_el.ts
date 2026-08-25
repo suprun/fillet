@@ -3,6 +3,14 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Залишити вузол #{0} (видалити {1})</source>
+            <translation>Διατήρηση κόμβου #{0} (αφαίρεση {1})</translation>
+        </message>
+        <message>
+            <source>Злити всі {0} дублів у вершині (залишити 1 вузол)</source>
+            <translation>Συγχώνευση όλων των {0} διπλότυπων στην κορυφή (διατήρηση 1 κόμβου)</translation>
+        </message>
+        <message>
             <source>CAD Очищення дубльованих вузлів</source>
             <translation>CAD Καθαρισμός διπλότυπων κόμβων</translation>
         </message>

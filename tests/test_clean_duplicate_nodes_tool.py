@@ -172,12 +172,40 @@ class TestCleanDuplicateNodesTool(unittest.TestCase):
         self.assertEqual(len(dups), 0)
         self.assertEqual(len(merged.asPolygon()[0]), 5)
 
+    def test_duplicate_cluster_detection_and_selective_removal(self):
+        # 5 identical duplicate vertices at (10, 10)
+        poly = QgsPolygon()
+        ring = QgsLineString([
+            QgsPoint(0, 0),
+            QgsPoint(10, 10), # idx 1
+            QgsPoint(10, 10), # idx 2
+            QgsPoint(10, 10), # idx 3
+            QgsPoint(10, 10), # idx 4
+            QgsPoint(10, 10), # idx 5
+            QgsPoint(0, 10),  # idx 6
+            QgsPoint(0, 0),   # idx 7
+        ])
+        poly.setExteriorRing(ring)
+        geom = QgsGeometry(poly)
+
+        dups = GeometryEngine.find_duplicate_nodes(geom, tolerance=1e-5)
+        self.assertEqual(len(dups), 1)
+        self.assertEqual(dups[0]["count"], 5)
+        self.assertEqual(dups[0]["vertex_indices"], [1, 2, 3, 4, 5])
+
+        # Remove all duplicates in cluster except index 3
+        res = GeometryEngine.remove_duplicate_indices_except(geom, 0, 0, 3, dups[0]["vertex_indices"])
+        self.assertEqual(len(res.asPolygon()[0]), 4)
+        rem_dups = GeometryEngine.find_duplicate_nodes(res, tolerance=1e-5)
+        self.assertEqual(len(rem_dups), 0)
+
     def test_map_tool_lifecycle(self):
         tool = CleanDuplicateNodesMapTool(self.canvas)
         tool.activate()
         self.assertIsNotNone(tool.hover_rubberband)
         self.assertIsNotNone(tool.dup_markers_rubberband)
         self.assertIsNotNone(tool.inter_markers_rubberband)
+        self.assertIsNotNone(tool.active_node_halo)
         self.assertIsNotNone(tool.active_node_marker)
         self.assertIsNotNone(tool.preview_rubberband)
 

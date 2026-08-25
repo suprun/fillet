@@ -3,6 +3,14 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Залишити вузол #{0} (видалити {1})</source>
+            <translation>เก็บโหนด #{0} (ลบ {1})</translation>
+        </message>
+        <message>
+            <source>Злити всі {0} дублів у вершині (залишити 1 вузол)</source>
+            <translation>ผสานจุดที่ซ้ำกันทั้งหมด {0} จุดที่จุดยอด (เก็บไว้ 1 โหนด)</translation>
+        </message>
+        <message>
             <source>CAD Очищення дубльованих вузлів</source>
             <translation>CAD ล้างโหนดที่ซ้ำกัน</translation>
         </message>

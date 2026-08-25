@@ -78,23 +78,29 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
         self.hover_rubberband.setStrokeColor(QColor(37, 99, 235, 200))
         self.hover_rubberband.setWidth(2)
 
-        # Duplicate node markers (Red)
+        # Duplicate node markers (Standard QGIS Red Cross)
         self.dup_markers_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
         self.dup_markers_rubberband.setColor(QColor(239, 68, 68, 240))
-        self.dup_markers_rubberband.setWidth(8)
+        self.dup_markers_rubberband.setWidth(10)
         self.dup_markers_rubberband.setIcon(getattr(QgsRubberBand, "ICON_X", 1))
 
-        # Self-intersection markers (Amber / Orange)
+        # Self-intersection markers (Standard QGIS Amber / Orange Cross)
         self.inter_markers_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
         self.inter_markers_rubberband.setColor(QColor(245, 158, 11, 240))
-        self.inter_markers_rubberband.setWidth(10)
-        self.inter_markers_rubberband.setIcon(getattr(QgsRubberBand, "ICON_BOX", 2))
+        self.inter_markers_rubberband.setWidth(12)
+        self.inter_markers_rubberband.setIcon(getattr(QgsRubberBand, "ICON_X", 1))
 
-        # Active highlighted error under cursor (Cyan highlight)
+        # Active highlighted error under cursor: Contrast Circle Halo (Variant 1.2)
+        self.active_node_halo = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
+        self.active_node_halo.setColor(QColor(6, 182, 212, 130))
+        self.active_node_halo.setWidth(18)
+        self.active_node_halo.setIcon(getattr(QgsRubberBand, "ICON_CIRCLE", 3))
+
+        # Active highlighted error under cursor: Highlighted White Cross (Variant 1.2)
         self.active_node_marker = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
-        self.active_node_marker.setColor(QColor(6, 182, 212, 255))
-        self.active_node_marker.setWidth(14)
-        self.active_node_marker.setIcon(getattr(QgsRubberBand, "ICON_CIRCLE", 3))
+        self.active_node_marker.setColor(QColor(255, 255, 255, 255))
+        self.active_node_marker.setWidth(10)
+        self.active_node_marker.setIcon(getattr(QgsRubberBand, "ICON_X", 1))
 
         # Preview rubberband for live preview (Green dashed)
         self.preview_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PolygonGeometry)
@@ -127,6 +133,7 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
             self.hover_rubberband,
             self.dup_markers_rubberband,
             self.inter_markers_rubberband,
+            self.active_node_halo,
             self.active_node_marker,
             self.preview_rubberband,
         ):
@@ -137,6 +144,7 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
         self.hover_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
         self.dup_markers_rubberband.reset(QgsWkbTypes.GeometryType.PointGeometry)
         self.inter_markers_rubberband.reset(QgsWkbTypes.GeometryType.PointGeometry)
+        self.active_node_halo.reset(QgsWkbTypes.GeometryType.PointGeometry)
         self.active_node_marker.reset(QgsWkbTypes.GeometryType.PointGeometry)
         self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
 
@@ -269,12 +277,15 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
 
         # Hit test for duplicate nodes or self-intersections (within SNAP_PIXELS)
         self.active_item = self._find_error_at_pos(event.pos(), layer)
+        self.active_node_halo.reset(QgsWkbTypes.GeometryType.PointGeometry)
         self.active_node_marker.reset(QgsWkbTypes.GeometryType.PointGeometry)
 
         if self.active_item:
             _, item_data = self.active_item
             pt = item_data["point"]
             map_pt_err = self.toMapCoordinates(layer, QgsPointXY(pt.x(), pt.y()))
+            self.active_node_halo.addPoint(map_pt_err, True)
+            self.active_node_halo.show()
             self.active_node_marker.addPoint(map_pt_err, True)
             self.active_node_marker.show()
 
@@ -351,24 +362,46 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
             if item_type == "duplicate":
                 part_idx = item_data["part_idx"]
                 ring_idx = item_data["ring_idx"]
-                v1_idx = item_data["v1_idx"]
-                v2_idx = item_data["v2_idx"]
+                cluster_indices = item_data.get("vertex_indices", [item_data.get("v1_idx", 0), item_data.get("v2_idx", 1)])
+                count = len(cluster_indices)
 
-                act_merge = QAction(self.tr("Злити дублі у вершині (залишити 1 вузол)"), menu)
-                act_merge.setData({"type": "merge_point", "point": item_data["point"]})
+                if count == 2:
+                    v1_idx = cluster_indices[0]
+                    v2_idx = cluster_indices[1]
 
-                act_keep_v1 = QAction(self.tr("Залишити вузол #{0} (видалити #{1})").format(v1_idx + 1, v2_idx + 1), menu)
-                act_keep_v1.setData({"type": "remove_idx", "idx": v2_idx})
+                    act_merge = QAction(self.tr("Злити дублі у вершині (залишити 1 вузол)"), menu)
+                    act_merge.setData({"type": "merge_point", "point": item_data["point"]})
 
-                act_keep_v2 = QAction(self.tr("Залишити вузол #{0} (видалити #{1})").format(v2_idx + 1, v1_idx + 1), menu)
-                act_keep_v2.setData({"type": "remove_idx", "idx": v1_idx})
+                    act_keep_v1 = QAction(self.tr("Залишити вузол #{0} (видалити #{1})").format(v1_idx + 1, v2_idx + 1), menu)
+                    act_keep_v1.setData({"type": "remove_idx", "idx": v2_idx})
+
+                    act_keep_v2 = QAction(self.tr("Залишити вузол #{0} (видалити #{1})").format(v2_idx + 1, v1_idx + 1), menu)
+                    act_keep_v2.setData({"type": "remove_idx", "idx": v1_idx})
+
+                    menu.addAction(act_merge)
+                    menu.addAction(act_keep_v1)
+                    menu.addAction(act_keep_v2)
+                else:
+                    act_merge = QAction(self.tr("Злити всі {0} дублів у вершині (залишити 1 вузол)").format(count), menu)
+                    act_merge.setData({"type": "merge_point", "point": item_data["point"]})
+                    menu.addAction(act_merge)
+
+                    for vk in cluster_indices:
+                        others = [idx + 1 for idx in cluster_indices if idx != vk]
+                        others_str = ", ".join(f"#{idx}" for idx in others)
+                        act_keep = QAction(self.tr("Залишити вузол #{0} (видалити {1})").format(vk + 1, others_str), menu)
+                        act_keep.setData({
+                            "type": "keep_single_idx",
+                            "keep_idx": vk,
+                            "cluster_indices": cluster_indices,
+                            "part_idx": part_idx,
+                            "ring_idx": ring_idx,
+                        })
+                        menu.addAction(act_keep)
 
                 act_clean_all = QAction(self.tr("Очистити всі дублі та помилки в об'єкті ({0})").format(total_errors), menu)
                 act_clean_all.setData({"type": "clean_all"})
 
-                menu.addAction(act_merge)
-                menu.addAction(act_keep_v1)
-                menu.addAction(act_keep_v2)
                 menu.addSeparator()
                 menu.addAction(act_clean_all)
 
@@ -392,6 +425,15 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
                         idx_to_remove = data.get("idx")
                         cand_geom = GeometryEngine.remove_duplicate_node_at_index(
                             feat.geometry(), part_idx, ring_idx, idx_to_remove
+                        )
+                        cand_geom = GeometryEngine.coerce_geometry_to_layer(cand_geom, layer)
+                        self.preview_rubberband.setToGeometry(cand_geom, layer)
+                        self.preview_rubberband.show()
+                    elif action_type == "keep_single_idx":
+                        keep_idx = data.get("keep_idx")
+                        c_indices = data.get("cluster_indices", [])
+                        cand_geom = GeometryEngine.remove_duplicate_indices_except(
+                            feat.geometry(), part_idx, ring_idx, keep_idx, c_indices
                         )
                         cand_geom = GeometryEngine.coerce_geometry_to_layer(cand_geom, layer)
                         self.preview_rubberband.setToGeometry(cand_geom, layer)
@@ -522,6 +564,18 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
                         layer.endEditCommand()
                         layer.triggerRepaint()
                         self.canvas.refresh()
+                    elif action_type == "keep_single_idx":
+                        keep_idx = data.get("keep_idx")
+                        c_indices = data.get("cluster_indices", [])
+                        new_geom = GeometryEngine.remove_duplicate_indices_except(
+                            feat.geometry(), part_idx, ring_idx, keep_idx, c_indices
+                        )
+                        new_geom = GeometryEngine.coerce_geometry_to_layer(new_geom, layer)
+                        layer.beginEditCommand(self.tr("Очищення дубльованих вузлів"))
+                        layer.changeGeometry(feat.id(), new_geom)
+                        layer.endEditCommand()
+                        layer.triggerRepaint()
+                        self.canvas.refresh()
                     elif action_type == "untangle":
                         new_geom = GeometryEngine.untangle_self_intersection(
                             feat.geometry(), part_idx, ring_idx, seg1_idx, seg2_idx, inter_pt, keep_loop=0
@@ -560,8 +614,9 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
                     else:
                         self._clear_visuals()
 
-            # Always clear active item and active marker after menu closes
+            # Always clear active item and active markers after menu closes
             self.active_item = None
+            self.active_node_halo.reset(QgsWkbTypes.GeometryType.PointGeometry)
             self.active_node_marker.reset(QgsWkbTypes.GeometryType.PointGeometry)
             self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
 

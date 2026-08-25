@@ -2179,8 +2179,8 @@ class GeometryEngine:
     @classmethod
     def find_duplicate_nodes(cls, geom: QgsGeometry, tolerance: float = 1e-6) -> List[Dict]:
         """
-        Finds all consecutive or adjacent duplicate nodes within tolerance in the geometry.
-        Returns a list of dicts with part_idx, ring_idx, v1_idx, v2_idx, point, next_point, is_closed.
+        Finds all clusters of duplicate (consecutive) nodes within tolerance in the geometry.
+        Returns a list of dicts with part_idx, ring_idx, v1_idx, v2_idx, vertex_indices, count, point, next_point, is_closed.
         """
         dups = []
         curves = cls.get_all_curves_from_geometry(geom)
@@ -2189,18 +2189,33 @@ class GeometryEngine:
             if num_pts < 2:
                 continue
             is_closed = curve.isClosed() or (num_pts > 2 and curve.pointN(0) == curve.pointN(num_pts - 1))
-            for i in range(num_pts - 1):
+            check_limit = (num_pts - 1) if is_closed else num_pts
+            visited = set()
+            for i in range(check_limit):
+                if i in visited:
+                    continue
                 p1 = curve.pointN(i)
-                p2 = curve.pointN(i + 1)
-                dist = math.hypot(p1.x() - p2.x(), p1.y() - p2.y())
-                if dist <= tolerance:
+                matching_indices = [i]
+                j = i + 1
+                while j < check_limit:
+                    pj = curve.pointN(j)
+                    if math.hypot(p1.x() - pj.x(), p1.y() - pj.y()) <= tolerance:
+                        matching_indices.append(j)
+                        visited.add(j)
+                        j += 1
+                    else:
+                        break
+
+                if len(matching_indices) > 1:
                     dups.append({
                         "part_idx": part_idx,
                         "ring_idx": ring_idx,
-                        "v1_idx": i,
-                        "v2_idx": i + 1,
+                        "v1_idx": matching_indices[0],
+                        "v2_idx": matching_indices[1],
+                        "vertex_indices": matching_indices,
+                        "count": len(matching_indices),
                         "point": p1,
-                        "next_point": p2,
+                        "next_point": curve.pointN(matching_indices[1]),
                         "is_closed": is_closed,
                         "total_points": num_pts,
                     })
@@ -2288,6 +2303,91 @@ class GeometryEngine:
                         if intr is not None:
                             if p == part_idx and ring_idx == r + 1:
                                 intr = _remove_from_curve(intr, vertex_idx, closed=True)
+                            new_poly.addInteriorRing(intr.clone())
+                    multi.addGeometry(new_poly)
+                return QgsGeometry(multi)
+
+        return geom
+
+    @classmethod
+    def remove_duplicate_indices_except(
+        cls,
+        geom: QgsGeometry,
+        part_idx: int,
+        ring_idx: int,
+        keep_vertex_idx: int,
+        cluster_indices: List[int],
+    ) -> QgsGeometry:
+        """
+        Removes all duplicate indices in cluster_indices except keep_vertex_idx.
+        """
+        if not geom or geom.isEmpty() or geom.isNull():
+            return geom
+
+        indices_to_remove = set(idx for idx in cluster_indices if idx != keep_vertex_idx)
+
+        def _clean_curve(curve: QgsLineString, closed: bool) -> QgsLineString:
+            n = curve.numPoints()
+            pts = [curve.pointN(i) for i in range(n) if i not in indices_to_remove]
+            if closed and len(pts) >= 3 and pts[0] != pts[-1]:
+                pts.append(pts[0])
+            return QgsLineString(pts)
+
+        geom_type = geom.type()
+        is_multi = geom.isMultipart()
+
+        if geom_type == QgsWkbTypes.GeometryType.LineGeometry:
+            if not is_multi:
+                curve = geom.constGet()
+                if not curve:
+                    return geom
+                is_closed = curve.isClosed() or (curve.numPoints() > 2 and curve.pointN(0) == curve.pointN(curve.numPoints() - 1))
+                return QgsGeometry(_clean_curve(curve, is_closed))
+            else:
+                multi = QgsMultiLineString()
+                orig_multi = geom.constGet()
+                for p in range(orig_multi.numGeometries()):
+                    curve = orig_multi.geometryN(p)
+                    if p == part_idx:
+                        is_closed = curve.isClosed() or (curve.numPoints() > 2 and curve.pointN(0) == curve.pointN(curve.numPoints() - 1))
+                        curve = _clean_curve(curve, is_closed)
+                    multi.addGeometry(curve.clone())
+                return QgsGeometry(multi)
+
+        elif geom_type == QgsWkbTypes.GeometryType.PolygonGeometry:
+            if not is_multi:
+                poly = geom.constGet()
+                if not poly:
+                    return geom
+                new_poly = QgsPolygon()
+                ext = poly.exteriorRing()
+                if ext is not None:
+                    if ring_idx == 0:
+                        ext = _clean_curve(ext, True)
+                    new_poly.setExteriorRing(ext.clone())
+                for r in range(poly.numInteriorRings()):
+                    intr = poly.interiorRing(r)
+                    if intr is not None:
+                        if ring_idx == r + 1:
+                            intr = _clean_curve(intr, True)
+                        new_poly.addInteriorRing(intr.clone())
+                return QgsGeometry(new_poly)
+            else:
+                multi = QgsMultiPolygon()
+                orig_multi = geom.constGet()
+                for p in range(orig_multi.numGeometries()):
+                    poly = orig_multi.geometryN(p)
+                    new_poly = QgsPolygon()
+                    ext = poly.exteriorRing()
+                    if ext is not None:
+                        if p == part_idx and ring_idx == 0:
+                            ext = _clean_curve(ext, True)
+                        new_poly.setExteriorRing(ext.clone())
+                    for r in range(poly.numInteriorRings()):
+                        intr = poly.interiorRing(r)
+                        if intr is not None:
+                            if p == part_idx and ring_idx == r + 1:
+                                intr = _clean_curve(intr, True)
                             new_poly.addInteriorRing(intr.clone())
                     multi.addGeometry(new_poly)
                 return QgsGeometry(multi)

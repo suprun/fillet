@@ -3,6 +3,14 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Залишити вузол #{0} (видалити {1})</source>
+            <translation>नोड #{0} रखें ({1} हटाएं)</translation>
+        </message>
+        <message>
+            <source>Злити всі {0} дублів у вершині (залишити 1 вузол)</source>
+            <translation>शीर्ष पर सभी {0} डुप्लिकेट को मर्ज करें (1 नोड रखें)</translation>
+        </message>
+        <message>
             <source>CAD Очищення дубльованих вузлів</source>
             <translation>CAD डुप्लिकेट नोड्स साफ़ करें</translation>
         </message>

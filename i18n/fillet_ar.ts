@@ -3,6 +3,14 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Залишити вузол #{0} (видалити {1})</source>
+            <translation>الاحتفاظ بالعقدة #{0} (إزالة {1})</translation>
+        </message>
+        <message>
+            <source>Злити всі {0} дублів у вершині (залишити 1 вузол)</source>
+            <translation>دمج كافة التكرارات {0} عند الرأس (الاحتفاظ بعقدة واحدة)</translation>
+        </message>
+        <message>
             <source>CAD Очищення дубльованих вузлів</source>
             <translation>CAD تنظيف العقد المكررة</translation>
         </message>
