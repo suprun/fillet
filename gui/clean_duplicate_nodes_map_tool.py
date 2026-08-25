@@ -78,20 +78,20 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
         self.hover_rubberband.setStrokeColor(QColor(37, 99, 235, 200))
         self.hover_rubberband.setWidth(2)
 
-        # Duplicate node markers (Standard QGIS Red Cross at duplicate vertices)
+        # Duplicate node markers (Variant B: High-contrast Neon Magenta Cross at duplicate vertices)
         self.dup_markers_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
-        self.dup_markers_rubberband.setColor(QColor(239, 68, 68, 255))
+        self.dup_markers_rubberband.setColor(QColor(255, 0, 128, 255))
         self.dup_markers_rubberband.setIcon(getattr(QgsRubberBand, "ICON_X", 1))
         if hasattr(self.dup_markers_rubberband, "setIconSize"):
-            self.dup_markers_rubberband.setIconSize(12)
-        self.dup_markers_rubberband.setWidth(2)
+            self.dup_markers_rubberband.setIconSize(16)
+        self.dup_markers_rubberband.setWidth(3)
 
-        # Self-intersection markers (Standard QGIS Bright Green Cross at intersections)
+        # Self-intersection markers (Ultra-Bright Neon Green Cross at intersections)
         self.inter_markers_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
-        self.inter_markers_rubberband.setColor(QColor(0, 230, 64, 255))
+        self.inter_markers_rubberband.setColor(QColor(0, 255, 50, 255))
         self.inter_markers_rubberband.setIcon(getattr(QgsRubberBand, "ICON_X", 1))
         if hasattr(self.inter_markers_rubberband, "setIconSize"):
-            self.inter_markers_rubberband.setIconSize(14)
+            self.inter_markers_rubberband.setIconSize(16)
         self.inter_markers_rubberband.setWidth(3)
 
         # Active hover marker under cursor: Circle outline with NO fill (hollow target circle)
@@ -100,7 +100,7 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
         self.active_node_halo.setStrokeColor(QColor(6, 182, 212, 255))  # Bright cyan outline
         self.active_node_halo.setIcon(getattr(QgsRubberBand, "ICON_CIRCLE", 3))
         if hasattr(self.active_node_halo, "setIconSize"):
-            self.active_node_halo.setIconSize(22)
+            self.active_node_halo.setIconSize(24)
         self.active_node_halo.setWidth(2)
 
         # Preview rubberband for live preview (Green dashed)
