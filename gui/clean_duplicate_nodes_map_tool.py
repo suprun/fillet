@@ -202,15 +202,19 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
         self.duplicate_nodes = GeometryEngine.find_duplicate_nodes(geom, tolerance=self.GEOM_TOLERANCE)
         self.self_intersections = GeometryEngine.find_self_intersections(geom)
 
-        # Update duplicate markers (Red)
+        inter_points = [inter["point"] for inter in self.self_intersections]
+
+        # Update duplicate markers (Magenta) - skip points coincident with self-intersections
         self.dup_markers_rubberband.reset(QgsWkbTypes.GeometryType.PointGeometry)
         for dup in self.duplicate_nodes:
             pt = dup["point"]
+            if any(math.hypot(pt.x() - ip.x(), pt.y() - ip.y()) <= self.GEOM_TOLERANCE for ip in inter_points):
+                continue
             map_pt = self.toMapCoordinates(layer, QgsPointXY(pt.x(), pt.y()))
             self.dup_markers_rubberband.addPoint(map_pt, True)
         self.dup_markers_rubberband.show()
 
-        # Update self-intersection markers (Amber)
+        # Update self-intersection markers (Green)
         self.inter_markers_rubberband.reset(QgsWkbTypes.GeometryType.PointGeometry)
         for inter in self.self_intersections:
             pt = inter["point"]
@@ -241,17 +245,7 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
         if not layer:
             return None
 
-        # Check duplicate nodes first
-        for dup in self.duplicate_nodes:
-            pt = dup["point"]
-            map_pt_dup = self.toMapCoordinates(layer, QgsPointXY(pt.x(), pt.y()))
-            screen_pt = self.toCanvasCoordinates(map_pt_dup)
-            dx = screen_pt.x() - screen_pos.x()
-            dy = screen_pt.y() - screen_pos.y()
-            if math.hypot(dx, dy) <= self.SNAP_PIXELS:
-                return ("duplicate", dup)
-
-        # Check self-intersections
+        # Check self-intersections first
         for inter in self.self_intersections:
             pt = inter["point"]
             map_pt_inter = self.toMapCoordinates(layer, QgsPointXY(pt.x(), pt.y()))
@@ -260,6 +254,16 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
             dy = screen_pt.y() - screen_pos.y()
             if math.hypot(dx, dy) <= self.SNAP_PIXELS:
                 return ("intersection", inter)
+
+        # Check duplicate nodes
+        for dup in self.duplicate_nodes:
+            pt = dup["point"]
+            map_pt_dup = self.toMapCoordinates(layer, QgsPointXY(pt.x(), pt.y()))
+            screen_pt = self.toCanvasCoordinates(map_pt_dup)
+            dx = screen_pt.x() - screen_pos.x()
+            dy = screen_pt.y() - screen_pos.y()
+            if math.hypot(dx, dy) <= self.SNAP_PIXELS:
+                return ("duplicate", dup)
 
         return None
 
