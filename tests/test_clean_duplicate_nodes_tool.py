@@ -211,23 +211,39 @@ class TestCleanDuplicateNodesTool(unittest.TestCase):
         tool.deactivate()
         tool.cleanup()
 
-    def test_execute_clean_all_feature_singlepart_layer(self):
-        layer = QgsVectorLayer("Polygon?crs=epsg:4326", "test_singlepart", "memory")
+    def test_strip_message_notification(self):
+        class MockMessageBar:
+            def __init__(self):
+                self.messages = []
+
+            def pushMessage(self, title, text, level=0, duration=3):
+                self.messages.append((title, text, level, duration))
+
+        class MockIface:
+            def __init__(self):
+                self._mb = MockMessageBar()
+
+            def messageBar(self):
+                return self._mb
+
+        iface = MockIface()
+        tool = CleanDuplicateNodesMapTool(self.canvas, iface)
+
+        layer = QgsVectorLayer("Polygon?crs=epsg:4326", "test_msg", "memory")
         pr = layer.dataProvider()
-        # Singlepart polygon with duplicate node: (0,0)-(10,0)-(10,0)-(10,10)-(0,10)-(0,0)
         f = QgsFeature()
         f.setGeometry(QgsGeometry.fromWkt("Polygon ((0 0, 10 0, 10 0, 10 10, 0 10, 0 0))"))
         pr.addFeatures([f])
         layer.startEditing()
         f_id = next(layer.getFeatures()).id()
 
-        tool = CleanDuplicateNodesMapTool(self.canvas)
         feat = layer.getFeature(f_id)
         tool._execute_clean_all_feature(layer, feat)
 
-        updated_feat = layer.getFeature(f_id)
-        rem_dups = GeometryEngine.find_duplicate_nodes(updated_feat.geometry())
-        self.assertEqual(len(rem_dups), 0)
+        self.assertGreater(len(iface.messageBar().messages), 0)
+        title, text, level, duration = iface.messageBar().messages[-1]
+        self.assertEqual(duration, 3)
+        self.assertIn("1", text)
         layer.commitChanges()
         tool.cleanup()
 

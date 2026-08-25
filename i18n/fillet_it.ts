@@ -3,6 +3,18 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Очищення топології</source>
+            <translation>Pulizia topologia</translation>
+        </message>
+        <message>
+            <source>Об'єкт успішно очищено та розділено на {0} окремих об'єктів.</source>
+            <translation>Elemento pulito con successo e diviso in {0} elementi separati.</translation>
+        </message>
+        <message>
+            <source>Успішно виправлено геометрію об'єкта (усунуто {0} помилок).</source>
+            <translation>Geometria dell'elemento corretta con successo ({0} errori risolti).</translation>
+        </message>
+        <message>
             <source>Залишити вузол #{0} (видалити {1})</source>
             <translation>Mantieni nodo #{0} (rimuovi {1})</translation>
         </message>

@@ -3,6 +3,18 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Очищення топології</source>
+            <translation>टोपोलॉजी सफाई</translation>
+        </message>
+        <message>
+            <source>Об'єкт успішно очищено та розділено на {0} окремих об'єктів.</source>
+            <translation>सुविधा को सफलतापूर्वक साफ़ किया गया और {0} अलग-अलग सुविधाओं में विभाजित किया गया।</translation>
+        </message>
+        <message>
+            <source>Успішно виправлено геометрію об'єкта (усунуто {0} помилок).</source>
+            <translation>सुविधा ज्यामिति सफलतापूर्वक सुधारी गई ({0} त्रुटियां हल की गईं)।</translation>
+        </message>
+        <message>
             <source>Залишити вузол #{0} (видалити {1})</source>
             <translation>नोड #{0} रखें ({1} हटाएं)</translation>
         </message>

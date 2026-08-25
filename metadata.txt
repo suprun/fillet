@@ -4,7 +4,7 @@ qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
 description=Interactive Fillet, Chamfer, Two-Line Merge, Corner Restoration, CAD Rotation, Mirror, Scale & Edge Offset suite for QGIS.
 about=Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), Interactive CAD Rotation, CAD Mirror Tool, CAD 3-Point Scale with Rotation Tool, and CAD Edge Offset (Parallel Shift) Tool for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.
-version=1.0.0.58
+version=1.0.0.59
 author=suprun
 email=suprun.serhiy+qgis@gmail.com
 homepage=https://github.com/suprun/fillet
@@ -14,7 +14,10 @@ tags=cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation,
 icon=icon.png
 experimental=False
 deprecated=False
-changelog=1.0.0.58:
+changelog=1.0.0.59:
+    - Fixed Live Preview for 'Clean all duplicates and errors' to show full multi-part geometries without truncation.
+    - Added QGIS messageBar auto-dismissing strip notification upon feature geometry cleanup (Variant A).
+    1.0.0.58:
     - Unified 'Clean all duplicates and errors in feature' menu action with body-click flow, including SinglePart layer MultiPart resolution dialog.
     1.0.0.57:
     - Applied high-contrast neon magenta duplicate node markers (16px, 3px stroke) and ultra-bright neon green self-intersection markers (16px, 3px stroke).

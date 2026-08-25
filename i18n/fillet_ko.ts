@@ -3,6 +3,18 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Очищення топології</source>
+            <translation>토폴로지 정리</translation>
+        </message>
+        <message>
+            <source>Об'єкт успішно очищено та розділено на {0} окремих об'єктів.</source>
+            <translation>피처를 성공적으로 정리하고 {0}개의 개별 피처로 분할했습니다.</translation>
+        </message>
+        <message>
+            <source>Успішно виправлено геометрію об'єкта (усунуто {0} помилок).</source>
+            <translation>피처 지오메트리가 성공적으로 수정되었습니다({0}개 오류 해결).</translation>
+        </message>
+        <message>
             <source>Залишити вузол #{0} (видалити {1})</source>
             <translation>#{0} 노드 유지 ({1} 제거)</translation>
         </message>

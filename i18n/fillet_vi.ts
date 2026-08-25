@@ -3,6 +3,18 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Очищення топології</source>
+            <translation>Dọn dẹp cấu trúc tô-pô</translation>
+        </message>
+        <message>
+            <source>Об'єкт успішно очищено та розділено на {0} окремих об'єктів.</source>
+            <translation>Đối tượng đã được dọn dẹp và chia thành {0} đối tượng riêng biệt.</translation>
+        </message>
+        <message>
+            <source>Успішно виправлено геометрію об'єкта (усунуто {0} помилок).</source>
+            <translation>Hình học đối tượng đã được sửa thành công (đã giải quyết {0} lỗi).</translation>
+        </message>
+        <message>
             <source>Залишити вузол #{0} (видалити {1})</source>
             <translation>Giữ nút #{0} (xóa {1})</translation>
         </message>

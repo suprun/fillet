@@ -3,6 +3,18 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Очищення топології</source>
+            <translation>تنظيف الطوبولوجيا</translation>
+        </message>
+        <message>
+            <source>Об'єкт успішно очищено та розділено на {0} окремих об'єктів.</source>
+            <translation>تم تنظيف المعلم بنجاح وتقسيمه إلى {0} معالم منفصلة.</translation>
+        </message>
+        <message>
+            <source>Успішно виправлено геометрію об'єкта (усунуто {0} помилок).</source>
+            <translation>تم تصحيح هندسة المعلم بنجاح (تم حل {0} أخطاء).</translation>
+        </message>
+        <message>
             <source>Залишити вузол #{0} (видалити {1})</source>
             <translation>الاحتفاظ بالعقدة #{0} (إزالة {1})</translation>
         </message>

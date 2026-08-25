@@ -271,7 +271,7 @@ class FilletPlugin:
         self.edge_offset_action.triggered.connect(self.toggle_edge_offset_tool)
 
         # 7.7. Create interactive Quick Clean Duplicate Nodes Map Tool (available in QGIS 3.x and QGIS 4.x)
-        self.clean_duplicates_map_tool = CleanDuplicateNodesMapTool(self.canvas)
+        self.clean_duplicates_map_tool = CleanDuplicateNodesMapTool(self.canvas, self.iface)
 
         clean_icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionCleanDuplicateNodes.svg")
         self.clean_duplicates_action = QAction(

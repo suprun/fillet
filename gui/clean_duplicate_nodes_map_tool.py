@@ -13,7 +13,7 @@ Interaction Model:
 """
 
 import math
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from qgis.core import (
     Qgis,
@@ -61,9 +61,10 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
     def tr(self, message: str) -> str:
         return QCoreApplication.translate("FilletPlugin", message)
 
-    def __init__(self, canvas: QgsMapCanvas):
+    def __init__(self, canvas: QgsMapCanvas, iface: Optional[Any] = None):
         super().__init__(canvas)
         self.canvas = canvas
+        self.iface = iface
 
         # State & cached data
         self.hovered_feature: Optional[QgsFeature] = None
@@ -113,6 +114,20 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
 
         if _CrossCursor is not None:
             self.setCursor(QCursor(_CrossCursor))
+
+    def _show_message(self, title: str, text: str, level=None, duration: int = 3):
+        """Displays temporary notification strip message in QGIS messageBar with auto-dismiss duration timer."""
+        if level is None:
+            level = getattr(Qgis.MessageLevel, "Success", getattr(Qgis, "Success", 0))
+        if self.iface and hasattr(self.iface, "messageBar") and self.iface.messageBar():
+            self.iface.messageBar().pushMessage(title, text, level, duration)
+        elif self.canvas:
+            parent = self.canvas.parent()
+            while parent:
+                if hasattr(parent, "messageBar") and parent.messageBar():
+                    parent.messageBar().pushMessage(title, text, level, duration)
+                    break
+                parent = parent.parent()
 
     def activate(self):
         super().activate()
@@ -360,12 +375,22 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
                 self._apply_split_features(
                     layer, feat, parts, self.tr("Очищення та розбиття на окремі об'єкти")
                 )
+                self._show_message(
+                    self.tr("Очищення топології"),
+                    self.tr("Об'єкт успішно очищено та розділено на {0} окремих об'єктів.").format(len(parts)),
+                    duration=3,
+                )
             elif clicked_button == btn_keep_multi:
                 layer.beginEditCommand(self.tr("Очищення геометрії (MultiPart)"))
                 layer.changeGeometry(feat.id(), cleaned_geom)
                 layer.endEditCommand()
                 layer.triggerRepaint()
                 self.canvas.refresh()
+                self._show_message(
+                    self.tr("Очищення топології"),
+                    self.tr("Успішно виправлено геометрію об'єкта (усунуто {0} помилок).").format(count),
+                    duration=3,
+                )
             else:
                 # Cancelled
                 return
@@ -376,6 +401,11 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
             layer.endEditCommand()
             layer.triggerRepaint()
             self.canvas.refresh()
+            self._show_message(
+                self.tr("Очищення топології"),
+                self.tr("Успішно виправлено геометрію об'єкта (усунуто {0} помилок).").format(count),
+                duration=3,
+            )
 
         fresh_feat = layer.getFeature(feat.id())
         if fresh_feat and fresh_feat.isValid():
@@ -512,9 +542,9 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
                         self.preview_rubberband.show()
                     elif action_type == "clean_all":
                         cand_geom, _ = GeometryEngine.clean_all_topology_errors(feat.geometry(), tolerance=self.GEOM_TOLERANCE)
-                        cand_geom = GeometryEngine.coerce_geometry_to_layer(cand_geom, layer)
-                        self.preview_rubberband.setToGeometry(cand_geom, layer)
-                        self.preview_rubberband.show()
+                        if cand_geom and not cand_geom.isEmpty():
+                            self.preview_rubberband.setToGeometry(cand_geom, layer)
+                            self.preview_rubberband.show()
 
                 menu.hovered.connect(_on_hover_dup)
 
@@ -597,9 +627,9 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
                         self.preview_rubberband.show()
                     elif action_type == "clean_all":
                         cand_geom, _ = GeometryEngine.clean_all_topology_errors(feat.geometry(), tolerance=self.GEOM_TOLERANCE)
-                        cand_geom = GeometryEngine.coerce_geometry_to_layer(cand_geom, layer)
-                        self.preview_rubberband.setToGeometry(cand_geom, layer)
-                        self.preview_rubberband.show()
+                        if cand_geom and not cand_geom.isEmpty():
+                            self.preview_rubberband.setToGeometry(cand_geom, layer)
+                            self.preview_rubberband.show()
 
                 menu.hovered.connect(_on_hover_inter)
 

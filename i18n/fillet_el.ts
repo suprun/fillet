@@ -3,6 +3,18 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Очищення топології</source>
+            <translation>Καθαρισμός τοπολογίας</translation>
+        </message>
+        <message>
+            <source>Об'єкт успішно очищено та розділено на {0} окремих об'єктів.</source>
+            <translation>Το στοιχείο καθαρίστηκε επιτυχώς και χωρίστηκε σε {0} ξεχωριστά στοιχεία.</translation>
+        </message>
+        <message>
+            <source>Успішно виправлено геометрію об'єкта (усунуто {0} помилок).</source>
+            <translation>Η γεωμετρία του στοιχείου διορθώθηκε επιτυχώς (επιλύθηκαν {0} σφάλματα).</translation>
+        </message>
+        <message>
             <source>Залишити вузол #{0} (видалити {1})</source>
             <translation>Διατήρηση κόμβου #{0} (αφαίρεση {1})</translation>
         </message>
