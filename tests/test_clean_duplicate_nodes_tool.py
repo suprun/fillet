@@ -211,6 +211,26 @@ class TestCleanDuplicateNodesTool(unittest.TestCase):
         tool.deactivate()
         tool.cleanup()
 
+    def test_execute_clean_all_feature_singlepart_layer(self):
+        layer = QgsVectorLayer("Polygon?crs=epsg:4326", "test_singlepart", "memory")
+        pr = layer.dataProvider()
+        # Singlepart polygon with duplicate node: (0,0)-(10,0)-(10,0)-(10,10)-(0,10)-(0,0)
+        f = QgsFeature()
+        f.setGeometry(QgsGeometry.fromWkt("Polygon ((0 0, 10 0, 10 0, 10 10, 0 10, 0 0))"))
+        pr.addFeatures([f])
+        layer.startEditing()
+        f_id = next(layer.getFeatures()).id()
+
+        tool = CleanDuplicateNodesMapTool(self.canvas)
+        feat = layer.getFeature(f_id)
+        tool._execute_clean_all_feature(layer, feat)
+
+        updated_feat = layer.getFeature(f_id)
+        rem_dups = GeometryEngine.find_duplicate_nodes(updated_feat.geometry())
+        self.assertEqual(len(rem_dups), 0)
+        layer.commitChanges()
+        tool.cleanup()
+
 
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(TestCleanDuplicateNodesTool)

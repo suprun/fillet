@@ -309,6 +309,82 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
         layer.triggerRepaint()
         self.canvas.refresh()
 
+    def _execute_clean_all_feature(self, layer: QgsVectorLayer, feat: QgsFeature):
+        """
+        Executes full clean of all duplicate nodes and topological errors for the given feature.
+        If the layer is SinglePart and the result yields multiple parts, prompts the user
+        to split into singlepart features, keep as multipart, or cancel.
+        """
+        if not layer or not feat or not feat.isValid():
+            return
+
+        is_multi_layer = QgsWkbTypes.isMultiType(layer.wkbType())
+        cleaned_geom, count = GeometryEngine.clean_all_topology_errors(feat.geometry(), tolerance=self.GEOM_TOLERANCE)
+        if count == 0:
+            return
+
+        parts = GeometryEngine.extract_singlepart_geometries(cleaned_geom, layer.geometryType())
+
+        # If layer is SinglePart and geometry split into multiple parts -> show system prompt
+        if not is_multi_layer and len(parts) > 1:
+            _AcceptRole = getattr(QMessageBox.ButtonRole, "AcceptRole", getattr(QMessageBox, "AcceptRole", 0))
+            _ActionRole = getattr(QMessageBox.ButtonRole, "ActionRole", getattr(QMessageBox, "ActionRole", 3))
+
+            msg = QMessageBox(self.canvas.window() if self.canvas else None)
+            msg.setIcon(getattr(QMessageBox.Icon, "Question", getattr(QMessageBox, "Question", 4)))
+            msg.setWindowTitle(self.tr("Тип геометрії шару"))
+            msg.setText(
+                self.tr(
+                    "Поточний шар не підтримує багаточастинні геометрії (MultiPart).\n\n"
+                    "Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:"
+                ).format(len(parts))
+            )
+
+            btn_split = msg.addButton(
+                self.tr("Розбити на окремі SinglePart об'єкти"),
+                _AcceptRole,
+            )
+            btn_keep_multi = msg.addButton(
+                self.tr("Залишити як MultiPart"),
+                _ActionRole,
+            )
+            btn_cancel = msg.addButton(
+                getattr(QMessageBox.StandardButton, "Cancel", getattr(QMessageBox, "Cancel", 0x00400000))
+            )
+            msg.setDefaultButton(btn_split)
+
+            msg.exec_()
+            clicked_button = msg.clickedButton()
+
+            if clicked_button == btn_split:
+                self._apply_split_features(
+                    layer, feat, parts, self.tr("Очищення та розбиття на окремі об'єкти")
+                )
+            elif clicked_button == btn_keep_multi:
+                layer.beginEditCommand(self.tr("Очищення геометрії (MultiPart)"))
+                layer.changeGeometry(feat.id(), cleaned_geom)
+                layer.endEditCommand()
+                layer.triggerRepaint()
+                self.canvas.refresh()
+            else:
+                # Cancelled
+                return
+        else:
+            new_geom = GeometryEngine.coerce_geometry_to_layer(cleaned_geom, layer)
+            layer.beginEditCommand(self.tr("Очищення топологічних помилок"))
+            layer.changeGeometry(feat.id(), new_geom)
+            layer.endEditCommand()
+            layer.triggerRepaint()
+            self.canvas.refresh()
+
+        fresh_feat = layer.getFeature(feat.id())
+        if fresh_feat and fresh_feat.isValid():
+            self.hovered_feature = fresh_feat
+            self.hover_rubberband.setToGeometry(fresh_feat.geometry(), layer)
+            self._update_errors_for_feature(fresh_feat, layer)
+        else:
+            self._clear_visuals()
+
     def canvasPressEvent(self, event: QgsMapMouseEvent):
         if event.button() == _RightButton:
             self._clear_visuals()
@@ -593,107 +669,28 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
                         parts = data.get("parts", [])
                         self._apply_split_features(layer, feat, parts, self.tr("Розділення на окремі об'єкти"))
                     elif action_type == "clean_all":
-                        new_geom, _ = GeometryEngine.clean_all_topology_errors(feat.geometry(), tolerance=self.GEOM_TOLERANCE)
-                        new_geom = GeometryEngine.coerce_geometry_to_layer(new_geom, layer)
-                        layer.beginEditCommand(self.tr("Очищення топологічних помилок"))
-                        layer.changeGeometry(feat.id(), new_geom)
-                        layer.endEditCommand()
-                        layer.triggerRepaint()
-                        self.canvas.refresh()
+                        self._execute_clean_all_feature(layer, feat)
 
-                    # Re-scan errors
-                    fresh_feat = layer.getFeature(feat.id())
-                    if fresh_feat and fresh_feat.isValid():
-                        self.hovered_feature = fresh_feat
-                        self.hover_rubberband.setToGeometry(fresh_feat.geometry(), layer)
-                        self._update_errors_for_feature(fresh_feat, layer)
-                    else:
-                        self._clear_visuals()
+                    if action_type != "clean_all":
+                        # Re-scan errors for single node/intersection actions
+                        fresh_feat = layer.getFeature(feat.id())
+                        if fresh_feat and fresh_feat.isValid():
+                            self.hovered_feature = fresh_feat
+                            self.hover_rubberband.setToGeometry(fresh_feat.geometry(), layer)
+                            self._update_errors_for_feature(fresh_feat, layer)
+                        else:
+                            self._clear_visuals()
 
             # Always clear active item and active markers after menu closes
             self.active_item = None
             self.active_node_halo.reset(QgsWkbTypes.GeometryType.PointGeometry)
             self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
 
-        # CASE 2: Clicked on feature body -> Fast One-Click Clean with SinglePart split safety (Variant A)
+        # CASE 2: Clicked on feature body -> Fast One-Click Clean with SinglePart split safety
         else:
             if total_errors == 0:
                 return
-
-            cleaned_geom, count = GeometryEngine.clean_all_topology_errors(feat.geometry(), tolerance=self.GEOM_TOLERANCE)
-            if count == 0:
-                return
-
-            parts = GeometryEngine.extract_singlepart_geometries(cleaned_geom, layer.geometryType())
-
-            # If layer is SinglePart and geometry split into multiple parts -> show system prompt
-            if not is_multi_layer and len(parts) > 1:
-                _AcceptRole = getattr(QMessageBox.ButtonRole, "AcceptRole", getattr(QMessageBox, "AcceptRole", 0))
-                _ActionRole = getattr(QMessageBox.ButtonRole, "ActionRole", getattr(QMessageBox, "ActionRole", 3))
-
-                msg = QMessageBox(self.canvas.window() if self.canvas else None)
-                msg.setIcon(getattr(QMessageBox.Icon, "Question", getattr(QMessageBox, "Question", 4)))
-                msg.setWindowTitle(self.tr("Тип геометрії шару"))
-                msg.setText(
-                    self.tr(
-                        "Поточний шар не підтримує багаточастинні геометрії (MultiPart).\n\n"
-                        "Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:"
-                    ).format(len(parts))
-                )
-
-                btn_split = msg.addButton(
-                    self.tr("Розбити на окремі SinglePart об'єкти"),
-                    _AcceptRole,
-                )
-                btn_keep_multi = msg.addButton(
-                    self.tr("Залишити як MultiPart"),
-                    _ActionRole,
-                )
-                btn_cancel = msg.addButton(
-                    getattr(QMessageBox.StandardButton, "Cancel", getattr(QMessageBox, "Cancel", 0x00400000))
-                )
-                msg.setDefaultButton(btn_split)
-
-                msg.exec_()
-                clicked_button = msg.clickedButton()
-
-                if clicked_button == btn_split:
-                    self._apply_split_features(
-                        layer, feat, parts, self.tr("Очищення та розбиття на окремі об'єкти")
-                    )
-                elif clicked_button == btn_keep_multi:
-                    layer.beginEditCommand(self.tr("Очищення геометрії (MultiPart)"))
-                    layer.changeGeometry(feat.id(), cleaned_geom)
-                    layer.endEditCommand()
-                    layer.triggerRepaint()
-                    self.canvas.refresh()
-                else:
-                    # Cancelled
-                    return
-
-                fresh_feat = layer.getFeature(feat.id())
-                if fresh_feat and fresh_feat.isValid():
-                    self.hovered_feature = fresh_feat
-                    self.hover_rubberband.setToGeometry(fresh_feat.geometry(), layer)
-                    self._update_errors_for_feature(fresh_feat, layer)
-                else:
-                    self._clear_visuals()
-            else:
-                # Direct 1-click execution (Single geometry or MultiPart layer)
-                coerced_geom = GeometryEngine.coerce_geometry_to_layer(cleaned_geom, layer)
-                layer.beginEditCommand(self.tr("Швидке очищення дубльованих вузлів та помилок"))
-                layer.changeGeometry(feat.id(), coerced_geom)
-                layer.endEditCommand()
-                layer.triggerRepaint()
-                self.canvas.refresh()
-
-                fresh_feat = layer.getFeature(feat.id())
-                if fresh_feat and fresh_feat.isValid():
-                    self.hovered_feature = fresh_feat
-                    self.hover_rubberband.setToGeometry(fresh_feat.geometry(), layer)
-                    self._update_errors_for_feature(fresh_feat, layer)
-                else:
-                    self._clear_visuals()
+            self._execute_clean_all_feature(layer, feat)
 
     def keyPressEvent(self, event):
         if event.key() == _Key_Escape:
