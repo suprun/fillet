@@ -1771,30 +1771,67 @@ class GeometryEngine:
         t1 = (v_prime_i.x() - p1.x()) * ux + (v_prime_i.y() - p1.y()) * uy
         t2 = (v_prime_next.x() - p1.x()) * ux + (v_prime_next.y() - p1.y()) * uy
 
-        # If t2 <= t1 + EPSILON, the extended adjacent lines crossed each other before
-        # meeting the shifted line or inverted orientation, creating a self-intersecting bowtie.
-        # Fallback to the parallel shifted segment endpoints [p1, p2].
+        # If t2 <= t1 + EPSILON, the shifted edge shrinks to length 0 and reaches/passes
+        # the apex of the adjacent edges. Collapse the edge to a single apex corner.
         if t2 <= t1 + cls.EPSILON:
-            v_prime_i = p1
-            v_prime_next = p2
+            # Find the apex intersection of the two adjacent edges
+            v_prev_pt = None
+            if i > 0:
+                v_prev_pt = curve.pointN(i - 1)
+            elif is_closed:
+                v_prev_pt = curve.pointN(effective_count - 1)
 
-        # 4. Update vertices in the ring / polyline
-        new_pts = [curve.pointN(k) for k in range(num_pts)]
-        if not is_closed:
-            new_pts[i] = v_prime_i
-            new_pts[i + 1] = v_prime_next
-        else:
-            if i == 0:
-                new_pts[0] = v_prime_i
-                new_pts[1] = v_prime_next
-                new_pts[num_pts - 1] = v_prime_i
-            elif i == effective_count - 1:
-                new_pts[i] = v_prime_i
-                new_pts[0] = v_prime_next
-                new_pts[num_pts - 1] = v_prime_next
+            v_after_pt = None
+            if not is_closed:
+                if i + 1 < num_pts - 1:
+                    v_after_pt = curve.pointN(i + 2)
             else:
+                next_next_idx = (i + 2) % effective_count
+                v_after_pt = curve.pointN(next_next_idx)
+
+            v_apex = None
+            if v_prev_pt is not None and v_after_pt is not None:
+                v_apex = cls.compute_line_intersection(v_prev_pt, v_i, v_next, v_after_pt)
+            if v_apex is None:
+                v_apex = p1
+
+            # Build new vertices list where segment [V_i, V_{i+1}] collapses to single vertex v_apex
+            if not is_closed:
+                if num_pts > 2:
+                    new_pts = [curve.pointN(k) for k in range(0, i)] + [v_apex] + [curve.pointN(k) for k in range(i + 2, num_pts)]
+                else:
+                    new_pts = [v_apex, v_apex]
+            else:
+                # Minimum closed polygon must retain at least 3 unique vertices (4 total with closing)
+                if effective_count > 3:
+                    if i == 0:
+                        new_pts = [v_apex] + [curve.pointN(k) for k in range(2, num_pts - 1)] + [v_apex]
+                    elif i == effective_count - 1:
+                        new_pts = [v_apex] + [curve.pointN(k) for k in range(1, effective_count - 1)] + [v_apex]
+                    else:
+                        new_pts = [curve.pointN(k) for k in range(0, i)] + [v_apex] + [curve.pointN(k) for k in range(i + 2, num_pts)]
+                else:
+                    new_pts = [v_apex if k in (i, (i + 1) % effective_count) else curve.pointN(k) for k in range(num_pts)]
+                    if i == 0 or i == effective_count - 1:
+                        new_pts[num_pts - 1] = new_pts[0]
+        else:
+            # 4. Normal extension: update the two vertices in the ring / polyline
+            new_pts = [curve.pointN(k) for k in range(num_pts)]
+            if not is_closed:
                 new_pts[i] = v_prime_i
                 new_pts[i + 1] = v_prime_next
+            else:
+                if i == 0:
+                    new_pts[0] = v_prime_i
+                    new_pts[1] = v_prime_next
+                    new_pts[num_pts - 1] = v_prime_i
+                elif i == effective_count - 1:
+                    new_pts[i] = v_prime_i
+                    new_pts[0] = v_prime_next
+                    new_pts[num_pts - 1] = v_prime_next
+                else:
+                    new_pts[i] = v_prime_i
+                    new_pts[i + 1] = v_prime_next
 
         res = QgsLineString()
         for pt in new_pts:

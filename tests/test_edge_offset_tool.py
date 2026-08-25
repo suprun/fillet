@@ -118,24 +118,28 @@ class TestEdgeOffsetTool(unittest.TestCase):
 
     def test_geometry_engine_prevent_bowtie_self_intersection(self):
         # Polygon with converging adjacent edges that would criss-cross / flip if not prevented
-        p_prev = QgsPoint(2, 0)
-        v_i = QgsPoint(4, 3)
-        v_next = QgsPoint(7, 5)
-        p_after = QgsPoint(10, 5)
-        p_bottom = QgsPoint(8, 0)
+        p_prev = QgsPoint(2, 2)
+        v_i = QgsPoint(3, 5)
+        v_next = QgsPoint(6, 5.5)
+        p_after = QgsPoint(8, 3.5)
+        p_bottom1 = QgsPoint(7, 1)
+        p_bottom2 = QgsPoint(4, 0.5)
 
         poly = QgsPolygon()
-        ext = QgsLineString([p_prev, v_i, v_next, p_after, p_bottom, p_prev])
+        ext = QgsLineString([p_prev, v_i, v_next, p_after, p_bottom1, p_bottom2, p_prev])
         poly.setExteriorRing(ext)
         geom = QgsGeometry(poly)
 
-        # Shift segment 1 by +4.0 (outward)
-        res = GeometryEngine.offset_segment(geom, 0, 0, 1, 4.0, mode="extend")
+        # Shift segment 1 (v_i -> v_next) outward past the apex
+        res = GeometryEngine.offset_segment(geom, 0, 0, 1, 5.0, mode="extend")
         self.assertIsNotNone(res)
         self.assertTrue(res.isGeosValid())
         pts = res.asPolygon()[0]
-        # Should not have inverted orientation or criss-crossed
-        self.assertTrue(len(pts) >= 5)
+        # Should collapse the edge to a single sharp corner at the apex (6 points total including closed ring)
+        self.assertEqual(len(pts), 6)
+        # Check apex coordinate
+        self.assertAlmostEqual(pts[1].x(), 3.875, places=3)
+        self.assertAlmostEqual(pts[1].y(), 7.625, places=3)
 
     def test_geometry_engine_polygon_step(self):
         # Square: (0,0) -> (10,0) -> (10,10) -> (0,10) -> (0,0)
@@ -192,6 +196,13 @@ class TestEdgeOffsetTool(unittest.TestCase):
         widget.mode = EdgeOffsetCanvasWidget.MODE_STEP
         self.assertEqual(widget.get_effective_mode(shift_pressed=False), EdgeOffsetCanvasWidget.MODE_STEP)
         self.assertEqual(widget.get_effective_mode(shift_pressed=True), EdgeOffsetCanvasWidget.MODE_EXTEND)
+
+        # Test step label
+        self.assertFalse(widget.lbl_step.isHidden())
+        self.assertIn("1", widget.lbl_step.text())
+        widget.set_step(EdgeOffsetCanvasWidget.STEP_ADJUST_OFFSET)
+        self.assertIn("2", widget.lbl_step.text())
+        self.assertFalse(widget.lbl_step.isHidden())
 
         # Test CRS adaptation
         widget.adapt_to_crs(QgsCoordinateReferenceSystem("EPSG:4326"))

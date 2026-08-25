@@ -89,7 +89,7 @@ class EdgeOffsetCanvasWidget(QFrame):
         main_layout.setContentsMargins(6, 6, 6, 6)
         main_layout.setSpacing(4)
 
-        # Step indicator label for multi-step workflow (hidden by default, consistent with Fillet/Chamfer)
+        # Step indicator label for multi-step workflow (matching Rotation & Mirror widgets)
         self.lbl_step = QLabel(self)
         self.lbl_step.setWordWrap(False)
         step_font = self.lbl_step.font()
@@ -97,7 +97,7 @@ class EdgeOffsetCanvasWidget(QFrame):
         step_font.setPointSize(max(8, step_font.pointSize() - 1))
         self.lbl_step.setFont(step_font)
         self.lbl_step.setStyleSheet("color: #1e3a8a; background-color: #dbeafe; border-radius: 4px; padding: 4px 8px;")
-        self.lbl_step.hide()
+        self.set_step(self.STEP_SELECT_EDGE)
         main_layout.addWidget(self.lbl_step)
 
         # Mode selection row on top (matching FilletCanvasWidget radio buttons)
@@ -269,6 +269,7 @@ class EdgeOffsetCanvasWidget(QFrame):
             self.lbl_step.setText(self.tr("1. Вкажіть ребро (оберіть відрізок)"))
         elif step == self.STEP_ADJUST_OFFSET:
             self.lbl_step.setText(self.tr("2. Вкажіть зміщення або клікніть для підтвердження"))
+        self.reposition_to_default()
 
     def set_shift_override(self, shift_pressed: bool):
         """Temporarily inverts mode between Extend and Step when Shift is held."""
