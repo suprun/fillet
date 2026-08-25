@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Map tool for interactive Quick Cleaning of Duplicate Nodes in QGIS.
+Map tool for interactive Quick Cleaning of Duplicate Nodes and Topology Self-Intersections in QGIS.
 Compatible with QGIS 3.16 to 4.x (Qt5 and Qt6).
 
-Interaction Model (Variant 1):
-1. Hovering over a feature highlights its geometry and marks duplicate nodes.
-2. Left-click on feature body -> Instant one-click cleanup of all duplicate nodes.
-3. Left-click on a specific duplicate node -> Context menu with Live Preview on hover.
+Interaction Model:
+1. Hovering over a feature highlights its geometry, marking duplicate nodes (red) and self-intersections (amber).
+2. Left-click on feature body -> Instant one-click cleanup of all duplicate nodes and resolution of self-intersections.
+3. Left-click on a specific duplicate node or intersection point -> Native Context Menu with Live Preview on hover.
 """
 
 import math
@@ -43,31 +43,32 @@ _Key_Escape = getattr(Qt.Key, "Key_Escape", getattr(Qt, "Key_Escape", 0x01000000
 
 try:
     from ..core.geometry_engine import GeometryEngine
-    from .clean_duplicate_nodes_canvas_widget import CleanDuplicateNodesCanvasWidget
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
-    from gui.clean_duplicate_nodes_canvas_widget import CleanDuplicateNodesCanvasWidget
 
 
 class CleanDuplicateNodesMapTool(QgsMapToolEdit):
     """
     Interactive map tool for detecting, previewing, and cleaning duplicate nodes
-    in vector geometries in QGIS 3.x and 4.x.
+    and self-intersections in vector geometries in QGIS 3.x and 4.x.
     """
+
+    SNAP_PIXELS = 10.0
+    GEOM_TOLERANCE = 1e-5
 
     def tr(self, message: str) -> str:
         return QCoreApplication.translate("FilletPlugin", message)
 
-    def __init__(self, canvas: QgsMapCanvas, widget: CleanDuplicateNodesCanvasWidget):
+    def __init__(self, canvas: QgsMapCanvas):
         super().__init__(canvas)
         self.canvas = canvas
-        self.widget = widget
 
         # State & cached data
         self.hovered_feature: Optional[QgsFeature] = None
         self.hovered_layer: Optional[QgsVectorLayer] = None
         self.duplicate_nodes: List[Dict] = []
-        self.active_dup_node: Optional[Dict] = None
+        self.self_intersections: List[Dict] = []
+        self.active_item: Optional[Tuple[str, Dict]] = None  # ("duplicate" | "intersection", data_dict)
 
         # RubberBands
         self.hover_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PolygonGeometry)
@@ -75,16 +76,25 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
         self.hover_rubberband.setStrokeColor(QColor(37, 99, 235, 200))
         self.hover_rubberband.setWidth(2)
 
+        # Duplicate node markers (Red)
         self.dup_markers_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
-        self.dup_markers_rubberband.setColor(QColor(239, 68, 68, 220))
+        self.dup_markers_rubberband.setColor(QColor(239, 68, 68, 240))
         self.dup_markers_rubberband.setWidth(8)
         self.dup_markers_rubberband.setIcon(getattr(QgsRubberBand, "ICON_X", 1))
 
-        self.active_node_marker = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
-        self.active_node_marker.setColor(QColor(245, 158, 11, 240))
-        self.active_node_marker.setWidth(12)
-        self.active_node_marker.setIcon(getattr(QgsRubberBand, "ICON_BOX", 2))
+        # Self-intersection markers (Amber / Orange)
+        self.inter_markers_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
+        self.inter_markers_rubberband.setColor(QColor(245, 158, 11, 240))
+        self.inter_markers_rubberband.setWidth(10)
+        self.inter_markers_rubberband.setIcon(getattr(QgsRubberBand, "ICON_BOX", 2))
 
+        # Active highlighted error under cursor (Cyan/Yellow highlight)
+        self.active_node_marker = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
+        self.active_node_marker.setColor(QColor(6, 182, 212, 255))
+        self.active_node_marker.setWidth(14)
+        self.active_node_marker.setIcon(getattr(QgsRubberBand, "ICON_CIRCLE", 3))
+
+        # Preview rubberband for live preview (Green dashed)
         self.preview_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PolygonGeometry)
         self.preview_rubberband.setColor(QColor(16, 185, 129, 70))
         self.preview_rubberband.setStrokeColor(QColor(16, 185, 129, 230))
@@ -95,25 +105,18 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
         if _CrossCursor is not None:
             self.setCursor(QCursor(_CrossCursor))
 
-        if self.widget:
-            self.widget.toleranceChanged.connect(self._on_tolerance_changed)
-
     def activate(self):
         super().activate()
-        if self.widget:
-            self.widget.show()
-            self.widget.set_step(CleanDuplicateNodesCanvasWidget.STEP_HOVER_SELECT)
         if _CrossCursor is not None:
             self.setCursor(QCursor(_CrossCursor))
 
     def deactivate(self):
-        if self.widget:
-            self.widget.hide()
         self._clear_visuals()
         self.hovered_feature = None
         self.hovered_layer = None
         self.duplicate_nodes = []
-        self.active_dup_node = None
+        self.self_intersections = []
+        self.active_item = None
         super().deactivate()
 
     def cleanup(self):
@@ -121,6 +124,7 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
         for rb in (
             self.hover_rubberband,
             self.dup_markers_rubberband,
+            self.inter_markers_rubberband,
             self.active_node_marker,
             self.preview_rubberband,
         ):
@@ -130,6 +134,7 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
     def _clear_visuals(self):
         self.hover_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
         self.dup_markers_rubberband.reset(QgsWkbTypes.GeometryType.PointGeometry)
+        self.inter_markers_rubberband.reset(QgsWkbTypes.GeometryType.PointGeometry)
         self.active_node_marker.reset(QgsWkbTypes.GeometryType.PointGeometry)
         self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
 
@@ -139,16 +144,12 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
             return layer
         return None
 
-    def _on_tolerance_changed(self, val: float):
-        if self.hovered_feature and self.hovered_layer:
-            self._update_duplicates_for_feature(self.hovered_feature, self.hovered_layer)
-
     def _identify_feature_at(self, map_pt: QgsPointXY, layer: QgsVectorLayer) -> Optional[QgsFeature]:
         """Identifies a feature under the given point in layer coordinates."""
         if not layer or not layer.isEditable():
             return None
 
-        tol_px = QgsSettings().value("qgis/digitizing/snap_tolerance", 10.0, type=float)
+        tol_px = QgsSettings().value("qgis/digitizing/snap_tolerance", self.SNAP_PIXELS, type=float)
         map_tol = self.canvas.mapUnitsPerPixel() * tol_px
 
         layer_pt = self.toLayerCoordinates(layer, map_pt)
@@ -172,18 +173,26 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
                     return feat
         return None
 
-    def _update_duplicates_for_feature(self, feat: QgsFeature, layer: QgsVectorLayer):
-        tol = self.widget.tolerance if self.widget else 1e-6
+    def _update_errors_for_feature(self, feat: QgsFeature, layer: QgsVectorLayer):
         geom = feat.geometry()
-        self.duplicate_nodes = GeometryEngine.find_duplicate_nodes(geom, tolerance=tol)
+        self.duplicate_nodes = GeometryEngine.find_duplicate_nodes(geom, tolerance=self.GEOM_TOLERANCE)
+        self.self_intersections = GeometryEngine.find_self_intersections(geom)
 
-        # Update duplicate markers on canvas
+        # Update duplicate markers (Red)
         self.dup_markers_rubberband.reset(QgsWkbTypes.GeometryType.PointGeometry)
         for dup in self.duplicate_nodes:
             pt = dup["point"]
             map_pt = self.toMapCoordinates(layer, QgsPointXY(pt.x(), pt.y()))
             self.dup_markers_rubberband.addPoint(map_pt, True)
         self.dup_markers_rubberband.show()
+
+        # Update self-intersection markers (Amber)
+        self.inter_markers_rubberband.reset(QgsWkbTypes.GeometryType.PointGeometry)
+        for inter in self.self_intersections:
+            pt = inter["point"]
+            map_pt = self.toMapCoordinates(layer, QgsPointXY(pt.x(), pt.y()))
+            self.inter_markers_rubberband.addPoint(map_pt, True)
+        self.inter_markers_rubberband.show()
 
     def canvasMoveEvent(self, event: QgsMapMouseEvent):
         layer = self.current_vector_layer()
@@ -199,7 +208,8 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
             self.hovered_feature = None
             self.hovered_layer = None
             self.duplicate_nodes = []
-            self.active_dup_node = None
+            self.self_intersections = []
+            self.active_item = None
             if _CrossCursor is not None:
                 self.setCursor(QCursor(_CrossCursor))
             return
@@ -210,26 +220,40 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
             self.hovered_layer = layer
             self.hover_rubberband.setToGeometry(feat.geometry(), layer)
             self.hover_rubberband.show()
-            self._update_duplicates_for_feature(feat, layer)
+            self._update_errors_for_feature(feat, layer)
 
-        # Hit test for duplicate nodes (within 10 px)
-        tol_px = 10.0
-        self.active_dup_node = None
+        # Hit test for duplicate nodes or self-intersections (within SNAP_PIXELS)
+        self.active_item = None
         self.active_node_marker.reset(QgsWkbTypes.GeometryType.PointGeometry)
 
+        # Check duplicate nodes first
         for dup in self.duplicate_nodes:
             pt = dup["point"]
             map_pt_dup = self.toMapCoordinates(layer, QgsPointXY(pt.x(), pt.y()))
             screen_pt = self.toCanvasCoordinates(map_pt_dup)
             dx = screen_pt.x() - event.pos().x()
             dy = screen_pt.y() - event.pos().y()
-            if math.hypot(dx, dy) <= tol_px:
-                self.active_dup_node = dup
+            if math.hypot(dx, dy) <= self.SNAP_PIXELS:
+                self.active_item = ("duplicate", dup)
                 self.active_node_marker.addPoint(map_pt_dup, True)
                 self.active_node_marker.show()
                 break
 
-        if self.active_dup_node:
+        # Check self-intersections if no duplicate node matched
+        if not self.active_item:
+            for inter in self.self_intersections:
+                pt = inter["point"]
+                map_pt_inter = self.toMapCoordinates(layer, QgsPointXY(pt.x(), pt.y()))
+                screen_pt = self.toCanvasCoordinates(map_pt_inter)
+                dx = screen_pt.x() - event.pos().x()
+                dy = screen_pt.y() - event.pos().y()
+                if math.hypot(dx, dy) <= self.SNAP_PIXELS:
+                    self.active_item = ("intersection", inter)
+                    self.active_node_marker.addPoint(map_pt_inter, True)
+                    self.active_node_marker.show()
+                    break
+
+        if self.active_item:
             if _PointingHandCursor is not None:
                 self.setCursor(QCursor(_PointingHandCursor))
         else:
@@ -242,7 +266,8 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
             self.hovered_feature = None
             self.hovered_layer = None
             self.duplicate_nodes = []
-            self.active_dup_node = None
+            self.self_intersections = []
+            self.active_item = None
             return
 
         if event.button() != _LeftButton:
@@ -253,121 +278,152 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
             return
 
         feat = self.hovered_feature
-        tol = self.widget.tolerance if self.widget else 1e-6
+        total_errors = len(self.duplicate_nodes) + len(self.self_intersections)
 
-        # CASE 1: Clicked on a specific duplicate node -> Open Context Menu with Live Preview
-        if self.active_dup_node:
-            dup = self.active_dup_node
-            part_idx = dup["part_idx"]
-            ring_idx = dup["ring_idx"]
-            v1_idx = dup["v1_idx"]
-            v2_idx = dup["v2_idx"]
-
+        # CASE 1: Clicked on a specific error -> Open Native System Context Menu with Live Preview
+        if self.active_item:
+            item_type, item_data = self.active_item
             menu = QMenu(self.canvas)
-            menu.setStyleSheet("""
-                QMenu {
-                    background-color: #ffffff;
-                    border: 1px solid #cbd5e1;
-                    padding: 4px;
-                    border-radius: 6px;
-                }
-                QMenu::item {
-                    padding: 6px 24px 6px 12px;
-                    border-radius: 4px;
-                    color: #1e293b;
-                    font-size: 11px;
-                }
-                QMenu::item:selected {
-                    background-color: #3b82f6;
-                    color: #ffffff;
-                }
-            """)
 
-            act_merge = QAction(self.tr("Злити дублі у вершині (залишити 1 вузол)"), menu)
-            act_merge.setData({"type": "remove_idx", "idx": v2_idx})
+            if item_type == "duplicate":
+                part_idx = item_data["part_idx"]
+                ring_idx = item_data["ring_idx"]
+                v1_idx = item_data["v1_idx"]
+                v2_idx = item_data["v2_idx"]
 
-            act_keep_v1 = QAction(self.tr("Залишити вузол #{0} (видалити #{1})").format(v1_idx + 1, v2_idx + 1), menu)
-            act_keep_v1.setData({"type": "remove_idx", "idx": v2_idx})
+                act_merge = QAction(self.tr("Злити дублі у вершині (залишити 1 вузол)"), menu)
+                act_merge.setData({"type": "remove_idx", "idx": v2_idx})
 
-            act_keep_v2 = QAction(self.tr("Залишити вузол #{0} (видалити #{1})").format(v2_idx + 1, v1_idx + 1), menu)
-            act_keep_v2.setData({"type": "remove_idx", "idx": v1_idx})
+                act_keep_v1 = QAction(self.tr("Залишити вузол #{0} (видалити #{1})").format(v1_idx + 1, v2_idx + 1), menu)
+                act_keep_v1.setData({"type": "remove_idx", "idx": v2_idx})
 
-            act_clean_all = QAction(self.tr("Очистити всі дублі в об'єкті ({0})").format(len(self.duplicate_nodes)), menu)
-            act_clean_all.setData({"type": "clean_all"})
+                act_keep_v2 = QAction(self.tr("Залишити вузол #{0} (видалити #{1})").format(v2_idx + 1, v1_idx + 1), menu)
+                act_keep_v2.setData({"type": "remove_idx", "idx": v1_idx})
 
-            menu.addAction(act_merge)
-            menu.addAction(act_keep_v1)
-            menu.addAction(act_keep_v2)
-            menu.addSeparator()
-            menu.addAction(act_clean_all)
+                act_clean_all = QAction(self.tr("Очистити всі дублі та помилки в об'єкті ({0})").format(total_errors), menu)
+                act_clean_all.setData({"type": "clean_all"})
 
-            def _on_hover(action: QAction):
-                if not action:
-                    self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
-                    return
-                data = action.data()
-                if not data:
-                    return
-                action_type = data.get("type")
-                if action_type == "remove_idx":
-                    idx_to_remove = data.get("idx")
-                    cand_geom = GeometryEngine.remove_duplicate_node_at_index(
-                        feat.geometry(), part_idx, ring_idx, idx_to_remove
-                    )
-                    self.preview_rubberband.setToGeometry(cand_geom, layer)
-                    self.preview_rubberband.show()
-                elif action_type == "clean_all":
-                    cand_geom, _ = GeometryEngine.remove_all_duplicate_nodes(feat.geometry(), tolerance=tol)
-                    self.preview_rubberband.setToGeometry(cand_geom, layer)
-                    self.preview_rubberband.show()
+                menu.addAction(act_merge)
+                menu.addAction(act_keep_v1)
+                menu.addAction(act_keep_v2)
+                menu.addSeparator()
+                menu.addAction(act_clean_all)
 
-            menu.hovered.connect(_on_hover)
+                def _on_hover(action: QAction):
+                    if not action:
+                        self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
+                        return
+                    data = action.data()
+                    if not data:
+                        return
+                    action_type = data.get("type")
+                    if action_type == "remove_idx":
+                        idx_to_remove = data.get("idx")
+                        cand_geom = GeometryEngine.remove_duplicate_node_at_index(
+                            feat.geometry(), part_idx, ring_idx, idx_to_remove
+                        )
+                        self.preview_rubberband.setToGeometry(cand_geom, layer)
+                        self.preview_rubberband.show()
+                    elif action_type == "clean_all":
+                        cand_geom, _ = GeometryEngine.clean_all_topology_errors(feat.geometry(), tolerance=self.GEOM_TOLERANCE)
+                        self.preview_rubberband.setToGeometry(cand_geom, layer)
+                        self.preview_rubberband.show()
+
+                menu.hovered.connect(_on_hover)
+
+            elif item_type == "intersection":
+                part_idx = item_data["part_idx"]
+                ring_idx = item_data["ring_idx"]
+                seg1_idx = item_data["seg1_idx"]
+                seg2_idx = item_data["seg2_idx"]
+                inter_pt = item_data["point"]
+
+                act_untangle = QAction(self.tr("Розплутати петлю самоперетину"), menu)
+                act_untangle.setData({"type": "untangle", "loop": 0})
+
+                act_make_valid = QAction(self.tr("Автоматично виправити геометрію (Make Valid)"), menu)
+                act_make_valid.setData({"type": "make_valid"})
+
+                act_clean_all = QAction(self.tr("Очистити всі дублі та помилки в об'єкті ({0})").format(total_errors), menu)
+                act_clean_all.setData({"type": "clean_all"})
+
+                menu.addAction(act_untangle)
+                menu.addAction(act_make_valid)
+                menu.addSeparator()
+                menu.addAction(act_clean_all)
+
+                def _on_hover(action: QAction):
+                    if not action:
+                        self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
+                        return
+                    data = action.data()
+                    if not data:
+                        return
+                    action_type = data.get("type")
+                    if action_type == "untangle":
+                        cand_geom = GeometryEngine.untangle_self_intersection(
+                            feat.geometry(), part_idx, ring_idx, seg1_idx, seg2_idx, inter_pt, keep_loop=0
+                        )
+                        self.preview_rubberband.setToGeometry(cand_geom, layer)
+                        self.preview_rubberband.show()
+                    elif action_type == "make_valid":
+                        cand_geom = feat.geometry().makeValid()
+                        self.preview_rubberband.setToGeometry(cand_geom, layer)
+                        self.preview_rubberband.show()
+                    elif action_type == "clean_all":
+                        cand_geom, _ = GeometryEngine.clean_all_topology_errors(feat.geometry(), tolerance=self.GEOM_TOLERANCE)
+                        self.preview_rubberband.setToGeometry(cand_geom, layer)
+                        self.preview_rubberband.show()
+
+                menu.hovered.connect(_on_hover)
 
             def _on_hide():
                 self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
 
             menu.aboutToHide.connect(_on_hide)
 
-            if self.widget:
-                self.widget.set_step(CleanDuplicateNodesCanvasWidget.STEP_CONTEXT_MENU)
-
             chosen_action = menu.exec_(self.canvas.mapToGlobal(event.pos()))
-
-            if self.widget:
-                self.widget.set_step(CleanDuplicateNodesCanvasWidget.STEP_HOVER_SELECT)
 
             if chosen_action:
                 data = chosen_action.data()
                 if data:
                     action_type = data.get("type")
-                    layer.beginEditCommand(self.tr("Очищення дубльованих вузлів"))
+                    layer.beginEditCommand(self.tr("Очищення топологічних помилок"))
                     if action_type == "remove_idx":
                         idx_to_remove = data.get("idx")
                         new_geom = GeometryEngine.remove_duplicate_node_at_index(
                             feat.geometry(), part_idx, ring_idx, idx_to_remove
                         )
                         layer.changeGeometry(feat.id(), new_geom)
+                    elif action_type == "untangle":
+                        new_geom = GeometryEngine.untangle_self_intersection(
+                            feat.geometry(), part_idx, ring_idx, seg1_idx, seg2_idx, inter_pt, keep_loop=0
+                        )
+                        layer.changeGeometry(feat.id(), new_geom)
+                    elif action_type == "make_valid":
+                        new_geom = feat.geometry().makeValid()
+                        layer.changeGeometry(feat.id(), new_geom)
                     elif action_type == "clean_all":
-                        new_geom, _ = GeometryEngine.remove_all_duplicate_nodes(feat.geometry(), tolerance=tol)
+                        new_geom, _ = GeometryEngine.clean_all_topology_errors(feat.geometry(), tolerance=self.GEOM_TOLERANCE)
                         layer.changeGeometry(feat.id(), new_geom)
                     layer.endEditCommand()
                     layer.triggerRepaint()
                     self.canvas.refresh()
 
-                    # Re-scan duplicates
+                    # Re-scan errors
                     fresh_feat = layer.getFeature(feat.id())
                     self.hovered_feature = fresh_feat
                     self.hover_rubberband.setToGeometry(fresh_feat.geometry(), layer)
-                    self._update_duplicates_for_feature(fresh_feat, layer)
+                    self._update_errors_for_feature(fresh_feat, layer)
 
-        # CASE 2: Clicked on feature body -> Fast One-Click Cleanup of all duplicates
+        # CASE 2: Clicked on feature body -> Fast One-Click Cleanup of all duplicates & self-intersections
         else:
-            if not self.duplicate_nodes:
+            if total_errors == 0:
                 return
 
-            cleaned_geom, count = GeometryEngine.remove_all_duplicate_nodes(feat.geometry(), tolerance=tol)
+            cleaned_geom, count = GeometryEngine.clean_all_topology_errors(feat.geometry(), tolerance=self.GEOM_TOLERANCE)
             if count > 0:
-                layer.beginEditCommand(self.tr("Швидке очищення дубльованих вузлів"))
+                layer.beginEditCommand(self.tr("Швидке очищення дубльованих вузлів та помилок"))
                 layer.changeGeometry(feat.id(), cleaned_geom)
                 layer.endEditCommand()
                 layer.triggerRepaint()
@@ -376,7 +432,7 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
                 fresh_feat = layer.getFeature(feat.id())
                 self.hovered_feature = fresh_feat
                 self.hover_rubberband.setToGeometry(fresh_feat.geometry(), layer)
-                self._update_duplicates_for_feature(fresh_feat, layer)
+                self._update_errors_for_feature(fresh_feat, layer)
 
     def keyPressEvent(self, event):
         if event.key() == _Key_Escape:
@@ -384,6 +440,7 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
             self.hovered_feature = None
             self.hovered_layer = None
             self.duplicate_nodes = []
-            self.active_dup_node = None
+            self.self_intersections = []
+            self.active_item = None
             return
         super().keyPressEvent(event)

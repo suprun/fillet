@@ -2317,6 +2317,166 @@ class GeometryEngine:
 
         return cleaned_geom, len(dups)
 
+    @classmethod
+    def find_self_intersections(cls, geom: QgsGeometry) -> List[Dict]:
+        """
+        Finds all segment-segment self-intersections in the geometry.
+        Returns a list of dicts with part_idx, ring_idx, seg1_idx, seg2_idx, point.
+        """
+        intersections = []
+        if not geom or geom.isEmpty() or geom.isNull():
+            return intersections
+
+        curves = cls.get_all_curves_from_geometry(geom)
+        for part_idx, ring_idx, curve in curves:
+            n = curve.numPoints()
+            if n < 4:
+                continue
+            is_closed = curve.isClosed() or (n > 2 and curve.pointN(0) == curve.pointN(n - 1))
+            num_segs = n - 1
+
+            for i in range(num_segs):
+                p1 = curve.pointN(i)
+                p2 = curve.pointN(i + 1)
+                for j in range(i + 2, num_segs):
+                    if is_closed and i == 0 and j == num_segs - 1:
+                        continue  # Adjacent at closing point
+                    p3 = curve.pointN(j)
+                    p4 = curve.pointN(j + 1)
+
+                    # Compute intersection
+                    x1, y1 = p1.x(), p1.y()
+                    x2, y2 = p2.x(), p2.y()
+                    x3, y3 = p3.x(), p3.y()
+                    x4, y4 = p4.x(), p4.y()
+
+                    denom = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1)
+                    if abs(denom) < 1e-12:
+                        continue
+
+                    ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denom
+                    ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denom
+
+                    if 1e-6 < ua < 1.0 - 1e-6 and 1e-6 < ub < 1.0 - 1e-6:
+                        ix = x1 + ua * (x2 - x1)
+                        iy = y1 + ua * (y2 - y1)
+                        inter_pt = QgsPoint(ix, iy)
+                        intersections.append({
+                            "part_idx": part_idx,
+                            "ring_idx": ring_idx,
+                            "seg1_idx": i,
+                            "seg2_idx": j,
+                            "point": inter_pt,
+                        })
+        return intersections
+
+    @classmethod
+    def untangle_self_intersection(
+        cls,
+        geom: QgsGeometry,
+        part_idx: int,
+        ring_idx: int,
+        seg1_idx: int,
+        seg2_idx: int,
+        inter_pt: QgsPoint,
+        keep_loop: int = 0,
+    ) -> QgsGeometry:
+        """
+        Untangles a self-intersecting polygon ring at inter_pt.
+        keep_loop=0 keeps the larger loop, keep_loop=1 keeps loop 1, keep_loop=2 keeps loop 2.
+        """
+        if not geom or geom.isEmpty() or geom.isNull():
+            return geom
+
+        curve = cls.get_curve_from_geometry(geom, part_idx, ring_idx)
+        if not curve or curve.numPoints() < 4:
+            return geom.makeValid() if not geom.isGeosValid() else geom
+
+        n = curve.numPoints()
+        i = min(seg1_idx, seg2_idx)
+        j = max(seg1_idx, seg2_idx)
+
+        # Loop 1: 0..i, inter_pt, j+1..n-1
+        pts_loop1 = [curve.pointN(k) for k in range(i + 1)] + [inter_pt] + [curve.pointN(k) for k in range(j + 1, n)]
+        if pts_loop1[0] != pts_loop1[-1]:
+            pts_loop1.append(pts_loop1[0])
+
+        # Loop 2: inter_pt, i+1..j, inter_pt
+        pts_loop2 = [inter_pt] + [curve.pointN(k) for k in range(i + 1, j + 1)] + [inter_pt]
+
+        poly1 = QgsPolygon()
+        poly1.setExteriorRing(QgsLineString(pts_loop1))
+        g1 = QgsGeometry(poly1)
+
+        poly2 = QgsPolygon()
+        poly2.setExteriorRing(QgsLineString(pts_loop2))
+        g2 = QgsGeometry(poly2)
+
+        if keep_loop == 1:
+            chosen_ring = QgsLineString(pts_loop1)
+        elif keep_loop == 2:
+            chosen_ring = QgsLineString(pts_loop2)
+        else:
+            chosen_ring = QgsLineString(pts_loop1) if g1.area() >= g2.area() else QgsLineString(pts_loop2)
+
+        # Reconstruct geometry with untangled ring
+        geom_type = geom.type()
+        is_multi = geom.isMultipart()
+
+        if geom_type == QgsWkbTypes.GeometryType.PolygonGeometry:
+            if not is_multi:
+                poly = geom.constGet()
+                new_poly = QgsPolygon()
+                if ring_idx == 0:
+                    new_poly.setExteriorRing(chosen_ring.clone())
+                else:
+                    ext = poly.exteriorRing()
+                    if ext:
+                        new_poly.setExteriorRing(ext.clone())
+                for r in range(poly.numInteriorRings()):
+                    intr = poly.interiorRing(r)
+                    if ring_idx == r + 1:
+                        new_poly.addInteriorRing(chosen_ring.clone())
+                    elif intr:
+                        new_poly.addInteriorRing(intr.clone())
+                res = QgsGeometry(new_poly)
+                if not res.isGeosValid():
+                    res = res.makeValid()
+                return res
+
+        # Fallback to makeValid
+        valid_res = geom.makeValid()
+        return valid_res if valid_res and not valid_res.isEmpty() else geom
+
+    @classmethod
+    def clean_all_topology_errors(
+        cls,
+        geom: QgsGeometry,
+        tolerance: float = 1e-6,
+    ) -> Tuple[QgsGeometry, int]:
+        """
+        Cleans all duplicate nodes and resolves self-intersections in one shot.
+        Returns a tuple of (cleaned_geometry, count_of_errors_resolved).
+        """
+        if not geom or geom.isEmpty() or geom.isNull():
+            return geom, 0
+
+        dups = cls.find_duplicate_nodes(geom, tolerance)
+        intersections = cls.find_self_intersections(geom)
+        total_errors = len(dups) + len(intersections)
+
+        if total_errors == 0:
+            return geom, 0
+
+        cleaned_geom = QgsGeometry(geom)
+        if dups:
+            cleaned_geom.removeDuplicateNodes(tolerance)
+
+        if not cleaned_geom.isGeosValid() or intersections:
+            cleaned_geom = cleaned_geom.makeValid()
+
+        return cleaned_geom, total_errors
+
     # Alias for backwards compatibility
     batch_process_geometry = batch_apply_geometry
 

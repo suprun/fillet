@@ -25,9 +25,7 @@ except ImportError:
 from qgis.PyQt.QtWidgets import QDockWidget
 
 try:
-    from .core.geometry_engine import GeometryEngine
     from .gui.canvas_widget import FilletCanvasWidget
-    from .gui.clean_duplicate_nodes_canvas_widget import CleanDuplicateNodesCanvasWidget
     from .gui.clean_duplicate_nodes_map_tool import CleanDuplicateNodesMapTool
     from .gui.edge_offset_canvas_widget import EdgeOffsetCanvasWidget
     from .gui.edge_offset_map_tool import EdgeOffsetMapTool
@@ -45,7 +43,6 @@ try:
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
     from gui.canvas_widget import FilletCanvasWidget
-    from gui.clean_duplicate_nodes_canvas_widget import CleanDuplicateNodesCanvasWidget
     from gui.clean_duplicate_nodes_map_tool import CleanDuplicateNodesMapTool
     from gui.edge_offset_canvas_widget import EdgeOffsetCanvasWidget
     from gui.edge_offset_map_tool import EdgeOffsetMapTool
@@ -96,7 +93,6 @@ class FilletPlugin:
         self.edge_offset_map_tool: Optional[EdgeOffsetMapTool] = None
         self.edge_offset_widget: Optional[EdgeOffsetCanvasWidget] = None
         self.clean_duplicates_map_tool: Optional[CleanDuplicateNodesMapTool] = None
-        self.clean_duplicates_widget: Optional[CleanDuplicateNodesCanvasWidget] = None
         self.canvas_widget: Optional[FilletCanvasWidget] = None
         self.dock_widget: Optional[QDockWidget] = None
         self.settings_widget: Optional[FilletSettingsWidget] = None
@@ -275,9 +271,7 @@ class FilletPlugin:
         self.edge_offset_action.triggered.connect(self.toggle_edge_offset_tool)
 
         # 7.7. Create interactive Quick Clean Duplicate Nodes Map Tool (available in QGIS 3.x and QGIS 4.x)
-        self.clean_duplicates_widget = CleanDuplicateNodesCanvasWidget(self.canvas)
-        self.clean_duplicates_widget.hide()
-        self.clean_duplicates_map_tool = CleanDuplicateNodesMapTool(self.canvas, self.clean_duplicates_widget)
+        self.clean_duplicates_map_tool = CleanDuplicateNodesMapTool(self.canvas)
 
         clean_icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionCleanDuplicateNodes.svg")
         self.clean_duplicates_action = QAction(
@@ -754,16 +748,6 @@ class FilletPlugin:
             self.edge_offset_widget.deleteLater()
             self.edge_offset_widget = None
 
-        if self.clean_duplicates_widget:
-            try:
-                self.canvas.removeEventFilter(self.clean_duplicates_widget)
-            except (TypeError, RuntimeError):
-                pass  # nosec B110
-            self.clean_duplicates_widget.hide()
-            self.clean_duplicates_widget.setParent(None)
-            self.clean_duplicates_widget.deleteLater()
-            self.clean_duplicates_widget = None
-
         # 10. Clean up settings widget and dock widget
         if self.settings_widget:
             try:
@@ -920,8 +904,6 @@ class FilletPlugin:
         if self.clean_duplicates_action:
             is_cd_active = tool == self.clean_duplicates_map_tool
             self.clean_duplicates_action.setChecked(is_cd_active)
-            if not is_cd_active and self.clean_duplicates_widget:
-                self.clean_duplicates_widget.hide()
 
     def _on_current_layer_changed(self, layer=None):
         self.update_action_state()
@@ -1021,8 +1003,6 @@ class FilletPlugin:
 
             if self.clean_duplicates_map_tool and self.canvas.mapTool() == self.clean_duplicates_map_tool:
                 self.canvas.unsetMapTool(self.clean_duplicates_map_tool)
-                if self.clean_duplicates_widget:
-                    self.clean_duplicates_widget.hide()
                 if self.clean_duplicates_action:
                     self.clean_duplicates_action.setChecked(False)
 
