@@ -35,7 +35,7 @@ from qgis.gui import (
 )
 from qgis.PyQt.QtCore import QCoreApplication, QPoint, Qt
 from qgis.PyQt.QtGui import QColor, QCursor
-from qgis.PyQt.QtWidgets import QAction, QApplication, QMenu
+from qgis.PyQt.QtWidgets import QAction, QApplication, QMenu, QMessageBox
 
 # Safe cross-version Qt constants
 _LeftButton = getattr(Qt.MouseButton, "LeftButton", getattr(Qt, "LeftButton", 1))
@@ -507,64 +507,58 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
 
             parts = GeometryEngine.extract_singlepart_geometries(cleaned_geom, layer.geometryType())
 
-            # If layer is SinglePart and geometry split into multiple parts -> show quick 2-choice micro-menu
+            # If layer is SinglePart and geometry split into multiple parts -> show system prompt
             if not is_multi_layer and len(parts) > 1:
-                menu = QMenu(self.canvas)
+                _AcceptRole = getattr(QMessageBox.ButtonRole, "AcceptRole", getattr(QMessageBox, "AcceptRole", 0))
+                _ActionRole = getattr(QMessageBox.ButtonRole, "ActionRole", getattr(QMessageBox, "ActionRole", 3))
 
-                act_keep_largest = QAction(self.tr("Залишити основну частину (найбільшу)"), menu)
-                act_keep_largest.setData({"type": "keep_largest"})
+                msg = QMessageBox(self.canvas.window() if self.canvas else None)
+                msg.setIcon(getattr(QMessageBox.Icon, "Question", getattr(QMessageBox, "Question", 4)))
+                msg.setWindowTitle(self.tr("Тип геометрії шару"))
+                msg.setText(
+                    self.tr(
+                        "Поточний шар не підтримує багаточастинні геометрії (MultiPart).\n\n"
+                        "Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:"
+                    ).format(len(parts))
+                )
 
-                act_split_all = QAction(self.tr("Розбити на {0} окремих об'єктів").format(len(parts)), menu)
-                act_split_all.setData({"type": "split_all"})
+                btn_split = msg.addButton(
+                    self.tr("Розбити на окремі SinglePart об'єкти"),
+                    _AcceptRole,
+                )
+                btn_keep_multi = msg.addButton(
+                    self.tr("Залишити як MultiPart"),
+                    _ActionRole,
+                )
+                btn_cancel = msg.addButton(
+                    getattr(QMessageBox.StandardButton, "Cancel", getattr(QMessageBox, "Cancel", 0x00400000))
+                )
+                msg.setDefaultButton(btn_split)
 
-                menu.addAction(act_keep_largest)
-                menu.addAction(act_split_all)
+                msg.exec_()
+                clicked_button = msg.clickedButton()
 
-                largest_part = GeometryEngine.get_largest_singlepart_geometry(cleaned_geom, layer.geometryType())
+                if clicked_button == btn_split:
+                    self._apply_split_features(
+                        layer, feat, parts, self.tr("Очищення та розбиття на окремі об'єкти")
+                    )
+                elif clicked_button == btn_keep_multi:
+                    layer.beginEditCommand(self.tr("Очищення геометрії (MultiPart)"))
+                    layer.changeGeometry(feat.id(), cleaned_geom)
+                    layer.endEditCommand()
+                    layer.triggerRepaint()
+                    self.canvas.refresh()
+                else:
+                    # Cancelled
+                    return
 
-                def _on_hover_body(action: QAction):
-                    if not action:
-                        self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
-                        return
-                    data = action.data()
-                    if not data:
-                        return
-                    action_type = data.get("type")
-                    if action_type == "keep_largest":
-                        self.preview_rubberband.setToGeometry(largest_part, layer)
-                        self.preview_rubberband.show()
-                    elif action_type == "split_all":
-                        self.preview_rubberband.setToGeometry(cleaned_geom, layer)
-                        self.preview_rubberband.show()
-
-                menu.hovered.connect(_on_hover_body)
-
-                def _on_hide_body():
-                    self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
-
-                menu.aboutToHide.connect(_on_hide_body)
-
-                chosen_action = menu.exec_(self.canvas.mapToGlobal(event.pos()))
-                if chosen_action:
-                    data = chosen_action.data()
-                    if data:
-                        action_type = data.get("type")
-                        if action_type == "keep_largest":
-                            layer.beginEditCommand(self.tr("Швидке очищення (основна частина)"))
-                            layer.changeGeometry(feat.id(), largest_part)
-                            layer.endEditCommand()
-                            layer.triggerRepaint()
-                            self.canvas.refresh()
-                        elif action_type == "split_all":
-                            self._apply_split_features(layer, feat, parts, self.tr("Очищення та розбиття на окремі об'єкти"))
-
-                        fresh_feat = layer.getFeature(feat.id())
-                        if fresh_feat and fresh_feat.isValid():
-                            self.hovered_feature = fresh_feat
-                            self.hover_rubberband.setToGeometry(fresh_feat.geometry(), layer)
-                            self._update_errors_for_feature(fresh_feat, layer)
-                        else:
-                            self._clear_visuals()
+                fresh_feat = layer.getFeature(feat.id())
+                if fresh_feat and fresh_feat.isValid():
+                    self.hovered_feature = fresh_feat
+                    self.hover_rubberband.setToGeometry(fresh_feat.geometry(), layer)
+                    self._update_errors_for_feature(fresh_feat, layer)
+                else:
+                    self._clear_visuals()
             else:
                 # Direct 1-click execution (Single geometry or MultiPart layer)
                 coerced_geom = GeometryEngine.coerce_geometry_to_layer(cleaned_geom, layer)
