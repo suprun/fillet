@@ -193,6 +193,30 @@ class TestEdgeOffsetTool(unittest.TestCase):
         self.assertAlmostEqual(pts_last[4].x(), 20.0)
         self.assertAlmostEqual(pts_last[4].y(), 12.0)
 
+    def test_geometry_engine_polyline_terminal_extend(self):
+        # Open polyline: (1, 2) -> (3.5, 4.5) -> (6.5, 3.2) -> (8.0, 0.5)
+        v0 = QgsPoint(1.0, 2.0)
+        v1 = QgsPoint(3.5, 4.5)
+        v2 = QgsPoint(6.5, 3.2)
+        v3 = QgsPoint(8.0, 0.5)
+        line = QgsGeometry(QgsLineString([v0, v1, v2, v3]))
+
+        # Shift last segment (v2 -> v3) outward with distance=3.0 (extend mode)
+        res = GeometryEngine.offset_segment(line, 0, 0, 2, 3.0, mode="extend")
+        self.assertIsNotNone(res)
+        pts = res.asPolyline()
+        self.assertEqual(len(pts), 4)
+        self.assertAlmostEqual(pts[0].x(), 1.0)
+        self.assertAlmostEqual(pts[0].y(), 2.0)
+        self.assertAlmostEqual(pts[1].x(), 3.5)
+        self.assertAlmostEqual(pts[1].y(), 4.5)
+        # Shifted joint is extended
+        self.assertAlmostEqual(pts[2].x(), 11.020, places=3)
+        self.assertAlmostEqual(pts[2].y(), 1.241, places=3)
+        # Terminal end maintains segment length and direction
+        self.assertAlmostEqual(pts[3].x(), 12.520, places=3)
+        self.assertAlmostEqual(pts[3].y(), -1.459, places=3)
+
     def test_canvas_widget_and_shift_inversion(self):
         widget = EdgeOffsetCanvasWidget(self.canvas)
         widget.show()

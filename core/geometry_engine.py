@@ -1703,7 +1703,9 @@ class GeometryEngine:
         if length < cls.EPSILON:
             return None
 
-        # Unit normal vector (left normal)
+        # Unit tangent and normal vectors (left normal)
+        ux = dx / length
+        uy = dy / length
         nx = -dy / length
         ny = dx / length
 
@@ -1771,38 +1773,39 @@ class GeometryEngine:
                 if v_prime_next is None:
                     v_prime_next = p2
             else:
-                v_prime_next = p2
+                # Open polyline last segment (i == num_pts - 2):
+                # Preserve segment length L starting from extended start joint v_prime_i
+                v_prime_next = QgsPoint(v_prime_i.x() + length * ux, v_prime_i.y() + length * uy)
         else:
             next_next_idx = (i + 2) % effective_count
             v_after = curve.pointN(next_next_idx)
             v_prime_next = cls.compute_line_intersection(p1, p2, v_next, v_after)
-        # 3. Prevent bowtie self-intersection / endpoint flipping along the shifted line
-        ux = dx / length
-        uy = dy / length
+            if v_prime_next is None:
+                v_prime_next = p2
+
+        # If i == 0 on open polyline: preserve segment length L ending at extended end joint v_prime_next
+        if not is_closed and i == 0:
+            if num_pts > 2:
+                v_after = curve.pointN(i + 2)
+                v_prime_next = cls.compute_line_intersection(p1, p2, v_next, v_after)
+                if v_prime_next is None:
+                    v_prime_next = p2
+                v_prime_i = QgsPoint(v_prime_next.x() - length * ux, v_prime_next.y() - length * uy)
+            else:
+                v_prime_i = p1
+                v_prime_next = p2
+
+        # 3. Prevent bowtie self-intersection / collapse only for internal segments with constrained adjacent edges
         t1 = (v_prime_i.x() - p1.x()) * ux + (v_prime_i.y() - p1.y()) * uy
         t2 = (v_prime_next.x() - p1.x()) * ux + (v_prime_next.y() - p1.y()) * uy
 
-        # If t2 <= t1 + EPSILON, the shifted edge shrinks to length 0 and reaches/passes
-        # the apex of the adjacent edges. Collapse the edge to a single apex corner.
-        if t2 <= t1 + cls.EPSILON:
+        is_internal = is_closed or (i > 0 and i + 1 < num_pts - 1)
+
+        if is_internal and t2 <= t1 + cls.EPSILON:
             # Find the apex intersection of the two adjacent edges
-            v_prev_pt = None
-            if i > 0:
-                v_prev_pt = curve.pointN(i - 1)
-            elif is_closed:
-                v_prev_pt = curve.pointN(effective_count - 1)
-
-            v_after_pt = None
-            if not is_closed:
-                if i + 1 < num_pts - 1:
-                    v_after_pt = curve.pointN(i + 2)
-            else:
-                next_next_idx = (i + 2) % effective_count
-                v_after_pt = curve.pointN(next_next_idx)
-
-            v_apex = None
-            if v_prev_pt is not None and v_after_pt is not None:
-                v_apex = cls.compute_line_intersection(v_prev_pt, v_i, v_next, v_after_pt)
+            v_prev_pt = curve.pointN(i - 1 if i > 0 else effective_count - 1)
+            v_after_pt = curve.pointN((i + 2) % effective_count if is_closed else i + 2)
+            v_apex = cls.compute_line_intersection(v_prev_pt, v_i, v_next, v_after_pt)
             if v_apex is None:
                 v_apex = p1
 
