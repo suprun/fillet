@@ -2358,10 +2358,7 @@ class GeometryEngine:
                     intr = poly.interiorRing(r)
                     if intr is not None:
                         new_poly.addInteriorRing(_clean_curve_at_point(intr, True))
-                res = QgsGeometry(new_poly)
-                if not res.isGeosValid():
-                    res = res.makeValid()
-                return res
+                return QgsGeometry(new_poly)
             else:
                 multi = QgsMultiPolygon()
                 orig_multi = geom.constGet()
@@ -2376,10 +2373,7 @@ class GeometryEngine:
                         if intr is not None:
                             new_poly.addInteriorRing(_clean_curve_at_point(intr, True))
                     multi.addGeometry(new_poly)
-                res = QgsGeometry(multi)
-                if not res.isGeosValid():
-                    res = res.makeValid()
-                return res
+                return QgsGeometry(multi)
 
         return geom
 
