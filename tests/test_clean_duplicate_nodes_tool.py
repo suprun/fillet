@@ -206,7 +206,6 @@ class TestCleanDuplicateNodesTool(unittest.TestCase):
         self.assertIsNotNone(tool.dup_markers_rubberband)
         self.assertIsNotNone(tool.inter_markers_rubberband)
         self.assertIsNotNone(tool.active_node_halo)
-        self.assertIsNotNone(tool.active_node_marker)
         self.assertIsNotNone(tool.preview_rubberband)
 
         tool.deactivate()

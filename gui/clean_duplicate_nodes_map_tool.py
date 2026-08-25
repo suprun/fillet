@@ -78,37 +78,30 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
         self.hover_rubberband.setStrokeColor(QColor(37, 99, 235, 200))
         self.hover_rubberband.setWidth(2)
 
-        # Duplicate node markers (Green and thicker for high contrast)
+        # Duplicate node markers (Standard QGIS Red Cross at duplicate vertices)
         self.dup_markers_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
-        self.dup_markers_rubberband.setColor(QColor(16, 185, 129, 255))
+        self.dup_markers_rubberband.setColor(QColor(239, 68, 68, 255))
         self.dup_markers_rubberband.setIcon(getattr(QgsRubberBand, "ICON_X", 1))
         if hasattr(self.dup_markers_rubberband, "setIconSize"):
-            self.dup_markers_rubberband.setIconSize(14)
-        self.dup_markers_rubberband.setWidth(3)
+            self.dup_markers_rubberband.setIconSize(12)
+        self.dup_markers_rubberband.setWidth(2)
 
-        # Self-intersection markers (Amber / Orange Cross)
+        # Self-intersection markers (Standard QGIS Bright Green Cross at intersections)
         self.inter_markers_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
-        self.inter_markers_rubberband.setColor(QColor(245, 158, 11, 255))
+        self.inter_markers_rubberband.setColor(QColor(0, 230, 64, 255))
         self.inter_markers_rubberband.setIcon(getattr(QgsRubberBand, "ICON_X", 1))
         if hasattr(self.inter_markers_rubberband, "setIconSize"):
-            self.inter_markers_rubberband.setIconSize(16)
+            self.inter_markers_rubberband.setIconSize(14)
         self.inter_markers_rubberband.setWidth(3)
 
-        # Active highlighted error under cursor: Contrast Circle Halo (Variant 1.2)
+        # Active hover marker under cursor: Circle outline with NO fill (hollow target circle)
         self.active_node_halo = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
-        self.active_node_halo.setColor(QColor(6, 182, 212, 150))
+        self.active_node_halo.setColor(QColor(0, 0, 0, 0))  # No fill
+        self.active_node_halo.setStrokeColor(QColor(6, 182, 212, 255))  # Bright cyan outline
         self.active_node_halo.setIcon(getattr(QgsRubberBand, "ICON_CIRCLE", 3))
         if hasattr(self.active_node_halo, "setIconSize"):
-            self.active_node_halo.setIconSize(24)
-        self.active_node_halo.setWidth(3)
-
-        # Active highlighted error under cursor: Enforced Prominent White Cross (Variant 1.2)
-        self.active_node_marker = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
-        self.active_node_marker.setColor(QColor(255, 255, 255, 255))
-        self.active_node_marker.setIcon(getattr(QgsRubberBand, "ICON_X", 1))
-        if hasattr(self.active_node_marker, "setIconSize"):
-            self.active_node_marker.setIconSize(16)
-        self.active_node_marker.setWidth(3)
+            self.active_node_halo.setIconSize(22)
+        self.active_node_halo.setWidth(2)
 
         # Preview rubberband for live preview (Green dashed)
         self.preview_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PolygonGeometry)
@@ -142,7 +135,6 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
             self.dup_markers_rubberband,
             self.inter_markers_rubberband,
             self.active_node_halo,
-            self.active_node_marker,
             self.preview_rubberband,
         ):
             if rb:
@@ -153,7 +145,6 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
         self.dup_markers_rubberband.reset(QgsWkbTypes.GeometryType.PointGeometry)
         self.inter_markers_rubberband.reset(QgsWkbTypes.GeometryType.PointGeometry)
         self.active_node_halo.reset(QgsWkbTypes.GeometryType.PointGeometry)
-        self.active_node_marker.reset(QgsWkbTypes.GeometryType.PointGeometry)
         self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
 
     def current_vector_layer(self) -> Optional[QgsVectorLayer]:
@@ -286,7 +277,6 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
         # Hit test for duplicate nodes or self-intersections (within SNAP_PIXELS)
         self.active_item = self._find_error_at_pos(event.pos(), layer)
         self.active_node_halo.reset(QgsWkbTypes.GeometryType.PointGeometry)
-        self.active_node_marker.reset(QgsWkbTypes.GeometryType.PointGeometry)
 
         if self.active_item:
             _, item_data = self.active_item
@@ -294,8 +284,6 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
             map_pt_err = self.toMapCoordinates(layer, QgsPointXY(pt.x(), pt.y()))
             self.active_node_halo.addPoint(map_pt_err, True)
             self.active_node_halo.show()
-            self.active_node_marker.addPoint(map_pt_err, True)
-            self.active_node_marker.show()
 
     def _apply_split_features(
         self,
@@ -625,7 +613,6 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
             # Always clear active item and active markers after menu closes
             self.active_item = None
             self.active_node_halo.reset(QgsWkbTypes.GeometryType.PointGeometry)
-            self.active_node_marker.reset(QgsWkbTypes.GeometryType.PointGeometry)
             self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
 
         # CASE 2: Clicked on feature body -> Fast One-Click Clean with SinglePart split safety (Variant A)

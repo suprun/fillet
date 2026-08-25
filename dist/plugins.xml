@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
-  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.55" plugin_id="fillet">
+  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.56" plugin_id="fillet">
     <description>Interactive Fillet, Chamfer, Two-Line Merge, Corner Restoration, CAD Rotation, Mirror, Scale &amp; Edge Offset suite for QGIS.</description>
     <about>Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), Interactive CAD Rotation, CAD Mirror Tool, CAD 3-Point Scale with Rotation Tool, and CAD Edge Offset (Parallel Shift) Tool for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.</about>
-    <version>1.0.0.55</version>
+    <version>1.0.0.56</version>
     <qgis_minimum_version>3.16</qgis_minimum_version>
     <qgis_maximum_version>4.99</qgis_maximum_version>
     <file_name>fillet.zip</file_name>
@@ -14,7 +14,10 @@
     <experimental>False</experimental>
     <deprecated>False</deprecated>
     <tags>cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation, mirror, symmetry, scale, scale-rotate, offset, edge-offset, duplicate, nodes, clean, deduplicate, self-intersection, topology, geometry, digitizing, curve, batch, merge, qgis4</tags>
-    <change_log>1.0.0.55:
+    <change_log>1.0.0.56:
+- Applied standard QGIS topology markers: red crosses for duplicate nodes and bright green crosses for self-intersections.
+- Added hollow outline circle on hover without fill encircling the issue point.
+1.0.0.55:
 - Re-styled duplicate node markers to high-visibility emerald green with 3px line stroke.
 - Enlarged active hover halo (24px) and prominent white target cross (16px) for distinct visual feedback.
 1.0.0.54:
