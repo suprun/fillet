@@ -4,17 +4,19 @@ qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
 description=Interactive Fillet, Chamfer, Two-Line Merge, Corner Restoration, CAD Rotation, Mirror, Scale & Edge Offset suite for QGIS.
 about=Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), Interactive CAD Rotation, CAD Mirror Tool, CAD 3-Point Scale with Rotation Tool, and CAD Edge Offset (Parallel Shift) Tool for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.
-version=1.0.0.44
+version=1.0.0.45
 author=suprun
 email=suprun.serhiy+qgis@gmail.com
 homepage=https://github.com/suprun/fillet
 repository=https://github.com/suprun/fillet
 tracker=https://github.com/suprun/fillet/issues
-tags=cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation, mirror, symmetry, scale, scale-rotate, offset, edge-offset, geometry, digitizing, curve, batch, merge, qgis4
+tags=cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation, mirror, symmetry, scale, scale-rotate, offset, edge-offset, duplicate, nodes, clean, deduplicate, geometry, digitizing, curve, batch, merge, qgis4
 icon=icon.png
 experimental=False
 deprecated=False
-changelog=1.0.0.44:
+changelog=1.0.0.45:
+    - Added CAD Clean Duplicate Nodes Tool with feature hover highlighting, one-click cleanup, and context menu with live preview.
+    1.0.0.44:
     - Added standard QGIS confirmation prompt when selected features are outside visible map view for Rotate, Mirror, and Scale & Rotate tools.
     1.0.0.43:
     - Added automatic deduplication and dissolution of collapsed duplicate vertices when an edge is offset to an adjacent node in Extend mode.

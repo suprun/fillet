@@ -27,6 +27,8 @@ from qgis.PyQt.QtWidgets import QDockWidget
 try:
     from .core.geometry_engine import GeometryEngine
     from .gui.canvas_widget import FilletCanvasWidget
+    from .gui.clean_duplicate_nodes_canvas_widget import CleanDuplicateNodesCanvasWidget
+    from .gui.clean_duplicate_nodes_map_tool import CleanDuplicateNodesMapTool
     from .gui.edge_offset_canvas_widget import EdgeOffsetCanvasWidget
     from .gui.edge_offset_map_tool import EdgeOffsetMapTool
     from .gui.map_tool import FilletMapTool
@@ -43,6 +45,8 @@ try:
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
     from gui.canvas_widget import FilletCanvasWidget
+    from gui.clean_duplicate_nodes_canvas_widget import CleanDuplicateNodesCanvasWidget
+    from gui.clean_duplicate_nodes_map_tool import CleanDuplicateNodesMapTool
     from gui.edge_offset_canvas_widget import EdgeOffsetCanvasWidget
     from gui.edge_offset_map_tool import EdgeOffsetMapTool
     from gui.map_tool import FilletMapTool
@@ -77,6 +81,7 @@ class FilletPlugin:
         self.mirror_action: Optional[QAction] = None
         self.scale_rotate_action: Optional[QAction] = None
         self.edge_offset_action: Optional[QAction] = None
+        self.clean_duplicates_action: Optional[QAction] = None
         self.batch_action: Optional[QAction] = None
         self.map_tool: Optional[FilletMapTool] = None
         self.two_line_map_tool: Optional[TwoLineMapTool] = None
@@ -90,6 +95,8 @@ class FilletPlugin:
         self.scale_rotate_widget: Optional[ScaleRotateCanvasWidget] = None
         self.edge_offset_map_tool: Optional[EdgeOffsetMapTool] = None
         self.edge_offset_widget: Optional[EdgeOffsetCanvasWidget] = None
+        self.clean_duplicates_map_tool: Optional[CleanDuplicateNodesMapTool] = None
+        self.clean_duplicates_widget: Optional[CleanDuplicateNodesCanvasWidget] = None
         self.canvas_widget: Optional[FilletCanvasWidget] = None
         self.dock_widget: Optional[QDockWidget] = None
         self.settings_widget: Optional[FilletSettingsWidget] = None
@@ -267,6 +274,22 @@ class FilletPlugin:
         self.edge_offset_action.setToolTip(self.tr("Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії"))
         self.edge_offset_action.triggered.connect(self.toggle_edge_offset_tool)
 
+        # 7.7. Create interactive Quick Clean Duplicate Nodes Map Tool (available in QGIS 3.x and QGIS 4.x)
+        self.clean_duplicates_widget = CleanDuplicateNodesCanvasWidget(self.canvas)
+        self.clean_duplicates_widget.hide()
+        self.clean_duplicates_map_tool = CleanDuplicateNodesMapTool(self.canvas, self.clean_duplicates_widget)
+
+        clean_icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionCleanDuplicateNodes.svg")
+        self.clean_duplicates_action = QAction(
+            QIcon(clean_icon_path),
+            self.tr("CAD Очищення дубльованих вузлів"),
+            self.iface.mainWindow(),
+        )
+        self.clean_duplicates_action.setCheckable(True)
+        self.clean_duplicates_action.setObjectName("actionCleanDuplicateNodes")
+        self.clean_duplicates_action.setToolTip(self.tr("Швидке очищення та виправлення дубльованих вузлів геометрій"))
+        self.clean_duplicates_action.triggered.connect(self.toggle_clean_duplicates_tool)
+
         adv_tb = self.iface.advancedDigitizeToolBar()
 
         # 8. Create interactive Fillet / Chamfer MapTool ONLY in QGIS 3.x (native in QGIS 4.0+)
@@ -294,7 +317,7 @@ class FilletPlugin:
                 self.iface.addVectorToolBarIcon(self.action)
             self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.action)
 
-        # 9. Insert rotate_action, mirror_action, scale_rotate_action, edge_offset_action on toolbar (after standard Rotate Feature action / 4th, 5th, 6th, 7th place)
+        # 9. Insert rotate_action, mirror_action, scale_rotate_action, edge_offset_action, clean_duplicates_action on toolbar
         if adv_tb:
             rotate_feature_act = None
             for act in adv_tb.actions():
@@ -350,11 +373,23 @@ class FilletPlugin:
                     adv_tb.addAction(self.edge_offset_action)
             except (ValueError, IndexError):
                 adv_tb.addAction(self.edge_offset_action)
+
+            # Insert clean_duplicates_action after edge_offset_action
+            actions_now = adv_tb.actions()
+            try:
+                idx = actions_now.index(self.edge_offset_action)
+                if idx + 1 < len(actions_now):
+                    adv_tb.insertAction(actions_now[idx + 1], self.clean_duplicates_action)
+                else:
+                    adv_tb.addAction(self.clean_duplicates_action)
+            except (ValueError, IndexError):
+                adv_tb.addAction(self.clean_duplicates_action)
         else:
             self.iface.addVectorToolBarIcon(self.rotate_action)
             self.iface.addVectorToolBarIcon(self.mirror_action)
             self.iface.addVectorToolBarIcon(self.scale_rotate_action)
             self.iface.addVectorToolBarIcon(self.edge_offset_action)
+            self.iface.addVectorToolBarIcon(self.clean_duplicates_action)
 
         # 10. Insert two_line_action, restore_action and batch_action on toolbar
         if adv_tb:
@@ -412,6 +447,7 @@ class FilletPlugin:
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.mirror_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.scale_rotate_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.edge_offset_action)
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.clean_duplicates_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.batch_action)
 
         if self.canvas:
@@ -534,6 +570,20 @@ class FilletPlugin:
             self.edge_offset_action.deleteLater()
             self.edge_offset_action = None
 
+        # 5.7. Clean up clean duplicates action
+        if self.clean_duplicates_action:
+            try:
+                self.clean_duplicates_action.triggered.disconnect(self.toggle_clean_duplicates_tool)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            if self.iface.advancedDigitizeToolBar():
+                self.iface.advancedDigitizeToolBar().removeAction(self.clean_duplicates_action)
+            self.iface.removeVectorToolBarIcon(self.clean_duplicates_action)
+            self.iface.removePluginVectorMenu(self.tr("Fillet & Chamfer"), self.clean_duplicates_action)
+            self.clean_duplicates_action.setParent(None)
+            self.clean_duplicates_action.deleteLater()
+            self.clean_duplicates_action = None
+
         # 6. Clean up two line action
         if self.two_line_action:
             try:
@@ -633,6 +683,16 @@ class FilletPlugin:
             self.edge_offset_map_tool.deleteLater()
             self.edge_offset_map_tool = None
 
+        if self.clean_duplicates_map_tool:
+            if self.canvas and self.canvas.mapTool() == self.clean_duplicates_map_tool:
+                self.canvas.unsetMapTool(self.clean_duplicates_map_tool)
+            if hasattr(self.clean_duplicates_map_tool, "cleanup"):
+                self.clean_duplicates_map_tool.cleanup()
+            else:
+                self.clean_duplicates_map_tool.deactivate()
+            self.clean_duplicates_map_tool.deleteLater()
+            self.clean_duplicates_map_tool = None
+
         # 9. Clean up canvas widgets
         if self.canvas_widget:
             try:
@@ -693,6 +753,16 @@ class FilletPlugin:
             self.edge_offset_widget.setParent(None)
             self.edge_offset_widget.deleteLater()
             self.edge_offset_widget = None
+
+        if self.clean_duplicates_widget:
+            try:
+                self.canvas.removeEventFilter(self.clean_duplicates_widget)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            self.clean_duplicates_widget.hide()
+            self.clean_duplicates_widget.setParent(None)
+            self.clean_duplicates_widget.deleteLater()
+            self.clean_duplicates_widget = None
 
         # 10. Clean up settings widget and dock widget
         if self.settings_widget:
@@ -788,6 +858,14 @@ class FilletPlugin:
             if self.canvas and self.canvas.mapTool() == self.edge_offset_map_tool:
                 self.canvas.unsetMapTool(self.edge_offset_map_tool)
 
+    def toggle_clean_duplicates_tool(self, checked: bool):
+        if checked:
+            if self.clean_duplicates_map_tool:
+                self.canvas.setMapTool(self.clean_duplicates_map_tool)
+        else:
+            if self.canvas and self.canvas.mapTool() == self.clean_duplicates_map_tool:
+                self.canvas.unsetMapTool(self.clean_duplicates_map_tool)
+
     def toggle_batch_panel(self, checked: bool):
         if self.dock_widget:
             self.dock_widget.setVisible(checked)
@@ -838,6 +916,12 @@ class FilletPlugin:
             self.edge_offset_action.setChecked(is_eo_active)
             if not is_eo_active and self.edge_offset_widget:
                 self.edge_offset_widget.hide()
+
+        if self.clean_duplicates_action:
+            is_cd_active = tool == self.clean_duplicates_map_tool
+            self.clean_duplicates_action.setChecked(is_cd_active)
+            if not is_cd_active and self.clean_duplicates_widget:
+                self.clean_duplicates_widget.hide()
 
     def _on_current_layer_changed(self, layer=None):
         self.update_action_state()
@@ -904,6 +988,8 @@ class FilletPlugin:
             self.scale_rotate_action.setEnabled(is_scale_rotate_enabled)
         if self.edge_offset_action:
             self.edge_offset_action.setEnabled(is_editable)
+        if self.clean_duplicates_action:
+            self.clean_duplicates_action.setEnabled(is_editable)
         if self.batch_action:
             self.batch_action.setEnabled(is_editable)
 
@@ -932,6 +1018,13 @@ class FilletPlugin:
                     self.edge_offset_widget.hide()
                 if self.edge_offset_action:
                     self.edge_offset_action.setChecked(False)
+
+            if self.clean_duplicates_map_tool and self.canvas.mapTool() == self.clean_duplicates_map_tool:
+                self.canvas.unsetMapTool(self.clean_duplicates_map_tool)
+                if self.clean_duplicates_widget:
+                    self.clean_duplicates_widget.hide()
+                if self.clean_duplicates_action:
+                    self.clean_duplicates_action.setChecked(False)
 
         if not is_rotate_enabled and self.canvas:
             if self.rotate_map_tool and self.canvas.mapTool() == self.rotate_map_tool:
