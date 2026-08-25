@@ -359,44 +359,44 @@
             <translation>Açı:</translation>
         </message>
         <message>
-            <source>CAD Зсув ребра (Edge Offset)</source>
-            <translation>CAD Kenar Öteleme (Edge Offset)</translation>
-        </message>
-        <message>
-            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
-            <translation>Çokgen veya çoklu çizgi segmentinin paralel ötelenmesi için etkileşimli CAD aracı</translation>
-        </message>
-        <message>
             <source>1. Вкажіть ребро (оберіть відрізок)</source>
             <translation>1. Kenarı belirtin (segment seçin)</translation>
         </message>
         <message>
             <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
-            <translation>2. Ötelemeyi belirtin veya onaylamak için tıklayın</translation>
+            <translation>2. Ofseti belirtin veya onaylamak için tıklayın</translation>
         </message>
         <message>
-            <source>Режим зсуву:</source>
-            <translation>Öteleme modu:</translation>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>CAD Kenar Ofseti (Edge Offset)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Çokgen veya çoklu çizgi kenar segmentinin paralel ofseti için etkileşimli CAD aracı</translation>
+        </message>
+        <message>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Mesafeyi kilitle / etkileşimli hesaplama</translation>
+        </message>
+        <message>
+            <source>Відстань:</source>
+            <translation>Mesafe:</translation>
+        </message>
+        <message>
+            <source>Зсув ребра</source>
+            <translation>Kenar Ofseti</translation>
         </message>
         <message>
             <source>Подовження (Extend)</source>
             <translation>Uzat (Extend)</translation>
         </message>
         <message>
+            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
+            <translation>Orijinali değiştirmek yerine ofsetli kenara sahip yeni bir detay oluşturur</translation>
+        </message>
+        <message>
             <source>Сходинка (Step)</source>
             <translation>Basamak (Step)</translation>
-        </message>
-        <message>
-            <source>Зсув ребра</source>
-            <translation>Kenar Öteleme</translation>
-        </message>
-        <message>
-            <source>Блокувати відстань / вільний розрахунок</source>
-            <translation>Mesafeyi kilitle / serbest hesaplama</translation>
-        </message>
-        <message>
-            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
-            <translation>Orijinali değiştirmek yerine ötelenmiş kenara sahip yeni bir detay oluşturun</translation>
         </message>
     </context>
 </TS>

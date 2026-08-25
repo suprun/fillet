@@ -359,44 +359,44 @@
             <translation>Winkel:</translation>
         </message>
         <message>
-            <source>CAD Зсув ребра (Edge Offset)</source>
-            <translation>CAD Kantenversatz (Edge Offset)</translation>
-        </message>
-        <message>
-            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
-            <translation>Interaktives CAD-Werkzeug zum parallelen Versetzen eines Polygon- oder Polyliniensegments</translation>
-        </message>
-        <message>
             <source>1. Вкажіть ребро (оберіть відрізок)</source>
             <translation>1. Kante angeben (Segment auswählen)</translation>
         </message>
         <message>
             <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
-            <translation>2. Versatz angeben oder zum Bestätigen klicken</translation>
+            <translation>2. Versatz angeben oder klicken zur Bestätigung</translation>
         </message>
         <message>
-            <source>Режим зсуву:</source>
-            <translation>Versatzmodus:</translation>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>CAD-Kantenversatz (Edge Offset)</translation>
         </message>
         <message>
-            <source>Подовження (Extend)</source>
-            <translation>Verlängern (Extend)</translation>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Interaktives CAD-Werkzeug für den parallelen Versatz von Polygon- oder Polylinien-Kanten</translation>
         </message>
         <message>
-            <source>Сходинка (Step)</source>
-            <translation>Stufe (Step)</translation>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Abstand sperren / interaktive Berechnung</translation>
+        </message>
+        <message>
+            <source>Відстань:</source>
+            <translation>Abstand:</translation>
         </message>
         <message>
             <source>Зсув ребра</source>
             <translation>Kantenversatz</translation>
         </message>
         <message>
-            <source>Блокувати відстань / вільний розрахунок</source>
-            <translation>Abstand sperren / freie Berechnung</translation>
+            <source>Подовження (Extend)</source>
+            <translation>Verlängern (Extend)</translation>
         </message>
         <message>
             <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
             <translation>Erstellt ein neues Objekt mit versetzter Kante, anstatt das Original zu ändern</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Stufe (Step)</translation>
         </message>
     </context>
 </TS>

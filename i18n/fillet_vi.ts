@@ -359,44 +359,44 @@
             <translation>Góc:</translation>
         </message>
         <message>
-            <source>CAD Зсув ребра (Edge Offset)</source>
-            <translation>CAD Dịch chuyển cạnh (Edge Offset)</translation>
-        </message>
-        <message>
-            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
-            <translation>Công cụ CAD tương tác để dịch chuyển song song một đoạn đa giác hoặc đường gấp khúc</translation>
-        </message>
-        <message>
             <source>1. Вкажіть ребро (оберіть відрізок)</source>
-            <translation>1. Chỉ định cạnh (chọn đoạn thẳng)</translation>
+            <translation>1. Chỉ định cạnh (chọn đoạn)</translation>
         </message>
         <message>
             <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
-            <translation>2. Chỉ định độ lệch hoặc nhấp để xác nhận</translation>
+            <translation>2. Chỉ định khoảng lệch hoặc nhấp để xác nhận</translation>
         </message>
         <message>
-            <source>Режим зсуву:</source>
-            <translation>Chế độ dịch chuyển:</translation>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>Lệch cạnh CAD (Edge Offset)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Công cụ CAD tương tác để lệch song song đoạn cạnh đa giác hoặc đa tuyến</translation>
+        </message>
+        <message>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Khóa khoảng cách / tính toán tương tác</translation>
+        </message>
+        <message>
+            <source>Відстань:</source>
+            <translation>Khoảng cách:</translation>
+        </message>
+        <message>
+            <source>Зсув ребра</source>
+            <translation>Lệch cạnh</translation>
         </message>
         <message>
             <source>Подовження (Extend)</source>
             <translation>Kéo dài (Extend)</translation>
         </message>
         <message>
-            <source>Сходинка (Step)</source>
-            <translation>Bậc thang (Step)</translation>
-        </message>
-        <message>
-            <source>Зсув ребра</source>
-            <translation>Dịch chuyển cạnh</translation>
-        </message>
-        <message>
-            <source>Блокувати відстань / вільний розрахунок</source>
-            <translation>Khóa khoảng cách / tính toán tự do</translation>
-        </message>
-        <message>
             <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
-            <translation>Tạo một đối tượng mới có cạnh dịch chuyển thay vì sửa đổi đối tượng gốc</translation>
+            <translation>Tạo đối tượng mới có cạnh bị lệch thay vì sửa đổi đối tượng gốc</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Bậc (Step)</translation>
         </message>
     </context>
 </TS>

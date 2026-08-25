@@ -359,44 +359,44 @@
             <translation>Γωνία:</translation>
         </message>
         <message>
+            <source>1. Вкажіть ребро (оберіть відрізок)</source>
+            <translation>1. Καθορίστε την ακμή (επιλέξτε τμήμα)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
+            <translation>2. Καθορίστε μετατόπιση ή κάντε κλικ για επιβεβαίωση</translation>
+        </message>
+        <message>
             <source>CAD Зсув ребра (Edge Offset)</source>
             <translation>CAD Μετατόπιση ακμής (Edge Offset)</translation>
         </message>
         <message>
             <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
-            <translation>Διαδραστικό εργαλείο CAD για παράλληλη μετατόπιση τμήματος πολυγώνου ή πολυγραμμής</translation>
+            <translation>Διαδραστικό εργαλείο CAD για παράλληλη μετατόπιση τμήματος ακμής πολυγώνου ή πολυγραμμής</translation>
         </message>
         <message>
-            <source>1. Вкажіть ребро (оберіть відрізок)</source>
-            <translation>1. Ορίστε ακμή (επιλέξτε τμήμα)</translation>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Κλείδωμα απόστασης / διαδραστικός υπολογισμός</translation>
         </message>
         <message>
-            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
-            <translation>2. Ορίστε μετατόπιση ή κάντε κλικ για επιβεβαίωση</translation>
-        </message>
-        <message>
-            <source>Режим зсуву:</source>
-            <translation>Λειτουργία μετατόπισης:</translation>
-        </message>
-        <message>
-            <source>Подовження (Extend)</source>
-            <translation>Επέκταση (Extend)</translation>
-        </message>
-        <message>
-            <source>Сходинка (Step)</source>
-            <translation>Βήμα (Step)</translation>
+            <source>Відстань:</source>
+            <translation>Απόσταση:</translation>
         </message>
         <message>
             <source>Зсув ребра</source>
             <translation>Μετατόπιση ακμής</translation>
         </message>
         <message>
-            <source>Блокувати відстань / вільний розрахунок</source>
-            <translation>Κλείδωμα απόστασης / ελεύθερος υπολογισμός</translation>
+            <source>Подовження (Extend)</source>
+            <translation>Επέκταση (Extend)</translation>
         </message>
         <message>
             <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
-            <translation>Δημιουργία νέου στοιχείου με μετατοπισμένη ακμή αντί για τροποποίηση του αρχικού</translation>
+            <translation>Δημιουργεί νέο στοιχείο με μετατοπισμένη ακμή αντί να τροποποιήσει το αρχικό</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Βήμα (Step)</translation>
         </message>
     </context>
 </TS>

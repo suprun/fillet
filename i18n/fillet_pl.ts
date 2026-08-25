@@ -359,44 +359,44 @@
             <translation>Kąt:</translation>
         </message>
         <message>
-            <source>CAD Зсув ребра (Edge Offset)</source>
-            <translation>Odsunięcie krawędzi CAD (Edge Offset)</translation>
-        </message>
-        <message>
-            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
-            <translation>Interaktywne narzędzie CAD do równoległego odsuwania segmentu poligonu lub polilinii</translation>
-        </message>
-        <message>
             <source>1. Вкажіть ребро (оберіть відрізок)</source>
             <translation>1. Wskaż krawędź (wybierz segment)</translation>
         </message>
         <message>
             <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
-            <translation>2. Wskaż przesunięcie lub kliknij, aby zatwierdzić</translation>
+            <translation>2. Wskaż odsunięcie lub kliknij, aby zatwierdzić</translation>
         </message>
         <message>
-            <source>Режим зсуву:</source>
-            <translation>Tryb odsunięcia:</translation>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>Odsunięcie krawędzi CAD (Edge Offset)</translation>
         </message>
         <message>
-            <source>Подовження (Extend)</source>
-            <translation>Wydłużenie (Extend)</translation>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Interaktywne narzędzie CAD do równoległego odsuwania segmentu krawędzi poligonu lub polilinii</translation>
         </message>
         <message>
-            <source>Сходинка (Step)</source>
-            <translation>Uskok (Step)</translation>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Zablokuj odległość / obliczanie interaktywne</translation>
+        </message>
+        <message>
+            <source>Відстань:</source>
+            <translation>Odległość:</translation>
         </message>
         <message>
             <source>Зсув ребра</source>
             <translation>Odsunięcie krawędzi</translation>
         </message>
         <message>
-            <source>Блокувати відстань / вільний розрахунок</source>
-            <translation>Zablokuj odległość / swobodne obliczenia</translation>
+            <source>Подовження (Extend)</source>
+            <translation>Wydłuż (Extend)</translation>
         </message>
         <message>
             <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
-            <translation>Utwórz nowy obiekt z odsuniętą krawędzią zamiast modyfikować oryginał</translation>
+            <translation>Tworzy nowy obiekt z odsuniętą krawędzią zamiast modyfikować oryginał</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Uskok (Step)</translation>
         </message>
     </context>
 </TS>

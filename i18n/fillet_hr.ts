@@ -359,14 +359,6 @@
             <translation>Kut:</translation>
         </message>
         <message>
-            <source>CAD Зсув ребра (Edge Offset)</source>
-            <translation>CAD Pomak ruba (Edge Offset)</translation>
-        </message>
-        <message>
-            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
-            <translation>Interaktivni CAD alat za paralelni pomak segmenta poligona ili polilinije</translation>
-        </message>
-        <message>
             <source>1. Вкажіть ребро (оберіть відрізок)</source>
             <translation>1. Odredite rub (odaberite segment)</translation>
         </message>
@@ -375,28 +367,36 @@
             <translation>2. Odredite pomak ili kliknite za potvrdu</translation>
         </message>
         <message>
-            <source>Режим зсуву:</source>
-            <translation>Način pomaka:</translation>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>CAD Pomak ruba (Edge Offset)</translation>
         </message>
         <message>
-            <source>Подовження (Extend)</source>
-            <translation>Produži (Extend)</translation>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Interaktivni CAD alat za paralelni pomak segmenta ruba poligona ili polilinije</translation>
         </message>
         <message>
-            <source>Сходинка (Step)</source>
-            <translation>Stuba (Step)</translation>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Zaključaj udaljenost / interaktivni izračun</translation>
+        </message>
+        <message>
+            <source>Відстань:</source>
+            <translation>Udaljenost:</translation>
         </message>
         <message>
             <source>Зсув ребра</source>
             <translation>Pomak ruba</translation>
         </message>
         <message>
-            <source>Блокувати відстань / вільний розрахунок</source>
-            <translation>Zaključaj udaljenost / slobodan izračun</translation>
+            <source>Подовження (Extend)</source>
+            <translation>Produži (Extend)</translation>
         </message>
         <message>
             <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
-            <translation>Stvori novi objekt s pomaknutim rubom umjesto mijenjanja izvornika</translation>
+            <translation>Stvara novi objekt s pomaknutim rubom umjesto promjene izvornika</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Stuba (Step)</translation>
         </message>
     </context>
 </TS>

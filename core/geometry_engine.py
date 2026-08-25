@@ -1714,11 +1714,22 @@ class GeometryEngine:
         if mode == "step":
             # Insert rectangular step / jog
             if not is_closed:
-                new_pts = (
-                    [curve.pointN(k) for k in range(0, i + 1)]
-                    + [p1, p2]
-                    + [curve.pointN(k) for k in range(i + 1, num_pts)]
-                )
+                if num_pts == 2:
+                    # Single segment open polyline: simply shift the segment
+                    new_pts = [p1, p2]
+                elif i == 0:
+                    # First segment of open polyline: starts at p1 -> p2 -> v1 -> v2 ...
+                    new_pts = [p1, p2] + [curve.pointN(k) for k in range(1, num_pts)]
+                elif i == num_pts - 2:
+                    # Last segment of open polyline: v0 -> ... -> v_{n-2} -> p1 -> p2
+                    new_pts = [curve.pointN(k) for k in range(0, num_pts - 1)] + [p1, p2]
+                else:
+                    # Middle segment: v0 -> ... -> v_i -> p1 -> p2 -> v_{i+1} -> ... -> v_{n-1}
+                    new_pts = (
+                        [curve.pointN(k) for k in range(0, i + 1)]
+                        + [p1, p2]
+                        + [curve.pointN(k) for k in range(i + 1, num_pts)]
+                    )
             else:
                 if i == effective_count - 1:
                     new_pts = (

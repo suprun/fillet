@@ -359,44 +359,44 @@
             <translation>الزاوية:</translation>
         </message>
         <message>
-            <source>CAD Зсув ребра (Edge Offset)</source>
-            <translation>إزاحة الحافة CAD (Edge Offset)</translation>
-        </message>
-        <message>
-            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
-            <translation>أداة CAD تفاعلية للإزاحة الموازية لقطعة مضلع أو خط متعدد</translation>
-        </message>
-        <message>
             <source>1. Вкажіть ребро (оберіть відрізок)</source>
-            <translation>1. حدد الحافة (اختر القطعة)</translation>
+            <translation>1. حدد الحافة (اختر المقطع)</translation>
         </message>
         <message>
             <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
             <translation>2. حدد الإزاحة أو انقر للتأكيد</translation>
         </message>
         <message>
-            <source>Режим зсуву:</source>
-            <translation>وضع الإزاحة:</translation>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>إزاحة الحافة CAD (Edge Offset)</translation>
         </message>
         <message>
-            <source>Подовження (Extend)</source>
-            <translation>تمديد (Extend)</translation>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>أداة CAD تفاعلية للإزاحة المتوازية لمقطع حافة مضلع أو خط متعدد</translation>
         </message>
         <message>
-            <source>Сходинка (Step)</source>
-            <translation>درجة (Step)</translation>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>قفل المسافة / حساب تفاعلي</translation>
+        </message>
+        <message>
+            <source>Відстань:</source>
+            <translation>المسافة:</translation>
         </message>
         <message>
             <source>Зсув ребра</source>
             <translation>إزاحة الحافة</translation>
         </message>
         <message>
-            <source>Блокувати відстань / вільний розрахунок</source>
-            <translation>قفل المسافة / حساب حر</translation>
+            <source>Подовження (Extend)</source>
+            <translation>تمديد (Extend)</translation>
         </message>
         <message>
             <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
-            <translation>إنشاء معلم جديد بحافة مزاحة بدلاً من تعديل المعلم الأصلي</translation>
+            <translation>إنشاء معلم جديد بحافة مزاحة بدلاً من تعديل الأصل</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>درجة (Step)</translation>
         </message>
     </context>
 </TS>

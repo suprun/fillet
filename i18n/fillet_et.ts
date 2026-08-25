@@ -359,44 +359,44 @@
             <translation>Nurk:</translation>
         </message>
         <message>
+            <source>1. Вкажіть ребро (оберіть відрізок)</source>
+            <translation>1. Määrake serv (valige segment)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
+            <translation>2. Määrake nihe või klõpsake kinnitamiseks</translation>
+        </message>
+        <message>
             <source>CAD Зсув ребра (Edge Offset)</source>
             <translation>CAD Serva nihe (Edge Offset)</translation>
         </message>
         <message>
             <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
-            <translation>Interaktiivne CAD-tööriist polügooni või murdjoone segmendi paralleelseks nihutamiseks</translation>
+            <translation>Interaktiivne CAD-tööriist polügooni või polüjoone serva paralleelseks nihutamiseks</translation>
         </message>
         <message>
-            <source>1. Вкажіть ребро (оберіть відрізок)</source>
-            <translation>1. Määra serv (vali segment)</translation>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Lukusta vahemaa / interaktiivne arvutus</translation>
         </message>
         <message>
-            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
-            <translation>2. Määra nihe või klõpsa kinnitamiseks</translation>
-        </message>
-        <message>
-            <source>Режим зсуву:</source>
-            <translation>Nihkerežiim:</translation>
-        </message>
-        <message>
-            <source>Подовження (Extend)</source>
-            <translation>Pikenda (Extend)</translation>
-        </message>
-        <message>
-            <source>Сходинка (Step)</source>
-            <translation>Aste (Step)</translation>
+            <source>Відстань:</source>
+            <translation>Vahemaa:</translation>
         </message>
         <message>
             <source>Зсув ребра</source>
             <translation>Serva nihe</translation>
         </message>
         <message>
-            <source>Блокувати відстань / вільний розрахунок</source>
-            <translation>Lukusta vahemaa / vaba arvutus</translation>
+            <source>Подовження (Extend)</source>
+            <translation>Pikenda (Extend)</translation>
         </message>
         <message>
             <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
-            <translation>Loo nihutatud servaga uus objekt esialgse muutmise asemel</translation>
+            <translation>Loob uue objekti nihutatud servaga originaali muutmise asemel</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Aste (Step)</translation>
         </message>
     </context>
 </TS>

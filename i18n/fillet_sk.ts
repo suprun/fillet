@@ -359,44 +359,44 @@
             <translation>Uhol:</translation>
         </message>
         <message>
-            <source>CAD Зсув ребра (Edge Offset)</source>
-            <translation>CAD Odsadenie hrany (Edge Offset)</translation>
-        </message>
-        <message>
-            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
-            <translation>Interaktívny CAD nástroj na paralelné odsadenie segmentu polygónu alebo krivky</translation>
-        </message>
-        <message>
             <source>1. Вкажіть ребро (оберіть відрізок)</source>
             <translation>1. Určite hranu (vyberte segment)</translation>
         </message>
         <message>
             <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
-            <translation>2. Určite odsadenie alebo kliknite na potvrdenie</translation>
+            <translation>2. Určite posun alebo kliknite na potvrdenie</translation>
         </message>
         <message>
-            <source>Режим зсуву:</source>
-            <translation>Režim odsadenia:</translation>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>CAD Posun hrany (Edge Offset)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Interaktívny CAD nástroj na paralelný posun segmentu hrany polygónu alebo lomenej čiary</translation>
+        </message>
+        <message>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Zamknúť vzdialenosť / interaktívny výpočet</translation>
+        </message>
+        <message>
+            <source>Відстань:</source>
+            <translation>Vzdialenosť:</translation>
+        </message>
+        <message>
+            <source>Зсув ребра</source>
+            <translation>Posun hrany</translation>
         </message>
         <message>
             <source>Подовження (Extend)</source>
             <translation>Predĺžiť (Extend)</translation>
         </message>
         <message>
+            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
+            <translation>Vytvorí nový prvok s posunutou hranou namiesto úpravy pôvodného</translation>
+        </message>
+        <message>
             <source>Сходинка (Step)</source>
             <translation>Schod (Step)</translation>
-        </message>
-        <message>
-            <source>Зсув ребра</source>
-            <translation>Odsadenie hrany</translation>
-        </message>
-        <message>
-            <source>Блокувати відстань / вільний розрахунок</source>
-            <translation>Uzamknúť vzdialenosť / voľný výpočet</translation>
-        </message>
-        <message>
-            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
-            <translation>Vytvoriť nový prvok s posunutou hranou namiesto úpravy pôvodného</translation>
         </message>
     </context>
 </TS>

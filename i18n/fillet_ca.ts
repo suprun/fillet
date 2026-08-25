@@ -359,14 +359,6 @@
             <translation>Angle:</translation>
         </message>
         <message>
-            <source>CAD Зсув ребра (Edge Offset)</source>
-            <translation>Desplaçament de vora CAD (Edge Offset)</translation>
-        </message>
-        <message>
-            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
-            <translation>Eina CAD interactiva per al desplaçament paral·lel d'un segment de polígon o polilínia</translation>
-        </message>
-        <message>
             <source>1. Вкажіть ребро (оберіть відрізок)</source>
             <translation>1. Especifiqueu la vora (seleccioneu el segment)</translation>
         </message>
@@ -375,28 +367,36 @@
             <translation>2. Especifiqueu el desplaçament o feu clic per confirmar</translation>
         </message>
         <message>
-            <source>Режим зсуву:</source>
-            <translation>Mode de desplaçament:</translation>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>CAD Desplaçament de vora (Edge Offset)</translation>
         </message>
         <message>
-            <source>Подовження (Extend)</source>
-            <translation>Extendre (Extend)</translation>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Eina CAD interactiva per al desplaçament paral·lel d'un segment de vora de polígon o polilínia</translation>
         </message>
         <message>
-            <source>Сходинка (Step)</source>
-            <translation>Esglaó (Step)</translation>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Bloqueja la distància / càlcul interactiu</translation>
+        </message>
+        <message>
+            <source>Відстань:</source>
+            <translation>Distància:</translation>
         </message>
         <message>
             <source>Зсув ребра</source>
             <translation>Desplaçament de vora</translation>
         </message>
         <message>
-            <source>Блокувати відстань / вільний розрахунок</source>
-            <translation>Bloqueja la distància / càlcul lliure</translation>
+            <source>Подовження (Extend)</source>
+            <translation>Estén (Extend)</translation>
         </message>
         <message>
             <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
-            <translation>Crea un element nou amb la vora desplaçada en lloc de modificar l'original</translation>
+            <translation>Crea una nova entitat amb la vora desplaçada en lloc de modificar l'original</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Graó (Step)</translation>
         </message>
     </context>
 </TS>

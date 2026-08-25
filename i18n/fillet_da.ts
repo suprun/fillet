@@ -359,14 +359,6 @@
             <translation>Vinkel:</translation>
         </message>
         <message>
-            <source>CAD Зсув ребра (Edge Offset)</source>
-            <translation>CAD Kantforskydning (Edge Offset)</translation>
-        </message>
-        <message>
-            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
-            <translation>Interaktivt CAD-værktøj til parallel forskydning af et polygon- eller polylinjesegment</translation>
-        </message>
-        <message>
             <source>1. Вкажіть ребро (оберіть відрізок)</source>
             <translation>1. Angiv kant (vælg segment)</translation>
         </message>
@@ -375,28 +367,36 @@
             <translation>2. Angiv forskydning eller klik for at bekræfte</translation>
         </message>
         <message>
-            <source>Режим зсуву:</source>
-            <translation>Forskydningstilstand:</translation>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>CAD Kantforskydning (Edge Offset)</translation>
         </message>
         <message>
-            <source>Подовження (Extend)</source>
-            <translation>Forlæng (Extend)</translation>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Interaktivt CAD-værktøj til parallel forskydning af polygon- eller polylinjesegment</translation>
         </message>
         <message>
-            <source>Сходинка (Step)</source>
-            <translation>Trin (Step)</translation>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Lås afstand / interaktiv beregning</translation>
+        </message>
+        <message>
+            <source>Відстань:</source>
+            <translation>Afstand:</translation>
         </message>
         <message>
             <source>Зсув ребра</source>
             <translation>Kantforskydning</translation>
         </message>
         <message>
-            <source>Блокувати відстань / вільний розрахунок</source>
-            <translation>Lås afstand / fri beregning</translation>
+            <source>Подовження (Extend)</source>
+            <translation>Forlæng (Extend)</translation>
         </message>
         <message>
             <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
-            <translation>Opret et nyt element med forskudt kant i stedet for at ændre det oprindelige</translation>
+            <translation>Opretter et nyt element med forskudt kant i stedet for at ændre det originale</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Trin (Step)</translation>
         </message>
     </context>
 </TS>

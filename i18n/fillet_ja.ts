@@ -359,44 +359,44 @@
             <translation>角度:</translation>
         </message>
         <message>
-            <source>CAD Зсув ребра (Edge Offset)</source>
-            <translation>CAD エッジオフセット (Edge Offset)</translation>
-        </message>
-        <message>
-            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
-            <translation>ポリゴンまたはポリラインのセグメントを平行オフセットする対話型CADツール</translation>
-        </message>
-        <message>
             <source>1. Вкажіть ребро (оберіть відрізок)</source>
             <translation>1. エッジを指定（セグメントを選択）</translation>
         </message>
         <message>
             <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
-            <translation>2. オフセットを指定するかクリックして確定</translation>
+            <translation>2. オフセットを指定またはクリックして確定</translation>
         </message>
         <message>
-            <source>Режим зсуву:</source>
-            <translation>オフセットモード:</translation>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>CAD エッジオフセット (Edge Offset)</translation>
         </message>
         <message>
-            <source>Подовження (Extend)</source>
-            <translation>延長 (Extend)</translation>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>ポリゴンまたはポリラインのエッジセグメントを平行オフセットするインタラクティブなCADツール</translation>
         </message>
         <message>
-            <source>Сходинка (Step)</source>
-            <translation>ステップ (Step)</translation>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>距離をロック / インタラクティブ計算</translation>
+        </message>
+        <message>
+            <source>Відстань:</source>
+            <translation>距離:</translation>
         </message>
         <message>
             <source>Зсув ребра</source>
             <translation>エッジオフセット</translation>
         </message>
         <message>
-            <source>Блокувати відстань / вільний розрахунок</source>
-            <translation>距離をロック / 自由計算</translation>
+            <source>Подовження (Extend)</source>
+            <translation>延長 (Extend)</translation>
         </message>
         <message>
             <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
-            <translation>元の地物を変更する代わりに、オフセットされたエッジを持つ新しい地物を作成します</translation>
+            <translation>元の地物を変更する代わりに、オフセットされたエッジを持つ新しい地物を作成</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>ステップ (Step)</translation>
         </message>
     </context>
 </TS>

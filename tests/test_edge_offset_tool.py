@@ -171,11 +171,27 @@ class TestEdgeOffsetTool(unittest.TestCase):
         self.assertAlmostEqual(pts2[1].x(), 13.0, places=4)
         self.assertAlmostEqual(pts2[2].x(), 13.0, places=4)
 
-        # Shift in step mode
-        res_l_step = GeometryEngine.offset_segment(line, 0, 0, 1, -3.0, mode="step")
-        self.assertIsNotNone(res_l_step)
-        pts_step = res_l_step.asPolyline()
-        self.assertEqual(len(pts_step), 6)  # 4 + 2 new vertices
+        # Shift middle segment in step mode (jog inserted at both internal joints)
+        res_l_step_mid = GeometryEngine.offset_segment(line, 0, 0, 1, -3.0, mode="step")
+        self.assertIsNotNone(res_l_step_mid)
+        pts_step_mid = res_l_step_mid.asPolyline()
+        self.assertEqual(len(pts_step_mid), 6)  # 4 + 2 new vertices
+
+        # Shift first segment in step mode (no perpendicular end cap at outer start V0)
+        res_l_step_first = GeometryEngine.offset_segment(line, 0, 0, 0, 2.0, mode="step")
+        self.assertIsNotNone(res_l_step_first)
+        pts_first = res_l_step_first.asPolyline()
+        self.assertEqual(len(pts_first), 5)  # [P1, P2, V1, V2, V3]
+        self.assertAlmostEqual(pts_first[0].x(), 0.0)
+        self.assertAlmostEqual(pts_first[0].y(), 2.0)
+
+        # Shift last segment in step mode (no perpendicular end cap at outer end V3)
+        res_l_step_last = GeometryEngine.offset_segment(line, 0, 0, 2, 2.0, mode="step")
+        self.assertIsNotNone(res_l_step_last)
+        pts_last = res_l_step_last.asPolyline()
+        self.assertEqual(len(pts_last), 5)  # [V0, V1, V2, P1, P2]
+        self.assertAlmostEqual(pts_last[4].x(), 20.0)
+        self.assertAlmostEqual(pts_last[4].y(), 12.0)
 
     def test_canvas_widget_and_shift_inversion(self):
         widget = EdgeOffsetCanvasWidget(self.canvas)

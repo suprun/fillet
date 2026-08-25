@@ -359,44 +359,44 @@
             <translation>각도:</translation>
         </message>
         <message>
-            <source>CAD Зсув ребра (Edge Offset)</source>
-            <translation>CAD 가장자리 오프셋 (Edge Offset)</translation>
-        </message>
-        <message>
-            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
-            <translation>다각형 또는 폴리라인 세그먼트의 평행 오프셋을 위한 대화형 CAD 도구</translation>
-        </message>
-        <message>
             <source>1. Вкажіть ребро (оберіть відрізок)</source>
-            <translation>1. 가장자리 지정 (세그먼트 선택)</translation>
+            <translation>1. 모서리 지정 (세그먼트 선택)</translation>
         </message>
         <message>
             <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
-            <translation>2. 오프셋을 지정하거나 클릭하여 확인</translation>
+            <translation>2. 오프셋 지정 또는 클릭하여 확인</translation>
         </message>
         <message>
-            <source>Режим зсуву:</source>
-            <translation>오프셋 모드:</translation>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>CAD 모서리 오프셋 (Edge Offset)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>다각형 또는 다중선 모서리 세그먼트의 평행 오프셋을 위한 대화형 CAD 도구</translation>
+        </message>
+        <message>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>거리 고정 / 대화형 계산</translation>
+        </message>
+        <message>
+            <source>Відстань:</source>
+            <translation>거리:</translation>
+        </message>
+        <message>
+            <source>Зсув ребра</source>
+            <translation>모서리 오프셋</translation>
         </message>
         <message>
             <source>Подовження (Extend)</source>
             <translation>연장 (Extend)</translation>
         </message>
         <message>
-            <source>Сходинка (Step)</source>
-            <translation>계단형 (Step)</translation>
-        </message>
-        <message>
-            <source>Зсув ребра</source>
-            <translation>가장자리 오프셋</translation>
-        </message>
-        <message>
-            <source>Блокувати відстань / вільний розрахунок</source>
-            <translation>거리 고정 / 자유 계산</translation>
-        </message>
-        <message>
             <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
-            <translation>원본을 수정하는 대신 오프셋된 가장자리가 있는 새 피처 생성</translation>
+            <translation>원본을 수정하는 대신 오프셋 모서리가 있는 새 객체 생성</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>스텝 (Step)</translation>
         </message>
     </context>
 </TS>

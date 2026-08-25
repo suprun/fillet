@@ -359,14 +359,6 @@
             <translation>Angle:</translation>
         </message>
         <message>
-            <source>CAD Зсув ребра (Edge Offset)</source>
-            <translation>CAD Edge Offset</translation>
-        </message>
-        <message>
-            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
-            <translation>Interactive CAD tool for parallel offset of a polygon or polyline segment</translation>
-        </message>
-        <message>
             <source>1. Вкажіть ребро (оберіть відрізок)</source>
             <translation>1. Specify edge (select segment)</translation>
         </message>
@@ -375,28 +367,36 @@
             <translation>2. Specify offset or click to confirm</translation>
         </message>
         <message>
-            <source>Режим зсуву:</source>
-            <translation>Offset mode:</translation>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>CAD Edge Offset</translation>
         </message>
         <message>
-            <source>Подовження (Extend)</source>
-            <translation>Extend</translation>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Interactive CAD tool for parallel offset of polygon or polyline edge segment</translation>
         </message>
         <message>
-            <source>Сходинка (Step)</source>
-            <translation>Step / Jog</translation>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Lock distance / interactive calculation</translation>
+        </message>
+        <message>
+            <source>Відстань:</source>
+            <translation>Distance:</translation>
         </message>
         <message>
             <source>Зсув ребра</source>
             <translation>Edge Offset</translation>
         </message>
         <message>
-            <source>Блокувати відстань / вільний розрахунок</source>
-            <translation>Lock distance / free calculation</translation>
+            <source>Подовження (Extend)</source>
+            <translation>Extend</translation>
         </message>
         <message>
             <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
-            <translation>Create a new feature with shifted edge instead of modifying the original</translation>
+            <translation>Create a new feature with offset edge instead of modifying original</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Step</translation>
         </message>
     </context>
 </TS>

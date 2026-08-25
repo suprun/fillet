@@ -359,44 +359,44 @@
             <translation>Ângulo:</translation>
         </message>
         <message>
-            <source>CAD Зсув ребра (Edge Offset)</source>
-            <translation>Deslocamento de borda CAD (Edge Offset)</translation>
-        </message>
-        <message>
-            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
-            <translation>Ferramenta CAD interativa para deslocamento paralelo de um segmento de polígono ou polilinha</translation>
-        </message>
-        <message>
             <source>1. Вкажіть ребро (оберіть відрізок)</source>
-            <translation>1. Especificar borda (selecionar segmento)</translation>
+            <translation>1. Especificar aresta (selecionar segmento)</translation>
         </message>
         <message>
             <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
             <translation>2. Especificar deslocamento ou clicar para confirmar</translation>
         </message>
         <message>
-            <source>Режим зсуву:</source>
-            <translation>Modo de deslocamento:</translation>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>Deslocamento de aresta CAD (Edge Offset)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Ferramenta CAD interativa para deslocamento paralelo de segmento de polígono ou polilinha</translation>
+        </message>
+        <message>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Bloquear distância / cálculo interativo</translation>
+        </message>
+        <message>
+            <source>Відстань:</source>
+            <translation>Distância:</translation>
+        </message>
+        <message>
+            <source>Зсув ребра</source>
+            <translation>Deslocamento de aresta</translation>
         </message>
         <message>
             <source>Подовження (Extend)</source>
             <translation>Estender (Extend)</translation>
         </message>
         <message>
+            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
+            <translation>Cria uma nova feição com a aresta deslocada em vez de modificar a original</translation>
+        </message>
+        <message>
             <source>Сходинка (Step)</source>
             <translation>Degrau (Step)</translation>
-        </message>
-        <message>
-            <source>Зсув ребра</source>
-            <translation>Deslocamento de borda</translation>
-        </message>
-        <message>
-            <source>Блокувати відстань / вільний розрахунок</source>
-            <translation>Bloquear distância / cálculo livre</translation>
-        </message>
-        <message>
-            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
-            <translation>Criar uma nova feição com a borda deslocada em vez de modificar a original</translation>
         </message>
     </context>
 </TS>

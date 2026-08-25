@@ -359,44 +359,44 @@
             <translation>Angolo:</translation>
         </message>
         <message>
+            <source>1. Вкажіть ребро (оберіть відрізок)</source>
+            <translation>1. Specificare lo spigolo (selezionare il segmento)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
+            <translation>2. Specificare l'offset o fare clic per confermare</translation>
+        </message>
+        <message>
             <source>CAD Зсув ребра (Edge Offset)</source>
-            <translation>Offset bordo CAD (Edge Offset)</translation>
+            <translation>Offset spigolo CAD (Edge Offset)</translation>
         </message>
         <message>
             <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
             <translation>Strumento CAD interattivo per l'offset parallelo di un segmento di poligono o polilinea</translation>
         </message>
         <message>
-            <source>1. Вкажіть ребро (оберіть відрізок)</source>
-            <translation>1. Specifica bordo (seleziona segmento)</translation>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Blocca distanza / calcolo interattivo</translation>
         </message>
         <message>
-            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
-            <translation>2. Specifica offset o fai clic per confermare</translation>
+            <source>Відстань:</source>
+            <translation>Distanza:</translation>
         </message>
         <message>
-            <source>Режим зсуву:</source>
-            <translation>Modalità offset:</translation>
+            <source>Зсув ребра</source>
+            <translation>Offset spigolo</translation>
         </message>
         <message>
             <source>Подовження (Extend)</source>
             <translation>Estendi (Extend)</translation>
         </message>
         <message>
-            <source>Сходинка (Step)</source>
-            <translation>Gradino (Step)</translation>
-        </message>
-        <message>
-            <source>Зсув ребра</source>
-            <translation>Offset bordo</translation>
-        </message>
-        <message>
-            <source>Блокувати відстань / вільний розрахунок</source>
-            <translation>Blocca distanza / calcolo libero</translation>
-        </message>
-        <message>
             <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
-            <translation>Crea un nuovo elemento con il bordo traslato invece di modificare l'originale</translation>
+            <translation>Crea un nuovo elemento con lo spigolo sfalsato invece di modificare l'originale</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Scalino (Step)</translation>
         </message>
     </context>
 </TS>

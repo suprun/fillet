@@ -359,14 +359,6 @@
             <translation>Leņķis:</translation>
         </message>
         <message>
-            <source>CAD Зсув ребра (Edge Offset)</source>
-            <translation>CAD Malas nobīde (Edge Offset)</translation>
-        </message>
-        <message>
-            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
-            <translation>Interaktīvs CAD rīks poligona vai polilīnijas segmenta paralēlai nobīdei</translation>
-        </message>
-        <message>
             <source>1. Вкажіть ребро (оберіть відрізок)</source>
             <translation>1. Norādiet malu (izvēlieties segmentu)</translation>
         </message>
@@ -375,28 +367,36 @@
             <translation>2. Norādiet nobīdi vai noklikšķiniet, lai apstiprinātu</translation>
         </message>
         <message>
-            <source>Режим зсуву:</source>
-            <translation>Nobīdes režīms:</translation>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>CAD Malas nobīde (Edge Offset)</translation>
         </message>
         <message>
-            <source>Подовження (Extend)</source>
-            <translation>Pagarināt (Extend)</translation>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Interaktīvs CAD rīks poligona vai polilīnijas malas segmenta paralēlai nobīdei</translation>
         </message>
         <message>
-            <source>Сходинка (Step)</source>
-            <translation>Pakāpiens (Step)</translation>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Bloķēt attālumu / interaktīvs aprēķins</translation>
+        </message>
+        <message>
+            <source>Відстань:</source>
+            <translation>Attālums:</translation>
         </message>
         <message>
             <source>Зсув ребра</source>
             <translation>Malas nobīde</translation>
         </message>
         <message>
-            <source>Блокувати відстань / вільний розрахунок</source>
-            <translation>Bloķēt attālumu / brīvs aprēķins</translation>
+            <source>Подовження (Extend)</source>
+            <translation>Pagarināt (Extend)</translation>
         </message>
         <message>
             <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
-            <translation>Izveidot jaunu objektu ar nobīdītu malu, nevis modificēt oriģinālu</translation>
+            <translation>Izveido jaunu objektu ar nobīdītu malu, nevis modificē oriģinālu</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Pakāpiens (Step)</translation>
         </message>
     </context>
 </TS>

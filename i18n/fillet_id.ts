@@ -359,14 +359,6 @@
             <translation>Sudut:</translation>
         </message>
         <message>
-            <source>CAD Зсув ребра (Edge Offset)</source>
-            <translation>CAD Offset Tepi (Edge Offset)</translation>
-        </message>
-        <message>
-            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
-            <translation>Alat CAD interaktif untuk pergeseran paralel segmen poligon atau polilinea</translation>
-        </message>
-        <message>
             <source>1. Вкажіть ребро (оберіть відрізок)</source>
             <translation>1. Tentukan tepi (pilih segmen)</translation>
         </message>
@@ -375,28 +367,36 @@
             <translation>2. Tentukan offset atau klik untuk mengonfirmasi</translation>
         </message>
         <message>
-            <source>Режим зсуву:</source>
-            <translation>Mode offset:</translation>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>Offset Tepi CAD (Edge Offset)</translation>
         </message>
         <message>
-            <source>Подовження (Extend)</source>
-            <translation>Perpanjang (Extend)</translation>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Alat CAD interaktif untuk offset paralel segmen tepi poligon atau polilinea</translation>
         </message>
         <message>
-            <source>Сходинка (Step)</source>
-            <translation>Tangga (Step)</translation>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Kunci jarak / perhitungan interaktif</translation>
+        </message>
+        <message>
+            <source>Відстань:</source>
+            <translation>Jarak:</translation>
         </message>
         <message>
             <source>Зсув ребра</source>
             <translation>Offset Tepi</translation>
         </message>
         <message>
-            <source>Блокувати відстань / вільний розрахунок</source>
-            <translation>Kunci jarak / perhitungan bebas</translation>
+            <source>Подовження (Extend)</source>
+            <translation>Perpanjang (Extend)</translation>
         </message>
         <message>
             <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
-            <translation>Buat fitur baru dengan tepi yang digeser alih-alih memodifikasi yang asli</translation>
+            <translation>Buat fitur baru dengan tepi offset alih-alih memodifikasi aslinya</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Tangga (Step)</translation>
         </message>
     </context>
 </TS>

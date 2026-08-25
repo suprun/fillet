@@ -359,44 +359,44 @@
             <translation>Angelua:</translation>
         </message>
         <message>
-            <source>CAD Зсув ребра (Edge Offset)</source>
-            <translation>CAD Ertzaren lerrokatze paraleloa (Edge Offset)</translation>
-        </message>
-        <message>
-            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
-            <translation>Poligono edo polilerro segmentu baten lerrokatze paralelo interaktiborako CAD tresna</translation>
-        </message>
-        <message>
             <source>1. Вкажіть ребро (оберіть відрізок)</source>
             <translation>1. Zehaztu ertza (hautatu segmentua)</translation>
         </message>
         <message>
             <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
-            <translation>2. Zehaztu lerrokatzea edo egin klik berresteko</translation>
+            <translation>2. Zehaztu desplazamendua edo egin klik berresteko</translation>
         </message>
         <message>
-            <source>Режим зсуву:</source>
-            <translation>Lerrokatze modua:</translation>
+            <source>CAD Зсув ребра (Edge Offset)</source>
+            <translation>CAD Ertz-desplazamendua (Edge Offset)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
+            <translation>Poligono edo polilerroen segmentu baten desplazamendu paraleloko CAD tresna interaktiboa</translation>
+        </message>
+        <message>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Blokeatu distantzia / kalkulu interaktiboa</translation>
+        </message>
+        <message>
+            <source>Відстань:</source>
+            <translation>Distantzia:</translation>
+        </message>
+        <message>
+            <source>Зсув ребра</source>
+            <translation>Ertz-desplazamendua</translation>
         </message>
         <message>
             <source>Подовження (Extend)</source>
             <translation>Luzatu (Extend)</translation>
         </message>
         <message>
+            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
+            <translation>Entitate berria sortzen du ertz desblokeatuarekin jatorrizkoa aldatu beharrean</translation>
+        </message>
+        <message>
             <source>Сходинка (Step)</source>
             <translation>Maila (Step)</translation>
-        </message>
-        <message>
-            <source>Зсув ребра</source>
-            <translation>Ertzaren lerrokatzea</translation>
-        </message>
-        <message>
-            <source>Блокувати відстань / вільний розрахунок</source>
-            <translation>Blokeatu distantzia / kalkulu librea</translation>
-        </message>
-        <message>
-            <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
-            <translation>Sortu elementu berria ertz lerrokatuarekin jatorrizkoa aldatu ordez</translation>
         </message>
     </context>
 </TS>

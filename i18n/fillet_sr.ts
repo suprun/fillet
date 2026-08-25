@@ -359,44 +359,44 @@
             <translation>Угао:</translation>
         </message>
         <message>
+            <source>1. Вкажіть ребро (оберіть відрізок)</source>
+            <translation>1. Наведите ивицу (изаберите сегмент)</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
+            <translation>2. Наведите помак или кликните за потврду</translation>
+        </message>
+        <message>
             <source>CAD Зсув ребра (Edge Offset)</source>
             <translation>CAD Помак ивице (Edge Offset)</translation>
         </message>
         <message>
             <source>Інтерактивний CAD інструмент паралельного зсуву відрізка полігона чи полілінії</source>
-            <translation>Интерактивни CAD алат за паралелни помак сегмента полигона или полилиније</translation>
+            <translation>Интерактивни CAD алат за паралелни помак сегмента ивице полигона или полилиније</translation>
         </message>
         <message>
-            <source>1. Вкажіть ребро (оберіть відрізок)</source>
-            <translation>1. Одредите ивицу (изаберите сегмент)</translation>
+            <source>Блокувати відстань / вільний розрахунок</source>
+            <translation>Закључај растојање / интерактивни прорачун</translation>
         </message>
         <message>
-            <source>2. Вкажіть зміщення або клікніть для підтвердження</source>
-            <translation>2. Одредите помак или кликните за потврду</translation>
-        </message>
-        <message>
-            <source>Режим зсуву:</source>
-            <translation>Режим помака:</translation>
-        </message>
-        <message>
-            <source>Подовження (Extend)</source>
-            <translation>Продужи (Extend)</translation>
-        </message>
-        <message>
-            <source>Сходинка (Step)</source>
-            <translation>Степеник (Step)</translation>
+            <source>Відстань:</source>
+            <translation>Растојање:</translation>
         </message>
         <message>
             <source>Зсув ребра</source>
             <translation>Помак ивице</translation>
         </message>
         <message>
-            <source>Блокувати відстань / вільний розрахунок</source>
-            <translation>Закључај удаљеност / слободно рачунање</translation>
+            <source>Подовження (Extend)</source>
+            <translation>Продужи (Extend)</translation>
         </message>
         <message>
             <source>Створити новий об'єкт зі зміщеним ребром замість модифікації оригінального</source>
-            <translation>Направи нови објекат са помереном ивицом уместо измене оригиналног</translation>
+            <translation>Креира нови објекат са помереном ивицом уместо измене оригинала</translation>
+        </message>
+        <message>
+            <source>Сходинка (Step)</source>
+            <translation>Степеник (Step)</translation>
         </message>
     </context>
 </TS>
