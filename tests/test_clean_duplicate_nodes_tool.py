@@ -14,14 +14,18 @@ from qgis.core import (
     QgsApplication,
     QgsCoordinateReferenceSystem,
     QgsFeature,
+    QgsField,
+    QgsFields,
     QgsGeometry,
     QgsLineString,
     QgsPoint,
     QgsPointXY,
     QgsPolygon,
     QgsVectorLayer,
+    QgsWkbTypes,
 )
 from qgis.gui import QgsMapCanvas
+from qgis.PyQt.QtCore import QVariant
 
 app = QgsApplication([], False)
 app.initQgis()
@@ -111,6 +115,42 @@ class TestCleanDuplicateNodesTool(unittest.TestCase):
         cleaned, total = GeometryEngine.clean_all_topology_errors(geom, tolerance=1e-6)
         self.assertGreater(total, 0)
         self.assertTrue(cleaned.isGeosValid())
+
+    def test_singlepart_and_multipart_coercion(self):
+        # Singlepart layer
+        single_layer = QgsVectorLayer("Polygon?crs=EPSG:3857", "single_poly", "memory")
+        # Multipart layer
+        multi_layer = QgsVectorLayer("MultiPolygon?crs=EPSG:3857", "multi_poly", "memory")
+
+        poly = QgsPolygon()
+        ring = QgsLineString([
+            QgsPoint(0, 0),
+            QgsPoint(10, 0),
+            QgsPoint(0, 10),
+            QgsPoint(10, 10),
+            QgsPoint(0, 0),
+        ])
+        poly.setExteriorRing(ring)
+        geom = QgsGeometry(poly)
+        valid_multi = geom.makeValid()
+
+        self.assertTrue(valid_multi.isMultipart())
+
+        # Test extract_singlepart_geometries
+        parts = GeometryEngine.extract_singlepart_geometries(valid_multi, QgsWkbTypes.GeometryType.PolygonGeometry)
+        self.assertEqual(len(parts), 2)
+
+        # Test get_largest_singlepart_geometry
+        largest = GeometryEngine.get_largest_singlepart_geometry(valid_multi, QgsWkbTypes.GeometryType.PolygonGeometry)
+        self.assertFalse(largest.isMultipart())
+
+        # Coerce to singlepart layer
+        single_res = GeometryEngine.coerce_geometry_to_layer(valid_multi, single_layer)
+        self.assertFalse(single_res.isMultipart())
+
+        # Coerce to multipart layer
+        multi_res = GeometryEngine.coerce_geometry_to_layer(largest, multi_layer)
+        self.assertTrue(multi_res.isMultipart())
 
     def test_map_tool_lifecycle(self):
         tool = CleanDuplicateNodesMapTool(self.canvas)

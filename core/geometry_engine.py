@@ -20,6 +20,7 @@ from qgis.core import (
     QgsPoint,
     QgsPointXY,
     QgsPolygon,
+    QgsVectorLayer,
     QgsVertexId,
     QgsWkbTypes,
 )
@@ -2476,6 +2477,75 @@ class GeometryEngine:
             cleaned_geom = cleaned_geom.makeValid()
 
         return cleaned_geom, total_errors
+
+    @classmethod
+    def extract_singlepart_geometries(
+        cls,
+        geom: QgsGeometry,
+        target_type: Optional[QgsWkbTypes.GeometryType] = None,
+    ) -> List[QgsGeometry]:
+        """
+        Extracts all individual single-part geometries from a multi-geometry or collection.
+        Optionally filters by target_type (PolygonGeometry or LineGeometry).
+        """
+        parts: List[QgsGeometry] = []
+        if not geom or geom.isEmpty() or geom.isNull():
+            return parts
+
+        if target_type is None:
+            target_type = geom.type()
+
+        if geom.isMultipart():
+            for part in geom.asGeometryCollection():
+                if part.type() == target_type and not part.isEmpty():
+                    parts.append(part)
+        elif geom.type() == target_type and not geom.isEmpty():
+            parts.append(geom)
+        return parts
+
+    @classmethod
+    def get_largest_singlepart_geometry(
+        cls,
+        geom: QgsGeometry,
+        target_type: Optional[QgsWkbTypes.GeometryType] = None,
+    ) -> QgsGeometry:
+        """
+        Returns the largest single-part geometry by area (for polygons) or length (for lines).
+        """
+        parts = cls.extract_singlepart_geometries(geom, target_type)
+        if not parts:
+            return geom
+
+        if target_type == QgsWkbTypes.GeometryType.PolygonGeometry or (
+            target_type is None and geom.type() == QgsWkbTypes.GeometryType.PolygonGeometry
+        ):
+            return max(parts, key=lambda p: p.area())
+        else:
+            return max(parts, key=lambda p: p.length())
+
+    @classmethod
+    def coerce_geometry_to_layer(
+        cls,
+        geom: QgsGeometry,
+        layer: Optional[QgsVectorLayer],
+    ) -> QgsGeometry:
+        """
+        Coerces geometry to be compatible with layer's WKB type (singlepart vs multipart).
+        """
+        if not geom or geom.isEmpty() or not layer:
+            return geom
+
+        is_multi_layer = QgsWkbTypes.isMultiType(layer.wkbType())
+        if is_multi_layer:
+            if not geom.isMultipart():
+                res = QgsGeometry(geom)
+                res.convertToMultiType()
+                return res
+            return geom
+        else:
+            if geom.isMultipart():
+                return cls.get_largest_singlepart_geometry(geom, layer.geometryType())
+            return geom
 
     # Alias for backwards compatibility
     batch_process_geometry = batch_apply_geometry
