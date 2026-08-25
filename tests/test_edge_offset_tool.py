@@ -243,9 +243,15 @@ class TestEdgeOffsetTool(unittest.TestCase):
         res = GeometryEngine.offset_segment(geom, 0, 0, 1, -5.0, mode="extend")
         self.assertIsNotNone(res)
         pts = res.asPolygon()[0]
-        # The shifted right endpoint reaches exactly v_after
+        # The shifted right endpoint reaches v_after and duplicate node is dissolved
         self.assertAlmostEqual(pts[2].x(), v_after.x(), places=3)
         self.assertAlmostEqual(pts[2].y(), v_after.y(), places=3)
+        self.assertTrue(res.isGeosValid())
+        for k in range(len(pts) - 1):
+            p_curr = pts[k]
+            p_next_node = pts[k + 1]
+            dist_pts = ((p_curr.x() - p_next_node.x())**2 + (p_curr.y() - p_next_node.y())**2)**0.5
+            self.assertGreater(dist_pts, 1e-5)
 
     def test_canvas_widget_and_shift_inversion(self):
         widget = EdgeOffsetCanvasWidget(self.canvas)

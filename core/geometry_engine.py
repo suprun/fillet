@@ -1751,15 +1751,17 @@ class GeometryEngine:
             v_prev = curve.pointN(effective_count - 1)
 
         if v_prev is not None:
-            l_prev = math.hypot(v_i.x() - v_prev.x(), v_i.y() - v_prev.y())
-            if l_prev > cls.EPSILON:
-                dir_prev_x = (v_i.x() - v_prev.x()) / l_prev
-                dir_prev_y = (v_i.y() - v_prev.y()) / l_prev
-                proj_prev = dir_prev_x * nx + dir_prev_y * ny
-                # Moving in distance_sign trims (shortens) V_prev -> V_i when distance_sign and proj_prev have opposite signs
-                if (distance_sign > 0 and proj_prev < -cls.EPSILON) or (distance_sign < 0 and proj_prev > cls.EPSILON):
-                    d_lim_prev = abs((v_prev.x() - v_i.x()) * nx + (v_prev.y() - v_i.y()) * ny)
-                    limits.append(d_lim_prev)
+            d_signed_prev = (v_prev.x() - v_i.x()) * nx + (v_prev.y() - v_i.y()) * ny
+            # V_prev can only limit the shift if it lies in the direction of shift (same sign)
+            if (distance_sign > 0 and d_signed_prev > cls.EPSILON) or (distance_sign < 0 and d_signed_prev < -cls.EPSILON):
+                l_prev = math.hypot(v_i.x() - v_prev.x(), v_i.y() - v_prev.y())
+                if l_prev > cls.EPSILON:
+                    dir_prev_x = (v_i.x() - v_prev.x()) / l_prev
+                    dir_prev_y = (v_i.y() - v_prev.y()) / l_prev
+                    proj_prev = dir_prev_x * nx + dir_prev_y * ny
+                    # Moving in distance_sign trims (shortens) V_prev -> V_i when distance_sign and proj_prev have opposite signs
+                    if (distance_sign > 0 and proj_prev < -cls.EPSILON) or (distance_sign < 0 and proj_prev > cls.EPSILON):
+                        limits.append(abs(d_signed_prev))
 
         # 2. Right adjacent edge (V_{i+1} -> V_after)
         v_after = None
@@ -1770,15 +1772,17 @@ class GeometryEngine:
             v_after = curve.pointN((i + 2) % effective_count)
 
         if v_after is not None:
-            l_next = math.hypot(v_after.x() - v_next.x(), v_after.y() - v_next.y())
-            if l_next > cls.EPSILON:
-                dir_next_x = (v_after.x() - v_next.x()) / l_next
-                dir_next_y = (v_after.y() - v_next.y()) / l_next
-                proj_next = dir_next_x * nx + dir_next_y * ny
-                # Moving in distance_sign trims (shortens) V_{i+1} -> V_after when distance_sign and proj_next have same signs
-                if (distance_sign > 0 and proj_next > cls.EPSILON) or (distance_sign < 0 and proj_next < -cls.EPSILON):
-                    d_lim_after = abs((v_after.x() - v_next.x()) * nx + (v_after.y() - v_next.y()) * ny)
-                    limits.append(d_lim_after)
+            d_signed_after = (v_after.x() - v_next.x()) * nx + (v_after.y() - v_next.y()) * ny
+            # V_after can only limit the shift if it lies in the direction of shift (same sign)
+            if (distance_sign > 0 and d_signed_after > cls.EPSILON) or (distance_sign < 0 and d_signed_after < -cls.EPSILON):
+                l_next = math.hypot(v_after.x() - v_next.x(), v_after.y() - v_next.y())
+                if l_next > cls.EPSILON:
+                    dir_next_x = (v_after.x() - v_next.x()) / l_next
+                    dir_next_y = (v_after.y() - v_next.y()) / l_next
+                    proj_next = dir_next_x * nx + dir_next_y * ny
+                    # Moving in distance_sign trims (shortens) V_{i+1} -> V_after when distance_sign and proj_next have same signs
+                    if (distance_sign > 0 and proj_next > cls.EPSILON) or (distance_sign < 0 and proj_next < -cls.EPSILON):
+                        limits.append(abs(d_signed_after))
 
         # 3. Apex of converging edges
         if v_prev is not None and v_after is not None:
@@ -1980,8 +1984,25 @@ class GeometryEngine:
                     new_pts[i] = v_prime_i
                     new_pts[i + 1] = v_prime_next
 
-        res = QgsLineString()
+        # Clean up any consecutive duplicate vertices (e.g. when adjacent edge is consumed to its node)
+        cleaned_pts = []
         for pt in new_pts:
+            if not cleaned_pts:
+                cleaned_pts.append(pt)
+            else:
+                last_pt = cleaned_pts[-1]
+                if math.hypot(pt.x() - last_pt.x(), pt.y() - last_pt.y()) > cls.EPSILON:
+                    cleaned_pts.append(pt)
+
+        # For closed rings, ensure closing vertex matches first vertex
+        if is_closed and len(cleaned_pts) > 2:
+            first_pt = cleaned_pts[0]
+            last_pt = cleaned_pts[-1]
+            if math.hypot(first_pt.x() - last_pt.x(), first_pt.y() - last_pt.y()) > cls.EPSILON:
+                cleaned_pts.append(first_pt)
+
+        res = QgsLineString()
+        for pt in cleaned_pts:
             res.addVertex(pt)
         return res
 
@@ -2054,6 +2075,8 @@ class GeometryEngine:
                         new_poly.addInteriorRing(int_ring.clone())
 
                 res_geom = QgsGeometry(new_poly)
+                if not res_geom.isEmpty():
+                    res_geom.removeDuplicateNodes(cls.EPSILON)
                 if mode == "extend" and not res_geom.isEmpty() and not res_geom.isGeosValid():
                     fallback_geom = cls.offset_segment(geom, part_idx, ring_idx, segment_idx, distance, mode="step")
                     if fallback_geom and fallback_geom.isGeosValid():
@@ -2090,6 +2113,8 @@ class GeometryEngine:
                         new_multi.addGeometry(poly.clone())
 
                 res_multi = QgsGeometry(new_multi)
+                if not res_multi.isEmpty():
+                    res_multi.removeDuplicateNodes(cls.EPSILON)
                 if mode == "extend" and not res_multi.isEmpty() and not res_multi.isGeosValid():
                     fallback_multi = cls.offset_segment(geom, part_idx, ring_idx, segment_idx, distance, mode="step")
                     if fallback_multi and fallback_multi.isGeosValid():
