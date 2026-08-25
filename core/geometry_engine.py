@@ -1665,6 +1665,134 @@ class GeometryEngine:
         return QgsGeometry(geom)
 
     @classmethod
+    def get_curve_from_geometry(
+        cls,
+        geom: QgsGeometry,
+        part_idx: int = 0,
+        ring_idx: int = 0,
+    ) -> Optional[QgsLineString]:
+        """Extracts the specific curve / ring (QgsLineString/QgsCurve) from a QgsGeometry."""
+        if not geom or geom.isEmpty() or geom.isNull():
+            return None
+        geom_type = geom.type()
+        is_multi = geom.isMultipart()
+        if geom_type == QgsWkbTypes.GeometryType.LineGeometry:
+            if not is_multi:
+                return geom.constGet()
+            else:
+                multi = geom.constGet()
+                if multi and part_idx < multi.numGeometries():
+                    return multi.geometryN(part_idx)
+        elif geom_type == QgsWkbTypes.GeometryType.PolygonGeometry:
+            if not is_multi:
+                poly = geom.constGet()
+                if not poly:
+                    return None
+                if ring_idx == 0:
+                    return poly.exteriorRing()
+                elif ring_idx - 1 < poly.numInteriorRings():
+                    return poly.interiorRing(ring_idx - 1)
+            else:
+                multi = geom.constGet()
+                if not multi or part_idx >= multi.numGeometries():
+                    return None
+                poly = multi.geometryN(part_idx)
+                if not poly:
+                    return None
+                if ring_idx == 0:
+                    return poly.exteriorRing()
+                elif ring_idx - 1 < poly.numInteriorRings():
+                    return poly.interiorRing(ring_idx - 1)
+        return None
+
+    @classmethod
+    def get_max_extend_distance(
+        cls,
+        curve: QgsLineString,
+        segment_idx: int,
+        distance_sign: float,
+    ) -> Optional[float]:
+        """
+        Calculates the maximum allowable offset distance in the given direction (distance_sign: +1 or -1)
+        for 'extend' mode before the shifted segment passes the far node of an adjacent edge or collapses at the apex.
+        """
+        if not curve or curve.numPoints() < 2:
+            return None
+
+        num_pts = curve.numPoints()
+        is_closed = curve.isClosed() or (num_pts > 2 and curve.pointN(0) == curve.pointN(num_pts - 1))
+        effective_count = num_pts - 1 if is_closed else num_pts
+
+        if not is_closed and (segment_idx < 0 or segment_idx >= num_pts - 1):
+            return None
+        if is_closed and (segment_idx < 0 or segment_idx >= effective_count):
+            return None
+
+        i = segment_idx
+        v_i = curve.pointN(i)
+        v_next = curve.pointN((i + 1) % effective_count if is_closed else i + 1)
+
+        dx = v_next.x() - v_i.x()
+        dy = v_next.y() - v_i.y()
+        length = math.hypot(dx, dy)
+        if length < cls.EPSILON:
+            return None
+
+        nx = -dy / length
+        ny = dx / length
+
+        limits = []
+
+        # 1. Left adjacent edge (V_prev -> V_i)
+        v_prev = None
+        if i > 0:
+            v_prev = curve.pointN(i - 1)
+        elif is_closed:
+            v_prev = curve.pointN(effective_count - 1)
+
+        if v_prev is not None:
+            l_prev = math.hypot(v_i.x() - v_prev.x(), v_i.y() - v_prev.y())
+            if l_prev > cls.EPSILON:
+                dir_prev_x = (v_i.x() - v_prev.x()) / l_prev
+                dir_prev_y = (v_i.y() - v_prev.y()) / l_prev
+                proj_prev = dir_prev_x * nx + dir_prev_y * ny
+                # Moving in distance_sign trims (shortens) V_prev -> V_i when distance_sign and proj_prev have opposite signs
+                if (distance_sign > 0 and proj_prev < -cls.EPSILON) or (distance_sign < 0 and proj_prev > cls.EPSILON):
+                    d_lim_prev = abs((v_prev.x() - v_i.x()) * nx + (v_prev.y() - v_i.y()) * ny)
+                    limits.append(d_lim_prev)
+
+        # 2. Right adjacent edge (V_{i+1} -> V_after)
+        v_after = None
+        if not is_closed:
+            if i + 1 < num_pts - 1:
+                v_after = curve.pointN(i + 2)
+        else:
+            v_after = curve.pointN((i + 2) % effective_count)
+
+        if v_after is not None:
+            l_next = math.hypot(v_after.x() - v_next.x(), v_after.y() - v_next.y())
+            if l_next > cls.EPSILON:
+                dir_next_x = (v_after.x() - v_next.x()) / l_next
+                dir_next_y = (v_after.y() - v_next.y()) / l_next
+                proj_next = dir_next_x * nx + dir_next_y * ny
+                # Moving in distance_sign trims (shortens) V_{i+1} -> V_after when distance_sign and proj_next have same signs
+                if (distance_sign > 0 and proj_next > cls.EPSILON) or (distance_sign < 0 and proj_next < -cls.EPSILON):
+                    d_lim_after = abs((v_after.x() - v_next.x()) * nx + (v_after.y() - v_next.y()) * ny)
+                    limits.append(d_lim_after)
+
+        # 3. Apex of converging edges
+        if v_prev is not None and v_after is not None:
+            v_apex = cls.compute_line_intersection(v_prev, v_i, v_next, v_after)
+            if v_apex is not None:
+                d_apex = (v_apex.x() - v_i.x()) * nx + (v_apex.y() - v_i.y()) * ny
+                if (distance_sign > 0 and d_apex > cls.EPSILON) or (distance_sign < 0 and d_apex < -cls.EPSILON):
+                    limits.append(abs(d_apex))
+
+        if limits:
+            return min(limits)
+        return None
+
+    @classmethod
     def offset_segment_in_curve(
         cls,
         curve: QgsLineString,
@@ -1710,6 +1838,11 @@ class GeometryEngine:
         ny = dx / length
 
         # Shifted endpoints of the segment
+        if mode == "extend":
+            d_max = cls.get_max_extend_distance(curve, segment_idx, 1.0 if distance >= 0 else -1.0)
+            if d_max is not None and abs(distance) > d_max:
+                distance = d_max if distance >= 0 else -d_max
+
         p1 = QgsPoint(v_i.x() + distance * nx, v_i.y() + distance * ny)
         p2 = QgsPoint(v_next.x() + distance * nx, v_next.y() + distance * ny)
 

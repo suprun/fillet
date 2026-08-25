@@ -217,6 +217,36 @@ class TestEdgeOffsetTool(unittest.TestCase):
         self.assertAlmostEqual(pts[3].x(), 12.520, places=3)
         self.assertAlmostEqual(pts[3].y(), -1.459, places=3)
 
+    def test_geometry_engine_extend_clamping_at_blocking_node(self):
+        # Create horseshoe / arch polygon
+        v_prev = QgsPoint(2.5, 4.0)
+        v_i = QgsPoint(5.0, 8.0)
+        v_next = QgsPoint(10.0, 8.2)
+        v_after = QgsPoint(12.5, 5.5)
+        p_b1 = QgsPoint(11.0, 0.0)
+        p_b2 = QgsPoint(1.0, 0.0)
+
+        poly = QgsPolygon()
+        ext = QgsLineString([v_prev, v_i, v_next, v_after, p_b1, p_b2, v_prev])
+        poly.setExteriorRing(ext)
+        geom = QgsGeometry(poly)
+
+        curve = GeometryEngine.get_curve_from_geometry(geom, 0, 0)
+        self.assertIsNotNone(curve)
+
+        # Calculate limit for downward shift (distance_sign = -1.0)
+        d_max = GeometryEngine.get_max_extend_distance(curve, 1, -1.0)
+        self.assertIsNotNone(d_max)
+        self.assertAlmostEqual(d_max, 2.798, places=3)
+
+        # Shift with distance -5.0 (exceeding limit) in extend mode -> clamped to -d_max (~ -2.798)
+        res = GeometryEngine.offset_segment(geom, 0, 0, 1, -5.0, mode="extend")
+        self.assertIsNotNone(res)
+        pts = res.asPolygon()[0]
+        # The shifted right endpoint reaches exactly v_after
+        self.assertAlmostEqual(pts[2].x(), v_after.x(), places=3)
+        self.assertAlmostEqual(pts[2].y(), v_after.y(), places=3)
+
     def test_canvas_widget_and_shift_inversion(self):
         widget = EdgeOffsetCanvasWidget(self.canvas)
         widget.show()

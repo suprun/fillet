@@ -260,10 +260,20 @@ class EdgeOffsetMapTool(QgsMapToolEdit):
         min_limit = 1e-6 if is_geo else 0.0001
         rounded_dist = max(min_limit, round(dist_mag, 6 if is_geo else (4 if dist_mag < 1.0 else 3)))
 
+        eff_mode = self.widget.get_effective_mode(shift_pressed)
+
+        # In extend mode, clamp the distance if a blocking node or apex limit is reached
+        if eff_mode == "extend" and m.geometry and not m.geometry.isEmpty():
+            curve = GeometryEngine.get_curve_from_geometry(m.geometry, m.part_idx, m.ring_idx)
+            if curve:
+                d_max = GeometryEngine.get_max_extend_distance(curve, m.segment_idx, self._current_side_sign)
+                if d_max is not None:
+                    d_max_rounded = round(d_max, 6 if is_geo else (4 if d_max < 1.0 else 3))
+                    rounded_dist = min(rounded_dist, d_max_rounded)
+
         if not self.widget.is_distance_locked:
             self.widget.set_distance(rounded_dist, block_signals=True)
 
-        eff_mode = self.widget.get_effective_mode(shift_pressed)
         eff_dist = (self.widget.distance if self.widget.is_distance_locked else rounded_dist) * self._current_side_sign
 
         self._update_preview(layer, m, eff_dist, eff_mode)
