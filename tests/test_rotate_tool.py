@@ -307,6 +307,22 @@ class TestCADRotateTool(unittest.TestCase):
         tool.keyPressEvent(QKeyEvent(evt_type, key_space, no_mod))
         self.assertFalse(widget.is_angle_locked)
 
+    def test_confirm_features_in_canvas_extent_logic(self):
+        from gui.gui_utils import confirm_features_in_canvas_extent
+        from qgis.core import QgsRectangle
+
+        self.canvas.setDestinationCrs(QgsCoordinateReferenceSystem("EPSG:3857"))
+        self.canvas.setExtent(QgsRectangle(0, 0, 100, 100))
+
+        layer = QgsVectorLayer("Point?crs=EPSG:3857", "test_extent", "memory")
+        pr = layer.dataProvider()
+        f_inside = QgsFeature()
+        f_inside.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(50, 50)))
+        pr.addFeatures([f_inside])
+
+        # Feature inside canvas extent returns True without dialog
+        self.assertTrue(confirm_features_in_canvas_extent(self.canvas, layer, [f_inside], "Rotate"))
+
 
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(TestCADRotateTool)

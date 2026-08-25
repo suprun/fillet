@@ -50,9 +50,11 @@ _ShiftModifier = getattr(Qt.KeyboardModifier, "ShiftModifier", getattr(Qt, "Shif
 
 try:
     from ..core.geometry_engine import GeometryEngine
+    from .gui_utils import confirm_features_in_canvas_extent
     from .rotation_canvas_widget import RotationCanvasWidget
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
+    from gui.gui_utils import confirm_features_in_canvas_extent
     from gui.rotation_canvas_widget import RotationCanvasWidget
 
 
@@ -306,6 +308,9 @@ class RotateMapTool(QgsMapToolEdit):
         map_pt = match.point() if match.isValid() else self.toMapCoordinates(event.pos())
 
         if self.state == self.STATE_SET_PIVOT:
+            target_features = self._get_target_features(layer)
+            if not confirm_features_in_canvas_extent(self.canvas, layer, target_features, self.tr("CAD Обертання")):
+                return
             self.pivot_point = map_pt
             self.pivot_marker.setToGeometry(QgsGeometry.fromPointXY(self.pivot_point), None)
             self.state = self.STATE_SET_REFERENCE

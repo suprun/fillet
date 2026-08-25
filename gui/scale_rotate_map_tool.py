@@ -50,9 +50,11 @@ _ShiftModifier = getattr(Qt.KeyboardModifier, "ShiftModifier", getattr(Qt, "Shif
 
 try:
     from ..core.geometry_engine import GeometryEngine
+    from .gui_utils import confirm_features_in_canvas_extent
     from .scale_rotate_canvas_widget import ScaleRotateCanvasWidget
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
+    from gui.gui_utils import confirm_features_in_canvas_extent
     from gui.scale_rotate_canvas_widget import ScaleRotateCanvasWidget
 
 
@@ -279,6 +281,9 @@ class ScaleRotateMapTool(QgsMapToolEdit):
         map_pt = match.point() if match.isValid() else self.toMapCoordinates(event.pos())
 
         if self.state == self.STATE_SET_ORIGIN:
+            target_features = self._get_target_features(layer)
+            if not confirm_features_in_canvas_extent(self.canvas, layer, target_features, self.tr("CAD Масштаб та Обертання")):
+                return
             self.origin_point = map_pt
             self.origin_marker.setToGeometry(QgsGeometry.fromPointXY(self.origin_point), None)
             self.state = self.STATE_SET_REFERENCE

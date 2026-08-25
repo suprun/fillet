@@ -46,9 +46,11 @@ _ShiftModifier = getattr(Qt.KeyboardModifier, "ShiftModifier", getattr(Qt, "Shif
 
 try:
     from ..core.geometry_engine import GeometryEngine
+    from .gui_utils import confirm_features_in_canvas_extent
     from .mirror_canvas_widget import MirrorCanvasWidget
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
+    from gui.gui_utils import confirm_features_in_canvas_extent
     from gui.mirror_canvas_widget import MirrorCanvasWidget
 
 
@@ -200,6 +202,9 @@ class MirrorMapTool(QgsMapToolEdit):
 
         if self.state == self.STATE_FIRST_POINT:
             # Step 1: Set P1 (first axis point)
+            target_features = list(layer.getSelectedFeatures())
+            if not confirm_features_in_canvas_extent(self.canvas, layer, target_features, self.tr("CAD Дзеркало")):
+                return
             self.p1 = pt
             self.p1_marker.reset(QgsWkbTypes.GeometryType.PointGeometry)
             self.p1_marker.addPoint(pt, True)
