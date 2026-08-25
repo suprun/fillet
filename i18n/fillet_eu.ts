@@ -3,6 +3,98 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>CAD Очищення дубльованих вузлів</source>
+            <translation>CAD Garbitu nodo bikoiztuak</translation>
+        </message>
+        <message>
+            <source>Швидке очищення та виправлення дубльованих вузлів геометрій</source>
+            <translation>Geometria-nodo bikoiztuen garbiketa eta konponketa azkarra</translation>
+        </message>
+        <message>
+            <source>Злити дублі у вершині (залишити 1 вузол)</source>
+            <translation>Batu erpineko bikoiztuak (mantendu nodo 1)</translation>
+        </message>
+        <message>
+            <source>Залишити вузол #{0} (видалити #{1})</source>
+            <translation>Mantendu #{0} nodoa (kendu #{1})</translation>
+        </message>
+        <message>
+            <source>Очистити всі дублі та помилки в об'єкті ({0})</source>
+            <translation>Garbitu elementuko bikoiztu eta errore guztiak ({0})</translation>
+        </message>
+        <message>
+            <source>Очищення дубльованих вузлів</source>
+            <translation>Nodo bikoiztuak garbitzea</translation>
+        </message>
+        <message>
+            <source>Розплутати петлю самоперетину</source>
+            <translation>Desegin auto-ebakidura-begizta</translation>
+        </message>
+        <message>
+            <source>Розплутування самоперетину</source>
+            <translation>Auto-ebakidura askatzea</translation>
+        </message>
+        <message>
+            <source>Розбити на мультиполігон (MultiPart)</source>
+            <translation>Zatitu zati anitzeko geometrian</translation>
+        </message>
+        <message>
+            <source>Розплутати / залишити основне тіло</source>
+            <translation>Desegin / mantendu gorputz nagusia</translation>
+        </message>
+        <message>
+            <source>Розділити на {0} окремих об'єктів</source>
+            <translation>Zatitu {0} elementu bereizitan</translation>
+        </message>
+        <message>
+            <source>Розділення на окремі об'єкти</source>
+            <translation>Elementu bereizitan banatzea</translation>
+        </message>
+        <message>
+            <source>Автоматично виправити геометрію (Make Valid)</source>
+            <translation>Konpondu automatikoki geometria (Make Valid)</translation>
+        </message>
+        <message>
+            <source>Виправлення геометрії</source>
+            <translation>Geometria konpontzea</translation>
+        </message>
+        <message>
+            <source>Очищення топологічних помилок</source>
+            <translation>Errore topologikoak garbitzea</translation>
+        </message>
+        <message>
+            <source>Тип геометрії шару</source>
+            <translation>Geruzaren geometria mota</translation>
+        </message>
+        <message>
+            <source>Поточний шар не підтримує багаточастинні геометрії (MultiPart).
+
+Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:</source>
+            <translation>Uneko geruzak ez ditu zati anitzeko geometriak (MultiPart) onartzen.
+
+Konponketaren emaitzak hainbat zati ({0}) ditu. Aukeratu gordetzeko modua:</translation>
+        </message>
+        <message>
+            <source>Розбити на окремі SinglePart об'єкти</source>
+            <translation>Zatitu SinglePart elementu bereizitan</translation>
+        </message>
+        <message>
+            <source>Залишити як MultiPart</source>
+            <translation>Mantendu MultiPart gisa</translation>
+        </message>
+        <message>
+            <source>Очищення геометрії (MultiPart)</source>
+            <translation>Geometria garbitzea (MultiPart)</translation>
+        </message>
+        <message>
+            <source>Швидке очищення дубльованих вузлів та помилок</source>
+            <translation>Nodo bikoiztuen eta erroreen garbiketa azkarra</translation>
+        </message>
+        <message>
+            <source>Очищення та розбиття на окремі об'єкти</source>
+            <translation>Garbitu eta zatitu elementu bereizitan</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Zehaztu lehen lerroa</translation>
         </message>

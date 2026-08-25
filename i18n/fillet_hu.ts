@@ -3,6 +3,98 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>CAD Очищення дубльованих вузлів</source>
+            <translation>CAD Duplikált csomópontok tisztítása</translation>
+        </message>
+        <message>
+            <source>Швидке очищення та виправлення дубльованих вузлів геометрій</source>
+            <translation>Duplikált geometriai csomópontok gyors tisztítása és javítása</translation>
+        </message>
+        <message>
+            <source>Злити дублі у вершині (залишити 1 вузол)</source>
+            <translation>Duplikátumok összevonása a csúcspontban (1 csomópont megtartása)</translation>
+        </message>
+        <message>
+            <source>Залишити вузол #{0} (видалити #{1})</source>
+            <translation>#{0} csomópont megtartása (#{1} törlése)</translation>
+        </message>
+        <message>
+            <source>Очистити всі дублі та помилки в об'єкті ({0})</source>
+            <translation>Minden duplikátum és hiba tisztítása az elemben ({0})</translation>
+        </message>
+        <message>
+            <source>Очищення дубльованих вузлів</source>
+            <translation>Duplikált csomópontok tisztítása</translation>
+        </message>
+        <message>
+            <source>Розплутати петлю самоперетину</source>
+            <translation>Önátfedő hurok kibogozása</translation>
+        </message>
+        <message>
+            <source>Розплутування самоперетину</source>
+            <translation>Önátfedés kibogozása</translation>
+        </message>
+        <message>
+            <source>Розбити на мультиполігон (MultiPart)</source>
+            <translation>Felosztás több részből álló geometriára (MultiPart)</translation>
+        </message>
+        <message>
+            <source>Розплутати / залишити основне тіло</source>
+            <translation>Kibogozás / fő test megtartása</translation>
+        </message>
+        <message>
+            <source>Розділити на {0} окремих об'єктів</source>
+            <translation>Felosztás {0} külön elemre</translation>
+        </message>
+        <message>
+            <source>Розділення на окремі об'єкти</source>
+            <translation>Felosztás külön elemekre</translation>
+        </message>
+        <message>
+            <source>Автоматично виправити геометрію (Make Valid)</source>
+            <translation>Geometria automatikus javítása (Make Valid)</translation>
+        </message>
+        <message>
+            <source>Виправлення геометрії</source>
+            <translation>Geometria javítása</translation>
+        </message>
+        <message>
+            <source>Очищення топологічних помилок</source>
+            <translation>Topológiai hibák tisztítása</translation>
+        </message>
+        <message>
+            <source>Тип геометрії шару</source>
+            <translation>Réteg geometriatípusa</translation>
+        </message>
+        <message>
+            <source>Поточний шар не підтримує багаточастинні геометрії (MultiPart).
+
+Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:</source>
+            <translation>Az aktuális réteg nem támogatja a több részből álló geometriákat (MultiPart).
+
+A javítás eredménye több részt tartalmaz ({0}). Válassza ki a mentési módot:</translation>
+        </message>
+        <message>
+            <source>Розбити на окремі SinglePart об'єкти</source>
+            <translation>Felosztás különálló SinglePart elemekre</translation>
+        </message>
+        <message>
+            <source>Залишити як MultiPart</source>
+            <translation>Megtartás MultiPart-ként</translation>
+        </message>
+        <message>
+            <source>Очищення геометрії (MultiPart)</source>
+            <translation>Geometria tisztítása (MultiPart)</translation>
+        </message>
+        <message>
+            <source>Швидке очищення дубльованих вузлів та помилок</source>
+            <translation>Duplikált csomópontok és hibák gyors tisztítása</translation>
+        </message>
+        <message>
+            <source>Очищення та розбиття на окремі об'єкти</source>
+            <translation>Tisztítás és felosztás külön elemekre</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Első vonal megadása</translation>
         </message>

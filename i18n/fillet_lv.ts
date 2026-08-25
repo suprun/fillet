@@ -3,6 +3,98 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>CAD Очищення дубльованих вузлів</source>
+            <translation>CAD Notīrīt dublētos mezglus</translation>
+        </message>
+        <message>
+            <source>Швидке очищення та виправлення дубльованих вузлів геометрій</source>
+            <translation>Ātra dublēto ģeometrijas mezglu tīrīšana un labošana</translation>
+        </message>
+        <message>
+            <source>Злити дублі у вершині (залишити 1 вузол)</source>
+            <translation>Apvienot virsotnes dublikātus (saglabāt 1 mezglu)</translation>
+        </message>
+        <message>
+            <source>Залишити вузол #{0} (видалити #{1})</source>
+            <translation>Saglabāt mezglu #{0} (noņemt #{1})</translation>
+        </message>
+        <message>
+            <source>Очистити всі дублі та помилки в об'єкті ({0})</source>
+            <translation>Notīrīt visus dublikātus un kļūdas objektā ({0})</translation>
+        </message>
+        <message>
+            <source>Очищення дубльованих вузлів</source>
+            <translation>Dublēto mezglu tīrīšana</translation>
+        </message>
+        <message>
+            <source>Розплутати петлю самоперетину</source>
+            <translation>Atrisināt paškrustošanās cilpu</translation>
+        </message>
+        <message>
+            <source>Розплутування самоперетину</source>
+            <translation>Paškrustošanās atrisināšana</translation>
+        </message>
+        <message>
+            <source>Розбити на мультиполігон (MultiPart)</source>
+            <translation>Sadalīt daudzdaļu ģeometrijā</translation>
+        </message>
+        <message>
+            <source>Розплутати / залишити основне тіло</source>
+            <translation>Atrisināt / saglabāt galveno ķermeni</translation>
+        </message>
+        <message>
+            <source>Розділити на {0} окремих об'єктів</source>
+            <translation>Sadalīt {0} atsevišķos objektos</translation>
+        </message>
+        <message>
+            <source>Розділення на окремі об'єкти</source>
+            <translation>Sadalīšana atsevišķos objektos</translation>
+        </message>
+        <message>
+            <source>Автоматично виправити геометрію (Make Valid)</source>
+            <translation>Automātiski labot ģeometriju (Make Valid)</translation>
+        </message>
+        <message>
+            <source>Виправлення геометрії</source>
+            <translation>Ģeometrijas labošana</translation>
+        </message>
+        <message>
+            <source>Очищення топологічних помилок</source>
+            <translation>Topoloģisko kļūdu tīrīšana</translation>
+        </message>
+        <message>
+            <source>Тип геометрії шару</source>
+            <translation>Slāņa ģeometrijas veids</translation>
+        </message>
+        <message>
+            <source>Поточний шар не підтримує багаточастинні геометрії (MultiPart).
+
+Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:</source>
+            <translation>Pašreizējais slānis neatbalsta daudzdaļu ģeometrijas (MultiPart).
+
+Labojuma rezultāts satur vairākas daļas ({0}). Izvēlieties, kā saglabāt:</translation>
+        </message>
+        <message>
+            <source>Розбити на окремі SinglePart об'єкти</source>
+            <translation>Sadalīt atsevišķos SinglePart objektos</translation>
+        </message>
+        <message>
+            <source>Залишити як MultiPart</source>
+            <translation>Saglabāt kā MultiPart</translation>
+        </message>
+        <message>
+            <source>Очищення геометрії (MultiPart)</source>
+            <translation>Ģeometrijas tīrīšana (MultiPart)</translation>
+        </message>
+        <message>
+            <source>Швидке очищення дубльованих вузлів та помилок</source>
+            <translation>Ātrā dublēto mezglu un kļūdu tīrīšana</translation>
+        </message>
+        <message>
+            <source>Очищення та розбиття на окремі об'єкти</source>
+            <translation>Notīrīt un sadalīt atsevišķos objektos</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Norādiet pirmo līniju</translation>
         </message>

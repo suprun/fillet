@@ -3,6 +3,98 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>CAD Очищення дубльованих вузлів</source>
+            <translation>CAD Καθαρισμός διπλότυπων κόμβων</translation>
+        </message>
+        <message>
+            <source>Швидке очищення та виправлення дубльованих вузлів геометрій</source>
+            <translation>Γρήγορος καθαρισμός και επιδιόρθωση διπλότυπων κόμβων γεωμετρίας</translation>
+        </message>
+        <message>
+            <source>Злити дублі у вершині (залишити 1 вузол)</source>
+            <translation>Συγχώνευση διπλότυπων στην κορυφή (διατήρηση 1 κόμβου)</translation>
+        </message>
+        <message>
+            <source>Залишити вузол #{0} (видалити #{1})</source>
+            <translation>Διατήρηση κόμβου #{0} (αφαίρεση #{1})</translation>
+        </message>
+        <message>
+            <source>Очистити всі дублі та помилки в об'єкті ({0})</source>
+            <translation>Καθαρισμός όλων των διπλότυπων και σφαλμάτων στο στοιχείο ({0})</translation>
+        </message>
+        <message>
+            <source>Очищення дубльованих вузлів</source>
+            <translation>Καθαρισμός διπλότυπων κόμβων</translation>
+        </message>
+        <message>
+            <source>Розплутати петлю самоперетину</source>
+            <translation>Ξεμπέρδεμα βρόχου αυτο-τομής</translation>
+        </message>
+        <message>
+            <source>Розплутування самоперетину</source>
+            <translation>Ξεμπέρδεμα αυτο-τομής</translation>
+        </message>
+        <message>
+            <source>Розбити на мультиполігон (MultiPart)</source>
+            <translation>Διαχωρισμός σε πολυμερή γεωμετρία</translation>
+        </message>
+        <message>
+            <source>Розплутати / залишити основне тіло</source>
+            <translation>Ξεμπέρδεμα / διατήρηση κύριου σώματος</translation>
+        </message>
+        <message>
+            <source>Розділити на {0} окремих об'єктів</source>
+            <translation>Διαχωρισμός σε {0} ξεχωριστά στοιχεία</translation>
+        </message>
+        <message>
+            <source>Розділення на окремі об'єкти</source>
+            <translation>Διαχωρισμός σε ξεχωριστά στοιχεία</translation>
+        </message>
+        <message>
+            <source>Автоматично виправити геометрію (Make Valid)</source>
+            <translation>Αυτόματη επιδιόρθωση γεωμετρίας (Make Valid)</translation>
+        </message>
+        <message>
+            <source>Виправлення геометрії</source>
+            <translation>Επιδιόρθωση γεωμετρίας</translation>
+        </message>
+        <message>
+            <source>Очищення топологічних помилок</source>
+            <translation>Καθαρισμός τοπολογικών σφαλμάτων</translation>
+        </message>
+        <message>
+            <source>Тип геометрії шару</source>
+            <translation>Τύπος γεωμετρίας επιπέδου</translation>
+        </message>
+        <message>
+            <source>Поточний шар не підтримує багаточастинні геометрії (MultiPart).
+
+Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:</source>
+            <translation>Το τρέχον επίπεδο δεν υποστηρίζει πολυμερείς γεωμετρίες (MultiPart).
+
+Το αποτέλεσμα επιδιόρθωσης περιέχει πολλαπλά μέρη ({0}). Επιλέξτε τρόπο αποθήκευσης:</translation>
+        </message>
+        <message>
+            <source>Розбити на окремі SinglePart об'єкти</source>
+            <translation>Διαχωρισμός σε ξεχωριστά στοιχεία SinglePart</translation>
+        </message>
+        <message>
+            <source>Залишити як MultiPart</source>
+            <translation>Διατήρηση ως MultiPart</translation>
+        </message>
+        <message>
+            <source>Очищення геометрії (MultiPart)</source>
+            <translation>Καθαρισμός γεωμετρίας (MultiPart)</translation>
+        </message>
+        <message>
+            <source>Швидке очищення дубльованих вузлів та помилок</source>
+            <translation>Γρήγορος καθαρισμός διπλότυπων κόμβων και σφαλμάτων</translation>
+        </message>
+        <message>
+            <source>Очищення та розбиття на окремі об'єкти</source>
+            <translation>Καθαρισμός και διαχωρισμός σε ξεχωριστά στοιχεία</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Καθορίστε την πρώτη γραμμή</translation>
         </message>

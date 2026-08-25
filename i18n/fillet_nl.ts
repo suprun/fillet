@@ -3,6 +3,98 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>CAD Очищення дубльованих вузлів</source>
+            <translation>CAD Dubbele knopen opschonen</translation>
+        </message>
+        <message>
+            <source>Швидке очищення та виправлення дубльованих вузлів геометрій</source>
+            <translation>Snel opschonen en repareren van dubbele geometrieknopen</translation>
+        </message>
+        <message>
+            <source>Злити дублі у вершині (залишити 1 вузол)</source>
+            <translation>Duplicaten op knoop samenvoegen (1 knoop behouden)</translation>
+        </message>
+        <message>
+            <source>Залишити вузол #{0} (видалити #{1})</source>
+            <translation>Knoop #{0} behouden (#{1} verwijderen)</translation>
+        </message>
+        <message>
+            <source>Очистити всі дублі та помилки в об'єкті ({0})</source>
+            <translation>Alle duplicaten en fouten in het object opschonen ({0})</translation>
+        </message>
+        <message>
+            <source>Очищення дубльованих вузлів</source>
+            <translation>Dubbele knopen opschonen</translation>
+        </message>
+        <message>
+            <source>Розплутати петлю самоперетину</source>
+            <translation>Zelfdoorsnijdende lus ontwarren</translation>
+        </message>
+        <message>
+            <source>Розплутування самоперетину</source>
+            <translation>Zelfdoorsnijding ontwarren</translation>
+        </message>
+        <message>
+            <source>Розбити на мультиполігон (MultiPart)</source>
+            <translation>Opsplitsen in meerdelige geometrie</translation>
+        </message>
+        <message>
+            <source>Розплутати / залишити основне тіло</source>
+            <translation>Ontwarren / hoofdlichaam behouden</translation>
+        </message>
+        <message>
+            <source>Розділити на {0} окремих об'єктів</source>
+            <translation>Splitsen in {0} afzonderlijke objecten</translation>
+        </message>
+        <message>
+            <source>Розділення на окремі об'єкти</source>
+            <translation>Splitsing in afzonderlijke objecten</translation>
+        </message>
+        <message>
+            <source>Автоматично виправити геометрію (Make Valid)</source>
+            <translation>Geometrie automatisch repareren (Make Valid)</translation>
+        </message>
+        <message>
+            <source>Виправлення геометрії</source>
+            <translation>Geometrie repareren</translation>
+        </message>
+        <message>
+            <source>Очищення топологічних помилок</source>
+            <translation>Topologiefouten opschonen</translation>
+        </message>
+        <message>
+            <source>Тип геометрії шару</source>
+            <translation>Laaggeometrietype</translation>
+        </message>
+        <message>
+            <source>Поточний шар не підтримує багаточастинні геометрії (MultiPart).
+
+Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:</source>
+            <translation>De huidige laag ondersteunt geen meerdelige geometrieën (MultiPart).
+
+Het reparatieresultaat bevat meerdere delen ({0}). Kies hoe u wilt opslaan:</translation>
+        </message>
+        <message>
+            <source>Розбити на окремі SinglePart об'єкти</source>
+            <translation>Splitsen in afzonderlijke SinglePart-objecten</translation>
+        </message>
+        <message>
+            <source>Залишити як MultiPart</source>
+            <translation>Behouden als MultiPart</translation>
+        </message>
+        <message>
+            <source>Очищення геометрії (MultiPart)</source>
+            <translation>Geometrie opschonen (MultiPart)</translation>
+        </message>
+        <message>
+            <source>Швидке очищення дубльованих вузлів та помилок</source>
+            <translation>Snelle opschoning van dubbele knopen en fouten</translation>
+        </message>
+        <message>
+            <source>Очищення та розбиття на окремі об'єкти</source>
+            <translation>Opschonen en splitsen in afzonderlijke objecten</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Eerste lijn opgeven</translation>
         </message>

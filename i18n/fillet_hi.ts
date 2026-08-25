@@ -3,6 +3,98 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>CAD Очищення дубльованих вузлів</source>
+            <translation>CAD डुप्लिकेट नोड्स साफ़ करें</translation>
+        </message>
+        <message>
+            <source>Швидке очищення та виправлення дубльованих вузлів геометрій</source>
+            <translation>डुप्लिकेट ज्यामिति नोड्स की त्वरित सफाई और मरम्मत</translation>
+        </message>
+        <message>
+            <source>Злити дублі у вершині (залишити 1 вузол)</source>
+            <translation>शीर्ष पर डुप्लिकेट मर्ज करें (1 नोड रखें)</translation>
+        </message>
+        <message>
+            <source>Залишити вузол #{0} (видалити #{1})</source>
+            <translation>नोड #{0} रखें (#{1} हटाएं)</translation>
+        </message>
+        <message>
+            <source>Очистити всі дублі та помилки в об'єкті ({0})</source>
+            <translation>सुविधा में सभी डुप्लिकेट और त्रुटियां साफ़ करें ({0})</translation>
+        </message>
+        <message>
+            <source>Очищення дубльованих вузлів</source>
+            <translation>डुप्लिकेट नोड्स की सफाई</translation>
+        </message>
+        <message>
+            <source>Розплутати петлю самоперетину</source>
+            <translation>स्व-प्रतिच्छेदन लूप को सुलझाएं</translation>
+        </message>
+        <message>
+            <source>Розплутування самоперетину</source>
+            <translation>स्व-प्रतिच्छेदन सुलझाना</translation>
+        </message>
+        <message>
+            <source>Розбити на мультиполігон (MultiPart)</source>
+            <translation>मल्टीपार्ट ज्यामिति में विभाजित करें</translation>
+        </message>
+        <message>
+            <source>Розплутати / залишити основне тіло</source>
+            <translation>सुलझाएं / मुख्य भाग रखें</translation>
+        </message>
+        <message>
+            <source>Розділити на {0} окремих об'єктів</source>
+            <translation>{0} अलग-अलग सुविधाओं में विभाजित करें</translation>
+        </message>
+        <message>
+            <source>Розділення на окремі об'єкти</source>
+            <translation>अलग-अलग सुविधाओं में विभाजन</translation>
+        </message>
+        <message>
+            <source>Автоматично виправити геометрію (Make Valid)</source>
+            <translation>ज्यामिति स्वचालित रूप से ठीक करें (Make Valid)</translation>
+        </message>
+        <message>
+            <source>Виправлення геометрії</source>
+            <translation>ज्यामिति सुधार</translation>
+        </message>
+        <message>
+            <source>Очищення топологічних помилок</source>
+            <translation>टोपोलॉजी त्रुटियों की सफाई</translation>
+        </message>
+        <message>
+            <source>Тип геометрії шару</source>
+            <translation>परत ज्यामिति प्रकार</translation>
+        </message>
+        <message>
+            <source>Поточний шар не підтримує багаточастинні геометрії (MultiPart).
+
+Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:</source>
+            <translation>वर्तमान परत मल्टीपार्ट ज्यामिति (MultiPart) का समर्थन नहीं करती है।
+
+सुधार परिणाम में कई भाग ({0}) शामिल हैं। परिणाम सहेजने का तरीका चुनें:</translation>
+        </message>
+        <message>
+            <source>Розбити на окремі SinglePart об'єкти</source>
+            <translation>अलग SinglePart सुविधाओं में विभाजित करें</translation>
+        </message>
+        <message>
+            <source>Залишити як MultiPart</source>
+            <translation>MultiPart के रूप में रखें</translation>
+        </message>
+        <message>
+            <source>Очищення геометрії (MultiPart)</source>
+            <translation>ज्यामिति की सफाई (MultiPart)</translation>
+        </message>
+        <message>
+            <source>Швидке очищення дубльованих вузлів та помилок</source>
+            <translation>डुप्लिकेट नोड्स और त्रुटियों की त्वरित सफाई</translation>
+        </message>
+        <message>
+            <source>Очищення та розбиття на окремі об'єкти</source>
+            <translation>साफ़ करें और अलग-अलग सुविधाओं में विभाजित करें</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. पहली रेखा निर्दिष्ट करें</translation>
         </message>

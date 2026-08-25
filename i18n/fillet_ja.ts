@@ -3,6 +3,98 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>CAD Очищення дубльованих вузлів</source>
+            <translation>CAD 重複ノードのクリーンアップ</translation>
+        </message>
+        <message>
+            <source>Швидке очищення та виправлення дубльованих вузлів геометрій</source>
+            <translation>重複ジオメトリノードのクイッククリーンアップと修復</translation>
+        </message>
+        <message>
+            <source>Злити дублі у вершині (залишити 1 вузол)</source>
+            <translation>頂点の重複を結合 (1つのノードを保持)</translation>
+        </message>
+        <message>
+            <source>Залишити вузол #{0} (видалити #{1})</source>
+            <translation>ノード #{0} を保持 (#{1} を削除)</translation>
+        </message>
+        <message>
+            <source>Очистити всі дублі та помилки в об'єкті ({0})</source>
+            <translation>地物内のすべての重複とエラーをクリーンアップ ({0})</translation>
+        </message>
+        <message>
+            <source>Очищення дубльованих вузлів</source>
+            <translation>重複ノードのクリーンアップ</translation>
+        </message>
+        <message>
+            <source>Розплутати петлю самоперетину</source>
+            <translation>自己交差ループの解消</translation>
+        </message>
+        <message>
+            <source>Розплутування самоперетину</source>
+            <translation>自己交差の解消</translation>
+        </message>
+        <message>
+            <source>Розбити на мультиполігон (MultiPart)</source>
+            <translation>マルチパートジオメトリに分割</translation>
+        </message>
+        <message>
+            <source>Розплутати / залишити основне тіло</source>
+            <translation>ほどく / メインボディを保持</translation>
+        </message>
+        <message>
+            <source>Розділити на {0} окремих об'єктів</source>
+            <translation>{0} 個の個別地物に分割</translation>
+        </message>
+        <message>
+            <source>Розділення на окремі об'єкти</source>
+            <translation>個別地物への分割</translation>
+        </message>
+        <message>
+            <source>Автоматично виправити геометрію (Make Valid)</source>
+            <translation>ジオメトリを自動修復 (Make Valid)</translation>
+        </message>
+        <message>
+            <source>Виправлення геометрії</source>
+            <translation>ジオメトリの修復</translation>
+        </message>
+        <message>
+            <source>Очищення топологічних помилок</source>
+            <translation>トポロジエラーのクリーンアップ</translation>
+        </message>
+        <message>
+            <source>Тип геометрії шару</source>
+            <translation>レイヤのジオメトリタイプ</translation>
+        </message>
+        <message>
+            <source>Поточний шар не підтримує багаточастинні геометрії (MultiPart).
+
+Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:</source>
+            <translation>現在のレイヤはマルチパートジオメトリ（MultiPart）をサポートしていません。
+
+修復結果には複数のパート ({0}) が含まれています。保存方法を選択してください:</translation>
+        </message>
+        <message>
+            <source>Розбити на окремі SinglePart об'єкти</source>
+            <translation>個別の SinglePart 地物に分割</translation>
+        </message>
+        <message>
+            <source>Залишити як MultiPart</source>
+            <translation>MultiPart として保持</translation>
+        </message>
+        <message>
+            <source>Очищення геометрії (MultiPart)</source>
+            <translation>ジオメトリのクリーンアップ (MultiPart)</translation>
+        </message>
+        <message>
+            <source>Швидке очищення дубльованих вузлів та помилок</source>
+            <translation>重複ノードとエラーのクイッククリーンアップ</translation>
+        </message>
+        <message>
+            <source>Очищення та розбиття на окремі об'єкти</source>
+            <translation>クリーンアップして個別地物に分割</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. 最初の線を指定</translation>
         </message>

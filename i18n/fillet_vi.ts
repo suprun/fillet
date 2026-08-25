@@ -3,6 +3,98 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>CAD Очищення дубльованих вузлів</source>
+            <translation>CAD Dọn dẹp các nút trùng lặp</translation>
+        </message>
+        <message>
+            <source>Швидке очищення та виправлення дубльованих вузлів геометрій</source>
+            <translation>Dọn dẹp và sửa chữa nhanh các nút hình học trùng lặp</translation>
+        </message>
+        <message>
+            <source>Злити дублі у вершині (залишити 1 вузол)</source>
+            <translation>Hợp nhất các điểm trùng tại đỉnh (giữ lại 1 nút)</translation>
+        </message>
+        <message>
+            <source>Залишити вузол #{0} (видалити #{1})</source>
+            <translation>Giữ lại nút #{0} (xóa #{1})</translation>
+        </message>
+        <message>
+            <source>Очистити всі дублі та помилки в об'єкті ({0})</source>
+            <translation>Dọn dẹp tất cả các điểm trùng và lỗi trong đối tượng ({0})</translation>
+        </message>
+        <message>
+            <source>Очищення дубльованих вузлів</source>
+            <translation>Dọn dẹp các nút trùng lặp</translation>
+        </message>
+        <message>
+            <source>Розплутати петлю самоперетину</source>
+            <translation>Gỡ vòng lặp tự giao nhau</translation>
+        </message>
+        <message>
+            <source>Розплутування самоперетину</source>
+            <translation>Gỡ tự giao nhau</translation>
+        </message>
+        <message>
+            <source>Розбити на мультиполігон (MultiPart)</source>
+            <translation>Tách thành hình học nhiều phần</translation>
+        </message>
+        <message>
+            <source>Розплутати / залишити основне тіло</source>
+            <translation>Gỡ rối / giữ lại thân chính</translation>
+        </message>
+        <message>
+            <source>Розділити на {0} окремих об'єктів</source>
+            <translation>Tách thành {0} đối tượng riêng biệt</translation>
+        </message>
+        <message>
+            <source>Розділення на окремі об'єкти</source>
+            <translation>Phân chia thành các đối tượng riêng biệt</translation>
+        </message>
+        <message>
+            <source>Автоматично виправити геометрію (Make Valid)</source>
+            <translation>Tự động sửa hình học (Make Valid)</translation>
+        </message>
+        <message>
+            <source>Виправлення геометрії</source>
+            <translation>Sửa hình học</translation>
+        </message>
+        <message>
+            <source>Очищення топологічних помилок</source>
+            <translation>Dọn dẹp lỗi tô-pô</translation>
+        </message>
+        <message>
+            <source>Тип геометрії шару</source>
+            <translation>Loại hình học lớp</translation>
+        </message>
+        <message>
+            <source>Поточний шар не підтримує багаточастинні геометрії (MultiPart).
+
+Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:</source>
+            <translation>Lớp hiện tại không hỗ trợ hình học nhiều phần (MultiPart).
+
+Kết quả sửa chữa chứa nhiều phần ({0}). Chọn cách lưu kết quả:</translation>
+        </message>
+        <message>
+            <source>Розбити на окремі SinglePart об'єкти</source>
+            <translation>Tách thành các đối tượng SinglePart riêng biệt</translation>
+        </message>
+        <message>
+            <source>Залишити як MultiPart</source>
+            <translation>Giữ dưới dạng MultiPart</translation>
+        </message>
+        <message>
+            <source>Очищення геометрії (MultiPart)</source>
+            <translation>Dọn dẹp hình học (MultiPart)</translation>
+        </message>
+        <message>
+            <source>Швидке очищення дубльованих вузлів та помилок</source>
+            <translation>Dọn dẹp nhanh các nút trùng lặp &amp; lỗi</translation>
+        </message>
+        <message>
+            <source>Очищення та розбиття на окремі об'єкти</source>
+            <translation>Dọn dẹp và tách thành các đối tượng riêng biệt</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Chỉ định đường đầu tiên</translation>
         </message>

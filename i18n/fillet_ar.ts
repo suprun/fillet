@@ -3,6 +3,98 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>CAD Очищення дубльованих вузлів</source>
+            <translation>CAD تنظيف العقد المكررة</translation>
+        </message>
+        <message>
+            <source>Швидке очищення та виправлення дубльованих вузлів геометрій</source>
+            <translation>تنظيف وإصلاح سريع لعقد الهندسة المكررة</translation>
+        </message>
+        <message>
+            <source>Злити дублі у вершині (залишити 1 вузол)</source>
+            <translation>دمج التكرارات في الرأس (الاحتفاظ بعقدة واحدة)</translation>
+        </message>
+        <message>
+            <source>Залишити вузол #{0} (видалити #{1})</source>
+            <translation>الاحتفاظ بالعقدة #{0} (إزالة #{1})</translation>
+        </message>
+        <message>
+            <source>Очистити всі дублі та помилки в об'єкті ({0})</source>
+            <translation>تنظيف جميع التكرارات والأخطاء في المعلم ({0})</translation>
+        </message>
+        <message>
+            <source>Очищення дубльованих вузлів</source>
+            <translation>تنظيف العقد المكررة</translation>
+        </message>
+        <message>
+            <source>Розплутати петлю самоперетину</source>
+            <translation>فك حلقة التقاطع الذاتي</translation>
+        </message>
+        <message>
+            <source>Розплутування самоперетину</source>
+            <translation>فك التقاطع الذاتي</translation>
+        </message>
+        <message>
+            <source>Розбити на мультиполігон (MultiPart)</source>
+            <translation>التقسيم إلى هندسة متعددة الأجزاء</translation>
+        </message>
+        <message>
+            <source>Розплутати / залишити основне тіло</source>
+            <translation>فك التشابك / الاحتفاظ بالجسم الرئيسي</translation>
+        </message>
+        <message>
+            <source>Розділити на {0} окремих об'єктів</source>
+            <translation>تقسيم إلى {0} معالم منفصلة</translation>
+        </message>
+        <message>
+            <source>Розділення на окремі об'єкти</source>
+            <translation>التقسيم إلى معالم منفصلة</translation>
+        </message>
+        <message>
+            <source>Автоматично виправити геометрію (Make Valid)</source>
+            <translation>إصلاح الهندسة تلقائيًا (Make Valid)</translation>
+        </message>
+        <message>
+            <source>Виправлення геометрії</source>
+            <translation>إصلاح الهندسة</translation>
+        </message>
+        <message>
+            <source>Очищення топологічних помилок</source>
+            <translation>تنظيف الأخطاء الطوبولوجية</translation>
+        </message>
+        <message>
+            <source>Тип геометрії шару</source>
+            <translation>نوع هندسة الطبقة</translation>
+        </message>
+        <message>
+            <source>Поточний шар не підтримує багаточастинні геометрії (MultiPart).
+
+Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:</source>
+            <translation>الطبقة الحالية لا تدعم الهندسة متعددة الأجزاء (MultiPart).
+
+تحتوي نتيجة الإصلاح على أجزاء متعددة ({0}). اختر طريقة الحفظ:</translation>
+        </message>
+        <message>
+            <source>Розбити на окремі SinglePart об'єкти</source>
+            <translation>تقسيم إلى معالم SinglePart منفصلة</translation>
+        </message>
+        <message>
+            <source>Залишити як MultiPart</source>
+            <translation>الاحتفاظ كـ MultiPart</translation>
+        </message>
+        <message>
+            <source>Очищення геометрії (MultiPart)</source>
+            <translation>تنظيف الهندسة (MultiPart)</translation>
+        </message>
+        <message>
+            <source>Швидке очищення дубльованих вузлів та помилок</source>
+            <translation>تنظيف سريع للعقد المكررة والأخطاء</translation>
+        </message>
+        <message>
+            <source>Очищення та розбиття на окремі об'єкти</source>
+            <translation>تنظيف وتقسيم إلى معالم منفصلة</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. حدد الخط الأول</translation>
         </message>

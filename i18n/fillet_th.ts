@@ -3,6 +3,98 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>CAD Очищення дубльованих вузлів</source>
+            <translation>CAD ล้างโหนดที่ซ้ำกัน</translation>
+        </message>
+        <message>
+            <source>Швидке очищення та виправлення дубльованих вузлів геометрій</source>
+            <translation>ล้างด่วนและซ่อมแซมโหนดเรขาคณิตที่ซ้ำกัน</translation>
+        </message>
+        <message>
+            <source>Злити дублі у вершині (залишити 1 вузол)</source>
+            <translation>ผสานจุดที่ซ้ำกันที่จุดยอด (เก็บไว้ 1 โหนด)</translation>
+        </message>
+        <message>
+            <source>Залишити вузол #{0} (видалити #{1})</source>
+            <translation>เก็บโหนด #{0} (ลบ #{1})</translation>
+        </message>
+        <message>
+            <source>Очистити всі дублі та помилки в об'єкті ({0})</source>
+            <translation>ล้างจุดที่ซ้ำกันและข้อผิดพลาดทั้งหมดในฟีเจอร์ ({0})</translation>
+        </message>
+        <message>
+            <source>Очищення дубльованих вузлів</source>
+            <translation>การล้างโหนดที่ซ้ำกัน</translation>
+        </message>
+        <message>
+            <source>Розплутати петлю самоперетину</source>
+            <translation>คลายลูปที่ตัดกันเอง</translation>
+        </message>
+        <message>
+            <source>Розплутування самоперетину</source>
+            <translation>การคลายการตัดกันเอง</translation>
+        </message>
+        <message>
+            <source>Розбити на мультиполігон (MultiPart)</source>
+            <translation>แยกเป็นเรขาคณิตหลายส่วน</translation>
+        </message>
+        <message>
+            <source>Розплутати / залишити основне тіло</source>
+            <translation>คลาย / เก็บตัววัตถุหลักไว้</translation>
+        </message>
+        <message>
+            <source>Розділити на {0} окремих об'єктів</source>
+            <translation>แยกเป็น {0} ฟีเจอร์ที่แยกจากกัน</translation>
+        </message>
+        <message>
+            <source>Розділення на окремі об'єкти</source>
+            <translation>การแยกเป็นฟีเจอร์แยกต่างหาก</translation>
+        </message>
+        <message>
+            <source>Автоматично виправити геометрію (Make Valid)</source>
+            <translation>ซ่อมแซมเรขาคณิตอัตโนมัติ (Make Valid)</translation>
+        </message>
+        <message>
+            <source>Виправлення геометрії</source>
+            <translation>การซ่อมแซมเรขาคณิต</translation>
+        </message>
+        <message>
+            <source>Очищення топологічних помилок</source>
+            <translation>การล้างข้อผิดพลาดโทποโลยี</translation>
+        </message>
+        <message>
+            <source>Тип геометрії шару</source>
+            <translation>ประเภทเรขาคณิตของชั้นข้อมูล</translation>
+        </message>
+        <message>
+            <source>Поточний шар не підтримує багаточастинні геометрії (MultiPart).
+
+Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:</source>
+            <translation>ชั้นข้อมูลปัจจุบันไม่รองรับเรขาคณิตหลายส่วน (MultiPart)
+
+ผลการซ่อมแซมมีหลายส่วน ({0}) เลือกวิธีการบันทึกผลลัพธ์:</translation>
+        </message>
+        <message>
+            <source>Розбити на окремі SinglePart об'єкти</source>
+            <translation>แยกเป็นฟีเจอร์ SinglePart แยกต่างหาก</translation>
+        </message>
+        <message>
+            <source>Залишити як MultiPart</source>
+            <translation>เก็บไว้เป็น MultiPart</translation>
+        </message>
+        <message>
+            <source>Очищення геометрії (MultiPart)</source>
+            <translation>การล้างเรขาคณิต (MultiPart)</translation>
+        </message>
+        <message>
+            <source>Швидке очищення дубльованих вузлів та помилок</source>
+            <translation>ล้างด่วนโหนดที่ซ้ำกันและข้อผิดพลาด</translation>
+        </message>
+        <message>
+            <source>Очищення та розбиття на окремі об'єкти</source>
+            <translation>ล้างและแยกเป็นฟีเจอร์แยกต่างหาก</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. ระบุเส้นแรก</translation>
         </message>

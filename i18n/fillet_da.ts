@@ -3,6 +3,98 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>CAD Очищення дубльованих вузлів</source>
+            <translation>CAD Rens duplikerede knuder</translation>
+        </message>
+        <message>
+            <source>Швидке очищення та виправлення дубльованих вузлів геометрій</source>
+            <translation>Hurtig rensning og reparation af duplikerede geometriknuder</translation>
+        </message>
+        <message>
+            <source>Злити дублі у вершині (залишити 1 вузол)</source>
+            <translation>Flet duplikater ved toppunkt (behold 1 knude)</translation>
+        </message>
+        <message>
+            <source>Залишити вузол #{0} (видалити #{1})</source>
+            <translation>Behold knude #{0} (fjern #{1})</translation>
+        </message>
+        <message>
+            <source>Очистити всі дублі та помилки в об'єкті ({0})</source>
+            <translation>Rens alle duplikater og fejl i objektet ({0})</translation>
+        </message>
+        <message>
+            <source>Очищення дубльованих вузлів</source>
+            <translation>Rensning af duplikerede knuder</translation>
+        </message>
+        <message>
+            <source>Розплутати петлю самоперетину</source>
+            <translation>Udred selvskærende løkke</translation>
+        </message>
+        <message>
+            <source>Розплутування самоперетину</source>
+            <translation>Udredning af selvskæring</translation>
+        </message>
+        <message>
+            <source>Розбити на мультиполігон (MultiPart)</source>
+            <translation>Opdel i flerdelsprofil</translation>
+        </message>
+        <message>
+            <source>Розплутати / залишити основне тіло</source>
+            <translation>Udred / behold hovedkrop</translation>
+        </message>
+        <message>
+            <source>Розділити на {0} окремих об'єктів</source>
+            <translation>Opdel i {0} separate objekter</translation>
+        </message>
+        <message>
+            <source>Розділення на окремі об'єкти</source>
+            <translation>Opdeling i separate objekter</translation>
+        </message>
+        <message>
+            <source>Автоматично виправити геометрію (Make Valid)</source>
+            <translation>Reparer geometri automatisk (Make Valid)</translation>
+        </message>
+        <message>
+            <source>Виправлення геометрії</source>
+            <translation>Reparer geometri</translation>
+        </message>
+        <message>
+            <source>Очищення топологічних помилок</source>
+            <translation>Rens topologifejl</translation>
+        </message>
+        <message>
+            <source>Тип геометрії шару</source>
+            <translation>Lagets geometritype</translation>
+        </message>
+        <message>
+            <source>Поточний шар не підтримує багаточастинні геометрії (MultiPart).
+
+Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:</source>
+            <translation>Det aktuelle lag understøtter ikke flerdelte geometrier (MultiPart).
+
+Reparationsresultatet indeholder flere dele ({0}). Vælg, hvordan resultatet skal gemmes:</translation>
+        </message>
+        <message>
+            <source>Розбити на окремі SinglePart об'єкти</source>
+            <translation>Opdel i separate SinglePart-objekter</translation>
+        </message>
+        <message>
+            <source>Залишити як MultiPart</source>
+            <translation>Behold som MultiPart</translation>
+        </message>
+        <message>
+            <source>Очищення геометрії (MultiPart)</source>
+            <translation>Geometrirensning (MultiPart)</translation>
+        </message>
+        <message>
+            <source>Швидке очищення дубльованих вузлів та помилок</source>
+            <translation>Hurtig rensning af duplikerede knuder og fejl</translation>
+        </message>
+        <message>
+            <source>Очищення та розбиття на окремі об'єкти</source>
+            <translation>Rens og opdel i separate objekter</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Angiv første linje</translation>
         </message>

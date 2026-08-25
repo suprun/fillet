@@ -3,6 +3,98 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>CAD Очищення дубльованих вузлів</source>
+            <translation>CAD Vyčistiť duplicitné uzly</translation>
+        </message>
+        <message>
+            <source>Швидке очищення та виправлення дубльованих вузлів геометрій</source>
+            <translation>Rýchle čistenie a oprava duplicitných uzlov geometrie</translation>
+        </message>
+        <message>
+            <source>Злити дублі у вершині (залишити 1 вузол)</source>
+            <translation>Zlúčiť duplicity vo vrchole (ponechať 1 uzol)</translation>
+        </message>
+        <message>
+            <source>Залишити вузол #{0} (видалити #{1})</source>
+            <translation>Ponechať uzol #{0} (odstrániť #{1})</translation>
+        </message>
+        <message>
+            <source>Очистити всі дублі та помилки в об'єкті ({0})</source>
+            <translation>Vyčistiť všetky duplicity a chyby v prvku ({0})</translation>
+        </message>
+        <message>
+            <source>Очищення дубльованих вузлів</source>
+            <translation>Čistenie duplicitných uzlov</translation>
+        </message>
+        <message>
+            <source>Розплутати петлю самоперетину</source>
+            <translation>Rozpliesť samopretínajúcu sa slučku</translation>
+        </message>
+        <message>
+            <source>Розплутування самоперетину</source>
+            <translation>Rozpletenie samopretnutia</translation>
+        </message>
+        <message>
+            <source>Розбити на мультиполігон (MultiPart)</source>
+            <translation>Rozdeliť na viacdielnu geometriu (MultiPart)</translation>
+        </message>
+        <message>
+            <source>Розплутати / залишити основне тіло</source>
+            <translation>Rozpliesť / ponechať hlavné telo</translation>
+        </message>
+        <message>
+            <source>Розділити на {0} окремих об'єктів</source>
+            <translation>Rozdeliť na {0} samostatných prvkov</translation>
+        </message>
+        <message>
+            <source>Розділення на окремі об'єкти</source>
+            <translation>Rozdelenie na samostatné prvky</translation>
+        </message>
+        <message>
+            <source>Автоматично виправити геометрію (Make Valid)</source>
+            <translation>Automaticky opraviť geometriu (Make Valid)</translation>
+        </message>
+        <message>
+            <source>Виправлення геометрії</source>
+            <translation>Oprava geometrie</translation>
+        </message>
+        <message>
+            <source>Очищення топологічних помилок</source>
+            <translation>Čistenie topologických chýb</translation>
+        </message>
+        <message>
+            <source>Тип геометрії шару</source>
+            <translation>Typ geometrie vrstvy</translation>
+        </message>
+        <message>
+            <source>Поточний шар не підтримує багаточастинні геометрії (MultiPart).
+
+Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:</source>
+            <translation>Aktuálna vrstva nepodporuje viacdielne geometrie (MultiPart).
+
+Výsledok opravy obsahuje viacero častí ({0}). Vyberte spôsob uloženia:</translation>
+        </message>
+        <message>
+            <source>Розбити на окремі SinglePart об'єкти</source>
+            <translation>Rozdeliť na samostatné SinglePart prvky</translation>
+        </message>
+        <message>
+            <source>Залишити як MultiPart</source>
+            <translation>Ponechať ako MultiPart</translation>
+        </message>
+        <message>
+            <source>Очищення геометрії (MultiPart)</source>
+            <translation>Čistenie geometrie (MultiPart)</translation>
+        </message>
+        <message>
+            <source>Швидке очищення дубльованих вузлів та помилок</source>
+            <translation>Rýchle čistenie duplicitných uzlov a chýb</translation>
+        </message>
+        <message>
+            <source>Очищення та розбиття на окремі об'єкти</source>
+            <translation>Vyčistiť a rozdeliť na samostatné prvky</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Určite prvú líniu</translation>
         </message>

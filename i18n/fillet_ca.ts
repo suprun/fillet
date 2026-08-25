@@ -3,6 +3,98 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>CAD Очищення дубльованих вузлів</source>
+            <translation>CAD Neteja de nodes duplicats</translation>
+        </message>
+        <message>
+            <source>Швидке очищення та виправлення дубльованих вузлів геометрій</source>
+            <translation>Neteja i reparació ràpida de nodes de geometria duplicats</translation>
+        </message>
+        <message>
+            <source>Злити дублі у вершині (залишити 1 вузол)</source>
+            <translation>Fusiona duplicats al vèrtex (mantén 1 node)</translation>
+        </message>
+        <message>
+            <source>Залишити вузол #{0} (видалити #{1})</source>
+            <translation>Mantén el node #{0} (elimina #{1})</translation>
+        </message>
+        <message>
+            <source>Очистити всі дублі та помилки в об'єкті ({0})</source>
+            <translation>Neteja tots els duplicats i errors de l'entitat ({0})</translation>
+        </message>
+        <message>
+            <source>Очищення дубльованих вузлів</source>
+            <translation>Neteja de nodes duplicats</translation>
+        </message>
+        <message>
+            <source>Розплутати петлю самоперетину</source>
+            <translation>Desfés el llaç d'autointersecció</translation>
+        </message>
+        <message>
+            <source>Розплутування самоперетину</source>
+            <translation>Desfeta d'autointersecció</translation>
+        </message>
+        <message>
+            <source>Розбити на мультиполігон (MultiPart)</source>
+            <translation>Divideix en geometria multipart</translation>
+        </message>
+        <message>
+            <source>Розплутати / залишити основне тіло</source>
+            <translation>Desfés / mantén el cos principal</translation>
+        </message>
+        <message>
+            <source>Розділити на {0} окремих об'єктів</source>
+            <translation>Divideix en {0} entitats separades</translation>
+        </message>
+        <message>
+            <source>Розділення на окремі об'єкти</source>
+            <translation>Divisió en entitats separades</translation>
+        </message>
+        <message>
+            <source>Автоматично виправити геометрію (Make Valid)</source>
+            <translation>Repara automàticament la geometria (Make Valid)</translation>
+        </message>
+        <message>
+            <source>Виправлення геометрії</source>
+            <translation>Reparació de geometria</translation>
+        </message>
+        <message>
+            <source>Очищення топологічних помилок</source>
+            <translation>Neteja d'errors topològics</translation>
+        </message>
+        <message>
+            <source>Тип геометрії шару</source>
+            <translation>Tipus de geometria de la capa</translation>
+        </message>
+        <message>
+            <source>Поточний шар не підтримує багаточастинні геометрії (MultiPart).
+
+Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:</source>
+            <translation>La capa actual no admet geometries multipart (MultiPart).
+
+El resultat de la reparació conté diverses parts ({0}). Trieu com desar el resultat:</translation>
+        </message>
+        <message>
+            <source>Розбити на окремі SinglePart об'єкти</source>
+            <translation>Divideix en entitats SinglePart separades</translation>
+        </message>
+        <message>
+            <source>Залишити як MultiPart</source>
+            <translation>Mantén com a MultiPart</translation>
+        </message>
+        <message>
+            <source>Очищення геометрії (MultiPart)</source>
+            <translation>Neteja de geometria (MultiPart)</translation>
+        </message>
+        <message>
+            <source>Швидке очищення дубльованих вузлів та помилок</source>
+            <translation>Neteja ràpida de nodes duplicats i errors</translation>
+        </message>
+        <message>
+            <source>Очищення та розбиття на окремі об'єкти</source>
+            <translation>Neteja i divideix en entitats separades</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Especifiqueu la primera línia</translation>
         </message>

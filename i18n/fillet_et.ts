@@ -3,6 +3,98 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>CAD Очищення дубльованих вузлів</source>
+            <translation>CAD Puhasta duplikaatsõlmed</translation>
+        </message>
+        <message>
+            <source>Швидке очищення та виправлення дубльованих вузлів геометрій</source>
+            <translation>Geomeetria duplikaatsõlmede kiirpuhastus ja parandus</translation>
+        </message>
+        <message>
+            <source>Злити дублі у вершині (залишити 1 вузол)</source>
+            <translation>Ühenda tipu duplikaadid (säilita 1 sõlm)</translation>
+        </message>
+        <message>
+            <source>Залишити вузол #{0} (видалити #{1})</source>
+            <translation>Säilita sõlm #{0} (eemalda #{1})</translation>
+        </message>
+        <message>
+            <source>Очистити всі дублі та помилки в об'єкті ({0})</source>
+            <translation>Puhasta kõik objekti duplikaadid ja vead ({0})</translation>
+        </message>
+        <message>
+            <source>Очищення дубльованих вузлів</source>
+            <translation>Duplikaatsõlmede puhastamine</translation>
+        </message>
+        <message>
+            <source>Розплутати петлю самоперетину</source>
+            <translation>Haruta lahti eneselõikuse silmus</translation>
+        </message>
+        <message>
+            <source>Розплутування самоперетину</source>
+            <translation>Eneselõikuse harutamine</translation>
+        </message>
+        <message>
+            <source>Розбити на мультиполігон (MultiPart)</source>
+            <translation>Jaga mitmeosaliseks geomeetriaks</translation>
+        </message>
+        <message>
+            <source>Розплутати / залишити основне тіло</source>
+            <translation>Haruta lahti / säilita põhiosa</translation>
+        </message>
+        <message>
+            <source>Розділити на {0} окремих об'єктів</source>
+            <translation>Jaga {0} eraldi objektiks</translation>
+        </message>
+        <message>
+            <source>Розділення на окремі об'єкти</source>
+            <translation>Jagamine eraldi objektideks</translation>
+        </message>
+        <message>
+            <source>Автоматично виправити геометрію (Make Valid)</source>
+            <translation>Paranda geomeetria automaatselt (Make Valid)</translation>
+        </message>
+        <message>
+            <source>Виправлення геометрії</source>
+            <translation>Geomeetria parandamine</translation>
+        </message>
+        <message>
+            <source>Очищення топологічних помилок</source>
+            <translation>Topoloogiavigade puhastamine</translation>
+        </message>
+        <message>
+            <source>Тип геометрії шару</source>
+            <translation>Kihi geomeetria tüüp</translation>
+        </message>
+        <message>
+            <source>Поточний шар не підтримує багаточастинні геометрії (MultiPart).
+
+Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:</source>
+            <translation>Praegune kiht ei toeta mitmeosalisi geomeetriaid (MultiPart).
+
+Paranduse tulemus sisaldab mitut osa ({0}). Valige salvestamise viis:</translation>
+        </message>
+        <message>
+            <source>Розбити на окремі SinglePart об'єкти</source>
+            <translation>Jaga eraldi SinglePart objektideks</translation>
+        </message>
+        <message>
+            <source>Залишити як MultiPart</source>
+            <translation>Säilita kui MultiPart</translation>
+        </message>
+        <message>
+            <source>Очищення геометрії (MultiPart)</source>
+            <translation>Geomeetria puhastamine (MultiPart)</translation>
+        </message>
+        <message>
+            <source>Швидке очищення дубльованих вузлів та помилок</source>
+            <translation>Duplikaatsõlmede ja vigade kiirpuhastus</translation>
+        </message>
+        <message>
+            <source>Очищення та розбиття на окремі об'єкти</source>
+            <translation>Puhasta ja jaga eraldi objektideks</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Määrake esimene joon</translation>
         </message>

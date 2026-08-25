@@ -3,6 +3,98 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>CAD Очищення дубльованих вузлів</source>
+            <translation>CAD 清理重复节点</translation>
+        </message>
+        <message>
+            <source>Швидке очищення та виправлення дубльованих вузлів геометрій</source>
+            <translation>快速清理并修复重复几何节点</translation>
+        </message>
+        <message>
+            <source>Злити дублі у вершині (залишити 1 вузол)</source>
+            <translation>合并顶点处的重复点（保留 1 个节点）</translation>
+        </message>
+        <message>
+            <source>Залишити вузол #{0} (видалити #{1})</source>
+            <translation>保留节点 #{0}（删除 #{1}）</translation>
+        </message>
+        <message>
+            <source>Очистити всі дублі та помилки в об'єкті ({0})</source>
+            <translation>清理要素中的所有重复点和错误（{0}）</translation>
+        </message>
+        <message>
+            <source>Очищення дубльованих вузлів</source>
+            <translation>清理重复节点</translation>
+        </message>
+        <message>
+            <source>Розплутати петлю самоперетину</source>
+            <translation>解开自相交环</translation>
+        </message>
+        <message>
+            <source>Розплутування самоперетину</source>
+            <translation>解开自相交</translation>
+        </message>
+        <message>
+            <source>Розбити на мультиполігон (MultiPart)</source>
+            <translation>拆分为多部件几何（MultiPart）</translation>
+        </message>
+        <message>
+            <source>Розплутати / залишити основне тіло</source>
+            <translation>解开 / 保留主体</translation>
+        </message>
+        <message>
+            <source>Розділити на {0} окремих об'єктів</source>
+            <translation>拆分为 {0} 个独立要素</translation>
+        </message>
+        <message>
+            <source>Розділення на окремі об'єкти</source>
+            <translation>拆分为独立要素</translation>
+        </message>
+        <message>
+            <source>Автоматично виправити геометрію (Make Valid)</source>
+            <translation>自动修复几何（Make Valid）</translation>
+        </message>
+        <message>
+            <source>Виправлення геометрії</source>
+            <translation>修复几何</translation>
+        </message>
+        <message>
+            <source>Очищення топологічних помилок</source>
+            <translation>清理拓扑错误</translation>
+        </message>
+        <message>
+            <source>Тип геометрії шару</source>
+            <translation>图层几何类型</translation>
+        </message>
+        <message>
+            <source>Поточний шар не підтримує багаточастинні геометрії (MultiPart).
+
+Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:</source>
+            <translation>当前图层不支持多部件几何（MultiPart）。
+
+修复结果包含多个部件 ({0})。请选择保存方式：</translation>
+        </message>
+        <message>
+            <source>Розбити на окремі SinglePart об'єкти</source>
+            <translation>拆分为独立的 SinglePart 要素</translation>
+        </message>
+        <message>
+            <source>Залишити як MultiPart</source>
+            <translation>保留为 MultiPart</translation>
+        </message>
+        <message>
+            <source>Очищення геометрії (MultiPart)</source>
+            <translation>清理几何（MultiPart）</translation>
+        </message>
+        <message>
+            <source>Швидке очищення дубльованих вузлів та помилок</source>
+            <translation>快速清理重复节点和错误</translation>
+        </message>
+        <message>
+            <source>Очищення та розбиття на окремі об'єкти</source>
+            <translation>清理并拆分为独立要素</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. 指定第一条线</translation>
         </message>

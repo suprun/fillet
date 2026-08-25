@@ -3,6 +3,98 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>CAD Очищення дубльованих вузлів</source>
+            <translation>CAD Bersihkan Node Duplikat</translation>
+        </message>
+        <message>
+            <source>Швидке очищення та виправлення дубльованих вузлів геометрій</source>
+            <translation>Pembersihan dan perbaikan cepat node geometri duplikat</translation>
+        </message>
+        <message>
+            <source>Злити дублі у вершині (залишити 1 вузол)</source>
+            <translation>Gabungkan duplikat di titik puncak (simpan 1 node)</translation>
+        </message>
+        <message>
+            <source>Залишити вузол #{0} (видалити #{1})</source>
+            <translation>Simpan node #{0} (hapus #{1})</translation>
+        </message>
+        <message>
+            <source>Очистити всі дублі та помилки в об'єкті ({0})</source>
+            <translation>Bersihkan semua duplikat dan kesalahan pada fitur ({0})</translation>
+        </message>
+        <message>
+            <source>Очищення дубльованих вузлів</source>
+            <translation>Pembersihan Node Duplikat</translation>
+        </message>
+        <message>
+            <source>Розплутати петлю самоперетину</source>
+            <translation>Uraikan loop perpotongan mandiri</translation>
+        </message>
+        <message>
+            <source>Розплутування самоперетину</source>
+            <translation>Penguraian Perpotongan Mandiri</translation>
+        </message>
+        <message>
+            <source>Розбити на мультиполігон (MultiPart)</source>
+            <translation>Bagi menjadi geometri multi-bagian</translation>
+        </message>
+        <message>
+            <source>Розплутати / залишити основне тіло</source>
+            <translation>Uraikan / simpan badan utama</translation>
+        </message>
+        <message>
+            <source>Розділити на {0} окремих об'єктів</source>
+            <translation>Bagi menjadi {0} fitur terpisah</translation>
+        </message>
+        <message>
+            <source>Розділення на окремі об'єкти</source>
+            <translation>Pembagian menjadi fitur terpisah</translation>
+        </message>
+        <message>
+            <source>Автоматично виправити геометрію (Make Valid)</source>
+            <translation>Perbaiki Geometri Secara Otomatis (Make Valid)</translation>
+        </message>
+        <message>
+            <source>Виправлення геометрії</source>
+            <translation>Perbaikan Geometri</translation>
+        </message>
+        <message>
+            <source>Очищення топологічних помилок</source>
+            <translation>Pembersihan Kesalahan Topologi</translation>
+        </message>
+        <message>
+            <source>Тип геометрії шару</source>
+            <translation>Tipe Geometri Layer</translation>
+        </message>
+        <message>
+            <source>Поточний шар не підтримує багаточастинні геометрії (MultiPart).
+
+Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:</source>
+            <translation>Layer saat ini tidak mendukung geometri multi-bagian (MultiPart).
+
+Hasil perbaikan berisi beberapa bagian ({0}). Pilih cara menyimpan:</translation>
+        </message>
+        <message>
+            <source>Розбити на окремі SinglePart об'єкти</source>
+            <translation>Bagi menjadi fitur SinglePart terpisah</translation>
+        </message>
+        <message>
+            <source>Залишити як MultiPart</source>
+            <translation>Simpan sebagai MultiPart</translation>
+        </message>
+        <message>
+            <source>Очищення геометрії (MultiPart)</source>
+            <translation>Pembersihan Geometri (MultiPart)</translation>
+        </message>
+        <message>
+            <source>Швидке очищення дубльованих вузлів та помилок</source>
+            <translation>Pembersihan Cepat Node Duplikat &amp; Kesalahan</translation>
+        </message>
+        <message>
+            <source>Очищення та розбиття на окремі об'єкти</source>
+            <translation>Bersihkan dan bagi menjadi fitur terpisah</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Tentukan garis pertama</translation>
         </message>

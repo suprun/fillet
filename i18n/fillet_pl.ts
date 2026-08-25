@@ -3,6 +3,98 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>CAD Очищення дубльованих вузлів</source>
+            <translation>CAD Czyszczenie zduplikowanych węzłów</translation>
+        </message>
+        <message>
+            <source>Швидке очищення та виправлення дубльованих вузлів геометрій</source>
+            <translation>Szybkie czyszczenie i naprawa zduplikowanych węzłów geometrii</translation>
+        </message>
+        <message>
+            <source>Злити дублі у вершині (залишити 1 вузол)</source>
+            <translation>Połącz duplikaty w wierzchołku (zachowaj 1 węzeł)</translation>
+        </message>
+        <message>
+            <source>Залишити вузол #{0} (видалити #{1})</source>
+            <translation>Zachowaj węzeł #{0} (usuń #{1})</translation>
+        </message>
+        <message>
+            <source>Очистити всі дублі та помилки в об'єкті ({0})</source>
+            <translation>Wyczyść wszystkie duplikaty i błędy w obiekcie ({0})</translation>
+        </message>
+        <message>
+            <source>Очищення дубльованих вузлів</source>
+            <translation>Czyszczenie zduplikowanych węzłów</translation>
+        </message>
+        <message>
+            <source>Розплутати петлю самоперетину</source>
+            <translation>Rozplącz pętlę samoprzecięcia</translation>
+        </message>
+        <message>
+            <source>Розплутування самоперетину</source>
+            <translation>Rozplątywanie samoprzecięcia</translation>
+        </message>
+        <message>
+            <source>Розбити на мультиполігон (MultiPart)</source>
+            <translation>Podziel na geometrię wieloczęściową (MultiPart)</translation>
+        </message>
+        <message>
+            <source>Розплутати / залишити основне тіло</source>
+            <translation>Rozplącz / zachowaj główną część</translation>
+        </message>
+        <message>
+            <source>Розділити на {0} окремих об'єктів</source>
+            <translation>Podziel na {0} osobnych obiektów</translation>
+        </message>
+        <message>
+            <source>Розділення на окремі об'єкти</source>
+            <translation>Podział na osobne obiekty</translation>
+        </message>
+        <message>
+            <source>Автоматично виправити геометрію (Make Valid)</source>
+            <translation>Automatycznie napraw geometrię (Make Valid)</translation>
+        </message>
+        <message>
+            <source>Виправлення геометрії</source>
+            <translation>Naprawa geometrii</translation>
+        </message>
+        <message>
+            <source>Очищення топологічних помилок</source>
+            <translation>Czyszczenie błędów topologicznych</translation>
+        </message>
+        <message>
+            <source>Тип геометрії шару</source>
+            <translation>Typ geometrii warstwy</translation>
+        </message>
+        <message>
+            <source>Поточний шар не підтримує багаточастинні геометрії (MultiPart).
+
+Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:</source>
+            <translation>Bieżąca warstwa nie obsługuje geometrii wieloczęściowych (MultiPart).
+
+Wynik naprawy zawiera wiele części ({0}). Wybierz sposób zapisu:</translation>
+        </message>
+        <message>
+            <source>Розбити на окремі SinglePart об'єкти</source>
+            <translation>Podziel na osobne obiekty SinglePart</translation>
+        </message>
+        <message>
+            <source>Залишити як MultiPart</source>
+            <translation>Zachowaj jako MultiPart</translation>
+        </message>
+        <message>
+            <source>Очищення геометрії (MultiPart)</source>
+            <translation>Czyszczenie geometrii (MultiPart)</translation>
+        </message>
+        <message>
+            <source>Швидке очищення дубльованих вузлів та помилок</source>
+            <translation>Szybkie czyszczenie zduplikowanych węzłów i błędów</translation>
+        </message>
+        <message>
+            <source>Очищення та розбиття на окремі об'єкти</source>
+            <translation>Wyczyść i podziel na osobne obiekty</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Wskaż pierwszą linię</translation>
         </message>

@@ -3,6 +3,98 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>CAD Очищення дубльованих вузлів</source>
+            <translation>CAD Curățare noduri duplicate</translation>
+        </message>
+        <message>
+            <source>Швидке очищення та виправлення дубльованих вузлів геометрій</source>
+            <translation>Curățare și reparare rapidă a nodurilor de geometrie duplicate</translation>
+        </message>
+        <message>
+            <source>Злити дублі у вершині (залишити 1 вузол)</source>
+            <translation>Îmbină duplicatele din vârf (păstrează 1 nod)</translation>
+        </message>
+        <message>
+            <source>Залишити вузол #{0} (видалити #{1})</source>
+            <translation>Păstrează nodul #{0} (elimină #{1})</translation>
+        </message>
+        <message>
+            <source>Очистити всі дублі та помилки в об'єкті ({0})</source>
+            <translation>Curăță toate duplicatele și erorile din element ({0})</translation>
+        </message>
+        <message>
+            <source>Очищення дубльованих вузлів</source>
+            <translation>Curățare noduri duplicate</translation>
+        </message>
+        <message>
+            <source>Розплутати петлю самоперетину</source>
+            <translation>Descurcă bucla de auto-intersecție</translation>
+        </message>
+        <message>
+            <source>Розплутування самоперетину</source>
+            <translation>Descurcare auto-intersecție</translation>
+        </message>
+        <message>
+            <source>Розбити на мультиполігон (MultiPart)</source>
+            <translation>Împărțire în geometrie multipartită</translation>
+        </message>
+        <message>
+            <source>Розплутати / залишити основне тіло</source>
+            <translation>Descurcă / păstrează corpul principal</translation>
+        </message>
+        <message>
+            <source>Розділити на {0} окремих об'єктів</source>
+            <translation>Împarte în {0} elemente separate</translation>
+        </message>
+        <message>
+            <source>Розділення на окремі об'єкти</source>
+            <translation>Divizare în elemente separate</translation>
+        </message>
+        <message>
+            <source>Автоматично виправити геометрію (Make Valid)</source>
+            <translation>Reparare automată a geometriei (Make Valid)</translation>
+        </message>
+        <message>
+            <source>Виправлення геометрії</source>
+            <translation>Reparare geometrie</translation>
+        </message>
+        <message>
+            <source>Очищення топологічних помилок</source>
+            <translation>Curățare erori topologice</translation>
+        </message>
+        <message>
+            <source>Тип геометрії шару</source>
+            <translation>Tipul de geometrie al stratului</translation>
+        </message>
+        <message>
+            <source>Поточний шар не підтримує багаточастинні геометрії (MultiPart).
+
+Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:</source>
+            <translation>Stratul curent nu acceptă geometrii multipartite (MultiPart).
+
+Rezultatul reparării conține mai multe părți ({0}). Alegeți cum să salvați rezultatul:</translation>
+        </message>
+        <message>
+            <source>Розбити на окремі SinglePart об'єкти</source>
+            <translation>Împarte în elemente SinglePart separate</translation>
+        </message>
+        <message>
+            <source>Залишити як MultiPart</source>
+            <translation>Păstrează ca MultiPart</translation>
+        </message>
+        <message>
+            <source>Очищення геометрії (MultiPart)</source>
+            <translation>Curățare geometrie (MultiPart)</translation>
+        </message>
+        <message>
+            <source>Швидке очищення дубльованих вузлів та помилок</source>
+            <translation>Curățare rapidă a nodurilor duplicate și a erorilor</translation>
+        </message>
+        <message>
+            <source>Очищення та розбиття на окремі об'єкти</source>
+            <translation>Curățare și împărțire în elemente separate</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. Specificați prima linie</translation>
         </message>

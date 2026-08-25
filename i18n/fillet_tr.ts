@@ -3,6 +3,98 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>CAD Очищення дубльованих вузлів</source>
+            <translation>CAD Yinelenen Düğümleri Temizle</translation>
+        </message>
+        <message>
+            <source>Швидке очищення та виправлення дубльованих вузлів геометрій</source>
+            <translation>Yinelenen geometri düğümlerini hızlıca temizleyin ve onarın</translation>
+        </message>
+        <message>
+            <source>Злити дублі у вершині (залишити 1 вузол)</source>
+            <translation>Köşedeki kopyaları birleştir (1 düğümü tut)</translation>
+        </message>
+        <message>
+            <source>Залишити вузол #{0} (видалити #{1})</source>
+            <translation>#{0} numaralı düğümü tut (#{1} numaralıyı kaldır)</translation>
+        </message>
+        <message>
+            <source>Очистити всі дублі та помилки в об'єкті ({0})</source>
+            <translation>Detaydaki tüm kopyaları ve hataları temizle ({0})</translation>
+        </message>
+        <message>
+            <source>Очищення дубльованих вузлів</source>
+            <translation>Yinelenen Düğümleri Temizleme</translation>
+        </message>
+        <message>
+            <source>Розплутати петлю самоперетину</source>
+            <translation>Kendisiyle kesişen döngüyü çöz</translation>
+        </message>
+        <message>
+            <source>Розплутування самоперетину</source>
+            <translation>Kendisiyle Kesişimi Çözme</translation>
+        </message>
+        <message>
+            <source>Розбити на мультиполігон (MultiPart)</source>
+            <translation>Çok parçalı geometriye böl</translation>
+        </message>
+        <message>
+            <source>Розплутати / залишити основне тіло</source>
+            <translation>Çöz / ana gövdeyi tut</translation>
+        </message>
+        <message>
+            <source>Розділити на {0} окремих об'єктів</source>
+            <translation>{0} ayrı detaya böl</translation>
+        </message>
+        <message>
+            <source>Розділення на окремі об'єкти</source>
+            <translation>Ayrı Detaylara Bölme</translation>
+        </message>
+        <message>
+            <source>Автоматично виправити геометрію (Make Valid)</source>
+            <translation>Geometriyi Otomatik Onar (Make Valid)</translation>
+        </message>
+        <message>
+            <source>Виправлення геометрії</source>
+            <translation>Geometriyi Onar</translation>
+        </message>
+        <message>
+            <source>Очищення топологічних помилок</source>
+            <translation>Topoloji Hatalarını Temizleme</translation>
+        </message>
+        <message>
+            <source>Тип геометрії шару</source>
+            <translation>Katman Geometri Türü</translation>
+        </message>
+        <message>
+            <source>Поточний шар не підтримує багаточастинні геометрії (MultiPart).
+
+Результат виправлення містить декілька частин ({0}). Оберіть варіант збереження:</source>
+            <translation>Geçerli katman çok parçalı geometrileri (MultiPart) desteklemiyor.
+
+Onarım sonucu birden fazla parça ({0}) içeriyor. Kaydetme yöntemini seçin:</translation>
+        </message>
+        <message>
+            <source>Розбити на окремі SinglePart об'єкти</source>
+            <translation>Ayrı SinglePart detaylarına böl</translation>
+        </message>
+        <message>
+            <source>Залишити як MultiPart</source>
+            <translation>MultiPart olarak tut</translation>
+        </message>
+        <message>
+            <source>Очищення геометрії (MultiPart)</source>
+            <translation>Geometri Temizleme (MultiPart)</translation>
+        </message>
+        <message>
+            <source>Швидке очищення дубльованих вузлів та помилок</source>
+            <translation>Yinelenen Düğümleri ve Hataları Hızlı Temizle</translation>
+        </message>
+        <message>
+            <source>Очищення та розбиття на окремі об'єкти</source>
+            <translation>Temizle ve Ayrı Detaylara Böl</translation>
+        </message>
+        <message>
             <source>1. Вкажіть першу лінію</source>
             <translation>1. İlk çizgiyi belirtin</translation>
         </message>
