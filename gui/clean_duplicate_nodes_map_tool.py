@@ -214,6 +214,51 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
             self.active_item = None
             return
 
+    def _find_error_at_pos(self, screen_pos: QPoint, layer: QgsVectorLayer) -> Optional[Tuple[str, Dict]]:
+        """Finds if a screen position is within snap tolerance of any duplicate node or self-intersection."""
+        if not layer:
+            return None
+
+        # Check duplicate nodes first
+        for dup in self.duplicate_nodes:
+            pt = dup["point"]
+            map_pt_dup = self.toMapCoordinates(layer, QgsPointXY(pt.x(), pt.y()))
+            screen_pt = self.toCanvasCoordinates(map_pt_dup)
+            dx = screen_pt.x() - screen_pos.x()
+            dy = screen_pt.y() - screen_pos.y()
+            if math.hypot(dx, dy) <= self.SNAP_PIXELS:
+                return ("duplicate", dup)
+
+        # Check self-intersections
+        for inter in self.self_intersections:
+            pt = inter["point"]
+            map_pt_inter = self.toMapCoordinates(layer, QgsPointXY(pt.x(), pt.y()))
+            screen_pt = self.toCanvasCoordinates(map_pt_inter)
+            dx = screen_pt.x() - screen_pos.x()
+            dy = screen_pt.y() - screen_pos.y()
+            if math.hypot(dx, dy) <= self.SNAP_PIXELS:
+                return ("intersection", inter)
+
+        return None
+
+    def canvasMoveEvent(self, event: QgsMapMouseEvent):
+        layer = self.current_vector_layer()
+        if not layer:
+            self._clear_visuals()
+            return
+
+        map_pt = self.toMapCoordinates(event.pos())
+        feat = self._identify_feature_at(map_pt, layer)
+
+        if not feat:
+            self._clear_visuals()
+            self.hovered_feature = None
+            self.hovered_layer = None
+            self.duplicate_nodes = []
+            self.self_intersections = []
+            self.active_item = None
+            return
+
         # Check if hovered feature changed
         if not self.hovered_feature or self.hovered_feature.id() != feat.id():
             self.hovered_feature = feat
@@ -223,35 +268,15 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
             self._update_errors_for_feature(feat, layer)
 
         # Hit test for duplicate nodes or self-intersections (within SNAP_PIXELS)
-        self.active_item = None
+        self.active_item = self._find_error_at_pos(event.pos(), layer)
         self.active_node_marker.reset(QgsWkbTypes.GeometryType.PointGeometry)
 
-        # Check duplicate nodes first
-        for dup in self.duplicate_nodes:
-            pt = dup["point"]
-            map_pt_dup = self.toMapCoordinates(layer, QgsPointXY(pt.x(), pt.y()))
-            screen_pt = self.toCanvasCoordinates(map_pt_dup)
-            dx = screen_pt.x() - event.pos().x()
-            dy = screen_pt.y() - event.pos().y()
-            if math.hypot(dx, dy) <= self.SNAP_PIXELS:
-                self.active_item = ("duplicate", dup)
-                self.active_node_marker.addPoint(map_pt_dup, True)
-                self.active_node_marker.show()
-                break
-
-        # Check self-intersections if no duplicate node matched
-        if not self.active_item:
-            for inter in self.self_intersections:
-                pt = inter["point"]
-                map_pt_inter = self.toMapCoordinates(layer, QgsPointXY(pt.x(), pt.y()))
-                screen_pt = self.toCanvasCoordinates(map_pt_inter)
-                dx = screen_pt.x() - event.pos().x()
-                dy = screen_pt.y() - event.pos().y()
-                if math.hypot(dx, dy) <= self.SNAP_PIXELS:
-                    self.active_item = ("intersection", inter)
-                    self.active_node_marker.addPoint(map_pt_inter, True)
-                    self.active_node_marker.show()
-                    break
+        if self.active_item:
+            _, item_data = self.active_item
+            pt = item_data["point"]
+            map_pt_err = self.toMapCoordinates(layer, QgsPointXY(pt.x(), pt.y()))
+            self.active_node_marker.addPoint(map_pt_err, True)
+            self.active_node_marker.show()
 
     def _apply_split_features(
         self,
@@ -291,16 +316,36 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
             return
 
         layer = self.current_vector_layer()
-        if not layer or not self.hovered_feature:
+        if not layer:
             return
 
-        feat = self.hovered_feature
+        map_pt = self.toMapCoordinates(event.pos())
+        feat = self._identify_feature_at(map_pt, layer)
+        if not feat:
+            self._clear_visuals()
+            self.hovered_feature = None
+            self.hovered_layer = None
+            self.duplicate_nodes = []
+            self.self_intersections = []
+            self.active_item = None
+            return
+
+        if not self.hovered_feature or self.hovered_feature.id() != feat.id():
+            self.hovered_feature = feat
+            self.hovered_layer = layer
+            self.hover_rubberband.setToGeometry(feat.geometry(), layer)
+            self.hover_rubberband.show()
+            self._update_errors_for_feature(feat, layer)
+
         is_multi_layer = QgsWkbTypes.isMultiType(layer.wkbType())
         total_errors = len(self.duplicate_nodes) + len(self.self_intersections)
 
+        # Hit test specifically at the exact click position
+        clicked_error = self._find_error_at_pos(event.pos(), layer)
+
         # CASE 1: Clicked on a specific error -> Native System Context Menu with Live Preview
-        if self.active_item:
-            item_type, item_data = self.active_item
+        if clicked_error:
+            item_type, item_data = clicked_error
             menu = QMenu(self.canvas)
 
             if item_type == "duplicate":
@@ -514,6 +559,11 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
                         self._update_errors_for_feature(fresh_feat, layer)
                     else:
                         self._clear_visuals()
+
+            # Always clear active item and active marker after menu closes
+            self.active_item = None
+            self.active_node_marker.reset(QgsWkbTypes.GeometryType.PointGeometry)
+            self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
 
         # CASE 2: Clicked on feature body -> Fast One-Click Clean with SinglePart split safety (Variant A)
         else:
