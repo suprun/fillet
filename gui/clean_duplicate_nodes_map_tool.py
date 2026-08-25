@@ -81,26 +81,34 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
         # Duplicate node markers (Standard QGIS Red Cross)
         self.dup_markers_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
         self.dup_markers_rubberband.setColor(QColor(239, 68, 68, 240))
-        self.dup_markers_rubberband.setWidth(10)
         self.dup_markers_rubberband.setIcon(getattr(QgsRubberBand, "ICON_X", 1))
+        if hasattr(self.dup_markers_rubberband, "setIconSize"):
+            self.dup_markers_rubberband.setIconSize(10)
+        self.dup_markers_rubberband.setWidth(2)
 
         # Self-intersection markers (Standard QGIS Amber / Orange Cross)
         self.inter_markers_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
         self.inter_markers_rubberband.setColor(QColor(245, 158, 11, 240))
-        self.inter_markers_rubberband.setWidth(12)
         self.inter_markers_rubberband.setIcon(getattr(QgsRubberBand, "ICON_X", 1))
+        if hasattr(self.inter_markers_rubberband, "setIconSize"):
+            self.inter_markers_rubberband.setIconSize(12)
+        self.inter_markers_rubberband.setWidth(2)
 
         # Active highlighted error under cursor: Contrast Circle Halo (Variant 1.2)
         self.active_node_halo = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
         self.active_node_halo.setColor(QColor(6, 182, 212, 130))
-        self.active_node_halo.setWidth(18)
         self.active_node_halo.setIcon(getattr(QgsRubberBand, "ICON_CIRCLE", 3))
+        if hasattr(self.active_node_halo, "setIconSize"):
+            self.active_node_halo.setIconSize(16)
+        self.active_node_halo.setWidth(2)
 
         # Active highlighted error under cursor: Highlighted White Cross (Variant 1.2)
         self.active_node_marker = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
         self.active_node_marker.setColor(QColor(255, 255, 255, 255))
-        self.active_node_marker.setWidth(10)
         self.active_node_marker.setIcon(getattr(QgsRubberBand, "ICON_X", 1))
+        if hasattr(self.active_node_marker, "setIconSize"):
+            self.active_node_marker.setIconSize(10)
+        self.active_node_marker.setWidth(2)
 
         # Preview rubberband for live preview (Green dashed)
         self.preview_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PolygonGeometry)

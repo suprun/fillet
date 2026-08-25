@@ -914,25 +914,26 @@ class FilletPlugin:
         # Re-bind editing state signals if current layer changed
         if layer != self._tracked_layer:
             if self._tracked_layer is not None:
-                try:
-                    self._tracked_layer.editingStarted.disconnect(self.update_action_state)
-                except (TypeError, RuntimeError):
-                    pass  # nosec B110
-                try:
-                    self._tracked_layer.editingStopped.disconnect(self.update_action_state)
-                except (TypeError, RuntimeError):
-                    pass  # nosec B110
-                try:
-                    self._tracked_layer.selectionChanged.disconnect(self.update_action_state)
-                except (TypeError, RuntimeError):
-                    pass  # nosec B110
+                if isinstance(self._tracked_layer, QgsVectorLayer):
+                    try:
+                        self._tracked_layer.editingStarted.disconnect(self.update_action_state)
+                    except (TypeError, RuntimeError, AttributeError):
+                        pass  # nosec B110
+                    try:
+                        self._tracked_layer.editingStopped.disconnect(self.update_action_state)
+                    except (TypeError, RuntimeError, AttributeError):
+                        pass  # nosec B110
+                    try:
+                        self._tracked_layer.selectionChanged.disconnect(self.update_action_state)
+                    except (TypeError, RuntimeError, AttributeError):
+                        pass  # nosec B110
             self._tracked_layer = layer
             if isinstance(layer, QgsVectorLayer):
                 try:
                     layer.editingStarted.connect(self.update_action_state)
                     layer.editingStopped.connect(self.update_action_state)
                     layer.selectionChanged.connect(self.update_action_state)
-                except (TypeError, RuntimeError):
+                except (TypeError, RuntimeError, AttributeError):
                     pass  # nosec B110
 
         is_vector = isinstance(layer, QgsVectorLayer)

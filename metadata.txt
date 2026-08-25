@@ -4,7 +4,7 @@ qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
 description=Interactive Fillet, Chamfer, Two-Line Merge, Corner Restoration, CAD Rotation, Mirror, Scale & Edge Offset suite for QGIS.
 about=Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), Interactive CAD Rotation, CAD Mirror Tool, CAD 3-Point Scale with Rotation Tool, and CAD Edge Offset (Parallel Shift) Tool for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.
-version=1.0.0.53
+version=1.0.0.54
 author=suprun
 email=suprun.serhiy+qgis@gmail.com
 homepage=https://github.com/suprun/fillet
@@ -14,7 +14,10 @@ tags=cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation,
 icon=icon.png
 experimental=False
 deprecated=False
-changelog=1.0.0.53:
+changelog=1.0.0.54:
+    - Fixed cross line stroke width (set crisp 2px line width with proper setIconSize) for clean rendering.
+    - Fixed AttributeError when switching to raster layers (safe disconnect on QgsVectorLayer only).
+    1.0.0.53:
     - Added standard QGIS topological crosses with dynamic halo-target hover highlighting (Variant 1.2).
     - Added full support for multi-duplicate node clusters (N >= 3) with individual node retention actions (Variant 2.A).
     1.0.0.52:
