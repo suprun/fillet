@@ -152,6 +152,26 @@ class TestCleanDuplicateNodesTool(unittest.TestCase):
         multi_res = GeometryEngine.coerce_geometry_to_layer(largest, multi_layer)
         self.assertTrue(multi_res.isMultipart())
 
+    def test_merge_duplicate_cluster_multiple_vertices(self):
+        # 3 identical duplicate vertices at (10, 10)
+        poly = QgsPolygon()
+        ring = QgsLineString([
+            QgsPoint(0, 0),
+            QgsPoint(10, 0),
+            QgsPoint(10, 10),
+            QgsPoint(10, 10),
+            QgsPoint(10, 10),
+            QgsPoint(0, 10),
+            QgsPoint(0, 0),
+        ])
+        poly.setExteriorRing(ring)
+        geom = QgsGeometry(poly)
+
+        merged = GeometryEngine.merge_duplicate_nodes_at_point(geom, QgsPoint(10, 10), tolerance=1e-5)
+        dups = GeometryEngine.find_duplicate_nodes(merged, tolerance=1e-5)
+        self.assertEqual(len(dups), 0)
+        self.assertEqual(len(merged.asPolygon()[0]), 5)
+
     def test_map_tool_lifecycle(self):
         tool = CleanDuplicateNodesMapTool(self.canvas)
         tool.activate()

@@ -2295,6 +2295,95 @@ class GeometryEngine:
         return geom
 
     @classmethod
+    def merge_duplicate_nodes_at_point(
+        cls,
+        geom: QgsGeometry,
+        target_pt: QgsPoint,
+        tolerance: float = 1e-5,
+    ) -> QgsGeometry:
+        """
+        Removes all duplicate consecutive vertices at target_pt across the geometry,
+        leaving exactly 1 vertex at this location regardless of how many duplicates exist (2, 3, 4...).
+        """
+        if not geom or geom.isEmpty() or geom.isNull():
+            return geom
+
+        geom_type = geom.type()
+        is_multi = geom.isMultipart()
+
+        def _clean_curve_at_point(curve, is_closed: bool):
+            n = curve.numPoints()
+            if n == 0:
+                return curve
+            new_pts = []
+            found_target = False
+            for i in range(n):
+                pt = curve.pointN(i)
+                # Check distance
+                dx = pt.x() - target_pt.x()
+                dy = pt.y() - target_pt.y()
+                if math.hypot(dx, dy) <= tolerance:
+                    if not found_target:
+                        new_pts.append(pt)
+                        found_target = True
+                    else:
+                        # Skip duplicate at this point
+                        continue
+                else:
+                    new_pts.append(pt)
+            if is_closed and len(new_pts) > 0 and new_pts[0] != new_pts[-1]:
+                new_pts.append(new_pts[0])
+            return QgsLineString(new_pts)
+
+        if geom_type == QgsWkbTypes.GeometryType.LineGeometry:
+            if not is_multi:
+                line = geom.constGet()
+                return QgsGeometry(_clean_curve_at_point(line, line.isClosed()))
+            else:
+                multi = QgsMultiLineString()
+                orig_multi = geom.constGet()
+                for p in range(orig_multi.numGeometries()):
+                    line = orig_multi.geometryN(p)
+                    multi.addGeometry(_clean_curve_at_point(line, line.isClosed()))
+                return QgsGeometry(multi)
+
+        elif geom_type == QgsWkbTypes.GeometryType.PolygonGeometry:
+            if not is_multi:
+                poly = geom.constGet()
+                new_poly = QgsPolygon()
+                ext = poly.exteriorRing()
+                if ext is not None:
+                    new_poly.setExteriorRing(_clean_curve_at_point(ext, True))
+                for r in range(poly.numInteriorRings()):
+                    intr = poly.interiorRing(r)
+                    if intr is not None:
+                        new_poly.addInteriorRing(_clean_curve_at_point(intr, True))
+                res = QgsGeometry(new_poly)
+                if not res.isGeosValid():
+                    res = res.makeValid()
+                return res
+            else:
+                multi = QgsMultiPolygon()
+                orig_multi = geom.constGet()
+                for p in range(orig_multi.numGeometries()):
+                    poly = orig_multi.geometryN(p)
+                    new_poly = QgsPolygon()
+                    ext = poly.exteriorRing()
+                    if ext is not None:
+                        new_poly.setExteriorRing(_clean_curve_at_point(ext, True))
+                    for r in range(poly.numInteriorRings()):
+                        intr = poly.interiorRing(r)
+                        if intr is not None:
+                            new_poly.addInteriorRing(_clean_curve_at_point(intr, True))
+                    multi.addGeometry(new_poly)
+                res = QgsGeometry(multi)
+                if not res.isGeosValid():
+                    res = res.makeValid()
+                return res
+
+        return geom
+
+    @classmethod
     def remove_all_duplicate_nodes(
         cls,
         geom: QgsGeometry,

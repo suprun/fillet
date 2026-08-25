@@ -310,7 +310,7 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
                 v2_idx = item_data["v2_idx"]
 
                 act_merge = QAction(self.tr("Злити дублі у вершині (залишити 1 вузол)"), menu)
-                act_merge.setData({"type": "remove_idx", "idx": v2_idx})
+                act_merge.setData({"type": "merge_point", "point": item_data["point"]})
 
                 act_keep_v1 = QAction(self.tr("Залишити вузол #{0} (видалити #{1})").format(v1_idx + 1, v2_idx + 1), menu)
                 act_keep_v1.setData({"type": "remove_idx", "idx": v2_idx})
@@ -335,7 +335,15 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
                     if not data:
                         return
                     action_type = data.get("type")
-                    if action_type == "remove_idx":
+                    if action_type == "merge_point":
+                        pt = data.get("point")
+                        cand_geom = GeometryEngine.merge_duplicate_nodes_at_point(
+                            feat.geometry(), pt, tolerance=self.GEOM_TOLERANCE
+                        )
+                        cand_geom = GeometryEngine.coerce_geometry_to_layer(cand_geom, layer)
+                        self.preview_rubberband.setToGeometry(cand_geom, layer)
+                        self.preview_rubberband.show()
+                    elif action_type == "remove_idx":
                         idx_to_remove = data.get("idx")
                         cand_geom = GeometryEngine.remove_duplicate_node_at_index(
                             feat.geometry(), part_idx, ring_idx, idx_to_remove
@@ -447,7 +455,18 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
                 data = chosen_action.data()
                 if data:
                     action_type = data.get("type")
-                    if action_type == "remove_idx":
+                    if action_type == "merge_point":
+                        pt = data.get("point")
+                        new_geom = GeometryEngine.merge_duplicate_nodes_at_point(
+                            feat.geometry(), pt, tolerance=self.GEOM_TOLERANCE
+                        )
+                        new_geom = GeometryEngine.coerce_geometry_to_layer(new_geom, layer)
+                        layer.beginEditCommand(self.tr("Очищення дубльованих вузлів"))
+                        layer.changeGeometry(feat.id(), new_geom)
+                        layer.endEditCommand()
+                        layer.triggerRepaint()
+                        self.canvas.refresh()
+                    elif action_type == "remove_idx":
                         idx_to_remove = data.get("idx")
                         new_geom = GeometryEngine.remove_duplicate_node_at_index(
                             feat.geometry(), part_idx, ring_idx, idx_to_remove
