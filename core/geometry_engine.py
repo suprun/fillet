@@ -1765,10 +1765,20 @@ class GeometryEngine:
             next_next_idx = (i + 2) % effective_count
             v_after = curve.pointN(next_next_idx)
             v_prime_next = cls.compute_line_intersection(p1, p2, v_next, v_after)
-            if v_prime_next is None:
-                v_prime_next = p2
+        # 3. Prevent bowtie self-intersection / endpoint flipping along the shifted line
+        ux = dx / length
+        uy = dy / length
+        t1 = (v_prime_i.x() - p1.x()) * ux + (v_prime_i.y() - p1.y()) * uy
+        t2 = (v_prime_next.x() - p1.x()) * ux + (v_prime_next.y() - p1.y()) * uy
 
-        # 3. Update vertices in the ring / polyline
+        # If t2 <= t1 + EPSILON, the extended adjacent lines crossed each other before
+        # meeting the shifted line or inverted orientation, creating a self-intersecting bowtie.
+        # Fallback to the parallel shifted segment endpoints [p1, p2].
+        if t2 <= t1 + cls.EPSILON:
+            v_prime_i = p1
+            v_prime_next = p2
+
+        # 4. Update vertices in the ring / polyline
         new_pts = [curve.pointN(k) for k in range(num_pts)]
         if not is_closed:
             new_pts[i] = v_prime_i
@@ -1859,7 +1869,12 @@ class GeometryEngine:
                     else:
                         new_poly.addInteriorRing(int_ring.clone())
 
-                return QgsGeometry(new_poly)
+                res_geom = QgsGeometry(new_poly)
+                if mode == "extend" and not res_geom.isEmpty() and not res_geom.isGeosValid():
+                    fallback_geom = cls.offset_segment(geom, part_idx, ring_idx, segment_idx, distance, mode="step")
+                    if fallback_geom and fallback_geom.isGeosValid():
+                        return fallback_geom
+                return res_geom
             else:
                 multi = geom.constGet()
                 if not multi or part_idx >= multi.numGeometries():
@@ -1890,7 +1905,12 @@ class GeometryEngine:
                     else:
                         new_multi.addGeometry(poly.clone())
 
-                return QgsGeometry(new_multi)
+                res_multi = QgsGeometry(new_multi)
+                if mode == "extend" and not res_multi.isEmpty() and not res_multi.isGeosValid():
+                    fallback_multi = cls.offset_segment(geom, part_idx, ring_idx, segment_idx, distance, mode="step")
+                    if fallback_multi and fallback_multi.isGeosValid():
+                        return fallback_multi
+                return res_multi
 
         return None
 

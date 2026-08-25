@@ -23,7 +23,6 @@ from qgis.PyQt.QtWidgets import (
     QButtonGroup,
     QCheckBox,
     QFrame,
-    QGraphicsDropShadowEffect,
     QGridLayout,
     QHBoxLayout,
     QLabel,
@@ -64,6 +63,7 @@ class EdgeOffsetCanvasWidget(QFrame):
         self._base_mode = self.MODE_EXTEND
         self._shift_pressed = False
         self._is_updating_shift_override = False
+        self._is_loading = False
 
         self._init_ui()
         self._apply_style()
@@ -83,27 +83,49 @@ class EdgeOffsetCanvasWidget(QFrame):
         wa_show = getattr(Qt.WidgetAttribute, "WA_ShowWithoutActivating", getattr(Qt, "WA_ShowWithoutActivating", None))
         if wa_show is not None:
             self.setAttribute(wa_show, True)
-        self.setMinimumWidth(250)
+        self.setMinimumWidth(235)
 
         main_layout = QVBoxLayout(self)
-        main_layout.setContentsMargins(8, 8, 8, 8)
-        main_layout.setSpacing(6)
+        main_layout.setContentsMargins(6, 6, 6, 6)
+        main_layout.setSpacing(4)
 
-        # Step indicator label
+        # Step indicator label for multi-step workflow (hidden by default, consistent with Fillet/Chamfer)
         self.lbl_step = QLabel(self)
+        self.lbl_step.setWordWrap(False)
         step_font = self.lbl_step.font()
         step_font.setBold(True)
         step_font.setPointSize(max(8, step_font.pointSize() - 1))
         self.lbl_step.setFont(step_font)
-        self.lbl_step.setStyleSheet("color: #1e3a8a; background-color: #dbeafe; border-radius: 4px; padding: 3px 6px;")
-        self.set_step(self.STEP_SELECT_EDGE)
+        self.lbl_step.setStyleSheet("color: #1e3a8a; background-color: #dbeafe; border-radius: 4px; padding: 4px 8px;")
+        self.lbl_step.hide()
         main_layout.addWidget(self.lbl_step)
 
-        # Grid for Distance and Mode
+        # Mode selection row on top (matching FilletCanvasWidget radio buttons)
+        mode_layout = QHBoxLayout()
+        mode_layout.setContentsMargins(0, 0, 0, 0)
+        mode_layout.setSpacing(8)
+
+        self.radio_extend = QRadioButton(self.tr("Подовження (Extend)"), self)
+        self.radio_extend.setChecked(True)
+
+        self.radio_step = QRadioButton(self.tr("Сходинка (Step)"), self)
+
+        self.mode_group = QButtonGroup(self)
+        self.mode_group.addButton(self.radio_extend)
+        self.mode_group.addButton(self.radio_step)
+
+        mode_layout.addWidget(self.radio_extend)
+        mode_layout.addWidget(self.radio_step)
+        mode_layout.addStretch()
+
+        main_layout.addLayout(mode_layout)
+
+        # Grid for Distance parameter
         grid = QGridLayout()
         grid.setHorizontalSpacing(6)
         grid.setVerticalSpacing(4)
         grid.setContentsMargins(0, 0, 0, 0)
+        grid.setColumnMinimumWidth(0, 95)
 
         # Row 0: Distance
         self.lbl_dist = QLabel(self.tr("Відстань:"), self)
@@ -112,7 +134,7 @@ class EdgeOffsetCanvasWidget(QFrame):
         self.spin_distance.setValue(1.0)
         self.spin_distance.setDecimals(3)
         self.spin_distance.setSingleStep(0.5)
-        self.spin_distance.setShowClearButton(False)
+        self.spin_distance.setShowClearButton(True)
 
         self.btn_lock_distance = QToolButton(self)
         self.btn_lock_distance.setCheckable(True)
@@ -128,39 +150,14 @@ class EdgeOffsetCanvasWidget(QFrame):
 
         main_layout.addLayout(grid)
 
-        # Mode Selection Block (Extend vs Step)
-        mode_box = QVBoxLayout()
-        mode_box.setSpacing(2)
-        mode_box.setContentsMargins(0, 0, 0, 0)
-
-        self.lbl_mode_title = QLabel(self.tr("Режим зсуву:"), self)
-        self.lbl_mode_title.setStyleSheet("font-size: 11px; color: #475569; font-weight: 500;")
-        mode_box.addWidget(self.lbl_mode_title)
-
-        mode_row = QHBoxLayout()
-        mode_row.setSpacing(8)
-        mode_row.setContentsMargins(0, 0, 0, 0)
-
-        self.btn_group_mode = QButtonGroup(self)
-        self.radio_extend = QRadioButton(self.tr("Подовження (Extend)"), self)
-        self.radio_step = QRadioButton(self.tr("Сходинка (Step)"), self)
-        self.radio_extend.setChecked(True)
-
-        self.btn_group_mode.addButton(self.radio_extend)
-        self.btn_group_mode.addButton(self.radio_step)
-
-        mode_row.addWidget(self.radio_extend)
-        mode_row.addWidget(self.radio_step)
-        mode_row.addStretch()
-
-        mode_box.addLayout(mode_row)
-        main_layout.addLayout(mode_box)
-
         # Horizontal Separator
         self.sep_copy = QFrame(self)
-        self.sep_copy.setFrameShape(QFrame.Shape.HLine if hasattr(QFrame, "Shape") else QFrame.HLine)
-        self.sep_copy.setFrameShadow(QFrame.Shadow.Sunken if hasattr(QFrame, "Shadow") else QFrame.Sunken)
-        self.sep_copy.setStyleSheet("margin-top: 2px; margin-bottom: 2px; color: #cbd5e1;")
+        hline = getattr(QFrame.Shape, "HLine", getattr(QFrame, "HLine", None))
+        sunken = getattr(QFrame.Shadow, "Sunken", getattr(QFrame, "Shadow", None))
+        if hline is not None:
+            self.sep_copy.setFrameShape(hline)
+        if sunken is not None:
+            self.sep_copy.setFrameShadow(sunken)
         main_layout.addWidget(self.sep_copy)
 
         # Checkbox: Save copy
@@ -186,60 +183,32 @@ class EdgeOffsetCanvasWidget(QFrame):
         if hasattr(self.spin_distance, "lineEdit") and self.spin_distance.lineEdit():
             self.spin_distance.lineEdit().returnPressed.connect(self.commitRequested.emit)
 
+        # Cursors
+        arrow_cursor = getattr(Qt.CursorShape, "ArrowCursor", getattr(Qt, "ArrowCursor", None))
+        ibeam_cursor = getattr(Qt.CursorShape, "IBeamCursor", getattr(Qt, "IBeamCursor", None))
+        if arrow_cursor is not None:
+            self.setCursor(QCursor(arrow_cursor))
+            self.spin_distance.setCursor(QCursor(arrow_cursor))
+            self.radio_extend.setCursor(QCursor(arrow_cursor))
+            self.radio_step.setCursor(QCursor(arrow_cursor))
+            self.btn_lock_distance.setCursor(QCursor(arrow_cursor))
+            self.chk_copy.setCursor(QCursor(arrow_cursor))
+        if hasattr(self.spin_distance, "lineEdit") and self.spin_distance.lineEdit() and ibeam_cursor is not None:
+            self.spin_distance.lineEdit().setCursor(QCursor(ibeam_cursor))
+            self.spin_distance.lineEdit().installEventFilter(self)
+
         self._configure_numeric_validators()
         self._load_settings()
 
     def _apply_style(self):
-        self.setStyleSheet("""
-            QFrame#EdgeOffsetCanvasWidget {
-                background-color: rgba(255, 255, 255, 242);
-                border: 1px solid #94a3b8;
-                border-radius: 8px;
-            }
-            QLabel {
-                color: #1e293b;
-                font-size: 11px;
-                font-weight: 500;
-            }
-            QgsDoubleSpinBox {
-                background-color: #ffffff;
-                border: 1px solid #cbd5e1;
-                border-radius: 4px;
-                padding: 2px 4px;
-                min-height: 22px;
-                color: #0f172a;
-                font-size: 11px;
-            }
-            QgsDoubleSpinBox:focus {
-                border: 1.5px solid #2563eb;
-                background-color: #eff6ff;
-            }
-            QToolButton {
-                border: 1px solid transparent;
-                border-radius: 4px;
-                padding: 2px;
-                background: transparent;
-            }
-            QToolButton:hover {
-                background-color: #e2e8f0;
-                border-color: #cbd5e1;
-            }
-            QToolButton:checked {
-                background-color: #fee2e2;
-                border: 1px solid #ef4444;
-            }
-            QRadioButton, QCheckBox {
-                font-size: 11px;
-                color: #1e293b;
-            }
-        """)
-
-        # Drop shadow
-        shadow = QGraphicsDropShadowEffect(self)
-        shadow.setBlurRadius(12)
-        shadow.setColor(QColor(0, 0, 0, 60))
-        shadow.setOffset(0, 3)
-        self.setGraphicsEffect(shadow)
+        """Unified visual style matching Fillet & Chamfer, Rotate, and Mirror widgets."""
+        shape_panel = getattr(QFrame.Shape, "StyledPanel", getattr(QFrame, "StyledPanel", None))
+        shadow_plain = getattr(QFrame.Shadow, "Plain", getattr(QFrame, "Plain", None))
+        if shape_panel is not None:
+            self.setFrameShape(shape_panel)
+        if shadow_plain is not None:
+            self.setFrameShadow(shadow_plain)
+        self.setAutoFillBackground(True)
 
     def _update_distance_lock_icon(self):
         is_locked = self.btn_lock_distance.isChecked()
@@ -252,7 +221,7 @@ class EdgeOffsetCanvasWidget(QFrame):
         self._save_settings()
 
     def _on_radio_mode_toggled(self):
-        if self._is_updating_shift_override:
+        if self._is_updating_shift_override or self._is_loading:
             return
         mode = self.MODE_EXTEND if self.radio_extend.isChecked() else self.MODE_STEP
         self._base_mode = mode
@@ -271,18 +240,22 @@ class EdgeOffsetCanvasWidget(QFrame):
             self.spin_distance.lineEdit().setValidator(val)
 
     def _load_settings(self):
-        s = QgsSettings()
-        self.spin_distance.setValue(float(s.value("plugins/fillet/edge_offset_distance", 1.0)))
-        self.btn_lock_distance.setChecked(s.value("plugins/fillet/edge_offset_lock_dist", False, type=bool))
-        self._base_mode = s.value("plugins/fillet/edge_offset_mode", self.MODE_EXTEND)
-        if self._base_mode == self.MODE_STEP:
-            self.radio_step.setChecked(True)
-        else:
-            self.radio_extend.setChecked(True)
-        self._update_distance_lock_icon()
+        self._is_loading = True
+        try:
+            s = QgsSettings()
+            self.spin_distance.setValue(float(s.value("plugins/fillet/edge_offset_distance", 1.0)))
+            self.btn_lock_distance.setChecked(s.value("plugins/fillet/edge_offset_lock_dist", False, type=bool))
+            self._base_mode = s.value("plugins/fillet/edge_offset_mode", self.MODE_EXTEND)
+            if self._base_mode == self.MODE_STEP:
+                self.radio_step.setChecked(True)
+            else:
+                self.radio_extend.setChecked(True)
+            self._update_distance_lock_icon()
+        finally:
+            self._is_loading = False
 
     def _save_settings(self):
-        if self._is_updating_shift_override:
+        if self._is_updating_shift_override or self._is_loading:
             return
         s = QgsSettings()
         s.setValue("plugins/fillet/edge_offset_distance", self.spin_distance.value())
@@ -296,7 +269,6 @@ class EdgeOffsetCanvasWidget(QFrame):
             self.lbl_step.setText(self.tr("1. Вкажіть ребро (оберіть відрізок)"))
         elif step == self.STEP_ADJUST_OFFSET:
             self.lbl_step.setText(self.tr("2. Вкажіть зміщення або клікніть для підтвердження"))
-        self.reposition_to_default()
 
     def set_shift_override(self, shift_pressed: bool):
         """Temporarily inverts mode between Extend and Step when Shift is held."""
@@ -343,15 +315,18 @@ class EdgeOffsetCanvasWidget(QFrame):
             self.spin_distance.setSingleStep(0.5)
 
     def reposition_to_default(self):
-        """Positions the widget at the top-left corner of the canvas with a standard margin."""
+        """Positions the widget firmly at top-right corner of the map canvas without margin (matching toolkit standard)."""
         if not self.canvas:
             return
         self.adjustSize()
-        margin = 16
-        self.move(margin, margin)
+        self.resize(self.minimumSizeHint())
+        self.adjustSize()
+        x = max(0, self.canvas.width() - self.width())
+        y = 0
+        self.move(x, y)
 
     def show_on_canvas(self):
-        """Displays and repositions the widget."""
+        """Displays and repositions the widget at the top-right corner."""
         self.show()
         self.raise_()
         self.reposition_to_default()

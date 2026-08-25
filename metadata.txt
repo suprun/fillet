@@ -4,7 +4,7 @@ qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
 description=Interactive Fillet, Chamfer, Two-Line Merge, Corner Restoration, CAD Rotation, Mirror, Scale & Edge Offset suite for QGIS.
 about=Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), Interactive CAD Rotation, CAD Mirror Tool, CAD 3-Point Scale with Rotation Tool, and CAD Edge Offset (Parallel Shift) Tool for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.
-version=1.0.0.37
+version=1.0.0.38
 author=suprun
 email=suprun.serhiy+qgis@gmail.com
 homepage=https://github.com/suprun/fillet
@@ -14,7 +14,9 @@ tags=cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation,
 icon=icon.png
 experimental=False
 deprecated=False
-changelog=1.0.0.37:
+changelog=1.0.0.38:
+    - Unified Edge Offset HUD panel appearance and top-right placement, added self-intersection & bowtie prevention in Extend mode, and integrated QGIS system map snapping.
+    1.0.0.37:
     - Added interactive CAD Edge Offset (Parallel Shift) tool with Extend (CAD stretch) and Step (jog) modes, Shift key mode inversion, HUD widget, live rubberband preview, and copy mode.
     1.0.0.36:
     - Added dynamic Shift key inversion for Chamfer to force equal-distance (isosceles) beveling when unlinked or allow asymmetrical beveling when linked.

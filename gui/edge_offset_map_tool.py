@@ -57,9 +57,7 @@ except (ImportError, ValueError):
 class EdgeOffsetMapTool(QgsMapToolEdit):
     """
     Interactive CAD Edge Offset Map Tool for QGIS 3.x and 4.x.
-    Two-step workflow:
-      1. Hover & click edge/segment to select.
-      2. Move mouse to adjust offset distance (or type in HUD) -> click / Enter to commit.
+    Supports system snapping to map layers, vertices, segments, and guides.
     """
 
     STATE_HOVER_EDGE = 1
@@ -79,7 +77,7 @@ class EdgeOffsetMapTool(QgsMapToolEdit):
         self.last_mouse_point: Optional[QgsPointXY] = None
         self._current_side_sign: float = 1.0
 
-        # Snapping indicator
+        # System snapping indicator
         self.snap_indicator = QgsSnapIndicator(self.canvas)
 
         # 1. Hovered/Selected Edge Rubberband
@@ -139,6 +137,8 @@ class EdgeOffsetMapTool(QgsMapToolEdit):
         if self.widget:
             self.widget.set_shift_override(False)
             self.widget.hide()
+        if hasattr(self.canvas.snappingUtils(), "clearAllLocators"):
+            self.canvas.snappingUtils().clearAllLocators()
         super().deactivate()
 
     def cleanup(self):
@@ -193,11 +193,20 @@ class EdgeOffsetMapTool(QgsMapToolEdit):
             self._clear_preview()
             return
 
+        # 1. System snapping to map canvas
+        snap_match = self.canvas.snappingUtils().snapToMap(event.pos())
+        if snap_match.isValid():
+            self.snap_indicator.setMatch(snap_match)
+            self.snap_indicator.setVisible(True)
+            map_point = snap_match.point()
+        else:
+            self.snap_indicator.setVisible(False)
+            map_point = event.mapPoint()
+
         shift_pressed = bool(_ShiftModifier is not None and (event.modifiers() & _ShiftModifier))
         if self.widget:
             self.widget.set_shift_override(shift_pressed)
 
-        map_point = event.mapPoint()
         self.last_mouse_point = map_point
 
         if self.state == self.STATE_HOVER_EDGE:
@@ -238,7 +247,7 @@ class EdgeOffsetMapTool(QgsMapToolEdit):
         nx = -dy / length
         ny = dx / length
 
-        # Vector from p1 to cursor
+        # Vector from p1 to cursor/snap point
         wx = layer_pt.x() - m.p1.x()
         wy = layer_pt.y() - m.p1.y()
 
@@ -284,7 +293,7 @@ class EdgeOffsetMapTool(QgsMapToolEdit):
             self.normal_guide_rubberband.addPoint(target_map, True)
             self.normal_guide_rubberband.show()
 
-        # 2. Calculate offset geometry
+        # 2. Calculate offset geometry (with automatic non-self-intersection guarantee)
         new_geom = GeometryEngine.offset_segment(
             match.geometry,
             match.part_idx,
@@ -329,12 +338,16 @@ class EdgeOffsetMapTool(QgsMapToolEdit):
 
         button = event.button()
         if button == _LeftButton:
+            # Check system snapping
+            snap_match = self.canvas.snappingUtils().snapToMap(event.pos())
+            map_point = snap_match.point() if snap_match.isValid() else event.mapPoint()
+
             if self.state == self.STATE_HOVER_EDGE:
                 if self.current_match:
                     self.state = self.STATE_ADJUSTING_OFFSET
                     self.widget.set_step(EdgeOffsetCanvasWidget.STEP_ADJUST_OFFSET)
                     self.widget.focus_primary_input()
-                    self._update_interactive_offset(layer, event.mapPoint())
+                    self._update_interactive_offset(layer, map_point)
             elif self.state == self.STATE_ADJUSTING_OFFSET:
                 self._commit_preview()
 

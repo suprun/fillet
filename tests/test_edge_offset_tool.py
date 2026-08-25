@@ -116,6 +116,27 @@ class TestEdgeOffsetTool(unittest.TestCase):
         self.assertAlmostEqual(pts_c[0].x(), -3.0, places=4)
         self.assertAlmostEqual(pts_c[4].x(), -3.0, places=4)
 
+    def test_geometry_engine_prevent_bowtie_self_intersection(self):
+        # Polygon with converging adjacent edges that would criss-cross / flip if not prevented
+        p_prev = QgsPoint(2, 0)
+        v_i = QgsPoint(4, 3)
+        v_next = QgsPoint(7, 5)
+        p_after = QgsPoint(10, 5)
+        p_bottom = QgsPoint(8, 0)
+
+        poly = QgsPolygon()
+        ext = QgsLineString([p_prev, v_i, v_next, p_after, p_bottom, p_prev])
+        poly.setExteriorRing(ext)
+        geom = QgsGeometry(poly)
+
+        # Shift segment 1 by +4.0 (outward)
+        res = GeometryEngine.offset_segment(geom, 0, 0, 1, 4.0, mode="extend")
+        self.assertIsNotNone(res)
+        self.assertTrue(res.isGeosValid())
+        pts = res.asPolygon()[0]
+        # Should not have inverted orientation or criss-crossed
+        self.assertTrue(len(pts) >= 5)
+
     def test_geometry_engine_polygon_step(self):
         # Square: (0,0) -> (10,0) -> (10,10) -> (0,10) -> (0,0)
         poly = QgsPolygon()
