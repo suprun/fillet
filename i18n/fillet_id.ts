@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>Jumlah Fitur:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>Spasi:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>Jumlah tetap salinan fitur baru dalam array</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>Jarak tetap (spasi) antar salinan fitur dalam array</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. Klik titik awal / fitur</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. Klik titik akhir / spasi</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>Array Fitur CAD (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>Salin fitur dalam array di sepanjang garis referensi</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>Konfigurasi Array Fitur</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>Mode:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>Jarak antar fitur (satuan peta):</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>Jumlah fitur baru:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>Jumlah Fitur</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>Spasi</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>Spasi dan Jumlah Fitur</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>Array fitur CAD</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>Array Fitur CAD</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>Pembersihan Topologi</translation>
         </message>

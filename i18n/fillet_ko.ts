@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>피처 개수:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>간격:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>배열 내 새 피처 복사본의 고정 개수</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>배열 내 피처 복사본 간 고정 거리 (간격)</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. 시작점 / 피처 클릭</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. 끝점 / 간격 클릭</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>CAD 피처 배열 (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>참조선을 따라 배열로 피처 복사</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>피처 배열 구성</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>모드:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>피처 간 간격 (지도 단위):</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>새 피처 수:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>피처 개수</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>간격</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>간격 및 피처 개수</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>CAD 피처 배열</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>CAD 피처 배열</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>토폴로지 정리</translation>
         </message>

@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>Detay Sayısı:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>Aralık:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>Dizideki yeni detay kopyalarının sabit sayısı</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>Dizideki detay kopyaları arasındaki sabit mesafe (aralık)</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. Başlangıç noktasına / detaya tıklayın</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. Bitiş noktasına / aralığa tıklayın</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>CAD Detay Dizisi (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>Detayları referans çizgisi boyunca dizi halinde kopyala</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>Detay Dizisi Yapılandırması</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>Mod:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>Detaylar arası mesafe (harita birimi):</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>Yeni detay sayısı:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>Detay Sayısı</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>Aralık</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>Aralık ve Detay Sayısı</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>CAD detay dizisi</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>CAD Detay Dizisi</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>Topoloji Temizleme</translation>
         </message>

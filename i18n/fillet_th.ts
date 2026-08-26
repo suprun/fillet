@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>จำนวนฟีเจอร์:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>ระยะห่าง:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>จำนวนสำเนาฟีเจอร์ใหม่ที่แน่นอนในอาร์เรย์</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>ระยะห่างคงที่ระหว่างสำเนาฟีเจอร์ในอาร์เรย์</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. คลิกจุดเริ่มต้น / ฟีเจอร์</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. คลิกจุดสิ้นสุด / ระยะห่าง</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>อาร์เรย์ฟีเจอร์ CAD (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>คัดลอกฟีเจอร์เป็นอาร์เรย์ตามแนวเส้นอ้างอิง</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>การกำหนดค่าอาร์เรย์ฟีเจอร์</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>โหมด:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>ระยะห่างระหว่างฟีเจอร์ (หน่วยแผนที่):</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>จำนวนฟีเจอร์ใหม่:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>จำนวนฟีเจอร์</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>ระยะห่าง</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>ระยะห่างและจำนวนฟีเจอร์</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>อาร์เรย์ฟีเจอร์ CAD</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>อาร์เรย์ฟีเจอร์ CAD</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>การล้างข้อมูลโทποโลยี</translation>
         </message>

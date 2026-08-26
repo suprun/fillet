@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>Počet prvkov:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>Rozostup:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>Pevný počet nových kópií prvkov v poli</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>Pevná vzdialenosť (rozostup) medzi kópiami prvkov v poli</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. Kliknite na začiatočný bod / prvok</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. Kliknite na koncový bod / rozostup</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>CAD Pole prvkov (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>Kopírovať prvky v poli pozdĺž referenčnej línie</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>Konfigurácia poľa prvkov</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>Režim:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>Rozostup medzi prvkami (mapové jednotky):</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>Počet nových prvkov:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>Počet prvkov</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>Rozostup</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>Rozostup a počet prvkov</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>CAD pole prvkov</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>CAD Pole prvkov</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>Čistenie topológie</translation>
         </message>

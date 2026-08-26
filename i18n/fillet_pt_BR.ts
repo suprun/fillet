@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>Contagem de feições:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>Espaçamento:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>Número fixo de novas cópias de feições na matriz</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>Distância fixa (espaçamento) entre cópias de feições na matriz</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. Clique no ponto inicial / feição</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. Clique no ponto final / espaçamento</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>Matriz de feições CAD (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>Copiar feições em matriz ao longo de uma linha de referência</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>Configuração da matriz de feições</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>Modo:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>Espaçamento entre feições (unidades do mapa):</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>Número de novas feições:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>Contagem de feições</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>Espaçamento</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>Espaçamento e contagem de feições</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>Matriz de feições CAD</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>Matriz de feições CAD</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>Limpeza de topologia</translation>
         </message>

@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>Objektantal:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>Avstånd:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>Fast antal nya objektkopior i matrisen</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>Fast avstånd (avstånd) mellan objektkopior i matrisen</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. Klicka på startpunkt / objekt</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. Klicka på slutpunkt / avstånd</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>CAD Objektmatris (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>Kopiera objekt i en matris längs en referenslinje</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>Objektmatriskonfiguration</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>Läge:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>Avstånd mellan objekt (kartenheter):</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>Antal nya objekt:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>Objektantal</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>Avstånd</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>Avstånd och objektantal</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>CAD objektmatris</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>CAD Objektmatris</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>Topologistädning</translation>
         </message>

@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>Πλήθος οντοτήτων:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>Απόσταση:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>Σταθερός αριθμός νέων αντιγράφων οντοτήτων στη διάταξη</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>Σταθερή απόσταση (διάκενο) μεταξύ αντιγράφων οντοτήτων στη διάταξη</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. Κάντε κλικ στο σημείο εκκίνησης / οντότητα</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. Κάντε κλικ στο τελικό σημείο / απόσταση</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>CAD Διάταξη οντοτήτων (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>Αντιγραφή οντοτήτων σε διάταξη κατά μήκος μιας γραμμής αναφοράς</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>Διαμόρφωση διάταξης οντοτήτων</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>Λειτουργία:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>Απόσταση μεταξύ οντοτήτων (μονάδες χάρτη):</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>Αριθμός νέων οντοτήτων:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>Πλήθος οντοτήτων</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>Απόσταση</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>Απόσταση και πλήθος οντοτήτων</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>CAD διάταξη οντοτήτων</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>CAD Διάταξη οντοτήτων</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>Καθαρισμός τοπολογίας</translation>
         </message>

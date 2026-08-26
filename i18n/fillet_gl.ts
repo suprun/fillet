@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>Reconto de entidades:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>Espazamento:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>Número fixo de novas copias de entidades na matriz</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>Distancia fixa (espazamento) entre copias de entidades na matriz</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. Faga clic no punto inicial / entidade</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. Faga clic no punto final / espazamento</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>Matriz de entidades CAD (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>Copiar entidades nunha matriz ao longo dunha liña de referencia</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>Configuración da matriz de entidades</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>Modo:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>Espazamento entre entidades (unidades do mapa):</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>Número de novas entidades:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>Reconto de entidades</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>Espazamento</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>Espazamento e reconto de entidades</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>Matriz de entidades CAD</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>Matriz de entidades CAD</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>Limpeza de topoloxía</translation>
         </message>

@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>Aantal objecten:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>Afstand:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>Vast aantal nieuwe objectkopieën in de array</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>Vaste afstand (tussenruimte) tussen objectkopieën in de array</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. Klik op beginpunt / object</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. Klik op eindpunt / afstand</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>CAD Objectenarray (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>Kopieer objecten in een array langs een referentielijn</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>Configuratie van objectenarray</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>Modus:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>Afstand tussen objecten (kaarteenheden):</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>Aantal nieuwe objecten:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>Aantal objecten</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>Afstand</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>Afstand en aantal objecten</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>CAD objectenarray</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>CAD Objectenarray</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>Topologie opschonen</translation>
         </message>

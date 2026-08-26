@@ -25,6 +25,8 @@ except ImportError:
 from qgis.PyQt.QtWidgets import QDockWidget
 
 try:
+    from .gui.array_canvas_widget import ArrayCanvasWidget
+    from .gui.array_map_tool import CADArrayMapTool
     from .gui.canvas_widget import FilletCanvasWidget
     from .gui.clean_duplicate_nodes_map_tool import CleanDuplicateNodesMapTool
     from .gui.edge_offset_canvas_widget import EdgeOffsetCanvasWidget
@@ -42,6 +44,8 @@ try:
     from .gui.two_line_map_tool import TwoLineMapTool
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
+    from gui.array_canvas_widget import ArrayCanvasWidget
+    from gui.array_map_tool import CADArrayMapTool
     from gui.canvas_widget import FilletCanvasWidget
     from gui.clean_duplicate_nodes_map_tool import CleanDuplicateNodesMapTool
     from gui.edge_offset_canvas_widget import EdgeOffsetCanvasWidget
@@ -72,6 +76,7 @@ class FilletPlugin:
         self._init_translator()
 
         self.action: Optional[QAction] = None
+        self.array_action: Optional[QAction] = None
         self.two_line_action: Optional[QAction] = None
         self.restore_action: Optional[QAction] = None
         self.rotate_action: Optional[QAction] = None
@@ -81,6 +86,8 @@ class FilletPlugin:
         self.clean_duplicates_action: Optional[QAction] = None
         self.batch_action: Optional[QAction] = None
         self.map_tool: Optional[FilletMapTool] = None
+        self.array_map_tool: Optional[CADArrayMapTool] = None
+        self.array_widget: Optional[ArrayCanvasWidget] = None
         self.two_line_map_tool: Optional[TwoLineMapTool] = None
         self.restore_map_tool: Optional[RestoreMapTool] = None
         self.restore_canvas_widget: Optional[RestoreCanvasWidget] = None
@@ -286,8 +293,9 @@ class FilletPlugin:
 
         adv_tb = self.iface.advancedDigitizeToolBar()
 
-        # 8. Create interactive Fillet / Chamfer MapTool ONLY in QGIS 3.x (native in QGIS 4.0+)
+        # 8. Create interactive Fillet / Chamfer and Array MapTools ONLY in QGIS 3.x (native in QGIS 4.0+)
         if not self.is_qgis_4():
+            # 8.1. Fillet / Chamfer Tool
             self.map_tool = FilletMapTool(self.canvas, self.canvas_widget)
 
             icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionChamferFillet.svg")
@@ -310,6 +318,50 @@ class FilletPlugin:
             else:
                 self.iface.addVectorToolBarIcon(self.action)
             self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.action)
+
+            # 8.2. Copy Features in an Array Tool (Backport for QGIS 3.16 - 3.44)
+            self.array_widget = ArrayCanvasWidget(self.canvas)
+            self.array_widget.hide()
+            self.array_map_tool = CADArrayMapTool(self.canvas, self.array_widget, self.iface)
+
+            array_icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionFeatureArrayPolygon.svg")
+            self.array_action = QAction(
+                QIcon(array_icon_path),
+                self.tr("CAD Масив об'єктів (Copy in Array)"),
+                self.iface.mainWindow(),
+            )
+            self.array_action.setCheckable(True)
+            self.array_action.setObjectName("actionFeatureArrayCAD")
+            self.array_action.setToolTip(self.tr("Створення масиву копій виділених об'єктів уздовж напрямної лінії"))
+            self.array_action.triggered.connect(self.toggle_array_tool)
+
+            if adv_tb:
+                move_copy_act = None
+                for act in adv_tb.actions():
+                    name_lower = act.objectName().lower()
+                    if "movefeaturecopy" in name_lower or act.objectName() == "mActionMoveFeatureCopy":
+                        move_copy_act = act
+                        break
+                    if move_copy_act is None and ("movefeature" in name_lower or act.objectName() == "mActionMoveFeature"):
+                        move_copy_act = act
+
+                actions_now = adv_tb.actions()
+                if move_copy_act and move_copy_act in actions_now:
+                    try:
+                        idx = actions_now.index(move_copy_act)
+                        if idx + 1 < len(actions_now):
+                            adv_tb.insertAction(actions_now[idx + 1], self.array_action)
+                        else:
+                            adv_tb.addAction(self.array_action)
+                    except (ValueError, IndexError):
+                        adv_tb.addAction(self.array_action)
+                elif len(actions_now) >= 3:
+                    adv_tb.insertAction(actions_now[2], self.array_action)
+                else:
+                    adv_tb.addAction(self.array_action)
+            else:
+                self.iface.addVectorToolBarIcon(self.array_action)
+            self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.array_action)
 
         # 9. Insert rotate_action, mirror_action, scale_rotate_action, edge_offset_action, clean_duplicates_action on toolbar
         if adv_tb:
@@ -494,6 +546,20 @@ class FilletPlugin:
             self.action.deleteLater()
             self.action = None
 
+        # 2.5. Clean up array action
+        if self.array_action:
+            try:
+                self.array_action.triggered.disconnect(self.toggle_array_tool)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            if self.iface.advancedDigitizeToolBar():
+                self.iface.advancedDigitizeToolBar().removeAction(self.array_action)
+            self.iface.removeVectorToolBarIcon(self.array_action)
+            self.iface.removePluginVectorMenu(self.tr("Fillet & Chamfer"), self.array_action)
+            self.array_action.setParent(None)
+            self.array_action.deleteLater()
+            self.array_action = None
+
         # 3. Clean up restore action
         if self.restore_action:
             try:
@@ -616,6 +682,16 @@ class FilletPlugin:
                 self.map_tool.deactivate()
             self.map_tool.deleteLater()
             self.map_tool = None
+
+        if self.array_map_tool:
+            if self.canvas and self.canvas.mapTool() == self.array_map_tool:
+                self.canvas.unsetMapTool(self.array_map_tool)
+            if hasattr(self.array_map_tool, "cleanup"):
+                self.array_map_tool.cleanup()
+            else:
+                self.array_map_tool.deactivate()
+            self.array_map_tool.deleteLater()
+            self.array_map_tool = None
 
         if self.two_line_map_tool:
             if self.canvas and self.canvas.mapTool() == self.two_line_map_tool:
@@ -748,6 +824,12 @@ class FilletPlugin:
             self.edge_offset_widget.deleteLater()
             self.edge_offset_widget = None
 
+        if self.array_widget:
+            self.array_widget.hide()
+            self.array_widget.setParent(None)
+            self.array_widget.deleteLater()
+            self.array_widget = None
+
         # 10. Clean up settings widget and dock widget
         if self.settings_widget:
             try:
@@ -793,6 +875,14 @@ class FilletPlugin:
         else:
             if self.canvas and self.canvas.mapTool() == self.map_tool:
                 self.canvas.unsetMapTool(self.map_tool)
+
+    def toggle_array_tool(self, checked: bool):
+        if checked:
+            if self.array_map_tool:
+                self.canvas.setMapTool(self.array_map_tool)
+        else:
+            if self.canvas and self.canvas.mapTool() == self.array_map_tool:
+                self.canvas.unsetMapTool(self.array_map_tool)
 
     def toggle_two_line_tool(self, checked: bool):
         if checked:
@@ -905,6 +995,12 @@ class FilletPlugin:
             is_cd_active = tool == self.clean_duplicates_map_tool
             self.clean_duplicates_action.setChecked(is_cd_active)
 
+        if self.array_action:
+            is_array_active = tool == self.array_map_tool
+            self.array_action.setChecked(is_array_active)
+            if not is_array_active and self.array_widget:
+                self.array_widget.hide()
+
     def _on_current_layer_changed(self, layer=None):
         self.update_action_state()
 
@@ -942,7 +1038,9 @@ class FilletPlugin:
             and layer.geometryType()
             in (QgsWkbTypes.GeometryType.LineGeometry, QgsWkbTypes.GeometryType.PolygonGeometry)
         )
+        is_spatial_vector = bool(is_vector and layer.isSpatial())
         is_editable = bool(is_supported_geom and layer.isEditable())
+        is_array_editable = bool(is_spatial_vector and layer.isEditable())
         is_line_editable = bool(is_vector and layer.geometryType() == QgsWkbTypes.GeometryType.LineGeometry and layer.isEditable())
         has_selection = bool(layer.selectedFeatureCount() > 0) if is_vector else False
         is_rotate_enabled = bool(is_editable and has_selection)
@@ -957,8 +1055,25 @@ class FilletPlugin:
             if self.edge_offset_widget and hasattr(self.edge_offset_widget, "adapt_to_crs"):
                 self.edge_offset_widget.adapt_to_crs(layer.crs())
 
+        if is_vector and is_spatial_vector:
+            if self.array_widget and hasattr(self.array_widget, "adapt_to_crs"):
+                self.array_widget.adapt_to_crs(layer.crs())
+
         if self.action:
             self.action.setEnabled(is_editable)
+        if self.array_action:
+            self.array_action.setEnabled(is_array_editable)
+            if is_vector and is_spatial_vector:
+                geom_type = layer.geometryType()
+                if geom_type == QgsWkbTypes.GeometryType.PointGeometry:
+                    icon_name = "mActionFeatureArrayPoint.svg"
+                elif geom_type == QgsWkbTypes.GeometryType.LineGeometry:
+                    icon_name = "mActionFeatureArrayLine.svg"
+                else:
+                    icon_name = "mActionFeatureArrayPolygon.svg"
+                icon_path = os.path.join(self.plugin_dir, "resources", "icons", icon_name)
+                if os.path.exists(icon_path):
+                    self.array_action.setIcon(QIcon(icon_path))
         if self.two_line_action:
             self.two_line_action.setEnabled(is_line_editable)
         if self.restore_action:
@@ -1006,6 +1121,14 @@ class FilletPlugin:
                 self.canvas.unsetMapTool(self.clean_duplicates_map_tool)
                 if self.clean_duplicates_action:
                     self.clean_duplicates_action.setChecked(False)
+
+        if not is_array_editable and self.canvas:
+            if self.array_map_tool and self.canvas.mapTool() == self.array_map_tool:
+                self.canvas.unsetMapTool(self.array_map_tool)
+                if self.array_widget:
+                    self.array_widget.hide()
+                if self.array_action:
+                    self.array_action.setChecked(False)
 
         if not is_rotate_enabled and self.canvas:
             if self.rotate_map_tool and self.canvas.mapTool() == self.rotate_map_tool:

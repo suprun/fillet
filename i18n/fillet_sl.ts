@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>Število gradnikov:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>Razmik:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>Fiksno število novih kopij gradnikov v polju</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>Fiksna razdalja (razmik) med kopijami gradnikov v polju</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. Kliknite začetno točko / gradnik</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. Kliknite končno točko / razmik</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>CAD Polje gradnikov (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>Kopiraj gradnike v polju vzdolž referenčne črte</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>Nastavitve polja gradnikov</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>Način:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>Razmik med gradniki (enote karte):</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>Število novih gradnikov:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>Število gradnikov</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>Razmik</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>Razmik in število gradnikov</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>CAD polje gradnikov</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>CAD Polje gradnikov</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>Čiščenje topologije</translation>
         </message>

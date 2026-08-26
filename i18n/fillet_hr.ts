@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>Broj objekata:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>Razmak:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>Fiksni broj novih kopija objekata u nizu</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>Fiksna udaljenost (razmak) između kopija objekata u nizu</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. Kliknite početnu točku / objekt</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. Kliknite krajnju točku / razmak</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>CAD Niz objekata (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>Kopiranje objekata u nizu duž referentne linije</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>Konfiguracija niza objekata</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>Način:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>Razmak između objekata (jedinice karte):</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>Broj novih objekata:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>Broj objekata</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>Razmak</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>Razmak i broj objekata</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>CAD niz objekata</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>CAD Niz objekata</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>Čišćenje topologije</translation>
         </message>

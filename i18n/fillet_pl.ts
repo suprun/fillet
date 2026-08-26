@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>Liczba obiektów:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>Odstęp:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>Stała liczba nowych kopii obiektów w szyku</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>Stała odległość (odstęp) między kopiami obiektów w szyku</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. Kliknij punkt początkowy / obiekt</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. Kliknij punkt końcowy / odstęp</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>Szyk obiektów CAD (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>Kopiowanie obiektów w szyku wzdłuż linii odniesienia</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>Konfiguracja szyku obiektów</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>Tryb:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>Odstęp między obiektami (jednostki mapy):</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>Liczba nowych obiektów:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>Liczba obiektów</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>Odstęp</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>Odstęp i liczba obiektów</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>Szyk obiektów CAD</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>Szyk obiektów CAD</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>Czyszczenie topologii</translation>
         </message>

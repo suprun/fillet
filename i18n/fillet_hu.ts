@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>Elemszám:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>Távolság:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>Új elemmásolatok fix száma a tömbben</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>Fix távolság (lépésköz) az elemmásolatok között a tömbben</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. Kattintson a kezdőpontra / elemre</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. Kattintson a végpontra / lépésközre</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>CAD Elem-tömb (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>Elemek másolása tömbben referenciavonal mentén</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>Elem-tömb beállítása</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>Mód:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>Elemek közötti távolság (térképi egység):</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>Új elemek száma:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>Elemszám</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>Távolság</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>Távolság és elemszám</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>CAD elem-tömb</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>CAD Elem-tömb</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>Topológia tisztítása</translation>
         </message>

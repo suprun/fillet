@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>Recompte d'elements:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>Espaiat:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>Nombre fix de noves còpies d'elements a la matriu</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>Distància fixa (espaiat) entre còpies d'elements a la matriu</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. Feu clic al punt d'inici / element</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. Feu clic al punt final / espaiat</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>Matriu d'elements CAD (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>Copia elements en una matriu al llarg d'una línia de referència</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>Configuració de la matriu d'elements</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>Mode:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>Espaiat entre elements (unitats de mapa):</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>Nombre de nous elements:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>Recompte d'elements</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>Espaiat</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>Espaiat i recompte d'elements</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>Matriu d'elements CAD</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>Matriu d'elements CAD</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>Neteja de topologia</translation>
         </message>

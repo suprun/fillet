@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>フィーチャ数:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>間隔:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>配列内の新しいフィーチャコピーの固定数</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>配列内のフィーチャコピー間の固定距離（間隔）</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. 始点 / フィーチャをクリック</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. 終点 / 間隔をクリック</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>CAD フィーチャ配列 (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>参照線に沿ってフィーチャを配列コピー</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>フィーチャ配列の設定</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>モード:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>フィーチャ間の間隔（マップ単位）:</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>新しいフィーチャの数:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>フィーチャ数</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>間隔</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>間隔とフィーチャ数</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>CAD フィーチャ配列</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>CAD フィーチャ配列</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>トポロジのクリーンアップ</translation>
         </message>

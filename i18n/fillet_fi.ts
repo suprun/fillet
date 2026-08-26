@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>Kohteiden määrä:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>Välistys:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>Uusien kohdekopioiden kiinteä määrä ryhmässä</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>Kiinteä etäisyys (välistys) kohdekopioiden välillä ryhmässä</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. Napsauta aloituspistettä / kohdetta</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. Napsauta päätepistettä / välistystä</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>CAD Kohteiden ryhmä (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>Kopioi kohteita ryhmänä viitelinjaa pitkin</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>Kohteiden ryhmän määritys</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>Tila:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>Kohteiden välinen etäisyys (karttayksiköt):</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>Uusien kohteiden määrä:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>Kohteiden määrä</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>Välistys</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>Välistys ja kohteiden määrä</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>CAD kohteiden ryhmä</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>CAD Kohteiden ryhmä</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>Topologian siivous</translation>
         </message>

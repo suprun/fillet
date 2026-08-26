@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>Objektų skaičius:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>Atstumas:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>Fiksuotas naujų objektų kopijų skaičius masyve</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>Fiksuotas atstumas (žingsnis) tarp objektų kopijų masyve</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. Spustelėkite pradžios tašką / objektą</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. Spustelėkite pabaigos tašką / žingsnį</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>CAD Objektų masyvas (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>Kopijuoti objektus masyve išilgai atskaitos linijos</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>Objektų masyvo konfigūracija</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>Režimas:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>Atstumas tarp objektų (žemėlapio vnt.):</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>Naujų objektų skaičius:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>Objektų skaičius</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>Atstumas</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>Atstumas ir objektų skaičius</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>CAD objektų masyvas</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>CAD Objektų masyvas</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>Topologijos valymas</translation>
         </message>

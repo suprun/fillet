@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>圖徵計數：</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>間距：</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>陣列中新圖徵複本的固定數量</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>陣列中圖徵複本之間的固定距離（間距）</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. 點擊起點 / 圖徵</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. 點擊終點 / 間距</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>CAD 圖徵陣列 (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>沿參考線按陣列複製圖徵</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>圖徵陣列配置</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>模式：</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>圖徵間距（地圖單位）：</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>新圖徵數量：</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>圖徵計數</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>間距</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>間距與圖徵計數</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>CAD 圖徵陣列</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>CAD 圖徵陣列</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>拓撲清理</translation>
         </message>

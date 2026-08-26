@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>Số lượng đối tượng:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>Khoảng cách:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>Số lượng cố định các bản sao đối tượng mới trong mảng</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>Khoảng cách cố định giữa các bản sao đối tượng trong mảng</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. Nhấp vào điểm bắt đầu / đối tượng</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. Nhấp vào điểm kết thúc / khoảng cách</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>Mảng đối tượng CAD (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>Sao chép đối tượng thành mảng dọc theo đường tham chiếu</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>Cấu hình mảng đối tượng</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>Chế độ:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>Khoảng cách giữa các đối tượng (đơn vị bản đồ):</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>Số lượng đối tượng mới:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>Số lượng đối tượng</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>Khoảng cách</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>Khoảng cách và số lượng đối tượng</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>Mảng đối tượng CAD</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>Mảng đối tượng CAD</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>Dọn dẹp cấu trúc tô-pô</translation>
         </message>

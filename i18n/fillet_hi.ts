@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>फ़ीचर गणना:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>दूरी:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>सारणी में नए फ़ीचर प्रतियों की निश्चित संख्या</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>सारणी में फ़ीचर प्रतियों के बीच निश्चित दूरी</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. प्रारंभ बिंदु / फ़ीचर पर क्लिक करें</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. अंतिम बिंदु / दूरी पर क्लिक करें</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>CAD फ़ीचर सारणी (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>संदर्भ रेखा के अनुदिश सारणी में फ़ीचर कॉपी करें</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>फ़ीचर सारणी कॉन्फ़िगरेशन</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>मोड:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>फ़ीचर के बीच दूरी (मानचित्र इकाइयाँ):</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>नए फ़ीचर की संख्या:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>फ़ीचर गणना</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>दूरी</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>दूरी और फ़ीचर गणना</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>CAD फ़ीचर सारणी</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>CAD फ़ीचर सारणी</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>टोपोलॉजी सफाई</translation>
         </message>

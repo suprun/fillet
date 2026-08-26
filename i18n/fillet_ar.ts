@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>عدد المعالم:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>المسافة:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>عدد ثابت من نسخ المعالم الجديدة في المصفوفة</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>مسافة ثابتة (تباعد) بين نسخ المعالم في المصفوفة</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. انقر فوق نقطة البداية / المعلم</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. انقر فوق نقطة النهاية / التباعد</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>مصفوفة المعالم CAD (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>نسخ المعالم في مصفوفة على طول خط مرجعي</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>تهيئة مصفوفة المعالم</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>الوضع:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>المسافة بين المعالم (وحدات الخريطة):</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>عدد المعالم الجديدة:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>عدد المعالم</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>المسافة</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>المسافة وعدد المعالم</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>مصفوفة المعالم CAD</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>مصفوفة المعالم CAD</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>تنظيف الطوبولوجيا</translation>
         </message>

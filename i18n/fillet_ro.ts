@@ -3,6 +3,74 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>Кількість (Count):</source>
+            <translation>Număr de entități:</translation>
+        </message>
+        <message>
+            <source>Крок (Spacing):</source>
+            <translation>Spațiere:</translation>
+        </message>
+        <message>
+            <source>Фіксована кількість нових копій об'єктів у масиві</source>
+            <translation>Număr fix de copii noi de entități în matrice</translation>
+        </message>
+        <message>
+            <source>Фіксована відстань (крок) між копіями об'єктів у масиві</source>
+            <translation>Distanță fixă (spațiere) între copiile de entități din matrice</translation>
+        </message>
+        <message>
+            <source>1. Вкажіть початкову точку / об'єкт</source>
+            <translation>1. Faceți clic pe punctul de pornire / entitate</translation>
+        </message>
+        <message>
+            <source>2. Вкажіть кінцеву точку / крок</source>
+            <translation>2. Faceți clic pe punctul final / spațiere</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів (Copy in Array)</source>
+            <translation>Matrice entități CAD (Copy in Array)</translation>
+        </message>
+        <message>
+            <source>Створення масиву копій виділених об'єктів уздовж напрямної лінії</source>
+            <translation>Copiere entități în matrice de-a lungul unei linii de referință</translation>
+        </message>
+        <message>
+            <source>Параметри масиву (Feature Array)</source>
+            <translation>Configurare matrice entități</translation>
+        </message>
+        <message>
+            <source>Режим:</source>
+            <translation>Mod:</translation>
+        </message>
+        <message>
+            <source>Крок між об'єктами (од. карти):</source>
+            <translation>Spațiere între entități (unități hartă):</translation>
+        </message>
+        <message>
+            <source>Кількість нових копій:</source>
+            <translation>Număr de entități noi:</translation>
+        </message>
+        <message>
+            <source>Кількість об'єктів (Feature Count)</source>
+            <translation>Număr de entități</translation>
+        </message>
+        <message>
+            <source>Крок / Відстань (Spacing)</source>
+            <translation>Spațiere</translation>
+        </message>
+        <message>
+            <source>Крок і кількість (Spacing &amp; Count)</source>
+            <translation>Spațiere și număr de entități</translation>
+        </message>
+        <message>
+            <source>CAD масив об'єктів</source>
+            <translation>Matrice entități CAD</translation>
+        </message>
+        <message>
+            <source>CAD Масив об'єктів</source>
+            <translation>Matrice entități CAD</translation>
+        </message>
+        <message>
             <source>Очищення топології</source>
             <translation>Curățare topologie</translation>
         </message>
