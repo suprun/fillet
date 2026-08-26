@@ -4,7 +4,7 @@ qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
 description=Interactive Fillet, Chamfer, Two-Line Merge, Corner Restoration, CAD Rotation, Mirror, Scale, Edge Offset, Feature Array & Explode Line suite for QGIS.
 about=Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), Interactive CAD Rotation, CAD Mirror Tool, CAD 3-Point Scale with Rotation Tool, CAD Edge Offset (Parallel Shift) Tool, CAD Feature Array along a line tool, and CAD Explode Line Tool for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.
-version=1.0.0.69
+version=1.0.0.70
 author=suprun
 email=suprun.serhiy+qgis@gmail.com
 homepage=https://github.com/suprun/fillet
@@ -14,7 +14,10 @@ tags=cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation,
 icon=icon.png
 experimental=False
 deprecated=False
-changelog=1.0.0.69:
+changelog=1.0.0.70:
+    - Updated advanced digitizing toolbar action ordering according to user layout: Explode after Trim/Extend, Two-Line Fillet/Chamfer after Batch Fillet/Chamfer, Scale & Rotate after Scale Feature, Edge Offset after Offset Curve, Mirror before Simplify Feature, Clean & Repair at end.
+    - Restored standard QGIS theme appearance for "Explode selected lines" push button in HUD canvas widget.
+    1.0.0.69:
     - Added single-segment (2-point line) explosion prevention with messageBar strip notifications for click and batch modes in ExplodeLineMapTool.
     1.0.0.68:
     - Fixed vertex iteration in ExplodeLineMapTool hover preview using cross-version geom.vertices() iterator.

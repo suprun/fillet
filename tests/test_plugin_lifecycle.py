@@ -344,6 +344,53 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
         self.assertGreaterEqual(last_msg[3], 4)
         layer.rollBack()
 
+    def test_toolbar_actions_order(self):
+        """Test relative placement of CAD actions in Advanced Digitize toolbar."""
+        custom_win = QMainWindow()
+        custom_tb = QToolBar("AdvDigitizeMock", custom_win)
+
+        act_move_copy = custom_tb.addAction("mActionMoveFeatureCopy")
+        act_move_copy.setObjectName("mActionMoveFeatureCopy")
+
+        act_rotate = custom_tb.addAction("mActionRotateFeature")
+        act_rotate.setObjectName("mActionRotateFeature")
+
+        act_scale = custom_tb.addAction("mActionScaleFeature")
+        act_scale.setObjectName("mActionScaleFeature")
+
+        act_simplify = custom_tb.addAction("mActionSimplifyFeature")
+        act_simplify.setObjectName("mActionSimplifyFeature")
+
+        act_offset = custom_tb.addAction("mActionOffsetCurve")
+        act_offset.setObjectName("mActionOffsetCurve")
+
+        act_trim_extend = custom_tb.addAction("mActionTrimExtend")
+        act_trim_extend.setObjectName("mActionTrimExtend")
+
+        class OrderMockIface(MockIface):
+            def advancedDigitizeToolBar(self):
+                return custom_tb
+
+        order_iface = OrderMockIface()
+        plugin = FilletPlugin(order_iface)
+        plugin.initGui()
+
+        actions = custom_tb.actions()
+        # 1. explode_action after trim/extend
+        self.assertEqual(actions[actions.index(act_trim_extend) + 1], plugin.explode_action)
+        # 2. scale_rotate_action after scale
+        self.assertEqual(actions[actions.index(act_scale) + 1], plugin.scale_rotate_action)
+        # 3. mirror_action before simplify
+        self.assertEqual(actions[actions.index(act_simplify) - 1], plugin.mirror_action)
+        # 4. edge_offset_action after offset
+        self.assertEqual(actions[actions.index(act_offset) + 1], plugin.edge_offset_action)
+        # 5. two_line_action after batch_action
+        self.assertEqual(actions[actions.index(plugin.batch_action) + 1], plugin.two_line_action)
+        # 6. clean_duplicates_action at the end
+        self.assertEqual(actions[-1], plugin.clean_duplicates_action)
+
+        plugin.unload()
+
 
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(TestPluginLifecycleAndEditState)

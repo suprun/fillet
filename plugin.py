@@ -386,151 +386,96 @@ class FilletPlugin:
                 self.iface.addVectorToolBarIcon(self.array_action)
             self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.array_action)
 
-        # 9. Insert rotate_action, mirror_action, scale_rotate_action, edge_offset_action, clean_duplicates_action, explode_action on toolbar
-        if adv_tb:
-            rotate_feature_act = None
+        # 9. Helper functions for inserting actions relative to standard QGIS actions
+        def _find_adv_action(predicate):
+            if not adv_tb:
+                return None
             for act in adv_tb.actions():
                 name_lower = act.objectName().lower()
-                if "rotatefeature" in name_lower or act.objectName() == "mActionRotateFeature":
-                    rotate_feature_act = act
-                    break
+                if predicate(name_lower, act.objectName()):
+                    return act
+            return None
 
+        def _insert_after_action(target_act, action_to_insert):
+            if not adv_tb or not action_to_insert:
+                return
             actions_now = adv_tb.actions()
-            if rotate_feature_act and rotate_feature_act in actions_now:
+            if target_act and target_act in actions_now:
                 try:
-                    idx = actions_now.index(rotate_feature_act)
+                    idx = actions_now.index(target_act)
                     if idx + 1 < len(actions_now):
-                        adv_tb.insertAction(actions_now[idx + 1], self.rotate_action)
-                    else:
-                        adv_tb.addAction(self.rotate_action)
+                        adv_tb.insertAction(actions_now[idx + 1], action_to_insert)
+                        return
                 except (ValueError, IndexError):
-                    adv_tb.addAction(self.rotate_action)
-            elif len(actions_now) >= 4:
-                adv_tb.insertAction(actions_now[3], self.rotate_action)
-            else:
-                adv_tb.addAction(self.rotate_action)
+                    pass
+            adv_tb.addAction(action_to_insert)
 
-            # Insert mirror_action after rotate_action
+        def _insert_before_action(target_act, action_to_insert):
+            if not adv_tb or not action_to_insert:
+                return
             actions_now = adv_tb.actions()
-            try:
-                idx = actions_now.index(self.rotate_action)
-                if idx + 1 < len(actions_now):
-                    adv_tb.insertAction(actions_now[idx + 1], self.mirror_action)
-                else:
-                    adv_tb.addAction(self.mirror_action)
-            except (ValueError, IndexError):
-                adv_tb.addAction(self.mirror_action)
+            if target_act and target_act in actions_now:
+                try:
+                    adv_tb.insertAction(target_act, action_to_insert)
+                    return
+                except (ValueError, IndexError):
+                    pass
+            adv_tb.addAction(action_to_insert)
 
-            # Insert scale_rotate_action after mirror_action
-            actions_now = adv_tb.actions()
-            try:
-                idx = actions_now.index(self.mirror_action)
-                if idx + 1 < len(actions_now):
-                    adv_tb.insertAction(actions_now[idx + 1], self.scale_rotate_action)
-                else:
-                    adv_tb.addAction(self.scale_rotate_action)
-            except (ValueError, IndexError):
-                adv_tb.addAction(self.scale_rotate_action)
-
-            # Insert edge_offset_action after scale_rotate_action
-            actions_now = adv_tb.actions()
-            try:
-                idx = actions_now.index(self.scale_rotate_action)
-                if idx + 1 < len(actions_now):
-                    adv_tb.insertAction(actions_now[idx + 1], self.edge_offset_action)
-                else:
-                    adv_tb.addAction(self.edge_offset_action)
-            except (ValueError, IndexError):
-                adv_tb.addAction(self.edge_offset_action)
-
-            # Insert clean_duplicates_action after edge_offset_action
-            actions_now = adv_tb.actions()
-            try:
-                idx = actions_now.index(self.edge_offset_action)
-                if idx + 1 < len(actions_now):
-                    adv_tb.insertAction(actions_now[idx + 1], self.clean_duplicates_action)
-                else:
-                    adv_tb.addAction(self.clean_duplicates_action)
-            except (ValueError, IndexError):
-                adv_tb.addAction(self.clean_duplicates_action)
-
-            # Insert explode_action after clean_duplicates_action
-            actions_now = adv_tb.actions()
-            try:
-                idx = actions_now.index(self.clean_duplicates_action)
-                if idx + 1 < len(actions_now):
-                    adv_tb.insertAction(actions_now[idx + 1], self.explode_action)
-                else:
-                    adv_tb.addAction(self.explode_action)
-            except (ValueError, IndexError):
-                adv_tb.addAction(self.explode_action)
-        else:
-            self.iface.addVectorToolBarIcon(self.rotate_action)
-            self.iface.addVectorToolBarIcon(self.mirror_action)
-            self.iface.addVectorToolBarIcon(self.scale_rotate_action)
-            self.iface.addVectorToolBarIcon(self.edge_offset_action)
-            self.iface.addVectorToolBarIcon(self.clean_duplicates_action)
-            self.iface.addVectorToolBarIcon(self.explode_action)
-
-        # 10. Insert two_line_action, restore_action and batch_action on toolbar
+        # 10. Position toolbar actions according to standard CAD workflow
         if adv_tb:
+            # 10.1. Fillet & Chamfer group: Anchor (Fillet) -> restore_action -> batch_action -> two_line_action (Join lines)
             anchor_act = self.action
             if not anchor_act:
-                # In QGIS 4.x, locate native fillet action as anchor
-                for act in adv_tb.actions():
-                    name_lower = act.objectName().lower()
-                    if "chamfer" in name_lower or "fillet" in name_lower:
-                        anchor_act = act
-                        break
+                anchor_act = _find_adv_action(lambda nl, n: "chamfer" in nl or "fillet" in nl)
 
-            if anchor_act:
-                actions_now = adv_tb.actions()
-                try:
-                    idx = actions_now.index(anchor_act)
-                    if idx + 1 < len(actions_now):
-                        adv_tb.insertAction(actions_now[idx + 1], self.two_line_action)
-                    else:
-                        adv_tb.addAction(self.two_line_action)
-                except (ValueError, IndexError):
-                    adv_tb.addAction(self.two_line_action)
-            else:
-                adv_tb.addAction(self.two_line_action)
+            _insert_after_action(anchor_act, self.restore_action)
+            _insert_after_action(self.restore_action, self.batch_action)
+            # кнопка join two lines with fillet/chamfer після batch fillet/chamfer
+            _insert_after_action(self.batch_action, self.two_line_action)
 
-            # Insert restore_action after two_line_action
-            actions_now = adv_tb.actions()
-            try:
-                idx = actions_now.index(self.two_line_action)
-                if idx + 1 < len(actions_now):
-                    adv_tb.insertAction(actions_now[idx + 1], self.restore_action)
-                else:
-                    adv_tb.addAction(self.restore_action)
-            except (ValueError, IndexError):
-                adv_tb.addAction(self.restore_action)
+            # 10.2. Rotate tool: after system rotate feature
+            rotate_act = _find_adv_action(lambda nl, n: "rotatefeature" in nl or n == "mActionRotateFeature" or "rotate" in nl)
+            _insert_after_action(rotate_act, self.rotate_action)
 
-            # Insert batch_action after restore_action
-            actions_now = adv_tb.actions()
-            try:
-                idx = actions_now.index(self.restore_action)
-                if idx + 1 < len(actions_now):
-                    adv_tb.insertAction(actions_now[idx + 1], self.batch_action)
-                else:
-                    adv_tb.addAction(self.batch_action)
-            except (ValueError, IndexError):
-                adv_tb.addAction(self.batch_action)
+            # 10.3. Scale and Rotate tool: після системного scale feature
+            scale_act = _find_adv_action(lambda nl, n: "scalefeature" in nl or n == "mActionScaleFeature" or "scale" in nl)
+            _insert_after_action(scale_act, self.scale_rotate_action)
+
+            # 10.4. Mirror tool: перед системною simplify feature
+            simplify_act = _find_adv_action(lambda nl, n: "simplifyfeature" in nl or n == "mActionSimplifyFeature" or "simplify" in nl)
+            _insert_before_action(simplify_act, self.mirror_action)
+
+            # 10.5. Edge buffer (Offset) tool: після системного offset curve
+            offset_act = _find_adv_action(lambda nl, n: "offsetcurve" in nl or n == "mActionOffsetCurve" or "offset" in nl)
+            _insert_after_action(offset_act, self.edge_offset_action)
+
+            # 10.6. Split lines (Explode) tool: після стандартної trim/extend feature
+            trim_extend_act = _find_adv_action(lambda nl, n: "trimextend" in nl or n == "mActionTrimExtend" or "trim" in nl or "extend" in nl)
+            _insert_after_action(trim_extend_act, self.explode_action)
+
+            # 10.7. Clean and repair tool: в кінець тулбара
+            adv_tb.addAction(self.clean_duplicates_action)
         else:
-            self.iface.addVectorToolBarIcon(self.two_line_action)
             self.iface.addVectorToolBarIcon(self.restore_action)
             self.iface.addVectorToolBarIcon(self.batch_action)
+            self.iface.addVectorToolBarIcon(self.two_line_action)
+            self.iface.addVectorToolBarIcon(self.rotate_action)
+            self.iface.addVectorToolBarIcon(self.scale_rotate_action)
+            self.iface.addVectorToolBarIcon(self.mirror_action)
+            self.iface.addVectorToolBarIcon(self.edge_offset_action)
+            self.iface.addVectorToolBarIcon(self.explode_action)
+            self.iface.addVectorToolBarIcon(self.clean_duplicates_action)
 
-        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.two_line_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.restore_action)
-        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.rotate_action)
-        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.mirror_action)
-        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.scale_rotate_action)
-        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.edge_offset_action)
-        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.clean_duplicates_action)
-        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.explode_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.batch_action)
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.two_line_action)
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.rotate_action)
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.scale_rotate_action)
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.mirror_action)
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.edge_offset_action)
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.explode_action)
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.clean_duplicates_action)
 
         if self.canvas:
             self.canvas.mapToolSet.connect(self.on_map_tool_changed)

@@ -96,11 +96,6 @@ class ExplodeCanvasWidget(QFrame):
 
         # Batch button for selected features
         self.btn_explode_selected = QPushButton(self.tr("Розбити виділені лінії"), self)
-        self.btn_explode_selected.setStyleSheet(
-            "QPushButton { background-color: #3b82f6; color: white; border-radius: 4px; padding: 4px 10px; font-weight: bold; } "
-            "QPushButton:hover { background-color: #2563eb; } "
-            "QPushButton:pressed { background-color: #1d4ed8; }"
-        )
         self.btn_explode_selected.setCursor(QCursor(getattr(Qt.CursorShape, "PointingHandCursor", getattr(Qt, "PointingHandCursor", 13))))
         self.btn_explode_selected.clicked.connect(self.commitRequested.emit)
         self.btn_explode_selected.hide()
