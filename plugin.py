@@ -31,6 +31,8 @@ try:
     from .gui.clean_duplicate_nodes_map_tool import CleanDuplicateNodesMapTool
     from .gui.edge_offset_canvas_widget import EdgeOffsetCanvasWidget
     from .gui.edge_offset_map_tool import EdgeOffsetMapTool
+    from .gui.explode_canvas_widget import ExplodeCanvasWidget
+    from .gui.explode_map_tool import ExplodeLineMapTool
     from .gui.map_tool import FilletMapTool
     from .gui.mirror_canvas_widget import MirrorCanvasWidget
     from .gui.mirror_map_tool import MirrorMapTool
@@ -50,6 +52,8 @@ except (ImportError, ValueError):
     from gui.clean_duplicate_nodes_map_tool import CleanDuplicateNodesMapTool
     from gui.edge_offset_canvas_widget import EdgeOffsetCanvasWidget
     from gui.edge_offset_map_tool import EdgeOffsetMapTool
+    from gui.explode_canvas_widget import ExplodeCanvasWidget
+    from gui.explode_map_tool import ExplodeLineMapTool
     from gui.map_tool import FilletMapTool
     from gui.mirror_canvas_widget import MirrorCanvasWidget
     from gui.mirror_map_tool import MirrorMapTool
@@ -84,6 +88,7 @@ class FilletPlugin:
         self.scale_rotate_action: Optional[QAction] = None
         self.edge_offset_action: Optional[QAction] = None
         self.clean_duplicates_action: Optional[QAction] = None
+        self.explode_action: Optional[QAction] = None
         self.batch_action: Optional[QAction] = None
         self.map_tool: Optional[FilletMapTool] = None
         self.array_map_tool: Optional[CADArrayMapTool] = None
@@ -100,6 +105,8 @@ class FilletPlugin:
         self.edge_offset_map_tool: Optional[EdgeOffsetMapTool] = None
         self.edge_offset_widget: Optional[EdgeOffsetCanvasWidget] = None
         self.clean_duplicates_map_tool: Optional[CleanDuplicateNodesMapTool] = None
+        self.explode_map_tool: Optional[ExplodeLineMapTool] = None
+        self.explode_widget: Optional[ExplodeCanvasWidget] = None
         self.canvas_widget: Optional[FilletCanvasWidget] = None
         self.dock_widget: Optional[QDockWidget] = None
         self.settings_widget: Optional[FilletSettingsWidget] = None
@@ -291,6 +298,22 @@ class FilletPlugin:
         self.clean_duplicates_action.setToolTip(self.tr("Швидке очищення та виправлення дубльованих вузлів геометрій"))
         self.clean_duplicates_action.triggered.connect(self.toggle_clean_duplicates_tool)
 
+        # 7.8. Create interactive CAD Explode Line Map Tool (available in QGIS 3.x and QGIS 4.x)
+        self.explode_widget = ExplodeCanvasWidget(self.canvas)
+        self.explode_widget.hide()
+        self.explode_map_tool = ExplodeLineMapTool(self.canvas, self.explode_widget, self.iface)
+
+        explode_icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionExplodeLine.svg")
+        self.explode_action = QAction(
+            QIcon(explode_icon_path),
+            self.tr("CAD Розбиття лінії (Explode)"),
+            self.iface.mainWindow(),
+        )
+        self.explode_action.setCheckable(True)
+        self.explode_action.setObjectName("actionExplodeLineCAD")
+        self.explode_action.setToolTip(self.tr("Інтерактивний CAD інструмент розбиття ліній на окремі сегменти або складові частини (multipart)"))
+        self.explode_action.triggered.connect(self.toggle_explode_tool)
+
         adv_tb = self.iface.advancedDigitizeToolBar()
 
         # 8. Create interactive Fillet / Chamfer and Array MapTools ONLY in QGIS 3.x (native in QGIS 4.0+)
@@ -363,7 +386,7 @@ class FilletPlugin:
                 self.iface.addVectorToolBarIcon(self.array_action)
             self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.array_action)
 
-        # 9. Insert rotate_action, mirror_action, scale_rotate_action, edge_offset_action, clean_duplicates_action on toolbar
+        # 9. Insert rotate_action, mirror_action, scale_rotate_action, edge_offset_action, clean_duplicates_action, explode_action on toolbar
         if adv_tb:
             rotate_feature_act = None
             for act in adv_tb.actions():
@@ -430,12 +453,24 @@ class FilletPlugin:
                     adv_tb.addAction(self.clean_duplicates_action)
             except (ValueError, IndexError):
                 adv_tb.addAction(self.clean_duplicates_action)
+
+            # Insert explode_action after clean_duplicates_action
+            actions_now = adv_tb.actions()
+            try:
+                idx = actions_now.index(self.clean_duplicates_action)
+                if idx + 1 < len(actions_now):
+                    adv_tb.insertAction(actions_now[idx + 1], self.explode_action)
+                else:
+                    adv_tb.addAction(self.explode_action)
+            except (ValueError, IndexError):
+                adv_tb.addAction(self.explode_action)
         else:
             self.iface.addVectorToolBarIcon(self.rotate_action)
             self.iface.addVectorToolBarIcon(self.mirror_action)
             self.iface.addVectorToolBarIcon(self.scale_rotate_action)
             self.iface.addVectorToolBarIcon(self.edge_offset_action)
             self.iface.addVectorToolBarIcon(self.clean_duplicates_action)
+            self.iface.addVectorToolBarIcon(self.explode_action)
 
         # 10. Insert two_line_action, restore_action and batch_action on toolbar
         if adv_tb:
@@ -494,6 +529,7 @@ class FilletPlugin:
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.scale_rotate_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.edge_offset_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.clean_duplicates_action)
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.explode_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.batch_action)
 
         if self.canvas:
@@ -644,6 +680,20 @@ class FilletPlugin:
             self.clean_duplicates_action.deleteLater()
             self.clean_duplicates_action = None
 
+        # 5.8. Clean up explode action
+        if self.explode_action:
+            try:
+                self.explode_action.triggered.disconnect(self.toggle_explode_tool)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            if self.iface.advancedDigitizeToolBar():
+                self.iface.advancedDigitizeToolBar().removeAction(self.explode_action)
+            self.iface.removeVectorToolBarIcon(self.explode_action)
+            self.iface.removePluginVectorMenu(self.tr("Fillet & Chamfer"), self.explode_action)
+            self.explode_action.setParent(None)
+            self.explode_action.deleteLater()
+            self.explode_action = None
+
         # 6. Clean up two line action
         if self.two_line_action:
             try:
@@ -763,6 +813,16 @@ class FilletPlugin:
             self.clean_duplicates_map_tool.deleteLater()
             self.clean_duplicates_map_tool = None
 
+        if self.explode_map_tool:
+            if self.canvas and self.canvas.mapTool() == self.explode_map_tool:
+                self.canvas.unsetMapTool(self.explode_map_tool)
+            if hasattr(self.explode_map_tool, "cleanup"):
+                self.explode_map_tool.cleanup()
+            else:
+                self.explode_map_tool.deactivate()
+            self.explode_map_tool.deleteLater()
+            self.explode_map_tool = None
+
         # 9. Clean up canvas widgets
         if self.canvas_widget:
             try:
@@ -823,6 +883,16 @@ class FilletPlugin:
             self.edge_offset_widget.setParent(None)
             self.edge_offset_widget.deleteLater()
             self.edge_offset_widget = None
+
+        if self.explode_widget:
+            try:
+                self.canvas.removeEventFilter(self.explode_widget)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            self.explode_widget.hide()
+            self.explode_widget.setParent(None)
+            self.explode_widget.deleteLater()
+            self.explode_widget = None
 
         if self.array_widget:
             self.array_widget.hide()
@@ -940,6 +1010,14 @@ class FilletPlugin:
             if self.canvas and self.canvas.mapTool() == self.clean_duplicates_map_tool:
                 self.canvas.unsetMapTool(self.clean_duplicates_map_tool)
 
+    def toggle_explode_tool(self, checked: bool):
+        if checked:
+            if self.explode_map_tool:
+                self.canvas.setMapTool(self.explode_map_tool)
+        else:
+            if self.canvas and self.canvas.mapTool() == self.explode_map_tool:
+                self.canvas.unsetMapTool(self.explode_map_tool)
+
     def toggle_batch_panel(self, checked: bool):
         if self.dock_widget:
             self.dock_widget.setVisible(checked)
@@ -994,6 +1072,12 @@ class FilletPlugin:
         if self.clean_duplicates_action:
             is_cd_active = tool == self.clean_duplicates_map_tool
             self.clean_duplicates_action.setChecked(is_cd_active)
+
+        if self.explode_action:
+            is_explode_active = tool == self.explode_map_tool
+            self.explode_action.setChecked(is_explode_active)
+            if not is_explode_active and self.explode_widget:
+                self.explode_widget.hide()
 
         if self.array_action:
             is_array_active = tool == self.array_map_tool
@@ -1059,6 +1143,10 @@ class FilletPlugin:
             if self.array_widget and hasattr(self.array_widget, "adapt_to_crs"):
                 self.array_widget.adapt_to_crs(layer.crs())
 
+        if is_vector and is_line_editable:
+            if self.explode_widget:
+                self.explode_widget.update_layer_capabilities(layer)
+
         if self.action:
             self.action.setEnabled(is_editable)
         if self.array_action:
@@ -1088,6 +1176,8 @@ class FilletPlugin:
             self.edge_offset_action.setEnabled(is_editable)
         if self.clean_duplicates_action:
             self.clean_duplicates_action.setEnabled(is_editable)
+        if self.explode_action:
+            self.explode_action.setEnabled(is_line_editable)
         if self.batch_action:
             self.batch_action.setEnabled(is_editable)
 
@@ -1121,6 +1211,14 @@ class FilletPlugin:
                 self.canvas.unsetMapTool(self.clean_duplicates_map_tool)
                 if self.clean_duplicates_action:
                     self.clean_duplicates_action.setChecked(False)
+
+        if not is_line_editable and self.canvas:
+            if self.explode_map_tool and self.canvas.mapTool() == self.explode_map_tool:
+                self.canvas.unsetMapTool(self.explode_map_tool)
+                if self.explode_widget:
+                    self.explode_widget.hide()
+                if self.explode_action:
+                    self.explode_action.setChecked(False)
 
         if not is_array_editable and self.canvas:
             if self.array_map_tool and self.canvas.mapTool() == self.array_map_tool:

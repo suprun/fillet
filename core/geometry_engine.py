@@ -2730,6 +2730,200 @@ class GeometryEngine:
                 return cls.get_largest_singlepart_geometry(geom, layer.geometryType())
             return geom
 
+    @classmethod
+    def can_explode_line(cls, geom: QgsGeometry, as_multipart: bool = False) -> bool:
+        """
+        Determines whether a line geometry can be exploded into multiple segments or parts.
+        Returns False if the geometry is empty, or is already a single 2-point segment.
+        """
+        if not geom or geom.isEmpty():
+            return False
+
+        abstract_geom = geom.constGet()
+        if not abstract_geom:
+            return False
+
+        curves = []
+        if isinstance(abstract_geom, (QgsMultiLineString,)):
+            for i in range(abstract_geom.numGeometries()):
+                g = abstract_geom.geometryN(i)
+                if g:
+                    curves.append(g)
+        elif hasattr(abstract_geom, "numGeometries") and abstract_geom.numGeometries() > 0:
+            for i in range(abstract_geom.numGeometries()):
+                g = abstract_geom.geometryN(i)
+                if isinstance(g, QgsLineString):
+                    curves.append(g)
+        else:
+            curves.append(abstract_geom)
+
+        total_segments = sum(max(0, curve.numPoints() - 1) for curve in curves if hasattr(curve, "numPoints"))
+        if total_segments <= 1:
+            return False
+
+        if as_multipart:
+            if isinstance(abstract_geom, (QgsMultiLineString,)) or (hasattr(abstract_geom, "numGeometries") and abstract_geom.numGeometries() > 1):
+                has_multi_vertex_part = any(getattr(c, "numPoints", lambda: 0)() > 2 for c in curves)
+                if not has_multi_vertex_part:
+                    return False
+            return True
+        else:
+            return True
+
+    @classmethod
+    def explode_line(cls, geom: QgsGeometry, as_multipart: bool = False) -> List[QgsGeometry]:
+        """
+        Splits a line, polyline, or MultiLineString into individual 2-point segments.
+        If as_multipart is True, returns a single QgsGeometry containing all segments as a MultiLineString.
+        If as_multipart is False, returns a list of individual 2-point QgsGeometry LineStrings.
+        """
+        if not geom or geom.isEmpty():
+            return []
+
+        segments = []
+        abstract_geom = geom.constGet()
+        if not abstract_geom:
+            return []
+
+        curves = []
+        if isinstance(abstract_geom, (QgsMultiLineString,)):
+            for i in range(abstract_geom.numGeometries()):
+                g = abstract_geom.geometryN(i)
+                if g:
+                    curves.append(g)
+        elif hasattr(abstract_geom, "numGeometries") and abstract_geom.numGeometries() > 0:
+            for i in range(abstract_geom.numGeometries()):
+                g = abstract_geom.geometryN(i)
+                if isinstance(g, QgsLineString):
+                    curves.append(g)
+        else:
+            curves.append(abstract_geom)
+
+        for curve in curves:
+            num_pts = curve.numPoints() if hasattr(curve, "numPoints") else 0
+            for i in range(num_pts - 1):
+                p1 = curve.pointN(i)
+                p2 = curve.pointN(i + 1)
+                segments.append(QgsLineString([p1, p2]))
+
+        if not segments:
+            return [geom]
+
+        if as_multipart:
+            mls = QgsMultiLineString()
+            for seg in segments:
+                mls.addGeometry(seg)
+            return [QgsGeometry(mls)]
+        else:
+            return [QgsGeometry(seg) for seg in segments]
+
+    @classmethod
+    def join_lines(cls, geometries: List[QgsGeometry], tolerance: float = 1e-6) -> List[QgsGeometry]:
+        """
+        Connects multiple line segments/polylines sharing coincident endpoints (within tolerance)
+        into continuous polyline(s). Automatically reverses line orientation when needed and
+        closes loops if start point equals end point.
+        """
+        if not geometries:
+            return []
+
+        all_polylines = []
+        for geom in geometries:
+            if not geom or geom.isEmpty():
+                continue
+            abstract_geom = geom.constGet()
+            if not abstract_geom:
+                continue
+
+            curves = []
+            if isinstance(abstract_geom, (QgsMultiLineString,)):
+                for i in range(abstract_geom.numGeometries()):
+                    g = abstract_geom.geometryN(i)
+                    if g:
+                        curves.append(g)
+            elif hasattr(abstract_geom, "numGeometries") and abstract_geom.numGeometries() > 0:
+                for i in range(abstract_geom.numGeometries()):
+                    g = abstract_geom.geometryN(i)
+                    if g:
+                        curves.append(g)
+            else:
+                curves.append(abstract_geom)
+
+            for curve in curves:
+                num_pts = curve.numPoints() if hasattr(curve, "numPoints") else 0
+                if num_pts >= 2:
+                    pts = [curve.pointN(i) for i in range(num_pts)]
+                    all_polylines.append(pts)
+
+        if not all_polylines:
+            return []
+
+        pool = [list(pts) for pts in all_polylines]
+        joined_chains = []
+
+        while pool:
+            current = pool.pop(0)
+            extended = True
+            while extended:
+                extended = False
+                end_pt = current[-1]
+                start_pt = current[0]
+
+                # If already a closed loop, don't extend
+                if len(current) > 2 and current[0].distance(current[-1]) <= tolerance:
+                    break
+
+                best_idx = None
+                best_action = None
+
+                for i, candidate in enumerate(pool):
+                    c_start = candidate[0]
+                    c_end = candidate[-1]
+
+                    # 1. current[-1] == candidate[0] (End-to-Start)
+                    if end_pt.distance(c_start) <= tolerance:
+                        best_idx = i
+                        best_action = "append_normal"
+                        break
+                    # 2. current[-1] == candidate[-1] (End-to-End)
+                    elif end_pt.distance(c_end) <= tolerance:
+                        best_idx = i
+                        best_action = "append_reversed"
+                        break
+                    # 3. current[0] == candidate[-1] (Start-to-End)
+                    elif start_pt.distance(c_end) <= tolerance:
+                        best_idx = i
+                        best_action = "prepend_normal"
+                        break
+                    # 4. current[0] == candidate[0] (Start-to-Start)
+                    elif start_pt.distance(c_start) <= tolerance:
+                        best_idx = i
+                        best_action = "prepend_reversed"
+                        break
+
+                if best_idx is not None:
+                    cand = pool.pop(best_idx)
+                    if best_action == "append_normal":
+                        current.extend(cand[1:])
+                    elif best_action == "append_reversed":
+                        cand_rev = list(reversed(cand))
+                        current.extend(cand_rev[1:])
+                    elif best_action == "prepend_normal":
+                        current = cand[:-1] + current
+                    elif best_action == "prepend_reversed":
+                        cand_rev = list(reversed(cand))
+                        current = cand_rev[:-1] + current
+                    extended = True
+
+            # If closed ring within tolerance, snap exact endpoint closure
+            if len(current) > 2 and current[0].distance(current[-1]) <= tolerance:
+                current[-1] = QgsPoint(current[0].x(), current[0].y())
+
+            joined_chains.append(current)
+
+        return [QgsGeometry(QgsLineString(pts)) for pts in joined_chains if len(pts) >= 2]
+
     # Alias for backwards compatibility
     batch_process_geometry = batch_apply_geometry
+
 

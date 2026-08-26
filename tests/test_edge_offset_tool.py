@@ -288,6 +288,34 @@ class TestEdgeOffsetTool(unittest.TestCase):
 
         widget.deleteLater()
 
+    def test_edge_offset_escape_key_and_rollback(self):
+        """Test Escape key cancellation and widget eventFilter resetRequested."""
+        widget = EdgeOffsetCanvasWidget(self.canvas)
+        tool = EdgeOffsetMapTool(self.canvas, widget)
+        tool.activate()
+
+        tool.state = EdgeOffsetMapTool.STATE_ADJUSTING_OFFSET
+        widget.set_step(EdgeOffsetCanvasWidget.STEP_ADJUST_OFFSET)
+
+        evt_type = getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", 6))
+        key_esc = getattr(Qt.Key, "Key_Escape", getattr(Qt, "Key_Escape", 0x01000000))
+        no_mod = getattr(Qt.KeyboardModifier, "NoModifier", getattr(Qt, "NoModifier", 0))
+        esc_event = QKeyEvent(evt_type, key_esc, no_mod)
+
+        # 1. Escape key on tool cancels operation back to select edge
+        tool.keyPressEvent(esc_event)
+        self.assertEqual(tool.state, EdgeOffsetMapTool.STATE_HOVER_EDGE)
+        self.assertEqual(widget._current_step, EdgeOffsetCanvasWidget.STEP_SELECT_EDGE)
+
+        # 2. Escape key on widget lineEdit emits resetRequested
+        reset_emitted = []
+        widget.resetRequested.connect(lambda: reset_emitted.append(True))
+        line_edit = widget.spin_distance.lineEdit() if hasattr(widget.spin_distance, "lineEdit") else widget.spin_distance
+        widget.eventFilter(line_edit, esc_event)
+        self.assertGreater(len(reset_emitted), 0)
+
+        tool.cleanup()
+
     def test_map_tool_lifecycle_and_plugin_integration(self):
         iface = DummyInterface(self.canvas)
         plugin = FilletPlugin(iface)

@@ -18,6 +18,8 @@ from qgis.core import (
     QgsPointXY,
 )
 from qgis.gui import QgsMapCanvas
+from qgis.PyQt.QtCore import QEvent, Qt
+from qgis.PyQt.QtGui import QKeyEvent
 from qgis.PyQt.QtWidgets import QMainWindow
 
 app = QgsApplication([], False)
@@ -288,12 +290,6 @@ class TestTwoLineFillet(unittest.TestCase):
         self.assertIsNone(tool.first_segment_match)
 
         tool.cleanup()
-        if tool.widget:
-            try:
-                canvas.removeEventFilter(tool.widget)
-            except (TypeError, RuntimeError):
-                pass
-            tool.widget.deleteLater()
         layer.rollBack()
 
     def test_large_radius_clamped_to_segment_length(self):
@@ -734,6 +730,38 @@ class TestTwoLineFillet(unittest.TestCase):
         self.assertTrue(widget.is_linked)
         tool.keyReleaseEvent(QKeyEvent(evt_release, key_shift, no_mod))
         self.assertFalse(widget.is_linked)
+        tool.cleanup()
+        widget.deleteLater()
+
+    def test_escape_key_and_snapping_lifecycle(self):
+        widget = FilletCanvasWidget(canvas)
+        tool = TwoLineMapTool(canvas, widget)
+        tool.activate()
+
+        # 1. Test snap indicator initialization
+        self.assertIsNotNone(tool.snap_indicator)
+
+        # 2. Test widget Esc key emits resetRequested
+        reset_emitted = []
+        widget.resetRequested.connect(lambda: reset_emitted.append(True))
+
+        key_esc = getattr(Qt.Key, "Key_Escape", getattr(Qt, "Key_Escape", 0x01000000))
+        evt_press = getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", 6))
+        no_mod = getattr(Qt.KeyboardModifier, "NoModifier", getattr(Qt, "NoModifier", 0))
+
+        # Send Escape event to spin_radius.lineEdit()
+        widget.eventFilter(widget.spin_radius.lineEdit(), QKeyEvent(evt_press, key_esc, no_mod))
+        self.assertGreater(len(reset_emitted), 0)
+
+        # 3. Test step rollback on resetRequested
+        tool.step = tool.STEP_SET_RADIUS
+        widget.resetRequested.emit()
+        self.assertEqual(tool.step, tool.STEP_SECOND_LINE)
+
+        widget.resetRequested.emit()
+        self.assertEqual(tool.step, tool.STEP_FIRST_LINE)
+
+        tool.cleanup()
 
 
 if __name__ == "__main__":

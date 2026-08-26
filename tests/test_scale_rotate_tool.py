@@ -303,6 +303,49 @@ class TestScaleRotateTool(unittest.TestCase):
         tool.cleanup()
         widget.hide()
 
+    def test_scale_rotate_escape_key_and_rollback(self):
+        """Test Escape key step back and widget resetRequested emission."""
+        widget = ScaleRotateCanvasWidget(self.canvas)
+        tool = ScaleRotateMapTool(self.canvas, widget)
+        tool.activate()
+
+        # Step 1: Set Origin
+        tool.origin_point = QgsPointXY(0, 0)
+        tool.state = ScaleRotateMapTool.STATE_SET_REFERENCE
+        widget.set_step(ScaleRotateCanvasWidget.STEP_REFERENCE)
+
+        # Step 2: Set Reference Point
+        tool.ref_point = QgsPointXY(10, 0)
+        tool.state = ScaleRotateMapTool.STATE_TRANSFORMING
+        widget.set_step(ScaleRotateCanvasWidget.STEP_TARGET)
+
+        evt_type = getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", 6))
+        key_esc = getattr(Qt.Key, "Key_Escape", getattr(Qt, "Key_Escape", 0x01000000))
+        no_mod = getattr(Qt.KeyboardModifier, "NoModifier", getattr(Qt, "NoModifier", 0))
+        esc_event = QKeyEvent(evt_type, key_esc, no_mod)
+
+        # 1. Escape key on Step 3 -> steps back to Step 2
+        tool.keyPressEvent(esc_event)
+        self.assertEqual(tool.state, ScaleRotateMapTool.STATE_SET_REFERENCE)
+        self.assertEqual(widget._current_step, ScaleRotateCanvasWidget.STEP_REFERENCE)
+        self.assertIsNone(tool.ref_point)
+        self.assertIsNotNone(tool.origin_point)
+
+        # 2. Escape key on Step 2 -> steps back to Step 1
+        tool.keyPressEvent(esc_event)
+        self.assertEqual(tool.state, ScaleRotateMapTool.STATE_SET_ORIGIN)
+        self.assertEqual(widget._current_step, ScaleRotateCanvasWidget.STEP_ORIGIN)
+        self.assertIsNone(tool.origin_point)
+
+        # 3. Widget eventFilter emits resetRequested on Escape
+        reset_emitted = []
+        widget.resetRequested.connect(lambda: reset_emitted.append(True))
+        line_edit = widget.spin_scale.lineEdit() if hasattr(widget.spin_scale, "lineEdit") else widget.spin_scale
+        widget.eventFilter(line_edit, esc_event)
+        self.assertGreater(len(reset_emitted), 0)
+
+        tool.cleanup()
+
     def test_plugin_lifecycle_integration(self):
         """Verify plugin initGui, action enablement, and unload cleanup for Scale & Rotate tool."""
         layer = QgsVectorLayer("Polygon?crs=EPSG:3857", "test_poly", "memory")

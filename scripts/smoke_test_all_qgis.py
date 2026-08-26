@@ -16,6 +16,7 @@ TEST_FILES = [
     "tests/test_edge_offset_tool.py",
     "tests/test_clean_duplicate_nodes_tool.py",
     "tests/test_array_tool.py",
+    "tests/test_explode_tool.py",
 ]
 
 def find_qgis_python_executables():

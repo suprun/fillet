@@ -3,6 +3,118 @@
     <context>
         <name>FilletPlugin</name>
         <message>
+            <source>CAD Розбиття лінії (Explode)</source>
+            <translation>Esplodi linea CAD (Explode)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент розбиття ліній на окремі сегменти або складові частини (multipart)</source>
+            <translation>Strumento CAD interattivo per dividere linee in segmenti individuali o parti composte</translation>
+        </message>
+        <message>
+            <source>CAD З'єднання ліній (Join)</source>
+            <translation>Unisci linee CAD (Join)</translation>
+        </message>
+        <message>
+            <source>Інтерактивний CAD інструмент топологічного з'єднання суміжних ліній у неперервні полілінії</source>
+            <translation>Strumento CAD interattivo per unire topologicamente linee adiacenti in polilinee continue</translation>
+        </message>
+        <message>
+            <source>1. Оберіть лінію для розбиття на відрізки</source>
+            <translation>1. Seleziona una linea da esplodere in segmenti</translation>
+        </message>
+        <message>
+            <source>Зберегти як складену геометрію (multipart)</source>
+            <translation>Salva come geometria multiparte</translation>
+        </message>
+        <message>
+            <source>Зберегти розбиті відрізки як частини єдиного об'єкта (MultiLineString)</source>
+            <translation>Salva i segmenti esplosi come parti di un singolo oggetto (MultiLineString)</translation>
+        </message>
+        <message>
+            <source>Зберегти розбиті відрізки як частини єдиного складеного об'єкта (MultiLineString)</source>
+            <translation>Salva i segmenti esplosi come parti di un singolo oggetto multiparte (MultiLineString)</translation>
+        </message>
+        <message>
+            <source>Шар є SinglePart (LineString) і не підтримує multipart</source>
+            <translation>Il layer è SinglePart (LineString) e non supporta il multiparte</translation>
+        </message>
+        <message>
+            <source>Розбити виділені лінії</source>
+            <translation>Esplodi linee selezionate</translation>
+        </message>
+        <message>
+            <source>Розбити виділені лінії ({})</source>
+            <translation>Esplodi linee selezionate ({})</translation>
+        </message>
+        <message>
+            <source>Розбиття ліній на складові частини (multipart)</source>
+            <translation>Esplodi linee in componenti multiparte</translation>
+        </message>
+        <message>
+            <source>Розбиття ліній на окремі відрізки</source>
+            <translation>Esplodi linee in segmenti separati</translation>
+        </message>
+        <message>
+            <source>Успішно розбито {} об'єктів на {} відрізків</source>
+            <translation>{} elemento/i esploso/i con successo in {} segmenti</translation>
+        </message>
+        <message>
+            <source>Успішно розбито {} об'єктів на {} відрізків (пропущено {} одинарних відрізків)</source>
+            <translation>{} elemento/i esploso/i in {} segmenti ({} segmento/i singolo/i saltato/i)</translation>
+        </message>
+        <message>
+            <source>Об'єкт вже є простим відрізком (2 точки) і не може бути розділений</source>
+            <translation>L'elemento è già un segmento semplice (2 punti) e non può essere esploso</translation>
+        </message>
+        <message>
+            <source>Усі виділені об'єкти вже є простими відрізками (2 точки) і не можуть бути розділені</source>
+            <translation>Tutti gli elementi selezionati sono già segmenti semplici (2 punti) e non possono essere esplosi</translation>
+        </message>
+        <message>
+            <source>CAD Explode Line</source>
+            <translation>CAD Explode Line</translation>
+        </message>
+        <message>
+            <source>1. Оберіть першу лінію для з'єднання</source>
+            <translation>1. Seleziona la prima linea da unire</translation>
+        </message>
+        <message>
+            <source>2. Оберіть суміжні лінії (Enter для фіксації)</source>
+            <translation>2. Seleziona linee adiacenti (Invio per confermare)</translation>
+        </message>
+        <message>
+            <source>Допуск вузлів:</source>
+            <translation>Tolleranza nodi:</translation>
+        </message>
+        <message>
+            <source>З'єднати виділені лінії</source>
+            <translation>Unisci linee selezionate</translation>
+        </message>
+        <message>
+            <source>З'єднати виділені лінії ({})</source>
+            <translation>Unisci linee selezionate ({})</translation>
+        </message>
+        <message>
+            <source>З'єднання ліній у полілінію</source>
+            <translation>Unisci linee in polilinea</translation>
+        </message>
+        <message>
+            <source>З'єднання виділених ліній</source>
+            <translation>Unisci linee selezionate</translation>
+        </message>
+        <message>
+            <source>CAD Join Lines</source>
+            <translation>CAD Join Lines</translation>
+        </message>
+        <message>
+            <source>Успішно з'єднано {} ліній в єдину полілінію</source>
+            <translation>{} linee unite con successo in una singola polilinea</translation>
+        </message>
+        <message>
+            <source>Успішно з'єднано {} виділених ліній в {} поліліній</source>
+            <translation>{} linee selezionate unite con successo in {} polilinee</translation>
+        </message>
+        <message>
             <source>Кількість (Count):</source>
             <translation>Conteggio elementi:</translation>
         </message>

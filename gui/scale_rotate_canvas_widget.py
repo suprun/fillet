@@ -356,9 +356,14 @@ class ScaleRotateCanvasWidget(QFrame):
             key_backtab = getattr(Qt.Key, "Key_Backtab", getattr(Qt, "Key_Backtab", 0x01000002))
             key_return = getattr(Qt.Key, "Key_Return", getattr(Qt, "Key_Return", 0x01000004))
             key_enter = getattr(Qt.Key, "Key_Enter", getattr(Qt, "Key_Enter", 0x01000005))
+            key_escape = getattr(Qt.Key, "Key_Escape", getattr(Qt, "Key_Escape", 0x01000000))
 
             if key in (key_return, key_enter):
                 self.commitRequested.emit()
+                return True
+
+            if key == key_escape:
+                self.resetRequested.emit()
                 return True
 
             if key == key_tab:

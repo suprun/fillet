@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
-  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.64" plugin_id="fillet">
-    <description>Interactive Fillet, Chamfer, Two-Line Merge, Corner Restoration, CAD Rotation, Mirror, Scale, Edge Offset &amp; Feature Array suite for QGIS.</description>
-    <about>Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), Interactive CAD Rotation, CAD Mirror Tool, CAD 3-Point Scale with Rotation Tool, CAD Edge Offset (Parallel Shift) Tool, and CAD Feature Array along a line tool for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.</about>
-    <version>1.0.0.64</version>
+  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.69" plugin_id="fillet">
+    <description>Interactive Fillet, Chamfer, Two-Line Merge, Corner Restoration, CAD Rotation, Mirror, Scale, Edge Offset, Feature Array &amp; Explode Line suite for QGIS.</description>
+    <about>Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), Interactive CAD Rotation, CAD Mirror Tool, CAD 3-Point Scale with Rotation Tool, CAD Edge Offset (Parallel Shift) Tool, CAD Feature Array along a line tool, and CAD Explode Line Tool for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.</about>
+    <version>1.0.0.69</version>
     <qgis_minimum_version>3.16</qgis_minimum_version>
     <qgis_maximum_version>4.99</qgis_maximum_version>
     <file_name>fillet.zip</file_name>
@@ -13,8 +13,18 @@
     <tracker>https://github.com/suprun/fillet/issues</tracker>
     <experimental>False</experimental>
     <deprecated>False</deprecated>
-    <tags>cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation, mirror, symmetry, scale, scale-rotate, offset, edge-offset, array, feature-array, duplicate, nodes, clean, deduplicate, self-intersection, topology, geometry, digitizing, curve, batch, merge, qgis4</tags>
-    <change_log>1.0.0.64:
+    <tags>cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation, mirror, symmetry, scale, scale-rotate, offset, edge-offset, array, feature-array, explode, duplicate, nodes, clean, deduplicate, self-intersection, topology, geometry, digitizing, curve, batch, merge, qgis4</tags>
+    <change_log>1.0.0.69:
+- Added single-segment (2-point line) explosion prevention with messageBar strip notifications for click and batch modes in ExplodeLineMapTool.
+1.0.0.68:
+- Fixed vertex iteration in ExplodeLineMapTool hover preview using cross-version geom.vertices() iterator.
+1.0.0.67:
+- Fixed package-relative import in ExplodeLineMapTool to ensure proper plugin loading within QGIS.
+- Added CAD Explode Line map tool with floating HUD panel supporting 2-point segment splitting and optional MultiLineString preservation.
+1.0.0.65:
+- Added project system snapping support during dimension adjustment (STATE_ADJUSTING &amp; STEP_SET_RADIUS) across Fillet and Two-Line Fillet/Chamfer map tools with native QgsSnapIndicator.
+- Implemented global Escape key cancellation and step rollback across all CAD HUD canvas widgets (Fillet, Two-Line, Rotate, Scale &amp; Rotate, Mirror, Edge Offset) via eventFilter pass-through.
+1.0.0.64:
 - Restored user-configured values in Feature Count and Spacing spinboxes upon re-enabling checkboxes.
 - Added canvas extent confirmation dialog when selected features to copy are outside map view on Step 1.
 1.0.0.63:

@@ -20,6 +20,8 @@ from qgis.core import (
     QgsVectorLayer,
 )
 from qgis.gui import QgsMapCanvas
+from qgis.PyQt.QtCore import QEvent, Qt
+from qgis.PyQt.QtGui import QKeyEvent
 
 app = QgsApplication([], False)
 app.initQgis()
@@ -267,6 +269,35 @@ class TestCADMirrorTool(unittest.TestCase):
         self.assertTrue(widget.is_angle_locked)
         tool.keyPressEvent(QKeyEvent(evt_type, key_space, no_mod))
         self.assertFalse(widget.is_angle_locked)
+
+    def test_mirror_escape_key_and_rollback(self):
+        """Test Escape key resets mirror tool and widget eventFilter emits resetRequested."""
+        widget = MirrorCanvasWidget(self.canvas)
+        tool = MirrorMapTool(self.canvas, widget)
+        tool.activate()
+
+        tool.p1 = QgsPointXY(0, 0)
+        tool.state = MirrorMapTool.STATE_SECOND_POINT
+        widget.set_step(MirrorCanvasWidget.STEP_SECOND_POINT)
+
+        evt_type = getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", 6))
+        key_esc = getattr(Qt.Key, "Key_Escape", getattr(Qt, "Key_Escape", 0x01000000))
+        no_mod = getattr(Qt.KeyboardModifier, "NoModifier", getattr(Qt, "NoModifier", 0))
+        esc_event = QKeyEvent(evt_type, key_esc, no_mod)
+
+        # 1. Escape key on tool resets state to first point
+        tool.keyPressEvent(esc_event)
+        self.assertEqual(tool.state, MirrorMapTool.STATE_FIRST_POINT)
+        self.assertIsNone(tool.p1)
+
+        # 2. Escape key on widget lineEdit emits resetRequested
+        reset_emitted = []
+        widget.resetRequested.connect(lambda: reset_emitted.append(True))
+        line_edit = widget.spin_angle.lineEdit() if hasattr(widget.spin_angle, "lineEdit") else widget.spin_angle
+        widget.eventFilter(line_edit, esc_event)
+        self.assertGreater(len(reset_emitted), 0)
+
+        tool.cleanup()
 
 
 if __name__ == "__main__":

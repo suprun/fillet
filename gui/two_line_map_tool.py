@@ -23,6 +23,7 @@ from qgis.gui import (
     QgsMapMouseEvent,
     QgsMapToolEdit,
     QgsRubberBand,
+    QgsSnapIndicator,
 )
 from qgis.PyQt.QtCore import QCoreApplication, QEvent, QObject, Qt
 from qgis.PyQt.QtGui import QColor, QCursor
@@ -160,13 +161,19 @@ class TwoLineMapTool(QgsMapToolEdit):
         self.tangent_marker.setWidth(2)
         self.tangent_marker.setColor(QColor(37, 99, 235, 255))
 
+        # 5. Snapping indicator
+        self.snap_indicator = QgsSnapIndicator(self.canvas)
+
         if _CrossCursor is not None:
             self.setCursor(QCursor(_CrossCursor))
 
         # Recompute preview on parameter change
         if self.widget:
             self.widget.parametersChanged.connect(self._on_parameters_changed)
-            self.widget.commitRequested.connect(self._commit_current_preview)
+            if hasattr(self.widget, "commitRequested"):
+                self.widget.commitRequested.connect(self._commit_current_preview)
+            if hasattr(self.widget, "resetRequested"):
+                self.widget.resetRequested.connect(self._handle_step_back)
 
     def activate(self):
         super().activate()
@@ -181,6 +188,8 @@ class TwoLineMapTool(QgsMapToolEdit):
 
     def deactivate(self):
         self._clear_preview()
+        if hasattr(self, "snap_indicator") and self.snap_indicator:
+            self.snap_indicator.setVisible(False)
         if self.widget:
             self.widget.set_shift_override(False)
             self.widget.set_two_line_mode(False)
@@ -194,10 +203,20 @@ class TwoLineMapTool(QgsMapToolEdit):
                 self.widget.parametersChanged.disconnect(self._on_parameters_changed)
             except (TypeError, RuntimeError):
                 pass  # nosec B110
-            try:
-                self.widget.commitRequested.disconnect(self._commit_current_preview)
-            except (TypeError, RuntimeError):
-                pass  # nosec B110
+            if hasattr(self.widget, "commitRequested"):
+                try:
+                    self.widget.commitRequested.disconnect(self._commit_current_preview)
+                except (TypeError, RuntimeError):
+                    pass  # nosec B110
+            if hasattr(self.widget, "resetRequested"):
+                try:
+                    self.widget.resetRequested.disconnect(self._handle_step_back)
+                except (TypeError, RuntimeError):
+                    pass  # nosec B110
+        if hasattr(self, "snap_indicator") and self.snap_indicator:
+            self.snap_indicator.setVisible(False)
+            del self.snap_indicator
+            self.snap_indicator = None
         for rb in (
             self.edge1_rubberband,
             self.edge2_rubberband,
@@ -303,6 +322,8 @@ class TwoLineMapTool(QgsMapToolEdit):
         self.last_mouse_point = map_point
 
         if self.step == self.STEP_FIRST_LINE:
+            if getattr(self, "snap_indicator", None):
+                self.snap_indicator.setVisible(False)
             # Step 1: Hovering over first line
             match = SnappingHelper.find_segment_at_position(layer, self.canvas, map_point)
             if match:
@@ -324,6 +345,8 @@ class TwoLineMapTool(QgsMapToolEdit):
             self.tangent_marker.reset()
 
         elif self.step == self.STEP_SECOND_LINE:
+            if getattr(self, "snap_indicator", None):
+                self.snap_indicator.setVisible(False)
             # Step 2: Hovering over second line
             m1 = self.first_segment_match
             m2 = SnappingHelper.find_segment_at_position(layer, self.canvas, map_point)
@@ -347,7 +370,18 @@ class TwoLineMapTool(QgsMapToolEdit):
                 self.preview_geom = None
 
         elif self.step == self.STEP_SET_RADIUS:
-            # Step 3: Interactive cursor drag to adjust radius / chamfer distance
+            # Step 3: Interactive cursor drag to adjust radius / chamfer distance with system snapping
+            snap_match = self.canvas.snappingUtils().snapToMap(event.pos())
+            if snap_match.isValid():
+                map_point = snap_match.point()
+                if getattr(self, "snap_indicator", None):
+                    self.snap_indicator.setMatch(snap_match)
+                    self.snap_indicator.setVisible(True)
+            else:
+                map_point = event.mapPoint()
+                if getattr(self, "snap_indicator", None):
+                    self.snap_indicator.setVisible(False)
+            self.last_mouse_point = map_point
             self._update_interactive_radius(layer, map_point, shift_pressed)
 
         # Keep focus on the HUD panel's numeric stepper if focus moved away
@@ -486,7 +520,13 @@ class TwoLineMapTool(QgsMapToolEdit):
                         self.widget.set_step(self.STEP_SET_RADIUS)
 
         elif self.step == self.STEP_SET_RADIUS:
-            # Step 3: Confirm radius and commit
+            # Step 3: Confirm radius and commit with snapping
+            snap_match = self.canvas.snappingUtils().snapToMap(event.pos())
+            if snap_match.isValid():
+                map_point = snap_match.point()
+            else:
+                map_point = event.mapPoint()
+            self._update_interactive_radius(layer, map_point)
             self._commit_current_preview()
 
         # Always restore focus to the primary numeric stepper after mouse click
@@ -739,3 +779,5 @@ class TwoLineMapTool(QgsMapToolEdit):
         self.preview_rubberband.reset()
         self.corner_marker.reset()
         self.tangent_marker.reset()
+        if getattr(self, "snap_indicator", None):
+            self.snap_indicator.setVisible(False)

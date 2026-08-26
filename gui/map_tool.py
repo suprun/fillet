@@ -93,6 +93,8 @@ class FilletMapTool(QgsMapToolEdit):
         self.widget.parametersChanged.connect(self._update_preview)
         if hasattr(self.widget, "commitRequested"):
             self.widget.commitRequested.connect(self._commit_change)
+        if hasattr(self.widget, "resetRequested"):
+            self.widget.resetRequested.connect(self._cancel_operation)
 
     def activate(self):
         super().activate()
@@ -124,6 +126,11 @@ class FilletMapTool(QgsMapToolEdit):
         if hasattr(self.widget, "commitRequested"):
             try:
                 self.widget.commitRequested.disconnect(self._commit_change)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+        if hasattr(self.widget, "resetRequested"):
+            try:
+                self.widget.resetRequested.disconnect(self._cancel_operation)
             except (TypeError, RuntimeError):
                 pass  # nosec B110
 
@@ -194,6 +201,16 @@ class FilletMapTool(QgsMapToolEdit):
                 self._clear_preview()
 
         elif self.state == self.STATE_ADJUSTING:
+            snap_match = self.canvas.snappingUtils().snapToMap(event.pos())
+            if snap_match.isValid():
+                map_point = snap_match.point()
+                self.snap_indicator.setMatch(snap_match)
+                self.snap_indicator.setVisible(True)
+            else:
+                map_point = event.mapPoint()
+                self.snap_indicator.setVisible(False)
+            self.last_mouse_point = map_point
+
             if self.current_match and isinstance(self.widget, FilletCanvasWidget):
                 self._update_values_from_point(layer, map_point, shift_pressed)
             self._update_preview()
@@ -300,6 +317,14 @@ class FilletMapTool(QgsMapToolEdit):
                         self._update_preview()
 
             elif self.state == self.STATE_ADJUSTING:
+                snap_match = self.canvas.snappingUtils().snapToMap(event.pos())
+                if snap_match.isValid():
+                    map_point = snap_match.point()
+                else:
+                    map_point = event.mapPoint()
+                if self.current_match and isinstance(self.widget, FilletCanvasWidget):
+                    self._update_values_from_point(layer, map_point)
+                    self._update_preview()
                 # Second click commits the modification (Two-step CAD workflow)
                 self._commit_change()
 

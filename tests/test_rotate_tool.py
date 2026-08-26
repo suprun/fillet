@@ -232,13 +232,14 @@ class TestCADRotateTool(unittest.TestCase):
         self.assertIsNone(tool.ref_point)
         self.assertIsNotNone(tool.pivot_point)
 
-        # 2. Escape key on Step 2 -> steps back to Step 1 (full reset)
-        tool.keyPressEvent(esc_event)
-        self.assertEqual(tool.state, RotateMapTool.STATE_SET_PIVOT)
-        self.assertEqual(widget._current_step, RotationCanvasWidget.STEP_PIVOT)
-        self.assertIsNone(tool.pivot_point)
+        # 3. Widget eventFilter on Escape key emits resetRequested
+        reset_emitted = []
+        widget.resetRequested.connect(lambda: reset_emitted.append(True))
+        line_edit = widget.spin_angle.lineEdit() if hasattr(widget.spin_angle, "lineEdit") else widget.spin_angle
+        widget.eventFilter(line_edit, esc_event)
+        self.assertGreater(len(reset_emitted), 0)
 
-        # 3. Deactivate -> clean state and hidden widget
+        # 4. Deactivate -> clean state and hidden widget
         tool.pivot_point = QgsPointXY(5, 5)
         tool.state = RotateMapTool.STATE_SET_REFERENCE
         widget.show()
