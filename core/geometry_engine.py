@@ -1558,18 +1558,252 @@ class GeometryEngine:
             for i in range(1, count):
                 split_dists.append(i * seg_len)
         elif step_length is not None and step_length > cls.EPSILON:
-            cur_d = step_length
-            while cur_d < total_length - cls.EPSILON:
-                split_dists.append(cur_d)
-                cur_d += step_length
+            curr_dist = step_length
+            while curr_dist < total_length - cls.EPSILON:
+                split_dists.append(curr_dist)
+                curr_dist += step_length
 
-        points = []
-        for d in split_dists:
-            pt_geom = geom.interpolate(total_length - d if reverse_direction else d)
-            if not pt_geom.isEmpty():
-                points.append(pt_geom.asPoint())
+        if reverse_direction:
+            split_dists = [total_length - d for d in reversed(split_dists)]
 
-        return points
+        cut_pts: List[QgsPointXY] = []
+        for dist in split_dists:
+            curve_pt = abstract_geom.interpolatePoint(dist)
+            if curve_pt is not None and not curve_pt.isEmpty():
+                cut_pts.append(QgsPointXY(curve_pt.x(), curve_pt.y()))
+
+        return cut_pts
+
+    @classmethod
+    def orthogonalize_geometry(
+        cls,
+        geom: QgsGeometry,
+        base_angle_rad: float,
+        tolerance_deg: float = 15.0,
+        preserve_area: bool = False,
+    ) -> QgsGeometry:
+        """
+        Orthogonalizes the vertices of a polygon or linestring so that segments whose angles
+        are within tolerance_deg of (base_angle_rad + k * 90°) become strictly parallel or
+        perpendicular to base_angle_rad.
+
+        :param geom: Source QgsGeometry (Polygon, MultiPolygon, LineString, MultiLineString).
+        :param base_angle_rad: Base reference azimuth in radians.
+        :param tolerance_deg: Angular tolerance in degrees (default 15.0°).
+        :param preserve_area: If True for polygons, scales the result around its centroid
+                              to match the original area exactly.
+        :return: A new orthogonalized QgsGeometry.
+        """
+        if geom.isNull() or geom.isEmpty():
+            return QgsGeometry(geom)
+
+        tol_rad = math.radians(max(0.1, min(45.0, tolerance_deg)))
+        orig_area = geom.area() if geom.type() == QgsWkbTypes.GeometryType.PolygonGeometry else 0.0
+
+        if geom.isMultipart():
+            sub_geoms = []
+            for part in geom.asGeometryCollection():
+                sub_ortho = cls.orthogonalize_geometry(
+                    part,
+                    base_angle_rad=base_angle_rad,
+                    tolerance_deg=tolerance_deg,
+                    preserve_area=False,
+                )
+                sub_geoms.append(sub_ortho)
+            if not sub_geoms:
+                return QgsGeometry(geom)
+
+            geom_type = geom.type()
+            if geom_type == QgsWkbTypes.GeometryType.PolygonGeometry:
+                poly_list = [g.asPolygon() for g in sub_geoms if not g.isEmpty()]
+                res = QgsGeometry.fromMultiPolygonXY(poly_list)
+            elif geom_type == QgsWkbTypes.GeometryType.LineGeometry:
+                line_list = [g.asPolyline() for g in sub_geoms if not g.isEmpty()]
+                res = QgsGeometry.fromMultiPolylineXY(line_list)
+            else:
+                return QgsGeometry(geom)
+
+            if preserve_area and orig_area > cls.EPSILON and res.area() > cls.EPSILON:
+                scale_factor = math.sqrt(orig_area / res.area())
+                centroid = res.centroid().asPoint() if not res.centroid().isEmpty() else None
+                if centroid:
+                    res = cls._scale_geometry_xy(res, centroid, scale_factor)
+            return res
+
+        # Single part polygon or linestring
+        geom_type = geom.type()
+        if geom_type == QgsWkbTypes.GeometryType.PolygonGeometry:
+            rings = geom.asPolygon()
+            if not rings:
+                return QgsGeometry(geom)
+            ortho_rings = []
+            for ring in rings:
+                ortho_ring = cls._orthogonalize_ring(ring, base_angle_rad, tol_rad, is_closed=True)
+                ortho_rings.append(ortho_ring)
+
+            res = QgsGeometry.fromPolygonXY(ortho_rings)
+            if preserve_area and orig_area > cls.EPSILON and res.area() > cls.EPSILON:
+                scale_factor = math.sqrt(orig_area / res.area())
+                centroid = res.centroid().asPoint() if not res.centroid().isEmpty() else None
+                if centroid:
+                    res = cls._scale_geometry_xy(res, centroid, scale_factor)
+            return res
+
+        elif geom_type == QgsWkbTypes.GeometryType.LineGeometry:
+            polyline = geom.asPolyline()
+            if not polyline or len(polyline) < 2:
+                return QgsGeometry(geom)
+            is_closed = (polyline[0] == polyline[-1] and len(polyline) >= 4)
+            ortho_pts = cls._orthogonalize_ring(polyline, base_angle_rad, tol_rad, is_closed=is_closed)
+            return QgsGeometry.fromPolylineXY(ortho_pts)
+
+        return QgsGeometry(geom)
+
+    @classmethod
+    def _orthogonalize_ring(
+        cls,
+        pts: List[QgsPointXY],
+        base_angle_rad: float,
+        tol_rad: float,
+        is_closed: bool,
+    ) -> List[QgsPointXY]:
+        """Orthogonalizes a list of QgsPointXY vertices for a closed ring or open polyline."""
+        if len(pts) < 3:
+            return list(pts)
+
+        if is_closed and pts[0] == pts[-1]:
+            pts_work = pts[:-1]
+        else:
+            pts_work = list(pts)
+
+        n = len(pts_work)
+        if n < 3:
+            return list(pts)
+
+        # 1. Compute midpoints, original lengths, and adjusted directions for all edges
+        lines = []
+        half_pi = math.pi / 2.0
+        quarter_pi = math.pi / 4.0
+
+        num_edges = n if is_closed else n - 1
+        for i in range(num_edges):
+            p1 = pts_work[i]
+            p2 = pts_work[(i + 1) % n]
+            dx = p2.x() - p1.x()
+            dy = p2.y() - p1.y()
+            seg_len = math.hypot(dx, dy)
+            if seg_len < cls.EPSILON:
+                alpha = base_angle_rad
+            else:
+                alpha = math.atan2(dy, dx)
+
+            # Measure difference relative to nearest orthogonal angle (base_angle_rad + k * 90°)
+            delta = (alpha - base_angle_rad + quarter_pi) % half_pi - quarter_pi
+            if abs(delta) <= tol_rad:
+                alpha_adj = alpha - delta
+            else:
+                alpha_adj = alpha
+
+            mx = (p1.x() + p2.x()) * 0.5
+            my = (p1.y() + p2.y()) * 0.5
+
+            # Line equation in form a*x + b*y = c
+            # Direction vector (cos a, sin a) -> Normal vector (-sin a, cos a)
+            a = -math.sin(alpha_adj)
+            b = math.cos(alpha_adj)
+            c = a * mx + b * my
+            lines.append((a, b, c, mx, my, alpha_adj))
+
+        # 2. Reconstruct vertices from adjacent line intersections
+        new_pts: List[QgsPointXY] = []
+        for i in range(n):
+            if is_closed:
+                line_prev = lines[(i - 1) % n]
+                line_next = lines[i]
+                pt = cls._intersect_2d_lines(line_prev, line_next, pts_work[i])
+                new_pts.append(pt)
+            else:
+                if i == 0:
+                    # Project first vertex onto first line
+                    a, b, c, mx, my, _ = lines[0]
+                    v = pts_work[0]
+                    pt = cls._project_point_to_line(v, a, b, c)
+                    new_pts.append(pt)
+                elif i == n - 1:
+                    # Project last vertex onto last line
+                    a, b, c, mx, my, _ = lines[-1]
+                    v = pts_work[-1]
+                    pt = cls._project_point_to_line(v, a, b, c)
+                    new_pts.append(pt)
+                else:
+                    line_prev = lines[i - 1]
+                    line_next = lines[i]
+                    pt = cls._intersect_2d_lines(line_prev, line_next, pts_work[i])
+                    new_pts.append(pt)
+
+        if is_closed:
+            new_pts.append(QgsPointXY(new_pts[0]))
+
+        return new_pts
+
+    @staticmethod
+    def _intersect_2d_lines(
+        line1: Tuple[float, float, float, float, float, float],
+        line2: Tuple[float, float, float, float, float, float],
+        fallback_pt: QgsPointXY,
+    ) -> QgsPointXY:
+        """Intersects two 2D lines (a1*x + b1*y = c1) and (a2*x + b2*y = c2)."""
+        a1, b1, c1, _, _, _ = line1
+        a2, b2, c2, _, _, _ = line2
+        det = a1 * b2 - a2 * b1
+        if abs(det) < 1e-7:
+            return fallback_pt
+        x = (c1 * b2 - c2 * b1) / det
+        y = (a1 * c2 - a2 * c1) / det
+        return QgsPointXY(x, y)
+
+    @staticmethod
+    def _project_point_to_line(pt: QgsPointXY, a: float, b: float, c: float) -> QgsPointXY:
+        """Projects point (x0, y0) onto line a*x + b*y = c."""
+        denom = a * a + b * b
+        if denom < 1e-12:
+            return pt
+        x0, y0 = pt.x(), pt.y()
+        d = (a * x0 + b * y0 - c) / denom
+        return QgsPointXY(x0 - a * d, y0 - b * d)
+
+    @classmethod
+    def _scale_geometry_xy(cls, geom: QgsGeometry, center: QgsPointXY, factor: float) -> QgsGeometry:
+        """Uniformly scales a geometry around center point by factor."""
+        if abs(factor - 1.0) < cls.EPSILON:
+            return QgsGeometry(geom)
+
+        cx, cy = center.x(), center.y()
+        if geom.type() == QgsWkbTypes.GeometryType.PolygonGeometry:
+            if geom.isMultipart():
+                multi_poly = []
+                for poly in geom.asMultiPolygon():
+                    poly_scaled = []
+                    for ring in poly:
+                        poly_scaled.append([QgsPointXY(cx + (p.x() - cx) * factor, cy + (p.y() - cy) * factor) for p in ring])
+                    multi_poly.append(poly_scaled)
+                return QgsGeometry.fromMultiPolygonXY(multi_poly)
+            else:
+                poly_scaled = []
+                for ring in geom.asPolygon():
+                    poly_scaled.append([QgsPointXY(cx + (p.x() - cx) * factor, cy + (p.y() - cy) * factor) for p in ring])
+                return QgsGeometry.fromPolygonXY(poly_scaled)
+        elif geom.type() == QgsWkbTypes.GeometryType.LineGeometry:
+            if geom.isMultipart():
+                multi_line = []
+                for line in geom.asMultiPolyline():
+                    multi_line.append([QgsPointXY(cx + (p.x() - cx) * factor, cy + (p.y() - cy) * factor) for p in line])
+                return QgsGeometry.fromMultiPolylineXY(multi_line)
+            else:
+                line_scaled = [QgsPointXY(cx + (p.x() - cx) * factor, cy + (p.y() - cy) * factor) for p in geom.asPolyline()]
+                return QgsGeometry.fromPolylineXY(line_scaled)
+
+        return QgsGeometry(geom)
 
     @classmethod
     def mirror_point(

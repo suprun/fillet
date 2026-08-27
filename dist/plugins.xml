@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
-  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.79" plugin_id="fillet">
-    <description>Interactive Fillet, Chamfer, Two-Line Merge, Corner Restoration, CAD Rotation, Mirror, Scale, Edge Offset, Feature Array &amp; Explode Line suite for QGIS.</description>
-    <about>Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), Interactive CAD Rotation, CAD Mirror Tool, CAD 3-Point Scale with Rotation Tool, CAD Edge Offset (Parallel Shift) Tool, CAD Feature Array along a line tool, and CAD Explode Line Tool for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.</about>
-    <version>1.0.0.79</version>
+  <pyqgis_plugin name="Fillet &amp; Chamfer for QGIS 3.x (Interactive &amp; Batch)" version="1.0.0.84" plugin_id="fillet">
+    <description>Interactive Fillet, Chamfer, Two-Line Merge, Corner Restoration, CAD Rotation, Mirror, Scale, Edge Offset, Feature Array, Ortho Angles &amp; Explode Line suite for QGIS.</description>
+    <about>Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), Interactive CAD Rotation, CAD Mirror Tool, CAD 3-Point Scale with Rotation Tool, CAD Edge Offset (Parallel Shift) Tool, CAD Feature Array along a line tool, CAD Polar (Circular) Array Tool, CAD Divide / Measure Line Tool, CAD Ortho Angles (orthogonalization of polygon/building corners relative to a reference facade), and CAD Explode Line Tool for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.</about>
+    <version>1.0.0.84</version>
     <qgis_minimum_version>3.16</qgis_minimum_version>
     <qgis_maximum_version>4.99</qgis_maximum_version>
     <file_name>fillet.zip</file_name>
@@ -13,8 +13,21 @@
     <tracker>https://github.com/suprun/fillet/issues</tracker>
     <experimental>False</experimental>
     <deprecated>False</deprecated>
-    <tags>cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation, mirror, symmetry, scale, scale-rotate, offset, edge-offset, array, feature-array, polar-array, circular-array, divide, measure, line-division, explode, duplicate, nodes, clean, deduplicate, self-intersection, topology, geometry, digitizing, curve, batch, merge, qgis4</tags>
-    <change_log>1.0.0.79:
+    <tags>cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation, mirror, symmetry, scale, scale-rotate, offset, edge-offset, array, feature-array, polar-array, circular-array, divide, measure, line-division, explode, ortho, orthogonal, orthogonalize, building, squaring, facade, duplicate, nodes, clean, deduplicate, self-intersection, topology, geometry, digitizing, curve, batch, merge, qgis4</tags>
+    <change_log>1.0.0.84:
+- Fixed Escape key step-back and tool deactivation in CAD Ortho Angles and CAD Polar Array by unifying event filtering across canvas, HUD panel, spinboxes, and line edits, and ensuring robust integer key code handling and clean Pan tool activation upon tool exit.
+1.0.0.83:
+- Fixed batch fillet/chamfer NameError by adding missing GeometryEngine import to package try block in plugin.py.
+- Updated CAD Ortho Angles and CAD Polar Array click selection to visually highlight chosen features via dedicated rubberbands instead of modifying layer selection state.
+1.0.0.82:
+- Fixed batch fillet/chamfer NameError by adding missing GeometryEngine import to package try block in plugin.py.
+- Updated CAD Ortho Angles and CAD Polar Array click selection to visually highlight chosen features via dedicated rubberbands instead of modifying layer selection state.
+1.0.0.81:
+- Fixed NameError in initGui by adding missing relative imports for OrthoAnglesCanvasWidget and CADOrthoAnglesMapTool when running as installed QGIS plugin package.
+1.0.0.80:
+- Added CAD Ortho Angles tool: interactive orthogonalization of building footprints and polygon/polyline corners (90° right angles) relative to a clicked reference facade/wall edge.
+- Features floating HUD canvas panel with angle tolerance spinbox (1°-45°), tolerance lock button, presets/history menu, preserve area toggle (centroid-based scaling), create copy toggle, and vertex displacement marker visualization.
+1.0.0.79:
 - Fixed guide line gap and angle desynchronization when rotating past 360° and reversing direction. Unified radius ray with arc angle so visual guides and feature copies are 100% synchronized in both CW and CCW directions.
 1.0.0.78:
 - Implemented 4-step CAD workflow for Polar Array: Select Feature(s) -> Set Center -> Specify 0° Baseline Direction -> Rotate Array with seamless real-time angle synchronization and full-circle sweep.

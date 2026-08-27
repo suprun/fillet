@@ -282,6 +282,121 @@ class TestCADPolarArrayTool(unittest.TestCase):
 
         self.polygon_layer.rollBack()
 
+    def test_click_select_highlights_without_layer_selection(self):
+        """Clicking a feature in STATE_SELECT_FEATURE highlights it without changing QGIS selection."""
+        self.polygon_layer.startEditing()
+        feat = QgsFeature()
+        box_geom = QgsGeometry.fromPolygonXY([[
+            QgsPointXY(5.0, 5.0),
+            QgsPointXY(7.0, 5.0),
+            QgsPointXY(7.0, 7.0),
+            QgsPointXY(5.0, 7.0),
+            QgsPointXY(5.0, 5.0),
+        ]])
+        feat.setGeometry(box_geom)
+        self.polygon_layer.addFeature(feat)
+        self.polygon_layer.removeSelection()
+        self.assertEqual(self.polygon_layer.selectedFeatureCount(), 0)
+
+        self.canvas.setCurrentLayer(self.polygon_layer)
+        widget = PolarArrayCanvasWidget(self.canvas)
+        tool = CADPolarArrayMapTool(self.canvas, widget, self.iface)
+        tool.activate()
+        self.assertEqual(tool.state, CADPolarArrayMapTool.STATE_SELECT_FEATURE)
+
+        from qgis.gui import QgsMapMouseEvent
+        from qgis.PyQt.QtCore import QEvent, QPointF, Qt
+        from qgis.PyQt.QtGui import QMouseEvent
+
+        mouse_ev = QMouseEvent(
+            getattr(QEvent.Type, "MouseButtonPress", getattr(QEvent, "MouseButtonPress", 2)),
+            QPointF(6.0, 6.0),
+            getattr(Qt.MouseButton, "LeftButton", getattr(Qt, "LeftButton", 1)),
+            getattr(Qt.MouseButton, "LeftButton", getattr(Qt, "LeftButton", 1)),
+            getattr(Qt.KeyboardModifier, "NoModifier", getattr(Qt, "NoModifier", 0)),
+        )
+        ev = QgsMapMouseEvent(self.canvas, mouse_ev)
+        tool._snap_point = lambda e: QgsPointXY(6.0, 6.0)
+        tool.canvasPressEvent(ev)
+
+        self.assertEqual(tool.state, CADPolarArrayMapTool.STATE_SET_CENTER)
+        self.assertEqual(len(tool.featureList), 1)
+        self.assertEqual(self.polygon_layer.selectedFeatureCount(), 0)
+        self.assertIsNotNone(tool.selection_rubberband)
+        self.assertFalse(tool.selection_rubberband.asGeometry().isEmpty())
+
+        tool.deactivate()
+        tool.deleteLater()
+        widget.deleteLater()
+        self.polygon_layer.rollBack()
+
+    def test_escape_key_step_back_and_deactivate(self):
+        """Verify Esc key steps back through all 4 CAD states and deactivates."""
+        widget = PolarArrayCanvasWidget(self.canvas)
+        tool = CADPolarArrayMapTool(self.canvas, widget, self.iface)
+        tool.activate()
+        tool.featureList = [QgsFeature()]
+        tool.featureLayer = self.polygon_layer
+        tool.center_point = QgsPointXY(0, 0)
+        tool.ref_point = QgsPointXY(10, 0)
+        tool.state = CADPolarArrayMapTool.STATE_SET_ANGLE
+
+        from qgis.PyQt.QtCore import QEvent, Qt
+        from qgis.PyQt.QtGui import QKeyEvent
+
+        def send_key(key_code):
+            ev = QKeyEvent(
+                getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", 6)),
+                key_code,
+                getattr(Qt.KeyboardModifier, "NoModifier", getattr(Qt, "NoModifier", 0)),
+            )
+            tool.keyPressEvent(ev)
+
+        esc_code = int(getattr(Qt.Key, "Key_Escape", 0x01000000))
+
+        # 1. From STATE_SET_ANGLE -> STATE_SET_BASE_RAY
+        send_key(esc_code)
+        self.assertEqual(tool.state, CADPolarArrayMapTool.STATE_SET_BASE_RAY)
+
+        # 2. From STATE_SET_BASE_RAY -> STATE_SET_CENTER
+        send_key(esc_code)
+        self.assertEqual(tool.state, CADPolarArrayMapTool.STATE_SET_CENTER)
+
+        # 3. From STATE_SET_CENTER -> STATE_SELECT_FEATURE
+        send_key(esc_code)
+        self.assertEqual(tool.state, CADPolarArrayMapTool.STATE_SELECT_FEATURE)
+        self.assertEqual(len(tool.featureList), 0)
+
+        # 4. From STATE_SELECT_FEATURE -> deactivate
+        send_key(esc_code)
+        self.assertNotEqual(self.canvas.mapTool(), tool)
+
+        tool.deleteLater()
+        widget.deleteLater()
+
+    def test_escape_key_in_hud_widget(self):
+        """Verify Esc key inside HUD spinbox emits resetRequested and steps back."""
+        widget = PolarArrayCanvasWidget(self.canvas)
+        tool = CADPolarArrayMapTool(self.canvas, widget, self.iface)
+        tool.activate()
+        tool.state = CADPolarArrayMapTool.STATE_SET_ANGLE
+        tool.center_point = QgsPointXY(0, 0)
+
+        from qgis.PyQt.QtCore import QEvent, Qt
+        from qgis.PyQt.QtGui import QKeyEvent
+
+        ev = QKeyEvent(
+            getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", 6)),
+            int(getattr(Qt.Key, "Key_Escape", 0x01000000)),
+            getattr(Qt.KeyboardModifier, "NoModifier", getattr(Qt, "NoModifier", 0)),
+        )
+        handled = widget.eventFilter(widget.spin_count, ev)
+        self.assertTrue(handled)
+        self.assertEqual(tool.state, CADPolarArrayMapTool.STATE_SET_BASE_RAY)
+
+        tool.deleteLater()
+        widget.deleteLater()
+
     def test_plugin_initgui_unload_lifecycle(self):
         """Test plugin initGui, polar array action creation and unload cleanup."""
         plugin = FilletPlugin(self.iface)

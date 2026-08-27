@@ -239,7 +239,11 @@ class PolarArrayCanvasWidget(QFrame):
             self.chk_step.setCursor(QCursor(arrow_cursor))
             self.spin_step.setCursor(QCursor(arrow_cursor))
             self.spin_fill_angle.setCursor(QCursor(arrow_cursor))
-            self.chk_rotate_features.setCursor(QCursor(arrow_cursor))
+        # Event filters
+        self.installEventFilter(self)
+        self.spin_count.installEventFilter(self)
+        self.spin_step.installEventFilter(self)
+        self.spin_fill_angle.installEventFilter(self)
         if hasattr(self.spin_step, "lineEdit") and self.spin_step.lineEdit() and ibeam_cursor is not None:
             self.spin_step.lineEdit().setCursor(QCursor(ibeam_cursor))
             self.spin_step.lineEdit().installEventFilter(self)
@@ -604,25 +608,26 @@ class PolarArrayCanvasWidget(QFrame):
         self.raise_()
 
     def eventFilter(self, obj, event):
-        evt_resize = getattr(QEvent.Type, "Resize", getattr(QEvent, "Resize", None))
-        evt_key_press = getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", None))
+        ev_type = event.type()
+        resize_type = getattr(QEvent.Type, "Resize", getattr(QEvent, "Resize", 14))
+        key_press_type = getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", 6))
 
-        if obj == self.canvas and event.type() == evt_resize:
+        if obj == self.canvas and ev_type == resize_type:
             self.reposition_to_default()
-        elif event.type() == evt_key_press:
-            key = event.key()
-            key_return = getattr(Qt.Key, "Key_Return", getattr(Qt, "Key_Return", 0x01000004))
-            key_enter = getattr(Qt.Key, "Key_Enter", getattr(Qt, "Key_Enter", 0x01000005))
-            key_escape = getattr(Qt.Key, "Key_Escape", getattr(Qt, "Key_Escape", 0x01000000))
-            key_space = getattr(Qt.Key, "Key_Space", getattr(Qt, "Key_Space", 0x20))
+        elif ev_type == key_press_type:
+            key_int = int(event.key())
+            key_escape = int(getattr(Qt.Key, "Key_Escape", 0x01000000))
+            key_return = int(getattr(Qt.Key, "Key_Return", 0x01000004))
+            key_enter = int(getattr(Qt.Key, "Key_Enter", 0x01000005))
+            key_space = int(getattr(Qt.Key, "Key_Space", 0x20))
 
-            if key in (key_return, key_enter):
-                self.commitRequested.emit()
-                return True
-            if key == key_escape:
+            if key_int in (0x01000000, key_escape):
                 self.resetRequested.emit()
                 return True
-            if key == key_space:
+            if key_int in (0x01000004, 0x01000005, key_return, key_enter):
+                self.commitRequested.emit()
+                return True
+            if key_int in (0x20, key_space):
                 from qgis.PyQt.QtWidgets import QApplication
                 focused = QApplication.focusWidget()
                 step_line_edit = getattr(self.spin_step, "lineEdit", lambda: None)()
@@ -633,6 +638,33 @@ class PolarArrayCanvasWidget(QFrame):
                 return True
 
         return super().eventFilter(obj, event)
+
+    def keyPressEvent(self, event):
+        key_int = int(event.key())
+        key_escape = int(getattr(Qt.Key, "Key_Escape", 0x01000000))
+        key_return = int(getattr(Qt.Key, "Key_Return", 0x01000004))
+        key_enter = int(getattr(Qt.Key, "Key_Enter", 0x01000005))
+        key_space = int(getattr(Qt.Key, "Key_Space", 0x20))
+
+        if key_int in (0x01000000, key_escape):
+            self.resetRequested.emit()
+            event.accept()
+            return
+        if key_int in (0x01000004, 0x01000005, key_return, key_enter):
+            self.commitRequested.emit()
+            event.accept()
+            return
+        if key_int in (0x20, key_space):
+            from qgis.PyQt.QtWidgets import QApplication
+            focused = QApplication.focusWidget()
+            step_line_edit = getattr(self.spin_step, "lineEdit", lambda: None)()
+            if focused in (self.spin_step, step_line_edit):
+                self.btn_lock_step_angle.toggle()
+            else:
+                self.btn_lock_fill_angle.toggle()
+            event.accept()
+            return
+        super().keyPressEvent(event)
 
     def focus_count_input(self):
         self.spin_count.setFocus()

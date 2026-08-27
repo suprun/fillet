@@ -25,6 +25,7 @@ except ImportError:
 from qgis.PyQt.QtWidgets import QDockWidget
 
 try:
+    from .core.geometry_engine import GeometryEngine
     from .gui.array_canvas_widget import ArrayCanvasWidget
     from .gui.array_map_tool import CADArrayMapTool
     from .gui.canvas_widget import FilletCanvasWidget
@@ -38,6 +39,8 @@ try:
     from .gui.map_tool import FilletMapTool
     from .gui.mirror_canvas_widget import MirrorCanvasWidget
     from .gui.mirror_map_tool import MirrorMapTool
+    from .gui.ortho_angles_canvas_widget import OrthoAnglesCanvasWidget
+    from .gui.ortho_angles_map_tool import CADOrthoAnglesMapTool
     from .gui.polar_array_canvas_widget import PolarArrayCanvasWidget
     from .gui.polar_array_map_tool import CADPolarArrayMapTool
     from .gui.restore_canvas_widget import RestoreCanvasWidget
@@ -63,6 +66,8 @@ except (ImportError, ValueError):
     from gui.map_tool import FilletMapTool
     from gui.mirror_canvas_widget import MirrorCanvasWidget
     from gui.mirror_map_tool import MirrorMapTool
+    from gui.ortho_angles_canvas_widget import OrthoAnglesCanvasWidget
+    from gui.ortho_angles_map_tool import CADOrthoAnglesMapTool
     from gui.polar_array_canvas_widget import PolarArrayCanvasWidget
     from gui.polar_array_map_tool import CADPolarArrayMapTool
     from gui.restore_canvas_widget import RestoreCanvasWidget
@@ -99,6 +104,7 @@ class FilletPlugin:
         self.clean_duplicates_action: Optional[QAction] = None
         self.explode_action: Optional[QAction] = None
         self.divide_line_action: Optional[QAction] = None
+        self.ortho_angles_action: Optional[QAction] = None
         self.batch_action: Optional[QAction] = None
         self.map_tool: Optional[FilletMapTool] = None
         self.array_map_tool: Optional[CADArrayMapTool] = None
@@ -107,6 +113,8 @@ class FilletPlugin:
         self.polar_array_widget: Optional[PolarArrayCanvasWidget] = None
         self.divide_line_map_tool: Optional[CADDivideLineMapTool] = None
         self.divide_line_widget: Optional[DivideLineCanvasWidget] = None
+        self.ortho_angles_map_tool: Optional[CADOrthoAnglesMapTool] = None
+        self.ortho_angles_widget: Optional[OrthoAnglesCanvasWidget] = None
         self.two_line_map_tool: Optional[TwoLineMapTool] = None
         self.restore_map_tool: Optional[RestoreMapTool] = None
         self.restore_canvas_widget: Optional[RestoreCanvasWidget] = None
@@ -360,6 +368,22 @@ class FilletPlugin:
         self.polar_array_action.setToolTip(self.tr("Створення кругового (полярного) масиву копій виділених об'єктів навколо центру"))
         self.polar_array_action.triggered.connect(self.toggle_polar_array_tool)
 
+        # 7.95. Create interactive CAD Ortho Angles Map Tool (available in QGIS 3.x and QGIS 4.x)
+        self.ortho_angles_widget = OrthoAnglesCanvasWidget(self.canvas)
+        self.ortho_angles_widget.hide()
+        self.ortho_angles_map_tool = CADOrthoAnglesMapTool(self.canvas, self.ortho_angles_widget, self.iface)
+
+        ortho_icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionOrthoAngles.svg")
+        self.ortho_angles_action = QAction(
+            QIcon(ortho_icon_path),
+            self.tr("CAD Ортогоналізація кутів (Ortho Angles)"),
+            self.iface.mainWindow(),
+        )
+        self.ortho_angles_action.setCheckable(True)
+        self.ortho_angles_action.setObjectName("actionOrthoAnglesCAD")
+        self.ortho_angles_action.setToolTip(self.tr("Інтерактивне вирівнювання кутів будівель і полігонів до прямих кутів (90°) за опорним фасадом"))
+        self.ortho_angles_action.triggered.connect(self.toggle_ortho_angles_tool)
+
         adv_tb = self.iface.advancedDigitizeToolBar()
 
         # 8. Create interactive Fillet / Chamfer and Array MapTools ONLY in QGIS 3.x (native in QGIS 4.0+)
@@ -508,7 +532,10 @@ class FilletPlugin:
             _insert_after_action(trim_extend_act, self.explode_action)
             _insert_after_action(self.explode_action, self.divide_line_action)
 
-            # 10.8. Clean and repair tool: в кінець тулбара
+            # 10.8. Ortho Angles tool: перед clean duplicate nodes
+            _insert_after_action(self.divide_line_action, self.ortho_angles_action)
+
+            # 10.9. Clean and repair tool: в кінець тулбара
             adv_tb.addAction(self.clean_duplicates_action)
         else:
             self.iface.addVectorToolBarIcon(self.polar_array_action)
@@ -521,6 +548,7 @@ class FilletPlugin:
             self.iface.addVectorToolBarIcon(self.edge_offset_action)
             self.iface.addVectorToolBarIcon(self.explode_action)
             self.iface.addVectorToolBarIcon(self.divide_line_action)
+            self.iface.addVectorToolBarIcon(self.ortho_angles_action)
             self.iface.addVectorToolBarIcon(self.clean_duplicates_action)
 
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.polar_array_action)
@@ -533,6 +561,7 @@ class FilletPlugin:
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.edge_offset_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.explode_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.divide_line_action)
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.ortho_angles_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.clean_duplicates_action)
 
         if self.canvas:
@@ -725,6 +754,20 @@ class FilletPlugin:
             self.divide_line_action.deleteLater()
             self.divide_line_action = None
 
+        # 5.95. Clean up ortho angles action
+        if self.ortho_angles_action:
+            try:
+                self.ortho_angles_action.triggered.disconnect(self.toggle_ortho_angles_tool)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            if self.iface.advancedDigitizeToolBar():
+                self.iface.advancedDigitizeToolBar().removeAction(self.ortho_angles_action)
+            self.iface.removeVectorToolBarIcon(self.ortho_angles_action)
+            self.iface.removePluginVectorMenu(self.tr("Fillet & Chamfer"), self.ortho_angles_action)
+            self.ortho_angles_action.setParent(None)
+            self.ortho_angles_action.deleteLater()
+            self.ortho_angles_action = None
+
         # 6. Clean up two line action
         if self.two_line_action:
             try:
@@ -854,6 +897,36 @@ class FilletPlugin:
             self.explode_map_tool.deleteLater()
             self.explode_map_tool = None
 
+        if self.divide_line_map_tool:
+            if self.canvas and self.canvas.mapTool() == self.divide_line_map_tool:
+                self.canvas.unsetMapTool(self.divide_line_map_tool)
+            if hasattr(self.divide_line_map_tool, "cleanup"):
+                self.divide_line_map_tool.cleanup()
+            else:
+                self.divide_line_map_tool.deactivate()
+            self.divide_line_map_tool.deleteLater()
+            self.divide_line_map_tool = None
+
+        if self.polar_array_map_tool:
+            if self.canvas and self.canvas.mapTool() == self.polar_array_map_tool:
+                self.canvas.unsetMapTool(self.polar_array_map_tool)
+            if hasattr(self.polar_array_map_tool, "cleanup"):
+                self.polar_array_map_tool.cleanup()
+            else:
+                self.polar_array_map_tool.deactivate()
+            self.polar_array_map_tool.deleteLater()
+            self.polar_array_map_tool = None
+
+        if self.ortho_angles_map_tool:
+            if self.canvas and self.canvas.mapTool() == self.ortho_angles_map_tool:
+                self.canvas.unsetMapTool(self.ortho_angles_map_tool)
+            if hasattr(self.ortho_angles_map_tool, "cleanup"):
+                self.ortho_angles_map_tool.cleanup()
+            else:
+                self.ortho_angles_map_tool.deactivate()
+            self.ortho_angles_map_tool.deleteLater()
+            self.ortho_angles_map_tool = None
+
         # 9. Clean up canvas widgets
         if self.canvas_widget:
             try:
@@ -950,6 +1023,16 @@ class FilletPlugin:
             self.polar_array_widget.setParent(None)
             self.polar_array_widget.deleteLater()
             self.polar_array_widget = None
+
+        if self.ortho_angles_widget:
+            try:
+                self.canvas.removeEventFilter(self.ortho_angles_widget)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            self.ortho_angles_widget.hide()
+            self.ortho_angles_widget.setParent(None)
+            self.ortho_angles_widget.deleteLater()
+            self.ortho_angles_widget = None
 
         # 10. Clean up settings widget and dock widget
         if self.settings_widget:
@@ -1085,6 +1168,14 @@ class FilletPlugin:
             if self.canvas and self.canvas.mapTool() == self.divide_line_map_tool:
                 self.canvas.unsetMapTool(self.divide_line_map_tool)
 
+    def toggle_ortho_angles_tool(self, checked: bool):
+        if checked:
+            if self.ortho_angles_map_tool:
+                self.canvas.setMapTool(self.ortho_angles_map_tool)
+        else:
+            if self.canvas and self.canvas.mapTool() == self.ortho_angles_map_tool:
+                self.canvas.unsetMapTool(self.ortho_angles_map_tool)
+
     def toggle_batch_panel(self, checked: bool):
         if self.dock_widget:
             self.dock_widget.setVisible(checked)
@@ -1163,6 +1254,12 @@ class FilletPlugin:
             self.polar_array_action.setChecked(is_polar_active)
             if not is_polar_active and self.polar_array_widget:
                 self.polar_array_widget.hide()
+
+        if self.ortho_angles_action:
+            is_oa_active = tool == self.ortho_angles_map_tool
+            self.ortho_angles_action.setChecked(is_oa_active)
+            if not is_oa_active and self.ortho_angles_widget:
+                self.ortho_angles_widget.hide()
 
     def _on_current_layer_changed(self, layer=None):
         self.update_action_state()
@@ -1263,6 +1360,8 @@ class FilletPlugin:
             self.explode_action.setEnabled(is_line_editable)
         if self.divide_line_action:
             self.divide_line_action.setEnabled(is_line_editable)
+        if self.ortho_angles_action:
+            self.ortho_angles_action.setEnabled(is_editable)
         if self.batch_action:
             self.batch_action.setEnabled(is_editable)
 
@@ -1296,6 +1395,13 @@ class FilletPlugin:
                 self.canvas.unsetMapTool(self.clean_duplicates_map_tool)
                 if self.clean_duplicates_action:
                     self.clean_duplicates_action.setChecked(False)
+
+            if self.ortho_angles_map_tool and self.canvas.mapTool() == self.ortho_angles_map_tool:
+                self.canvas.unsetMapTool(self.ortho_angles_map_tool)
+                if self.ortho_angles_widget:
+                    self.ortho_angles_widget.hide()
+                if self.ortho_angles_action:
+                    self.ortho_angles_action.setChecked(False)
 
         if not is_line_editable and self.canvas:
             if self.explode_map_tool and self.canvas.mapTool() == self.explode_map_tool:

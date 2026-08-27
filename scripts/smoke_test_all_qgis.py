@@ -19,6 +19,7 @@ TEST_FILES = [
     "tests/test_polar_array_tool.py",
     "tests/test_explode_tool.py",
     "tests/test_divide_line_tool.py",
+    "tests/test_ortho_angles_tool.py",
 ]
 
 def find_qgis_python_executables():

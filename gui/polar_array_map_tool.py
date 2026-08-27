@@ -150,6 +150,12 @@ class CADPolarArrayMapTool(QgsMapToolEdit):
             if hasattr(self.arc_rubberband, "setLineStyle") and _DotLine is not None:
                 self.arc_rubberband.setLineStyle(_DotLine)
 
+            # Selected feature highlight rubberband (amber/orange outline)
+            self.selection_rubberband = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PolygonGeometry)
+            self.selection_rubberband.setColor(QColor(255, 170, 0, 40))
+            self.selection_rubberband.setStrokeColor(QColor(255, 140, 0, 220))
+            self.selection_rubberband.setWidth(2)
+
     def _get_preview_rubberband(self, index: int, geom_type: QgsWkbTypes.GeometryType) -> QgsRubberBand:
         while len(self.preview_rubberbands) <= index:
             rb = QgsRubberBand(self.canvas, geom_type)
@@ -158,6 +164,37 @@ class CADPolarArrayMapTool(QgsMapToolEdit):
             rb.setWidth(2)
             self.preview_rubberbands.append(rb)
         return self.preview_rubberbands[index]
+
+    def _update_selection_highlight(self) -> None:
+        if not self.selection_rubberband or not self.canvas:
+            return
+        if not self.featureList or not self.featureLayer:
+            self.selection_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
+            return
+
+        canvas_crs = self.canvas.mapSettings().destinationCrs() if self.canvas else QgsProject.instance().crs()
+        layer_crs = self.featureLayer.crs()
+        needs_transform = canvas_crs.isValid() and layer_crs.isValid() and canvas_crs != layer_crs
+        to_canvas = QgsCoordinateTransform(layer_crs, canvas_crs, QgsProject.instance()) if needs_transform else None
+
+        geoms = []
+        for feat in self.featureList:
+            g = QgsGeometry(feat.geometry())
+            if not g.isEmpty() and not g.isNull():
+                if to_canvas:
+                    try:
+                        g.transform(to_canvas)
+                    except Exception:
+                        pass
+                geoms.append(g)
+
+        if geoms:
+            geom_type = self.featureLayer.geometryType()
+            self.selection_rubberband.reset(geom_type)
+            for g in geoms:
+                self.selection_rubberband.addGeometry(g, None)
+        else:
+            self.selection_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
 
     def activate(self) -> None:
         super().activate()
@@ -219,6 +256,13 @@ class CADPolarArrayMapTool(QgsMapToolEdit):
             self.widget.hide()
         if self.canvas:
             self.canvas.unsetMapTool(self)
+        if self.iface:
+            try:
+                pan_action = self.iface.actionPan()
+                if pan_action and hasattr(pan_action, "trigger"):
+                    pan_action.trigger()
+            except Exception:
+                pass
 
     def reset_state(self) -> None:
         layer = self.currentVectorLayer()
@@ -266,49 +310,39 @@ class CADPolarArrayMapTool(QgsMapToolEdit):
                 return match.point()
         return e.mapPoint()
 
-    def _get_target_features(self, layer: QgsVectorLayer, click_point: Optional[QgsPointXY] = None) -> List[QgsFeature]:
+    def _get_target_features(self, layer: QgsVectorLayer, point: QgsPointXY) -> List[QgsFeature]:
         if not layer or not layer.isEditable():
             return []
-        selected = layer.selectedFeatures()
-        if selected:
-            return selected
-        if click_point is None:
-            return []
+        if layer.selectedFeatureCount() > 0:
+            return list(layer.selectedFeatures())
 
-        # Find feature at click point with search tolerance
-        tol = 8.0
+        tol = 10.0
         if self.canvas:
-            mu_per_px = self.canvas.mapUnitsPerPixel()
-            tol = max(tol * mu_per_px, 1e-6)
-
-        rect = QgsRectangle(
-            click_point.x() - tol,
-            click_point.y() - tol,
-            click_point.x() + tol,
-            click_point.y() + tol,
-        )
-        # Transform rect to layer CRS if needed
+            mupp = self.canvas.mapUnitsPerPixel()
+            tol = mupp * 12.0
+        search_rect = QgsRectangle(point.x() - tol, point.y() - tol, point.x() + tol, point.y() + tol)
         canvas_crs = self.canvas.mapSettings().destinationCrs() if self.canvas else QgsProject.instance().crs()
         layer_crs = layer.crs()
         if canvas_crs.isValid() and layer_crs.isValid() and canvas_crs != layer_crs:
             transform = QgsCoordinateTransform(canvas_crs, layer_crs, QgsProject.instance())
-            try:
-                rect = transform.transformBoundingBox(rect)
-            except Exception:
-                pass
+            search_rect = transform.transformBoundingBox(search_rect)
 
-        req = QgsFeatureRequest().setFilterRect(rect).setFlags(QgsFeatureRequest.Flag.ExactIntersect)
-        for feat in layer.getFeatures(req):
-            if not feat.geometry().isEmpty():
-                return [feat]
-        return []
+        req = layer.getFeatures(QgsFeatureRequest().setFilterRect(search_rect))
+        pt_geom = QgsGeometry.fromPointXY(point)
+        found = []
+        for feat in req:
+            g = feat.geometry()
+            if not g.isEmpty():
+                found.append(feat)
+                break
+        return found
 
     def canvasPressEvent(self, e: QgsMapMouseEvent) -> None:
-        if e.button() == _RightButton:
+        button = e.button()
+        if button == _RightButton:
             self.step_back()
             return
-
-        if e.button() != _LeftButton:
+        if button != _LeftButton:
             return
 
         point = self._snap_point(e)
@@ -322,7 +356,7 @@ class CADPolarArrayMapTool(QgsMapToolEdit):
                 return
             self.featureLayer = layer
             self.featureList = feats
-            layer.selectByIds([f.id() for f in feats])
+            self._update_selection_highlight()
 
             if self.canvas and not confirm_features_in_canvas_extent(
                 self.canvas, layer, self.featureList, self.tr("CAD Полярний масив")
@@ -342,6 +376,7 @@ class CADPolarArrayMapTool(QgsMapToolEdit):
                     return
                 self.featureLayer = layer
                 self.featureList = feats
+                self._update_selection_highlight()
 
             if self.canvas and not confirm_features_in_canvas_extent(
                 self.canvas, layer, self.featureList, self.tr("CAD Полярний масив")
@@ -552,9 +587,14 @@ class CADPolarArrayMapTool(QgsMapToolEdit):
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
         key = event.key()
+        key_int = int(key)
+        key_escape = int(getattr(Qt.Key, "Key_Escape", 0x01000000))
+        key_return = int(getattr(Qt.Key, "Key_Return", 0x01000004))
+        key_enter = int(getattr(Qt.Key, "Key_Enter", 0x01000005))
+        key_tab = int(getattr(Qt.Key, "Key_Tab", 0x01000001))
 
         # If user types numbers, redirect focus to HUD spinbox
-        if event.text() and (event.text().isdigit() or event.text() in ".-+," or key == _Key_Backspace):
+        if event.text() and (event.text().isdigit() or event.text() in ".-+," or key_int == 0x01000003):
             if self.widget:
                 from qgis.PyQt.QtWidgets import QApplication
                 focused = QApplication.focusWidget()
@@ -574,16 +614,16 @@ class CADPolarArrayMapTool(QgsMapToolEdit):
                     event.accept()
                     return
 
-        if key == _Key_Escape:
+        if key_int in (0x01000000, key_escape):
             self.step_back()
             event.accept()
             return
-        elif key in (_Key_Return, _Key_Enter):
+        elif key_int in (0x01000004, 0x01000005, key_return, key_enter):
             if self.state == self.STATE_SET_ANGLE:
                 self.commit_array()
                 event.accept()
                 return
-        elif key == _Key_Tab:
+        elif key_int in (0x01000001, key_tab):
             if self.widget:
                 from qgis.PyQt.QtWidgets import QApplication
                 focused = QApplication.focusWidget()

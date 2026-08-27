@@ -391,6 +391,13 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
 
         plugin.unload()
 
+    def test_ortho_angles_action_and_widget_init(self):
+        """Verify CAD Ortho Angles action, map tool, and widget are initialized in initGui."""
+        self.assertIsNotNone(self.plugin.ortho_angles_action)
+        self.assertIsNotNone(self.plugin.ortho_angles_map_tool)
+        self.assertIsNotNone(self.plugin.ortho_angles_widget)
+        self.assertFalse(self.plugin.ortho_angles_widget.isVisible())
+
 
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(TestPluginLifecycleAndEditState)
