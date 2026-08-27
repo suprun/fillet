@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   height="24"
+   viewBox="0 0 24 24"
+   width="24"
+   version="1.1"
+   xmlns="http://www.w3.org/2000/svg">
+  <!-- Base continuous line -->
+  <line
+     x1="2"
+     y1="16"
+     x2="22"
+     y2="8"
+     style="stroke:#94a3b8;stroke-width:2;stroke-linecap:round" />
+
+  <!-- Segment 1: Blue -->
+  <line
+     x1="2"
+     y1="16"
+     x2="8.67"
+     y2="13.33"
+     style="stroke:#2563eb;stroke-width:2.6;stroke-linecap:round" />
+
+  <!-- Segment 2: Emerald Green -->
+  <line
+     x1="8.67"
+     y1="13.33"
+     x2="15.33"
+     y2="10.67"
+     style="stroke:#059669;stroke-width:2.6;stroke-linecap:round" />
+
+  <!-- Segment 3: Blue -->
+  <line
+     x1="15.33"
+     y1="10.67"
+     x2="22"
+     y2="8"
+     style="stroke:#2563eb;stroke-width:2.6;stroke-linecap:round" />
+
+  <!-- Endpoints -->
+  <circle cx="2" cy="16" r="1.6" style="fill:#1e3a8a" />
+  <circle cx="22" cy="8" r="1.6" style="fill:#1e3a8a" />
+
+  <!-- Division ticks / cut notches perpendicular to line -->
+  <line
+     x1="7.5"
+     y1="10.5"
+     x2="9.8"
+     y2="16.2"
+     style="stroke:#dc2626;stroke-width:2;stroke-linecap:round" />
+  <circle cx="8.67" cy="13.33" r="1.8" style="fill:#dc2626" />
+
+  <line
+     x1="14.2"
+     y1="7.8"
+     x2="16.5"
+     y2="13.5"
+     style="stroke:#dc2626;stroke-width:2;stroke-linecap:round" />
+  <circle cx="15.33" cy="10.67" r="1.8" style="fill:#dc2626" />
+
+  <!-- Division mark indicator (small division symbol / tick marks at top) -->
+  <path
+     d="M 5,7 L 7,7 M 6,5 L 6,9"
+     style="stroke:#ea580c;stroke-width:1.4;stroke-linecap:round" />
+  <path
+     d="M 18,3 L 20,3 M 19,1 L 19,5"
+     style="stroke:#ea580c;stroke-width:1.4;stroke-linecap:round" />
+</svg>

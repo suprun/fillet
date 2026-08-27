@@ -393,6 +393,61 @@ class TestScaleRotateTool(unittest.TestCase):
         layer.rollBack()
         QgsProject.instance().removeMapLayer(layer.id())
 
+    def test_scale_rotate_continuous_past_180_degrees(self):
+        """Verify that dragging the mouse past 180 deg does not flip and smoothly tracks continuous rotation."""
+        from qgis.gui import QgsMapMouseEvent
+        from qgis.PyQt.QtCore import QEvent, QPointF, Qt
+        from qgis.PyQt.QtGui import QMouseEvent
+
+        layer = QgsVectorLayer("Polygon?crs=EPSG:3857", "temp_poly", "memory")
+        pr = layer.dataProvider()
+        feat = QgsFeature()
+        geom = QgsGeometry.fromPolygonXY([[QgsPointXY(0, 0), QgsPointXY(10, 0), QgsPointXY(10, 10), QgsPointXY(0, 10)]])
+        feat.setGeometry(geom)
+        pr.addFeatures([feat])
+        layer.updateExtents()
+
+        layer.startEditing()
+        layer.selectByIds([1])
+        self.canvas.setCurrentLayer(layer)
+
+        widget = ScaleRotateCanvasWidget(self.canvas)
+        tool = ScaleRotateMapTool(self.canvas, widget)
+        tool.activate()
+
+        tool.origin_point = QgsPointXY(0.0, 0.0)
+        tool.ref_point = QgsPointXY(10.0, 0.0)
+        tool.state = tool.STATE_TRANSFORMING
+        tool._last_mouse_angle_rad = 0.0
+        tool._accumulated_angle_deg = 0.0
+
+        def make_map_mouse_event(map_pt: QgsPointXY):
+            screen_qpt = QPointF(float(map_pt.x()), float(map_pt.y()))
+            mouse_ev = QMouseEvent(
+                getattr(QEvent.Type, "MouseMove", getattr(QEvent, "MouseMove", 5)),
+                screen_qpt,
+                getattr(Qt.MouseButton, "NoButton", getattr(Qt, "NoButton", 0)),
+                getattr(Qt.MouseButton, "NoButton", getattr(Qt, "NoButton", 0)),
+                getattr(Qt.KeyboardModifier, "NoModifier", getattr(Qt, "NoModifier", 0)),
+            )
+            map_ev = QgsMapMouseEvent(self.canvas, mouse_ev)
+            tool.toMapCoordinates = lambda pos: map_pt
+            return map_ev
+
+        # Move to 90 deg (0, 10)
+        tool.canvasMoveEvent(make_map_mouse_event(QgsPointXY(0.0, 10.0)))
+        self.assertAlmostEqual(tool.current_angle, 90.0, delta=1.0)
+
+        # Move to 180 deg (-10, 0.1)
+        tool.canvasMoveEvent(make_map_mouse_event(QgsPointXY(-10.0, 0.1)))
+        self.assertAlmostEqual(tool.current_angle, 180.0, delta=2.0)
+
+        # Move past 180 to 270 deg (0, -10) -> MUST NOT FLIP to -90, must be +270
+        tool.canvasMoveEvent(make_map_mouse_event(QgsPointXY(0.0, -10.0)))
+        self.assertAlmostEqual(tool.current_angle, 270.0, delta=2.0)
+
+        layer.rollBack()
+
 
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(TestScaleRotateTool)

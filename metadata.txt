@@ -4,17 +4,36 @@ qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
 description=Interactive Fillet, Chamfer, Two-Line Merge, Corner Restoration, CAD Rotation, Mirror, Scale, Edge Offset, Feature Array & Explode Line suite for QGIS.
 about=Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), Interactive CAD Rotation, CAD Mirror Tool, CAD 3-Point Scale with Rotation Tool, CAD Edge Offset (Parallel Shift) Tool, CAD Feature Array along a line tool, and CAD Explode Line Tool for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.
-version=1.0.0.71
+version=1.0.0.79
 author=suprun
 email=suprun.serhiy+qgis@gmail.com
 homepage=https://github.com/suprun/fillet
 repository=https://github.com/suprun/fillet
 tracker=https://github.com/suprun/fillet/issues
-tags=cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation, mirror, symmetry, scale, scale-rotate, offset, edge-offset, array, feature-array, explode, duplicate, nodes, clean, deduplicate, self-intersection, topology, geometry, digitizing, curve, batch, merge, qgis4
+tags=cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation, mirror, symmetry, scale, scale-rotate, offset, edge-offset, array, feature-array, polar-array, circular-array, divide, measure, line-division, explode, duplicate, nodes, clean, deduplicate, self-intersection, topology, geometry, digitizing, curve, batch, merge, qgis4
 icon=icon.png
 experimental=False
 deprecated=False
-changelog=1.0.0.71:
+changelog=1.0.0.79:
+    - Fixed guide line gap and angle desynchronization when rotating past 360° and reversing direction. Unified radius ray with arc angle so visual guides and feature copies are 100% synchronized in both CW and CCW directions.
+    1.0.0.78:
+    - Implemented 4-step CAD workflow for Polar Array: Select Feature(s) -> Set Center -> Specify 0° Baseline Direction -> Rotate Array with seamless real-time angle synchronization and full-circle sweep.
+    1.0.0.77:
+    - Added 0° baseline reference ray (indigo dashed line) to CAD Polar Array preview.
+    - Clamped angle accumulation strictly to [-360°, +360°] with subtle 360° magnetic snap to prevent over-winding and eliminate 355° jump.
+    1.0.0.76:
+    - Added lock and preset/history menu buttons to both Step Angle and Fill Angle rows on the CAD Polar Array HUD panel.
+    - Implemented step-back and clean tool deactivation for the Escape key and right-click across all CAD Polar Array states.
+    1.0.0.75:
+    - Enhanced CAD Polar Array tool: 3-step workflow (Select Feature -> Center Point -> Angle/Confirm), distinct individual rubberbands for each copy, amber cross center marker, fill angle lock button, and step angle presets & recent values popup menu.
+    1.0.0.74:
+    - Fixed rotation angle tracking across CAD Rotate, Scale & Rotate, and Polar Array tools to prevent guide line flip and allow smooth continuous rotation past 180° up to 360°.
+    1.0.0.73:
+    - Added CAD Divide / Measure Line tool (CADDivideLineMapTool) with floating top-right HUD panel, interactive segment preview, alternating segment coloring, equal parts count vs fixed step length, reverse direction, and single vs multipart output.
+    - Updated HUD canvas panel styling and top-right pinned placement for Polar Array and Divide Line tools.
+    1.0.0.72:
+    - Added CAD Polar (Circular) Feature Array tool (CADPolarArrayMapTool) with floating HUD panel, interactive rubberband preview, snapping, angle step/fill angle control, and feature rotation.
+    1.0.0.71:
     - Redesigned plugin icon based on standard QGIS Advanced Digitizing CAD tool with transparent background and stylish PRO badge.
     1.0.0.70:
     - Updated advanced digitizing toolbar action ordering according to user layout: Explode after Trim/Extend, Two-Line Fillet/Chamfer after Batch Fillet/Chamfer, Scale & Rotate after Scale Feature, Edge Offset after Offset Curve, Mirror before Simplify Feature, Clean & Repair at end.

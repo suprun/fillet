@@ -80,6 +80,8 @@ class RotateMapTool(QgsMapToolEdit):
         self.pivot_point: Optional[QgsPointXY] = None
         self.ref_point: Optional[QgsPointXY] = None
         self.current_angle: float = 0.0
+        self._last_mouse_angle_rad: Optional[float] = None
+        self._accumulated_angle_deg: float = 0.0
 
         # Snapping indicator
         self.snap_indicator = QgsSnapIndicator(self.canvas)
@@ -163,6 +165,8 @@ class RotateMapTool(QgsMapToolEdit):
         self.pivot_point = None
         self.ref_point = None
         self.current_angle = 0.0
+        self._last_mouse_angle_rad = None
+        self._accumulated_angle_deg = 0.0
         self.widget.set_step(RotationCanvasWidget.STEP_PIVOT)
         self._clear_visuals()
 
@@ -182,13 +186,10 @@ class RotateMapTool(QgsMapToolEdit):
         return None
 
     def _get_target_features(self, layer: QgsVectorLayer) -> List[QgsFeature]:
-        """Returns selected features or all features if none selected."""
+        """Returns selected features or empty list."""
         if not layer:
             return []
-        selected = layer.selectedFeatures()
-        if selected:
-            return selected
-        return []
+        return layer.selectedFeatures()
 
     def canvasMoveEvent(self, event: QgsMapMouseEvent):
         layer = self.current_vector_layer()
@@ -246,17 +247,27 @@ class RotateMapTool(QgsMapToolEdit):
                 )
 
                 if not self.widget.is_angle_locked:
-                    angle_deg = GeometryEngine.calculate_rotation_angle(
-                        self.pivot_point,
-                        self.ref_point,
-                        map_pt,
-                    )
+                    dx = map_pt.x() - self.pivot_point.x()
+                    dy = map_pt.y() - self.pivot_point.y()
+                    if math.hypot(dx, dy) > 1e-6:
+                        cur_rad = math.atan2(dy, dx)
+                        if self._last_mouse_angle_rad is not None:
+                            d_rad = (cur_rad - self._last_mouse_angle_rad + math.pi) % (2.0 * math.pi) - math.pi
+                            self._accumulated_angle_deg += math.degrees(d_rad)
+                        else:
+                            base_rad = math.atan2(self.ref_point.y() - self.pivot_point.y(), self.ref_point.x() - self.pivot_point.x())
+                            d_rad = (cur_rad - base_rad + math.pi) % (2.0 * math.pi) - math.pi
+                            self._accumulated_angle_deg = math.degrees(d_rad)
+                        self._last_mouse_angle_rad = cur_rad
 
+                    raw_angle = self._accumulated_angle_deg
                     shift_pressed = bool(_ShiftModifier is not None and (event.modifiers() & _ShiftModifier))
                     eff_snap = self.widget.get_effective_snap_step(shift_pressed)
 
                     if eff_snap is not None and eff_snap > 0.0:
-                        angle_deg = round(angle_deg / eff_snap) * eff_snap
+                        angle_deg = round(raw_angle / eff_snap) * eff_snap
+                    else:
+                        angle_deg = raw_angle
 
                     self.current_angle = angle_deg
                     self.widget.set_angle(angle_deg, block_signals=True)
@@ -328,19 +339,32 @@ class RotateMapTool(QgsMapToolEdit):
                 else:
                     self.state = self.STATE_ROTATING
                     self.widget.set_step(RotationCanvasWidget.STEP_ROTATING)
+                    dx = self.ref_point.x() - self.pivot_point.x()
+                    dy = self.ref_point.y() - self.pivot_point.y()
+                    self._last_mouse_angle_rad = math.atan2(dy, dx)
+                    self._accumulated_angle_deg = 0.0
+                    self.current_angle = 0.0
                     self._update_preview(self.current_angle)
 
         elif self.state == self.STATE_ROTATING:
             if not self.widget.is_angle_locked and self.pivot_point and self.ref_point:
-                angle_deg = GeometryEngine.calculate_rotation_angle(
-                    self.pivot_point,
-                    self.ref_point,
-                    map_pt,
-                )
+                # Update angle one last time with current map_pt before committing
+                dx = map_pt.x() - self.pivot_point.x()
+                dy = map_pt.y() - self.pivot_point.y()
+                if math.hypot(dx, dy) > 1e-6:
+                    cur_rad = math.atan2(dy, dx)
+                    if self._last_mouse_angle_rad is not None:
+                        d_rad = (cur_rad - self._last_mouse_angle_rad + math.pi) % (2.0 * math.pi) - math.pi
+                        self._accumulated_angle_deg += math.degrees(d_rad)
+                    self._last_mouse_angle_rad = cur_rad
+
+                raw_angle = self._accumulated_angle_deg
                 shift_pressed = bool(_ShiftModifier is not None and (event.modifiers() & _ShiftModifier))
                 eff_snap = self.widget.get_effective_snap_step(shift_pressed)
                 if eff_snap is not None and eff_snap > 0.0:
-                    angle_deg = round(angle_deg / eff_snap) * eff_snap
+                    angle_deg = round(raw_angle / eff_snap) * eff_snap
+                else:
+                    angle_deg = raw_angle
                 self.current_angle = angle_deg
                 self.widget.set_angle(angle_deg, block_signals=True)
 
@@ -354,7 +378,21 @@ class RotateMapTool(QgsMapToolEdit):
     def _on_widget_angle_changed(self, angle: float):
         if self.state == self.STATE_ROTATING and self.pivot_point:
             self.current_angle = angle
+            self._accumulated_angle_deg = angle
             self._update_preview(self.current_angle)
+            if self.ref_point:
+                base_rad = math.atan2(self.ref_point.y() - self.pivot_point.y(), self.ref_point.x() - self.pivot_point.x())
+                r = GeometryEngine.distance(self.pivot_point, self.ref_point)
+                target_rad = base_rad + math.radians(angle)
+                target_pt = QgsPointXY(
+                    self.pivot_point.x() + r * math.cos(target_rad),
+                    self.pivot_point.y() + r * math.sin(target_rad),
+                )
+                self.target_ray_rubberband.setToGeometry(
+                    QgsGeometry.fromPolylineXY([self.pivot_point, target_pt]),
+                    None,
+                )
+                self._update_angle_arc(target_pt, self.current_angle)
 
     def _update_preview(self, angle_deg_ccw: float):
         """Updates rubberband preview of rotated selected features."""

@@ -29,6 +29,8 @@ try:
     from .gui.array_map_tool import CADArrayMapTool
     from .gui.canvas_widget import FilletCanvasWidget
     from .gui.clean_duplicate_nodes_map_tool import CleanDuplicateNodesMapTool
+    from .gui.divide_line_canvas_widget import DivideLineCanvasWidget
+    from .gui.divide_line_map_tool import CADDivideLineMapTool
     from .gui.edge_offset_canvas_widget import EdgeOffsetCanvasWidget
     from .gui.edge_offset_map_tool import EdgeOffsetMapTool
     from .gui.explode_canvas_widget import ExplodeCanvasWidget
@@ -36,6 +38,8 @@ try:
     from .gui.map_tool import FilletMapTool
     from .gui.mirror_canvas_widget import MirrorCanvasWidget
     from .gui.mirror_map_tool import MirrorMapTool
+    from .gui.polar_array_canvas_widget import PolarArrayCanvasWidget
+    from .gui.polar_array_map_tool import CADPolarArrayMapTool
     from .gui.restore_canvas_widget import RestoreCanvasWidget
     from .gui.restore_map_tool import RestoreMapTool
     from .gui.rotate_map_tool import RotateMapTool
@@ -50,6 +54,8 @@ except (ImportError, ValueError):
     from gui.array_map_tool import CADArrayMapTool
     from gui.canvas_widget import FilletCanvasWidget
     from gui.clean_duplicate_nodes_map_tool import CleanDuplicateNodesMapTool
+    from gui.divide_line_canvas_widget import DivideLineCanvasWidget
+    from gui.divide_line_map_tool import CADDivideLineMapTool
     from gui.edge_offset_canvas_widget import EdgeOffsetCanvasWidget
     from gui.edge_offset_map_tool import EdgeOffsetMapTool
     from gui.explode_canvas_widget import ExplodeCanvasWidget
@@ -57,6 +63,8 @@ except (ImportError, ValueError):
     from gui.map_tool import FilletMapTool
     from gui.mirror_canvas_widget import MirrorCanvasWidget
     from gui.mirror_map_tool import MirrorMapTool
+    from gui.polar_array_canvas_widget import PolarArrayCanvasWidget
+    from gui.polar_array_map_tool import CADPolarArrayMapTool
     from gui.restore_canvas_widget import RestoreCanvasWidget
     from gui.restore_map_tool import RestoreMapTool
     from gui.rotate_map_tool import RotateMapTool
@@ -81,6 +89,7 @@ class FilletPlugin:
 
         self.action: Optional[QAction] = None
         self.array_action: Optional[QAction] = None
+        self.polar_array_action: Optional[QAction] = None
         self.two_line_action: Optional[QAction] = None
         self.restore_action: Optional[QAction] = None
         self.rotate_action: Optional[QAction] = None
@@ -89,10 +98,15 @@ class FilletPlugin:
         self.edge_offset_action: Optional[QAction] = None
         self.clean_duplicates_action: Optional[QAction] = None
         self.explode_action: Optional[QAction] = None
+        self.divide_line_action: Optional[QAction] = None
         self.batch_action: Optional[QAction] = None
         self.map_tool: Optional[FilletMapTool] = None
         self.array_map_tool: Optional[CADArrayMapTool] = None
         self.array_widget: Optional[ArrayCanvasWidget] = None
+        self.polar_array_map_tool: Optional[CADPolarArrayMapTool] = None
+        self.polar_array_widget: Optional[PolarArrayCanvasWidget] = None
+        self.divide_line_map_tool: Optional[CADDivideLineMapTool] = None
+        self.divide_line_widget: Optional[DivideLineCanvasWidget] = None
         self.two_line_map_tool: Optional[TwoLineMapTool] = None
         self.restore_map_tool: Optional[RestoreMapTool] = None
         self.restore_canvas_widget: Optional[RestoreCanvasWidget] = None
@@ -314,6 +328,38 @@ class FilletPlugin:
         self.explode_action.setToolTip(self.tr("Інтерактивний CAD інструмент розбиття ліній на окремі сегменти або складові частини (multipart)"))
         self.explode_action.triggered.connect(self.toggle_explode_tool)
 
+        # 7.85. Create interactive CAD Divide / Measure Line Map Tool
+        self.divide_line_widget = DivideLineCanvasWidget(self.canvas)
+        self.divide_line_widget.hide()
+        self.divide_line_map_tool = CADDivideLineMapTool(self.canvas, self.divide_line_widget, self.iface)
+
+        divide_line_icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionDivideLine.svg")
+        self.divide_line_action = QAction(
+            QIcon(divide_line_icon_path),
+            self.tr("CAD Поділ лінії (Divide / Measure Line)"),
+            self.iface.mainWindow(),
+        )
+        self.divide_line_action.setCheckable(True)
+        self.divide_line_action.setObjectName("actionDivideLineCAD")
+        self.divide_line_action.setToolTip(self.tr("Інтерактивний CAD поділ ліній на рівні частини або за фіксованим кроком довжини"))
+        self.divide_line_action.triggered.connect(self.toggle_divide_line_tool)
+
+        # 7.9. Create interactive CAD Polar (Circular) Array Map Tool (available in QGIS 3.x and QGIS 4.x)
+        self.polar_array_widget = PolarArrayCanvasWidget(self.canvas)
+        self.polar_array_widget.hide()
+        self.polar_array_map_tool = CADPolarArrayMapTool(self.canvas, self.polar_array_widget, self.iface)
+
+        polar_array_icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionPolarArray.svg")
+        self.polar_array_action = QAction(
+            QIcon(polar_array_icon_path),
+            self.tr("CAD Полярний масив (Polar Array)"),
+            self.iface.mainWindow(),
+        )
+        self.polar_array_action.setCheckable(True)
+        self.polar_array_action.setObjectName("actionPolarArrayCAD")
+        self.polar_array_action.setToolTip(self.tr("Створення кругового (полярного) масиву копій виділених об'єктів навколо центру"))
+        self.polar_array_action.triggered.connect(self.toggle_polar_array_tool)
+
         adv_tb = self.iface.advancedDigitizeToolBar()
 
         # 8. Create interactive Fillet / Chamfer and Array MapTools ONLY in QGIS 3.x (native in QGIS 4.0+)
@@ -424,7 +470,14 @@ class FilletPlugin:
 
         # 10. Position toolbar actions according to standard CAD workflow
         if adv_tb:
-            # 10.1. Fillet & Chamfer group: Anchor (Fillet) -> restore_action -> batch_action -> two_line_action (Join lines)
+            # 10.1. Polar array tool: після linear array_action, або перед rotate_action
+            if self.array_action:
+                _insert_after_action(self.array_action, self.polar_array_action)
+            else:
+                _rotate_ref = _find_adv_action(lambda nl, n: "rotatefeature" in nl or n == "mActionRotateFeature" or "rotate" in nl)
+                _insert_before_action(_rotate_ref or self.rotate_action, self.polar_array_action)
+
+            # 10.2. Fillet & Chamfer group: Anchor (Fillet) -> restore_action -> batch_action -> two_line_action (Join lines)
             anchor_act = self.action
             if not anchor_act:
                 anchor_act = _find_adv_action(lambda nl, n: "chamfer" in nl or "fillet" in nl)
@@ -434,29 +487,31 @@ class FilletPlugin:
             # кнопка join two lines with fillet/chamfer після batch fillet/chamfer
             _insert_after_action(self.batch_action, self.two_line_action)
 
-            # 10.2. Rotate tool: after system rotate feature
+            # 10.3. Rotate tool: after system rotate feature
             rotate_act = _find_adv_action(lambda nl, n: "rotatefeature" in nl or n == "mActionRotateFeature" or "rotate" in nl)
             _insert_after_action(rotate_act, self.rotate_action)
 
-            # 10.3. Scale and Rotate tool: після системного scale feature
+            # 10.4. Scale and Rotate tool: після системного scale feature
             scale_act = _find_adv_action(lambda nl, n: "scalefeature" in nl or n == "mActionScaleFeature" or "scale" in nl)
             _insert_after_action(scale_act, self.scale_rotate_action)
 
-            # 10.4. Mirror tool: перед системною simplify feature
+            # 10.5. Mirror tool: перед системною simplify feature
             simplify_act = _find_adv_action(lambda nl, n: "simplifyfeature" in nl or n == "mActionSimplifyFeature" or "simplify" in nl)
             _insert_before_action(simplify_act, self.mirror_action)
 
-            # 10.5. Edge buffer (Offset) tool: після системного offset curve
+            # 10.6. Edge buffer (Offset) tool: після системного offset curve
             offset_act = _find_adv_action(lambda nl, n: "offsetcurve" in nl or n == "mActionOffsetCurve" or "offset" in nl)
             _insert_after_action(offset_act, self.edge_offset_action)
 
-            # 10.6. Split lines (Explode) tool: після стандартної trim/extend feature
+            # 10.7. Split lines (Explode) and Divide line tools: після стандартної trim/extend feature
             trim_extend_act = _find_adv_action(lambda nl, n: "trimextend" in nl or n == "mActionTrimExtend" or "trim" in nl or "extend" in nl)
             _insert_after_action(trim_extend_act, self.explode_action)
+            _insert_after_action(self.explode_action, self.divide_line_action)
 
-            # 10.7. Clean and repair tool: в кінець тулбара
+            # 10.8. Clean and repair tool: в кінець тулбара
             adv_tb.addAction(self.clean_duplicates_action)
         else:
+            self.iface.addVectorToolBarIcon(self.polar_array_action)
             self.iface.addVectorToolBarIcon(self.restore_action)
             self.iface.addVectorToolBarIcon(self.batch_action)
             self.iface.addVectorToolBarIcon(self.two_line_action)
@@ -465,8 +520,10 @@ class FilletPlugin:
             self.iface.addVectorToolBarIcon(self.mirror_action)
             self.iface.addVectorToolBarIcon(self.edge_offset_action)
             self.iface.addVectorToolBarIcon(self.explode_action)
+            self.iface.addVectorToolBarIcon(self.divide_line_action)
             self.iface.addVectorToolBarIcon(self.clean_duplicates_action)
 
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.polar_array_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.restore_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.batch_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.two_line_action)
@@ -475,6 +532,7 @@ class FilletPlugin:
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.mirror_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.edge_offset_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.explode_action)
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.divide_line_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.clean_duplicates_action)
 
         if self.canvas:
@@ -540,6 +598,20 @@ class FilletPlugin:
             self.array_action.setParent(None)
             self.array_action.deleteLater()
             self.array_action = None
+
+        # 2.6. Clean up polar array action
+        if self.polar_array_action:
+            try:
+                self.polar_array_action.triggered.disconnect(self.toggle_polar_array_tool)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            if self.iface.advancedDigitizeToolBar():
+                self.iface.advancedDigitizeToolBar().removeAction(self.polar_array_action)
+            self.iface.removeVectorToolBarIcon(self.polar_array_action)
+            self.iface.removePluginVectorMenu(self.tr("Fillet & Chamfer"), self.polar_array_action)
+            self.polar_array_action.setParent(None)
+            self.polar_array_action.deleteLater()
+            self.polar_array_action = None
 
         # 3. Clean up restore action
         if self.restore_action:
@@ -638,6 +710,20 @@ class FilletPlugin:
             self.explode_action.setParent(None)
             self.explode_action.deleteLater()
             self.explode_action = None
+
+        # 5.9. Clean up divide line action
+        if self.divide_line_action:
+            try:
+                self.divide_line_action.triggered.disconnect(self.toggle_divide_line_tool)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            if self.iface.advancedDigitizeToolBar():
+                self.iface.advancedDigitizeToolBar().removeAction(self.divide_line_action)
+            self.iface.removeVectorToolBarIcon(self.divide_line_action)
+            self.iface.removePluginVectorMenu(self.tr("Fillet & Chamfer"), self.divide_line_action)
+            self.divide_line_action.setParent(None)
+            self.divide_line_action.deleteLater()
+            self.divide_line_action = None
 
         # 6. Clean up two line action
         if self.two_line_action:
@@ -839,11 +925,31 @@ class FilletPlugin:
             self.explode_widget.deleteLater()
             self.explode_widget = None
 
+        if self.divide_line_widget:
+            try:
+                self.canvas.removeEventFilter(self.divide_line_widget)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            self.divide_line_widget.hide()
+            self.divide_line_widget.setParent(None)
+            self.divide_line_widget.deleteLater()
+            self.divide_line_widget = None
+
         if self.array_widget:
             self.array_widget.hide()
             self.array_widget.setParent(None)
             self.array_widget.deleteLater()
             self.array_widget = None
+
+        if self.polar_array_widget:
+            try:
+                self.canvas.removeEventFilter(self.polar_array_widget)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            self.polar_array_widget.hide()
+            self.polar_array_widget.setParent(None)
+            self.polar_array_widget.deleteLater()
+            self.polar_array_widget = None
 
         # 10. Clean up settings widget and dock widget
         if self.settings_widget:
@@ -898,6 +1004,14 @@ class FilletPlugin:
         else:
             if self.canvas and self.canvas.mapTool() == self.array_map_tool:
                 self.canvas.unsetMapTool(self.array_map_tool)
+
+    def toggle_polar_array_tool(self, checked: bool):
+        if checked:
+            if self.polar_array_map_tool:
+                self.canvas.setMapTool(self.polar_array_map_tool)
+        else:
+            if self.canvas and self.canvas.mapTool() == self.polar_array_map_tool:
+                self.canvas.unsetMapTool(self.polar_array_map_tool)
 
     def toggle_two_line_tool(self, checked: bool):
         if checked:
@@ -963,6 +1077,14 @@ class FilletPlugin:
             if self.canvas and self.canvas.mapTool() == self.explode_map_tool:
                 self.canvas.unsetMapTool(self.explode_map_tool)
 
+    def toggle_divide_line_tool(self, checked: bool):
+        if checked:
+            if self.divide_line_map_tool:
+                self.canvas.setMapTool(self.divide_line_map_tool)
+        else:
+            if self.canvas and self.canvas.mapTool() == self.divide_line_map_tool:
+                self.canvas.unsetMapTool(self.divide_line_map_tool)
+
     def toggle_batch_panel(self, checked: bool):
         if self.dock_widget:
             self.dock_widget.setVisible(checked)
@@ -1024,11 +1146,23 @@ class FilletPlugin:
             if not is_explode_active and self.explode_widget:
                 self.explode_widget.hide()
 
+        if self.divide_line_action:
+            is_divide_active = tool == self.divide_line_map_tool
+            self.divide_line_action.setChecked(is_divide_active)
+            if not is_divide_active and self.divide_line_widget:
+                self.divide_line_widget.hide()
+
         if self.array_action:
             is_array_active = tool == self.array_map_tool
             self.array_action.setChecked(is_array_active)
             if not is_array_active and self.array_widget:
                 self.array_widget.hide()
+
+        if self.polar_array_action:
+            is_polar_active = tool == self.polar_array_map_tool
+            self.polar_array_action.setChecked(is_polar_active)
+            if not is_polar_active and self.polar_array_widget:
+                self.polar_array_widget.hide()
 
     def _on_current_layer_changed(self, layer=None):
         self.update_action_state()
@@ -1091,6 +1225,8 @@ class FilletPlugin:
         if is_vector and is_line_editable:
             if self.explode_widget:
                 self.explode_widget.update_layer_capabilities(layer)
+            if self.divide_line_widget and hasattr(self.divide_line_widget, "adapt_to_crs"):
+                self.divide_line_widget.adapt_to_crs(layer.crs())
 
         if self.action:
             self.action.setEnabled(is_editable)
@@ -1107,6 +1243,8 @@ class FilletPlugin:
                 icon_path = os.path.join(self.plugin_dir, "resources", "icons", icon_name)
                 if os.path.exists(icon_path):
                     self.array_action.setIcon(QIcon(icon_path))
+        if self.polar_array_action:
+            self.polar_array_action.setEnabled(is_array_editable)
         if self.two_line_action:
             self.two_line_action.setEnabled(is_line_editable)
         if self.restore_action:
@@ -1123,6 +1261,8 @@ class FilletPlugin:
             self.clean_duplicates_action.setEnabled(is_editable)
         if self.explode_action:
             self.explode_action.setEnabled(is_line_editable)
+        if self.divide_line_action:
+            self.divide_line_action.setEnabled(is_line_editable)
         if self.batch_action:
             self.batch_action.setEnabled(is_editable)
 
@@ -1165,6 +1305,13 @@ class FilletPlugin:
                 if self.explode_action:
                     self.explode_action.setChecked(False)
 
+            if self.divide_line_map_tool and self.canvas.mapTool() == self.divide_line_map_tool:
+                self.canvas.unsetMapTool(self.divide_line_map_tool)
+                if self.divide_line_widget:
+                    self.divide_line_widget.hide()
+                if self.divide_line_action:
+                    self.divide_line_action.setChecked(False)
+
         if not is_array_editable and self.canvas:
             if self.array_map_tool and self.canvas.mapTool() == self.array_map_tool:
                 self.canvas.unsetMapTool(self.array_map_tool)
@@ -1172,6 +1319,13 @@ class FilletPlugin:
                     self.array_widget.hide()
                 if self.array_action:
                     self.array_action.setChecked(False)
+
+            if self.polar_array_map_tool and self.canvas.mapTool() == self.polar_array_map_tool:
+                self.canvas.unsetMapTool(self.polar_array_map_tool)
+                if self.polar_array_widget:
+                    self.polar_array_widget.hide()
+                if self.polar_array_action:
+                    self.polar_array_action.setChecked(False)
 
         if not is_rotate_enabled and self.canvas:
             if self.rotate_map_tool and self.canvas.mapTool() == self.rotate_map_tool:

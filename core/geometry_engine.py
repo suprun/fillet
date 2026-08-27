@@ -1377,6 +1377,201 @@ class GeometryEngine:
         return rotated
 
     @classmethod
+    def create_polar_array_geometries(
+        cls,
+        geom: QgsGeometry,
+        center: Union[QgsPoint, QgsPointXY],
+        count: int,
+        fill_angle_deg: float,
+        rotate_features: bool = True,
+        include_original: bool = False,
+        step_angle_deg: Optional[float] = None,
+    ) -> List[QgsGeometry]:
+        """
+        Generates a polar (circular) array of geometries around center point.
+        :param geom: Source QgsGeometry to replicate.
+        :param center: Center point of the circular/polar array.
+        :param count: Total number of items in the array (>= 1).
+        :param fill_angle_deg: Total fill angle in degrees (e.g. 360.0, 180.0, -90.0). CCW is positive.
+        :param rotate_features: If True, each copy rotates around center.
+                                If False, copies translate along the circle preserving original azimuth.
+        :param include_original: If True, includes the i=0 element (original geometry).
+        :param step_angle_deg: Optional explicit step angle. If None, computed from fill_angle_deg.
+        :return: List of transformed QgsGeometry objects.
+        """
+        if geom.isEmpty() or geom.isNull() or count < 1:
+            return []
+
+        if count == 1:
+            return [QgsGeometry(geom)] if include_original else []
+
+        if step_angle_deg is not None:
+            step_deg = step_angle_deg
+        else:
+            if abs(abs(fill_angle_deg) - 360.0) < 1e-4:
+                step_deg = fill_angle_deg / float(count)
+            else:
+                step_deg = fill_angle_deg / float(count - 1) if count > 1 else 0.0
+
+        results: List[QgsGeometry] = []
+        start_idx = 0 if include_original else 1
+
+        # Centroid for non-rotating translation
+        ref_pt: Optional[QgsPointXY] = None
+        if not rotate_features:
+            centroid = geom.centroid()
+            if not centroid.isEmpty():
+                ref_pt = centroid.asPoint()
+            else:
+                box = geom.boundingBox()
+                ref_pt = box.center()
+
+        for i in range(start_idx, count):
+            cur_angle_deg = i * step_deg
+            if abs(cur_angle_deg) < cls.EPSILON:
+                results.append(QgsGeometry(geom))
+                continue
+
+            if rotate_features or ref_pt is None:
+                rotated_geom = cls.rotate_geometry(geom, center, cur_angle_deg)
+                results.append(rotated_geom)
+            else:
+                # Rotate the reference point around center to find target translation vector
+                cur_rad = math.radians(cur_angle_deg)
+                cos_a = math.cos(cur_rad)
+                sin_a = math.sin(cur_rad)
+                dx0 = ref_pt.x() - center.x()
+                dy0 = ref_pt.y() - center.y()
+                # CCW rotation
+                rx = center.x() + (dx0 * cos_a - dy0 * sin_a)
+                ry = center.y() + (dx0 * sin_a + dy0 * cos_a)
+                shift_x = rx - ref_pt.x()
+                shift_y = ry - ref_pt.y()
+
+                trans_geom = QgsGeometry(geom)
+                trans_geom.translate(shift_x, shift_y)
+                results.append(trans_geom)
+
+        return results
+
+    @classmethod
+    def divide_line_geometries(
+        cls,
+        geom: QgsGeometry,
+        count: Optional[int] = None,
+        step_length: Optional[float] = None,
+        reverse_direction: bool = False,
+    ) -> List[QgsGeometry]:
+        """
+        Divides a line (or each part of a multi-line) into sub-geometries.
+        Can divide by equal parts (count) or by fixed segment length (step_length).
+        If reverse_direction is True, measurement starts from the opposite endpoint.
+        """
+        if geom.isNull() or geom.isEmpty():
+            return []
+
+        if geom.isMultipart():
+            results = []
+            for part in geom.asGeometryCollection():
+                sub_parts = cls.divide_line_geometries(
+                    part,
+                    count=count,
+                    step_length=step_length,
+                    reverse_direction=reverse_direction,
+                )
+                results.extend(sub_parts)
+            return results
+
+        abstract_geom = geom.constGet()
+        if abstract_geom is None:
+            return [QgsGeometry(geom)]
+
+        total_length = abstract_geom.length()
+        if total_length <= cls.EPSILON:
+            return [QgsGeometry(geom)]
+
+        curve = abstract_geom.reversed() if reverse_direction else abstract_geom
+
+        distances = [0.0]
+        if count is not None and count >= 2:
+            seg_len = total_length / count
+            for i in range(1, count):
+                distances.append(i * seg_len)
+            distances.append(total_length)
+        elif step_length is not None and step_length > cls.EPSILON:
+            cur_d = step_length
+            while cur_d < total_length - cls.EPSILON:
+                distances.append(cur_d)
+                cur_d += step_length
+            distances.append(total_length)
+        else:
+            return [QgsGeometry(geom)]
+
+        results = []
+        for i in range(len(distances) - 1):
+            d_start = distances[i]
+            d_end = distances[i + 1]
+            if d_end - d_start < cls.EPSILON:
+                continue
+            sub_curve = curve.curveSubstring(d_start, d_end)
+            if sub_curve is not None:
+                sub_geom = QgsGeometry(sub_curve)
+                if not sub_geom.isEmpty():
+                    results.append(sub_geom)
+
+        return results if results else [QgsGeometry(geom)]
+
+    @classmethod
+    def get_division_points(
+        cls,
+        geom: QgsGeometry,
+        count: Optional[int] = None,
+        step_length: Optional[float] = None,
+        reverse_direction: bool = False,
+    ) -> List[QgsPointXY]:
+        """Returns the intermediate division cut points along the line."""
+        if geom.isNull() or geom.isEmpty():
+            return []
+
+        if geom.isMultipart():
+            pts = []
+            for part in geom.asGeometryCollection():
+                pts.extend(cls.get_division_points(
+                    part,
+                    count=count,
+                    step_length=step_length,
+                    reverse_direction=reverse_direction,
+                ))
+            return pts
+
+        abstract_geom = geom.constGet()
+        if abstract_geom is None:
+            return []
+
+        total_length = abstract_geom.length()
+        if total_length <= cls.EPSILON:
+            return []
+
+        split_dists = []
+        if count is not None and count >= 2:
+            seg_len = total_length / count
+            for i in range(1, count):
+                split_dists.append(i * seg_len)
+        elif step_length is not None and step_length > cls.EPSILON:
+            cur_d = step_length
+            while cur_d < total_length - cls.EPSILON:
+                split_dists.append(cur_d)
+                cur_d += step_length
+
+        points = []
+        for d in split_dists:
+            pt_geom = geom.interpolate(total_length - d if reverse_direction else d)
+            if not pt_geom.isEmpty():
+                points.append(pt_geom.asPoint())
+
+        return points
+
+    @classmethod
     def mirror_point(
         cls,
         p: Union[QgsPoint, QgsPointXY],

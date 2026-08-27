@@ -81,6 +81,8 @@ class ScaleRotateMapTool(QgsMapToolEdit):
         self.ref_point: Optional[QgsPointXY] = None
         self.current_scale: float = 1.0
         self.current_angle: float = 0.0
+        self._last_mouse_angle_rad: Optional[float] = None
+        self._accumulated_angle_deg: float = 0.0
 
         # Snapping indicator
         self.snap_indicator = QgsSnapIndicator(self.canvas)
@@ -160,6 +162,8 @@ class ScaleRotateMapTool(QgsMapToolEdit):
         self.ref_point = None
         self.current_scale = 1.0
         self.current_angle = 0.0
+        self._last_mouse_angle_rad = None
+        self._accumulated_angle_deg = 0.0
         self.widget.set_step(ScaleRotateCanvasWidget.STEP_ORIGIN)
         self._clear_visuals()
 
@@ -216,15 +220,35 @@ class ScaleRotateMapTool(QgsMapToolEdit):
                     None,
                 )
 
+                dx_ref = self.ref_point.x() - self.origin_point.x()
+                dy_ref = self.ref_point.y() - self.origin_point.y()
+                len_ref = math.hypot(dx_ref, dy_ref)
+
+                dx_tar = map_pt.x() - self.origin_point.x()
+                dy_tar = map_pt.y() - self.origin_point.y()
+                len_tar = math.hypot(dx_tar, dy_tar)
+
+                calc_scale = len_tar / len_ref if len_ref > 1e-6 else 1.0
+
+                if len_tar > 1e-6:
+                    cur_rad = math.atan2(dy_tar, dx_tar)
+                    if self._last_mouse_angle_rad is not None:
+                        d_rad = (cur_rad - self._last_mouse_angle_rad + math.pi) % (2.0 * math.pi) - math.pi
+                        self._accumulated_angle_deg += math.degrees(d_rad)
+                    else:
+                        base_rad = math.atan2(dy_ref, dx_ref)
+                        d_rad = (cur_rad - base_rad + math.pi) % (2.0 * math.pi) - math.pi
+                        self._accumulated_angle_deg = math.degrees(d_rad)
+                    self._last_mouse_angle_rad = cur_rad
+
+                raw_angle = self._accumulated_angle_deg
                 shift_pressed = bool(_ShiftModifier is not None and (event.modifiers() & _ShiftModifier))
                 eff_snap = self.widget.get_effective_snap_step(shift_pressed)
 
-                calc_scale, calc_angle = GeometryEngine.compute_3point_scale_and_rotation(
-                    self.origin_point,
-                    self.ref_point,
-                    map_pt,
-                    snap_step_deg=eff_snap,
-                )
+                if eff_snap is not None and eff_snap > 0.0:
+                    calc_angle = round(raw_angle / eff_snap) * eff_snap
+                else:
+                    calc_angle = raw_angle
 
                 if self.widget.is_scale_locked:
                     self.current_scale = self.widget.scale_factor
@@ -298,19 +322,41 @@ class ScaleRotateMapTool(QgsMapToolEdit):
                 )
                 self.state = self.STATE_TRANSFORMING
                 self.widget.set_step(ScaleRotateCanvasWidget.STEP_TARGET)
+                dx = self.ref_point.x() - self.origin_point.x()
+                dy = self.ref_point.y() - self.origin_point.y()
+                self._last_mouse_angle_rad = math.atan2(dy, dx)
+                self._accumulated_angle_deg = 0.0
+                self.current_angle = 0.0
                 self._update_preview(self.current_scale, self.current_angle)
 
         elif self.state == self.STATE_TRANSFORMING:
             if self.origin_point and self.ref_point:
+                dx_ref = self.ref_point.x() - self.origin_point.x()
+                dy_ref = self.ref_point.y() - self.origin_point.y()
+                len_ref = math.hypot(dx_ref, dy_ref)
+
+                dx_tar = map_pt.x() - self.origin_point.x()
+                dy_tar = map_pt.y() - self.origin_point.y()
+                len_tar = math.hypot(dx_tar, dy_tar)
+
+                calc_scale = len_tar / len_ref if len_ref > 1e-6 else 1.0
+
+                if len_tar > 1e-6:
+                    cur_rad = math.atan2(dy_tar, dx_tar)
+                    if self._last_mouse_angle_rad is not None:
+                        d_rad = (cur_rad - self._last_mouse_angle_rad + math.pi) % (2.0 * math.pi) - math.pi
+                        self._accumulated_angle_deg += math.degrees(d_rad)
+                    self._last_mouse_angle_rad = cur_rad
+
+                raw_angle = self._accumulated_angle_deg
                 shift_pressed = bool(_ShiftModifier is not None and (event.modifiers() & _ShiftModifier))
                 eff_snap = self.widget.get_effective_snap_step(shift_pressed)
 
-                calc_scale, calc_angle = GeometryEngine.compute_3point_scale_and_rotation(
-                    self.origin_point,
-                    self.ref_point,
-                    map_pt,
-                    snap_step_deg=eff_snap,
-                )
+                if eff_snap is not None and eff_snap > 0.0:
+                    calc_angle = round(raw_angle / eff_snap) * eff_snap
+                else:
+                    calc_angle = raw_angle
+
                 if not self.widget.is_scale_locked:
                     self.current_scale = calc_scale
                     self.widget.set_scale(self.current_scale, block_signals=True)
@@ -333,6 +379,7 @@ class ScaleRotateMapTool(QgsMapToolEdit):
     def _on_widget_angle_changed(self, angle_val: float):
         if self.state == self.STATE_TRANSFORMING and self.origin_point:
             self.current_angle = angle_val
+            self._accumulated_angle_deg = angle_val
             self._update_preview(self.current_scale, self.current_angle)
 
     def _update_preview(self, scale_factor: float, angle_deg_ccw: float):

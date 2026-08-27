@@ -306,7 +306,6 @@ class TestExplodeTool(unittest.TestCase):
         pr = layer.dataProvider()
         pr.addAttributes([QgsField("name", QVariant.String)])
         layer.updateFields()
-        layer.startEditing()
 
         # Feature 1: 4 points (3 segments) -> should be exploded into 3 features
         f1 = QgsFeature(layer.fields())
@@ -318,15 +317,17 @@ class TestExplodeTool(unittest.TestCase):
         f2.setAttribute("name", "single")
         f2.setGeometry(QgsGeometry(QgsLineString([QgsPoint(100, 0), QgsPoint(110, 0)])))
 
-        layer.addFeatures([f1, f2])
+        pr.addFeatures([f1, f2])
+        layer.startEditing()
         self.canvas.setCurrentLayer(layer)
         layer.selectAll()
 
         self.tool.explode_selected_features()
 
         # Total features should now be 4 (3 from f1 + 1 from f2)
-        self.assertEqual(layer.featureCount(), 4)
-        names = [f.attribute("name") for f in layer.getFeatures()]
+        features = list(layer.getFeatures())
+        self.assertEqual(len(features), 4)
+        names = [f.attribute("name") for f in features]
         self.assertEqual(names.count("complex"), 3)
         self.assertEqual(names.count("single"), 1)
 
