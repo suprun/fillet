@@ -36,6 +36,7 @@ try:
     from .gui.edge_offset_map_tool import EdgeOffsetMapTool
     from .gui.explode_canvas_widget import ExplodeCanvasWidget
     from .gui.explode_map_tool import ExplodeLineMapTool
+    from .gui.gui_utils import checked_edit_command, require_edit_success
     from .gui.map_tool import FilletMapTool
     from .gui.mirror_canvas_widget import MirrorCanvasWidget
     from .gui.mirror_map_tool import MirrorMapTool
@@ -63,6 +64,7 @@ except (ImportError, ValueError):
     from gui.edge_offset_map_tool import EdgeOffsetMapTool
     from gui.explode_canvas_widget import ExplodeCanvasWidget
     from gui.explode_map_tool import ExplodeLineMapTool
+    from gui.gui_utils import checked_edit_command, require_edit_success
     from gui.map_tool import FilletMapTool
     from gui.mirror_canvas_widget import MirrorCanvasWidget
     from gui.mirror_map_tool import MirrorMapTool
@@ -207,7 +209,11 @@ class FilletPlugin:
         # 3. Create interactive Corner Restore (Unfillet/Unchamfer) CAD Map Tool (available in QGIS 3.x and QGIS 4.x)
         self.restore_canvas_widget = RestoreCanvasWidget(self.canvas)
         self.restore_canvas_widget.hide()
-        self.restore_map_tool = RestoreMapTool(self.canvas, self.restore_canvas_widget)
+        self.restore_map_tool = RestoreMapTool(
+            self.canvas,
+            self.restore_canvas_widget,
+            self.iface,
+        )
 
         restore_icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionRestoreCorners.svg")
         self.restore_action = QAction(
@@ -245,7 +251,11 @@ class FilletPlugin:
         # 6. Create interactive CAD 3-Point Rotation Map Tool (available in QGIS 3.x and QGIS 4.x)
         self.rotation_widget = RotationCanvasWidget(self.canvas)
         self.rotation_widget.hide()
-        self.rotate_map_tool = RotateMapTool(self.canvas, self.rotation_widget)
+        self.rotate_map_tool = RotateMapTool(
+            self.canvas,
+            self.rotation_widget,
+            self.iface,
+        )
 
         rotate_icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionRotateCAD.svg")
         self.rotate_action = QAction(
@@ -261,7 +271,11 @@ class FilletPlugin:
         # 7. Create interactive CAD 2-Point Mirror Map Tool (available in QGIS 3.x and QGIS 4.x)
         self.mirror_widget = MirrorCanvasWidget(self.canvas)
         self.mirror_widget.hide()
-        self.mirror_map_tool = MirrorMapTool(self.canvas, self.mirror_widget)
+        self.mirror_map_tool = MirrorMapTool(
+            self.canvas,
+            self.mirror_widget,
+            self.iface,
+        )
 
         mirror_icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionMirrorCAD.svg")
         self.mirror_action = QAction(
@@ -277,7 +291,11 @@ class FilletPlugin:
         # 7.5. Create interactive CAD 3-Point Scale with Rotation Map Tool (available in QGIS 3.x and QGIS 4.x)
         self.scale_rotate_widget = ScaleRotateCanvasWidget(self.canvas)
         self.scale_rotate_widget.hide()
-        self.scale_rotate_map_tool = ScaleRotateMapTool(self.canvas, self.scale_rotate_widget)
+        self.scale_rotate_map_tool = ScaleRotateMapTool(
+            self.canvas,
+            self.scale_rotate_widget,
+            self.iface,
+        )
 
         scale_rotate_icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionScaleRotateCAD.svg")
         self.scale_rotate_action = QAction(
@@ -293,7 +311,11 @@ class FilletPlugin:
         # 7.6. Create interactive CAD Edge Offset (Parallel Shift) Map Tool (available in QGIS 3.x and QGIS 4.x)
         self.edge_offset_widget = EdgeOffsetCanvasWidget(self.canvas)
         self.edge_offset_widget.hide()
-        self.edge_offset_map_tool = EdgeOffsetMapTool(self.canvas, self.edge_offset_widget)
+        self.edge_offset_map_tool = EdgeOffsetMapTool(
+            self.canvas,
+            self.edge_offset_widget,
+            self.iface,
+        )
 
         edge_offset_icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionEdgeOffsetCAD.svg")
         self.edge_offset_action = QAction(
@@ -389,7 +411,11 @@ class FilletPlugin:
         # 8. Create interactive Fillet / Chamfer and Array MapTools ONLY in QGIS 3.x (native in QGIS 4.0+)
         if not self.is_qgis_4():
             # 8.1. Fillet / Chamfer Tool
-            self.map_tool = FilletMapTool(self.canvas, self.canvas_widget)
+            self.map_tool = FilletMapTool(
+                self.canvas,
+                self.canvas_widget,
+                self.iface,
+            )
 
             icon_path = os.path.join(self.plugin_dir, "resources", "icons", "mActionChamferFillet.svg")
             self.action = QAction(
@@ -594,11 +620,10 @@ class FilletPlugin:
                 pass  # nosec B110
             self._tracked_layer = None
 
-        if not self.is_qgis_4():
-            try:
-                self.canvas.mapToolSet.disconnect(self.on_map_tool_changed)
-            except (TypeError, RuntimeError):
-                pass  # nosec B110
+        try:
+            self.canvas.mapToolSet.disconnect(self.on_map_tool_changed)
+        except (TypeError, RuntimeError):
+            pass  # nosec B110
 
         # 2. Clean up interactive fillet action
         if self.action:
@@ -1498,22 +1523,47 @@ class FilletPlugin:
         else:
             cmd_title = self.tr("Пакетне скруглення")
 
-        layer.beginEditCommand(cmd_title)
-
-        modified_count = 0
+        geometry_changes = []
+        curved_count = 0
         for fid in selected_fids:
             feat = layer.getFeature(fid)
             geom = feat.geometry()
             if geom.isEmpty() or geom.isNull():
                 continue
+            if GeometryEngine.has_curved_segments(geom):
+                curved_count += 1
+                continue
 
             new_geom = self._batch_process_geometry(geom, mode, radius, segments, d1, d2)
             if new_geom and not new_geom.isEmpty():
-                layer.changeGeometry(fid, new_geom)
-                modified_count += 1
+                geometry_changes.append((fid, new_geom))
 
-        layer.endEditCommand()
+        try:
+            if geometry_changes:
+                with checked_edit_command(layer, cmd_title):
+                    for fid, new_geom in geometry_changes:
+                        require_edit_success(
+                            layer.changeGeometry(fid, new_geom),
+                            self.tr("Не вдалося змінити геометрію об'єкта."),
+                        )
+        except (RuntimeError, TypeError) as error:
+            self._show_message(
+                self.tr("Помилка"),
+                str(error),
+                level=Qgis.MessageLevel.Warning,
+                duration=5,
+            )
+            return
+
+        modified_count = len(geometry_changes)
         self.canvas.refresh()
+        if curved_count:
+            self._show_message(
+                self.tr("Увага"),
+                self.tr("Пропущено об'єктів із кривими сегментами: {}.").format(curved_count),
+                level=Qgis.MessageLevel.Warning,
+                duration=5,
+            )
         self._show_message(
             self.tr("Успіх"),
             self.tr("Оброблено {} об'єкт(ів).").format(modified_count),

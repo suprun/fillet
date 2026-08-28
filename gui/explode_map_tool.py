@@ -30,10 +30,12 @@ try:
     from ..core.geometry_engine import GeometryEngine
     from ..core.snapping_helper import SnappingHelper
     from .explode_canvas_widget import ExplodeCanvasWidget
+    from .gui_utils import checked_edit_command, require_edit_success
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
     from core.snapping_helper import SnappingHelper
     from gui.explode_canvas_widget import ExplodeCanvasWidget
+    from gui.gui_utils import checked_edit_command, require_edit_success
 
 _CrossCursor = getattr(Qt.CursorShape, "CrossCursor", getattr(Qt, "CrossCursor", None))
 _LeftButton = getattr(Qt.MouseButton, "LeftButton", getattr(Qt, "LeftButton", 1))
@@ -191,7 +193,7 @@ class ExplodeLineMapTool(QgsMapToolEdit):
             try:
                 self.iface.messageBar().pushMessage(title, text, level, duration)
             except Exception:
-                pass
+                return
 
     def canvasPressEvent(self, event: QgsMapMouseEvent):
         layer = self.current_vector_layer()
@@ -205,6 +207,9 @@ class ExplodeLineMapTool(QgsMapToolEdit):
             if match and match.fid is not None:
                 feat = layer.getFeature(match.fid)
                 if feat.isValid():
+                    if GeometryEngine.has_curved_segments(feat.geometry()):
+                        self._show_curved_geometry_warning()
+                        return
                     as_multipart = self.widget.is_save_as_multipart if self.widget else False
                     if not GeometryEngine.can_explode_line(feat.geometry(), as_multipart=as_multipart):
                         self._clear_preview()
@@ -241,6 +246,13 @@ class ExplodeLineMapTool(QgsMapToolEdit):
         if not selected_features:
             return
 
+        if any(
+            GeometryEngine.has_curved_segments(feature.geometry())
+            for feature in selected_features
+        ):
+            self._show_curved_geometry_warning()
+            return
+
         as_multipart = self.widget.is_save_as_multipart if self.widget else False
         splittable_features = [
             f for f in selected_features
@@ -264,45 +276,64 @@ class ExplodeLineMapTool(QgsMapToolEdit):
             return
 
         as_multipart = self.widget.is_save_as_multipart if self.widget else False
+        if any(
+            GeometryEngine.has_curved_segments(feature.geometry())
+            for feature in features
+        ):
+            self._show_curved_geometry_warning()
+            return
         total_created_segments = 0
         new_features = []
 
-        layer.beginEditCommand(
-            self.tr("Розбиття ліній на складові частини (multipart)")
-            if as_multipart
-            else self.tr("Розбиття ліній на окремі відрізки")
-        )
-
         try:
-            for feat in features:
-                geom = feat.geometry()
-                if not geom or geom.isEmpty():
-                    continue
+            command_name = (
+                self.tr("Розбиття ліній на складові частини (multipart)")
+                if as_multipart
+                else self.tr("Розбиття ліній на окремі відрізки")
+            )
+            with checked_edit_command(layer, command_name):
+                for feat in features:
+                    geom = feat.geometry()
+                    if not geom or geom.isEmpty():
+                        continue
 
-                exploded_geoms = GeometryEngine.explode_line(geom, as_multipart=as_multipart)
-                if not exploded_geoms:
-                    continue
+                    exploded_geoms = GeometryEngine.explode_line(
+                        geom,
+                        as_multipart=as_multipart,
+                    )
+                    if not exploded_geoms:
+                        raise RuntimeError("exploded geometry is empty")
 
-                if as_multipart:
-                    # Single feature updated with MultiLineString containing all 2-point parts
-                    multi_geom = exploded_geoms[0]
-                    layer.changeGeometry(feat.id(), multi_geom)
-                    total_created_segments += multi_geom.constGet().numGeometries() if multi_geom.constGet() else 1
-                else:
-                    # Replace feature with first segment, add remaining segments as new features
-                    total_created_segments += len(exploded_geoms)
-                    layer.changeGeometry(feat.id(), exploded_geoms[0])
+                    if as_multipart:
+                        multi_geom = exploded_geoms[0]
+                        require_edit_success(
+                            layer.changeGeometry(feat.id(), multi_geom),
+                            "changeGeometry",
+                        )
+                        total_created_segments += (
+                            multi_geom.constGet().numGeometries()
+                            if multi_geom.constGet()
+                            else 1
+                        )
+                    else:
+                        total_created_segments += len(exploded_geoms)
+                        require_edit_success(
+                            layer.changeGeometry(feat.id(), exploded_geoms[0]),
+                            "changeGeometry",
+                        )
 
-                    for seg_geom in exploded_geoms[1:]:
-                        new_feat = QgsFeature(layer.fields())
-                        new_feat.setAttributes(feat.attributes())
-                        new_feat.setGeometry(seg_geom)
-                        new_features.append(new_feat)
+                        for seg_geom in exploded_geoms[1:]:
+                            new_feat = QgsFeature(layer.fields())
+                            new_feat.setAttributes(feat.attributes())
+                            new_feat.setGeometry(seg_geom)
+                            new_features.append(new_feat)
 
-            if new_features:
-                layer.addFeatures(new_features)
+                for new_feature in new_features:
+                    require_edit_success(
+                        layer.addFeature(new_feature),
+                        "addFeature",
+                    )
 
-            layer.endEditCommand()
             layer.triggerRepaint()
             self._clear_preview()
 
@@ -322,11 +353,18 @@ class ExplodeLineMapTool(QgsMapToolEdit):
                 getattr(Qgis.MessageLevel, "Info", getattr(Qgis, "Info", 0)),
                 duration=3,
             )
-        except Exception as err:
-            layer.destroyEditCommand()
+        except (RuntimeError, TypeError) as err:
             self._show_message(
                 self.tr("CAD Explode Line"),
                 str(err),
                 getattr(Qgis.MessageLevel, "Warning", getattr(Qgis, "Warning", 1)),
                 duration=5,
             )
+
+    def _show_curved_geometry_warning(self):
+        self._show_message(
+            self.tr("CAD Explode Line"),
+            self.tr("Ця операція недоступна для геометрій із кривими сегментами."),
+            getattr(Qgis.MessageLevel, "Warning", getattr(Qgis, "Warning", 1)),
+            duration=5,
+        )

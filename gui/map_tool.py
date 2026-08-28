@@ -11,6 +11,7 @@ from typing import Optional, Union
 from qgis.core import (
     Qgis,
     QgsGeometry,
+    QgsMessageLog,
     QgsPointLocator,
     QgsPointXY,
     QgsSettings,
@@ -45,9 +46,11 @@ _ShiftModifier = getattr(Qt.KeyboardModifier, "ShiftModifier", getattr(Qt, "Shif
 try:
     from ..core.geometry_engine import GeometryEngine
     from ..core.snapping_helper import SegmentMatch, SnappingHelper, VertexMatch
+    from .gui_utils import checked_edit_command, require_edit_success
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
     from core.snapping_helper import SegmentMatch, SnappingHelper, VertexMatch
+    from gui.gui_utils import checked_edit_command, require_edit_success
 from .canvas_widget import FilletCanvasWidget
 from .settings_widget import FilletSettingsWidget
 
@@ -61,10 +64,16 @@ class FilletMapTool(QgsMapToolEdit):
     STATE_HOVER = "hover"
     STATE_ADJUSTING = "adjusting"
 
-    def __init__(self, canvas: QgsMapCanvas, widget: Union[FilletCanvasWidget, FilletSettingsWidget]):
+    def __init__(
+        self,
+        canvas: QgsMapCanvas,
+        widget: Union[FilletCanvasWidget, FilletSettingsWidget],
+        iface=None,
+    ):
         super().__init__(canvas)
         self.canvas = canvas
         self.widget = widget
+        self.iface = iface
 
         self.state = self.STATE_HOVER
         self.current_match: Optional[VertexMatch] = None
@@ -303,6 +312,9 @@ class FilletMapTool(QgsMapToolEdit):
                 map_point = event.mapPoint()
                 match = SnappingHelper.find_vertex_at_position(layer, self.canvas, map_point)
                 if match:
+                    if GeometryEngine.has_curved_segments(match.geometry):
+                        self._show_curved_geometry_warning()
+                        return
                     self.current_match = match
                     self._show_vertex_marker(layer, match)
 
@@ -462,16 +474,43 @@ class FilletMapTool(QgsMapToolEdit):
         else:
             mode_name = self.tr("Фаска вершини")
 
-        layer.beginEditCommand(mode_name)
-        success = layer.changeGeometry(self.current_match.fid, self.preview_geom)
-        if success:
-            layer.endEditCommand()
-            self.canvas.refresh()
-        else:
-            layer.destroyEditCommand()
+        try:
+            with checked_edit_command(layer, mode_name):
+                require_edit_success(
+                    layer.changeGeometry(self.current_match.fid, self.preview_geom),
+                    self.tr("Не вдалося змінити геометрію об'єкта."),
+                )
+        except (RuntimeError, TypeError) as error:
+            self._show_write_error(error)
+            return
+
+        self.canvas.refresh()
 
         self._clear_preview()
         self.state = self.STATE_HOVER
+
+    def _show_write_error(self, error: Exception):
+        self._show_message(
+            self.tr("Не вдалося записати зміни: {error}").format(error=error),
+            Qgis.Critical,
+        )
+
+    def _show_curved_geometry_warning(self):
+        self._show_message(
+            self.tr("Ця операція недоступна для геометрій із кривими сегментами."),
+            Qgis.Warning,
+        )
+
+    def _show_message(self, message: str, level):
+        if self.iface and hasattr(self.iface, "messageBar"):
+            self.iface.messageBar().pushMessage(
+                self.tr("Fillet Toolkit"),
+                message,
+                level=level,
+                duration=5,
+            )
+        else:
+            QgsMessageLog.logMessage(message, "Fillet Toolkit", level)
 
     def _cancel_operation(self):
         """Cancels current operation and returns to hovering state."""

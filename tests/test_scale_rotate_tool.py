@@ -12,6 +12,7 @@ import unittest
 from qgis.core import (
     Qgis,
     QgsApplication,
+    QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
     QgsFeature,
     QgsGeometry,
@@ -285,6 +286,62 @@ class TestScaleRotateTool(unittest.TestCase):
 
         tool.cleanup()
         layer.rollBack()
+
+    def test_preview_and_commit_use_canvas_crs(self):
+        previous_crs = self.canvas.mapSettings().destinationCrs()
+        canvas_crs = QgsCoordinateReferenceSystem("EPSG:3857")
+        layer_crs = QgsCoordinateReferenceSystem("EPSG:4326")
+        self.canvas.setDestinationCrs(canvas_crs)
+
+        layer = QgsVectorLayer("Polygon?crs=EPSG:4326", "crs_poly", "memory")
+        source = QgsGeometry.fromPolygonXY([[
+            QgsPointXY(1.0, 45.0),
+            QgsPointXY(1.1, 45.0),
+            QgsPointXY(1.1, 45.1),
+            QgsPointXY(1.0, 45.1),
+            QgsPointXY(1.0, 45.0),
+        ]])
+        feature = QgsFeature(layer.fields())
+        feature.setGeometry(source)
+        layer.dataProvider().addFeatures([feature])
+        layer.startEditing()
+        layer.selectAll()
+        self.canvas.setCurrentLayer(layer)
+
+        to_canvas = QgsCoordinateTransform(layer_crs, canvas_crs, QgsProject.instance())
+        origin = to_canvas.transform(QgsPointXY(0.0, 45.0))
+        expected_canvas = QgsGeometry(source)
+        expected_canvas.transform(to_canvas)
+        expected_canvas = GeometryEngine.scale_and_rotate_geometry(
+            expected_canvas,
+            origin,
+            1.5,
+            30.0,
+        )
+
+        widget = ScaleRotateCanvasWidget(self.canvas)
+        tool = ScaleRotateMapTool(self.canvas, widget)
+        tool.origin_point = origin
+        tool.current_scale = 1.5
+        tool.current_angle = 30.0
+        tool.state = ScaleRotateMapTool.STATE_TRANSFORMING
+        tool._update_preview(1.5, 30.0)
+
+        preview_first = next(tool.preview_rubberband.asGeometry().vertices())
+        expected_first = next(expected_canvas.vertices())
+        self.assertAlmostEqual(preview_first.x(), expected_first.x(), places=3)
+        self.assertAlmostEqual(preview_first.y(), expected_first.y(), places=3)
+
+        tool.commit_transformation()
+        committed = next(layer.getFeatures()).geometry()
+        committed.transform(to_canvas)
+        committed_first = next(committed.vertices())
+        self.assertAlmostEqual(committed_first.x(), expected_first.x(), places=3)
+        self.assertAlmostEqual(committed_first.y(), expected_first.y(), places=3)
+
+        tool.cleanup()
+        layer.rollBack()
+        self.canvas.setDestinationCrs(previous_crs)
 
     def test_scale_rotate_space_toggle_lock(self):
         """Verify Space key toggles lock for scale and rotation."""

@@ -45,10 +45,10 @@ _Key_Enter = getattr(Qt.Key, "Key_Enter", getattr(Qt, "Key_Enter", 0x01000005))
 
 try:
     from .array_canvas_widget import ArrayCanvasWidget, ArrayMode
-    from .gui_utils import confirm_features_in_canvas_extent
+    from .gui_utils import checked_edit_command, confirm_features_in_canvas_extent, require_edit_success
 except (ImportError, ValueError):
     from gui.array_canvas_widget import ArrayCanvasWidget, ArrayMode
-    from gui.gui_utils import confirm_features_in_canvas_extent
+    from gui.gui_utils import checked_edit_command, confirm_features_in_canvas_extent, require_edit_success
 
 
 class CADArrayMapTool(QgsMapToolEdit):
@@ -207,7 +207,7 @@ class CADArrayMapTool(QgsMapToolEdit):
             if match.isValid():
                 return match.point(), match
         except Exception:
-            pass
+            return e.mapPoint(), None
         return e.mapPoint(), None
 
     def canvasPressEvent(self, e: Optional[QgsMapMouseEvent]) -> None:
@@ -412,8 +412,6 @@ class CADArrayMapTool(QgsMapToolEdit):
         dx = first_layer_pt.x() - start_layer_pt.x()
         dy = first_layer_pt.y() - start_layer_pt.y()
 
-        self.featureLayer.beginEditCommand(self.tr("CAD Масив об'єктів"))
-
         new_features = []
         for i in range(1, count + 1):
             for feat in self.featureList:
@@ -424,8 +422,14 @@ class CADArrayMapTool(QgsMapToolEdit):
                     new_feat.setGeometry(geom)
                     new_features.append(new_feat)
 
-        self.featureLayer.addFeatures(new_features)
-        self.featureLayer.endEditCommand()
+        try:
+            with checked_edit_command(self.featureLayer, self.tr("CAD Масив об'єктів")):
+                require_edit_success(
+                    self.featureLayer.addFeatures(new_features),
+                    self.tr("Не вдалося додати елементи масиву."),
+                )
+        except (RuntimeError, TypeError):
+            return
 
         if self.canvas is not None:
             self.canvas.refresh()

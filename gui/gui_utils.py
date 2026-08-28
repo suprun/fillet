@@ -4,17 +4,61 @@ Shared GUI utility functions for CAD tools in QGIS.
 Compatible with QGIS 3.16 to 4.x (Qt5 and Qt6).
 """
 
-from typing import List, Optional
+from contextlib import contextmanager
+from typing import Iterator, List, Optional
 
 from qgis.core import (
+    QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
     QgsFeature,
+    QgsGeometry,
     QgsProject,
     QgsVectorLayer,
 )
 from qgis.gui import QgsMapCanvas
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtWidgets import QMessageBox
+
+
+def require_edit_success(success: bool, operation: str) -> None:
+    """Raise when a vector-layer edit operation reports failure."""
+    if not success:
+        raise RuntimeError(operation)
+
+
+@contextmanager
+def checked_edit_command(layer: QgsVectorLayer, title: str) -> Iterator[None]:
+    """Run a QGIS edit command atomically and destroy it on any failure."""
+    layer.beginEditCommand(title)
+    try:
+        yield
+        layer.endEditCommand()
+    except Exception:
+        layer.destroyEditCommand()
+        raise
+
+
+def transform_geometry_copy(
+    geom: QgsGeometry,
+    source_crs: QgsCoordinateReferenceSystem,
+    destination_crs: QgsCoordinateReferenceSystem,
+) -> QgsGeometry:
+    """Return a transformed clone, preserving raw coordinates for invalid CRS."""
+    result = QgsGeometry(geom)
+    if (
+        source_crs.isValid()
+        and destination_crs.isValid()
+        and source_crs != destination_crs
+    ):
+        coordinate_transform = QgsCoordinateTransform(
+            source_crs,
+            destination_crs,
+            QgsProject.instance(),
+        )
+        transform_result = result.transform(coordinate_transform)
+        if transform_result not in (None, 0):
+            raise RuntimeError("Geometry CRS transformation failed")
+    return result
 
 
 def confirm_features_in_canvas_extent(

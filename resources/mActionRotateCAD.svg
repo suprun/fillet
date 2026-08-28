@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   height="24"
+   viewBox="0 0 24 24"
+   width="24"
+   version="1.1"
+   xmlns="http://www.w3.org/2000/svg">
+  <!-- Original and rotated geometry polygons -->
+  <polygon
+     points="4,20 18,20 18,8 4,8"
+     style="fill:#8cbe8c;fill-opacity:0.4;stroke:#555753;stroke-width:1;stroke-dasharray:1.5,1.5" />
+  <polygon
+     points="6,21 19,13 12,2 1,10"
+     style="fill:#8cbe8c;fill-opacity:0.85;stroke:#204a87;stroke-width:1.5" />
+
+  <!-- Circular Rotation Arrow Arc -->
+  <path
+     d="M 17,5 A 9,9 0 0 1 21,14"
+     style="fill:none;stroke:#ce5c00;stroke-width:2;stroke-linecap:round" />
+  <!-- Arrow Head -->
+  <polygon
+     points="19,16 23,14 20,12"
+     style="fill:#ce5c00;stroke:#ce5c00;stroke-width:0.5;stroke-linejoin:round" />
+
+  <!-- Pivot Center Crosshair Anchor Point -->
+  <circle
+     cx="4"
+     cy="20"
+     r="3.2"
+     style="fill:#ea580c;fill-opacity:0.9;stroke:#ffffff;stroke-width:1.2" />
+  <circle
+     cx="4"
+     cy="20"
+     r="1"
+     style="fill:#ffffff" />
+</svg>

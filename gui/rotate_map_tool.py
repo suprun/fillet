@@ -14,12 +14,10 @@ from typing import List, Optional, Tuple
 
 from qgis.core import (
     Qgis,
-    QgsCoordinateTransform,
     QgsFeature,
     QgsGeometry,
     QgsPointLocator,
     QgsPointXY,
-    QgsProject,
     QgsVectorLayer,
     QgsWkbTypes,
 )
@@ -50,11 +48,21 @@ _ShiftModifier = getattr(Qt.KeyboardModifier, "ShiftModifier", getattr(Qt, "Shif
 
 try:
     from ..core.geometry_engine import GeometryEngine
-    from .gui_utils import confirm_features_in_canvas_extent
+    from .gui_utils import (
+        checked_edit_command,
+        confirm_features_in_canvas_extent,
+        require_edit_success,
+        transform_geometry_copy,
+    )
     from .rotation_canvas_widget import RotationCanvasWidget
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
-    from gui.gui_utils import confirm_features_in_canvas_extent
+    from gui.gui_utils import (
+        checked_edit_command,
+        confirm_features_in_canvas_extent,
+        require_edit_success,
+        transform_geometry_copy,
+    )
     from gui.rotation_canvas_widget import RotationCanvasWidget
 
 
@@ -71,10 +79,16 @@ class RotateMapTool(QgsMapToolEdit):
     STATE_SET_REFERENCE = 2
     STATE_ROTATING = 3
 
-    def __init__(self, canvas: QgsMapCanvas, widget: RotationCanvasWidget):
+    def __init__(
+        self,
+        canvas: QgsMapCanvas,
+        widget: RotationCanvasWidget,
+        iface=None,
+    ):
         super().__init__(canvas)
         self.canvas = canvas
         self.widget = widget
+        self.iface = iface
 
         self.state = self.STATE_SET_PIVOT
         self.pivot_point: Optional[QgsPointXY] = None
@@ -405,28 +419,25 @@ class RotateMapTool(QgsMapToolEdit):
             self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
             return
 
-        # CRS Transform from Map Canvas to Layer CRS
         canvas_crs = self.canvas.mapSettings().destinationCrs()
         layer_crs = layer.crs()
 
-        pivot_in_layer = self.pivot_point
-        transform_to_layer: Optional[QgsCoordinateTransform] = None
-        transform_to_canvas: Optional[QgsCoordinateTransform] = None
-
-        if canvas_crs.isValid() and layer_crs.isValid() and canvas_crs != layer_crs:
-            transform_to_layer = QgsCoordinateTransform(canvas_crs, layer_crs, QgsProject.instance())
-            transform_to_canvas = QgsCoordinateTransform(layer_crs, canvas_crs, QgsProject.instance())
-            pivot_in_layer = transform_to_layer.transform(self.pivot_point)
-
         combined_geoms: List[QgsGeometry] = []
-        for feat in features:
-            geom = feat.geometry()
-            if geom.isEmpty() or geom.isNull():
-                continue
-            rotated_geom = GeometryEngine.rotate_geometry(geom, pivot_in_layer, angle_deg_ccw)
-            if transform_to_canvas:
-                rotated_geom.transform(transform_to_canvas)
-            combined_geoms.append(rotated_geom)
+        try:
+            for feat in features:
+                geom = feat.geometry()
+                if geom.isEmpty() or geom.isNull():
+                    continue
+                canvas_geom = transform_geometry_copy(geom, layer_crs, canvas_crs)
+                rotated_geom = GeometryEngine.rotate_geometry(
+                    canvas_geom,
+                    self.pivot_point,
+                    angle_deg_ccw,
+                )
+                combined_geoms.append(rotated_geom)
+        except (RuntimeError, TypeError):
+            self.preview_rubberband.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
+            return
 
         if combined_geoms:
             # Combine all for display
@@ -572,45 +583,52 @@ class RotateMapTool(QgsMapToolEdit):
             self.reset_state()
             return
 
-        # CRS Transform
         canvas_crs = self.canvas.mapSettings().destinationCrs()
         layer_crs = layer.crs()
-        pivot_in_layer = self.pivot_point
-        if canvas_crs.isValid() and layer_crs.isValid() and canvas_crs != layer_crs:
-            transform = QgsCoordinateTransform(canvas_crs, layer_crs, QgsProject.instance())
-            pivot_in_layer = transform.transform(self.pivot_point)
-
         is_copy = self.widget.is_copy_mode
 
-        layer.beginEditCommand(self.tr("CAD Rotate Feature(s)"))
         try:
-            if is_copy:
-                new_features: List[QgsFeature] = []
-                for feat in features:
-                    orig_geom = feat.geometry()
-                    if orig_geom.isEmpty() or orig_geom.isNull():
-                        continue
-                    new_geom = GeometryEngine.rotate_geometry(orig_geom, pivot_in_layer, angle_deg)
+            new_features: List[QgsFeature] = []
+            geometry_changes = []
+            for feat in features:
+                orig_geom = feat.geometry()
+                if orig_geom.isEmpty() or orig_geom.isNull():
+                    continue
+                canvas_geom = transform_geometry_copy(orig_geom, layer_crs, canvas_crs)
+                rotated_canvas_geom = GeometryEngine.rotate_geometry(
+                    canvas_geom,
+                    self.pivot_point,
+                    angle_deg,
+                )
+                new_geom = transform_geometry_copy(rotated_canvas_geom, canvas_crs, layer_crs)
+                if is_copy:
                     new_feat = QgsFeature(feat)
                     new_feat.setGeometry(new_geom)
                     new_features.append(new_feat)
-                if new_features:
-                    layer.addFeatures(new_features)
-                    new_fids = [f.id() for f in new_features if f.id() != 0]
-                    if new_fids:
-                        layer.selectByIds(new_fids)
-            else:
-                for feat in features:
-                    orig_geom = feat.geometry()
-                    if orig_geom.isEmpty() or orig_geom.isNull():
-                        continue
-                    new_geom = GeometryEngine.rotate_geometry(orig_geom, pivot_in_layer, angle_deg)
-                    layer.changeGeometry(feat.id(), new_geom)
+                else:
+                    geometry_changes.append((feat.id(), new_geom))
 
-            layer.endEditCommand()
-        except Exception:
-            layer.destroyEditCommand()
-            raise
+            with checked_edit_command(layer, self.tr("CAD Rotate Feature(s)")):
+                if is_copy and new_features:
+                    require_edit_success(
+                        layer.addFeatures(new_features),
+                        self.tr("Не вдалося додати повернуті копії."),
+                    )
+                else:
+                    for feature_id, new_geom in geometry_changes:
+                        require_edit_success(
+                            layer.changeGeometry(feature_id, new_geom),
+                            self.tr("Не вдалося змінити геометрію об'єкта."),
+                        )
+
+            if is_copy:
+                new_fids = [feature.id() for feature in new_features if feature.id() != 0]
+                if new_fids:
+                    layer.selectByIds(new_fids)
+        except (RuntimeError, TypeError) as error:
+            if self.iface and hasattr(self.iface, "messageBar"):
+                self.iface.messageBar().pushWarning(self.tr("Помилка"), str(error))
+            return
 
         layer.updateExtents()
         layer.triggerRepaint()

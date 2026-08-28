@@ -15,6 +15,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from qgis.core import (
     QgsApplication,
     QgsCoordinateReferenceSystem,
+    QgsCoordinateTransform,
     QgsFeature,
     QgsGeometry,
     QgsPoint,
@@ -282,6 +283,83 @@ class TestCADPolarArrayTool(unittest.TestCase):
 
         self.polygon_layer.rollBack()
 
+    def test_preview_and_commit_use_canvas_crs(self):
+        layer = QgsVectorLayer("Polygon?crs=EPSG:4326", "crs_array", "memory")
+        source = QgsGeometry.fromPolygonXY([[
+            QgsPointXY(1.0, 45.0),
+            QgsPointXY(1.1, 45.0),
+            QgsPointXY(1.1, 45.1),
+            QgsPointXY(1.0, 45.1),
+            QgsPointXY(1.0, 45.0),
+        ]])
+        feature = QgsFeature(layer.fields())
+        feature.setGeometry(source)
+        layer.dataProvider().addFeatures([feature])
+        layer.startEditing()
+        source_feature = next(layer.getFeatures())
+        self.canvas.setCurrentLayer(layer)
+
+        canvas_crs = self.canvas.mapSettings().destinationCrs()
+        to_canvas = QgsCoordinateTransform(
+            layer.crs(),
+            canvas_crs,
+            QgsProject.instance(),
+        )
+        center = to_canvas.transform(QgsPointXY(0.0, 45.0))
+        source_canvas = QgsGeometry(source)
+        source_canvas.transform(to_canvas)
+        expected = GeometryEngine.create_polar_array_geometries(
+            source_canvas,
+            center,
+            count=4,
+            fill_angle_deg=360.0,
+            rotate_features=True,
+            include_original=False,
+        )
+
+        widget = PolarArrayCanvasWidget(self.canvas)
+        widget.spin_count.setValue(4)
+        widget.spin_fill_angle.setValue(360.0)
+        widget.chk_rotate_features.setChecked(True)
+        tool = CADPolarArrayMapTool(self.canvas, widget, self.iface)
+        tool.center_point = center
+        tool.featureList = [source_feature]
+        tool.featureLayer = layer
+        tool._update_preview(None)
+
+        self.assertEqual(len(tool.preview_rubberbands), 3)
+        for rubberband, expected_geometry in zip(tool.preview_rubberbands, expected):
+            preview_centroid = rubberband.asGeometry().centroid().asPoint()
+            expected_centroid = expected_geometry.centroid().asPoint()
+            self.assertAlmostEqual(preview_centroid.x(), expected_centroid.x(), places=3)
+            self.assertAlmostEqual(preview_centroid.y(), expected_centroid.y(), places=3)
+
+        tool.commit_array()
+        committed = [
+            feature.geometry()
+            for feature in layer.getFeatures()
+            if feature.id() != source_feature.id()
+        ]
+        self.assertEqual(len(committed), 3)
+        committed_canvas = []
+        for geometry in committed:
+            geometry.transform(to_canvas)
+            committed_canvas.append(geometry)
+        committed_centers = sorted(
+            (round(g.centroid().asPoint().x(), 3), round(g.centroid().asPoint().y(), 3))
+            for g in committed_canvas
+        )
+        expected_centers = sorted(
+            (round(g.centroid().asPoint().x(), 3), round(g.centroid().asPoint().y(), 3))
+            for g in expected
+        )
+        self.assertEqual(committed_centers, expected_centers)
+
+        tool.deactivate()
+        tool.deleteLater()
+        widget.deleteLater()
+        layer.rollBack()
+
     def test_click_select_highlights_without_layer_selection(self):
         """Clicking a feature in STATE_SELECT_FEATURE highlights it without changing QGIS selection."""
         self.polygon_layer.startEditing()
@@ -394,6 +472,45 @@ class TestCADPolarArrayTool(unittest.TestCase):
         self.assertTrue(handled)
         self.assertEqual(tool.state, CADPolarArrayMapTool.STATE_SET_BASE_RAY)
 
+        tool.deleteLater()
+        widget.deleteLater()
+
+    def test_escape_with_hidden_competing_hud_filters(self):
+        """A hidden, later-created HUD must not consume Circular Array Escape."""
+        from qgis.PyQt.QtCore import Qt
+        from qgis.PyQt.QtTest import QTest
+        from gui.ortho_angles_canvas_widget import OrthoAnglesCanvasWidget
+
+        widget = PolarArrayCanvasWidget(self.canvas)
+        tool = CADPolarArrayMapTool(self.canvas, widget, self.iface)
+        tool.activate()
+        tool.center_point = QgsPointXY(0, 0)
+
+        hidden_widget = OrthoAnglesCanvasWidget(self.canvas)
+        hidden_widget.hide()
+        hidden_resets = []
+        hidden_widget.resetRequested.connect(lambda: hidden_resets.append(True))
+
+        escape = getattr(Qt.Key, "Key_Escape", getattr(Qt, "Key_Escape", 0x01000000))
+        targets = (
+            self.canvas,
+            self.canvas.viewport(),
+            widget.spin_count,
+        )
+        for target in targets:
+            tool.state = CADPolarArrayMapTool.STATE_SET_ANGLE
+            target.setFocus()
+            QTest.keyClick(target, escape)
+            QgsApplication.processEvents()
+            self.assertEqual(tool.state, CADPolarArrayMapTool.STATE_SET_BASE_RAY)
+
+        self.assertEqual(hidden_resets, [])
+        try:
+            self.canvas.removeEventFilter(hidden_widget)
+        except (TypeError, RuntimeError):
+            pass
+        hidden_widget.deleteLater()
+        tool.deactivate()
         tool.deleteLater()
         widget.deleteLater()
 

@@ -274,6 +274,9 @@ class RotationCanvasWidget(QFrame):
         return True
 
     def eventFilter(self, obj, event):
+        if obj == self.canvas and self.isHidden():
+            return super().eventFilter(obj, event)
+
         evt_resize = getattr(QEvent.Type, "Resize", getattr(QEvent, "Resize", None))
         evt_focus_in = getattr(QEvent.Type, "FocusIn", getattr(QEvent, "FocusIn", None))
         evt_key_press = getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", None))

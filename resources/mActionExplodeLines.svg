@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   height="24"
+   viewBox="0 0 24 24"
+   width="24"
+   version="1.1"
+   xmlns="http://www.w3.org/2000/svg">
+  <!-- Segment 1: Upper-left segment moving outward -->
+  <line
+     x1="3"
+     y1="19"
+     x2="8"
+     y2="14"
+     style="stroke:#2563eb;stroke-width:2.4;stroke-linecap:round" />
+  <circle cx="3" cy="19" r="1.5" style="fill:#1e3a8a" />
+  <circle cx="8" cy="14" r="1.5" style="fill:#1e3a8a" />
+
+  <!-- Segment 2: Middle segment separated -->
+  <line
+     x1="11"
+     y1="11"
+     x2="15"
+     y2="7"
+     style="stroke:#2563eb;stroke-width:2.4;stroke-linecap:round" />
+  <circle cx="11" cy="11" r="1.5" style="fill:#1e3a8a" />
+  <circle cx="15" cy="7" r="1.5" style="fill:#1e3a8a" />
+
+  <!-- Segment 3: Right segment separated -->
+  <line
+     x1="17"
+     y1="9"
+     x2="21"
+     y2="13"
+     style="stroke:#2563eb;stroke-width:2.4;stroke-linecap:round" />
+  <circle cx="17" cy="9" r="1.5" style="fill:#1e3a8a" />
+  <circle cx="21" cy="13" r="1.5" style="fill:#1e3a8a" />
+
+  <!-- Explode / separation burst rays in amber/orange -->
+  <path
+     d="M 9.5,12.5 L 7.5,10.5 M 9.5,12.5 L 11.5,14.5 M 16,8 L 18,6"
+     style="stroke:#ea580c;stroke-width:1.6;stroke-linecap:round" />
+  <polygon
+     points="7,10 9,10 7,12"
+     style="fill:#ea580c" />
+</svg>

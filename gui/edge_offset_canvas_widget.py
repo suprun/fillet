@@ -374,6 +374,9 @@ class EdgeOffsetCanvasWidget(QFrame):
         return self.chk_copy.isChecked()
 
     def eventFilter(self, obj, event):
+        if obj == self.canvas and self.isHidden():
+            return super().eventFilter(obj, event)
+
         evt_resize = getattr(QEvent.Type, "Resize", getattr(QEvent, "Resize", None))
         evt_key_press = getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", None))
         evt_key_release = getattr(QEvent.Type, "KeyRelease", getattr(QEvent, "KeyRelease", None))

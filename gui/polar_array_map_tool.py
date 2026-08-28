@@ -50,11 +50,21 @@ _Key_Backspace = getattr(Qt.Key, "Key_Backspace", getattr(Qt, "Key_Backspace", 0
 try:
     from ..core.geometry_engine import GeometryEngine
     from .polar_array_canvas_widget import PolarArrayCanvasWidget, PolarArrayMode
-    from .gui_utils import confirm_features_in_canvas_extent
+    from .gui_utils import (
+        checked_edit_command,
+        confirm_features_in_canvas_extent,
+        require_edit_success,
+        transform_geometry_copy,
+    )
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
     from gui.polar_array_canvas_widget import PolarArrayCanvasWidget, PolarArrayMode
-    from gui.gui_utils import confirm_features_in_canvas_extent
+    from gui.gui_utils import (
+        checked_edit_command,
+        confirm_features_in_canvas_extent,
+        require_edit_success,
+        transform_geometry_copy,
+    )
 
 
 class CADPolarArrayMapTool(QgsMapToolEdit):
@@ -174,18 +184,17 @@ class CADPolarArrayMapTool(QgsMapToolEdit):
 
         canvas_crs = self.canvas.mapSettings().destinationCrs() if self.canvas else QgsProject.instance().crs()
         layer_crs = self.featureLayer.crs()
-        needs_transform = canvas_crs.isValid() and layer_crs.isValid() and canvas_crs != layer_crs
-        to_canvas = QgsCoordinateTransform(layer_crs, canvas_crs, QgsProject.instance()) if needs_transform else None
-
         geoms = []
         for feat in self.featureList:
             g = QgsGeometry(feat.geometry())
             if not g.isEmpty() and not g.isNull():
-                if to_canvas:
-                    try:
-                        g.transform(to_canvas)
-                    except Exception:
-                        pass
+                try:
+                    g = transform_geometry_copy(g, layer_crs, canvas_crs)
+                except Exception:
+                    self.selection_rubberband.reset(
+                        QgsWkbTypes.GeometryType.PolygonGeometry
+                    )
+                    return
                 geoms.append(g)
 
         if geoms:
@@ -262,7 +271,7 @@ class CADPolarArrayMapTool(QgsMapToolEdit):
                 if pan_action and hasattr(pan_action, "trigger"):
                     pan_action.trigger()
             except Exception:
-                pass
+                return
 
     def reset_state(self) -> None:
         layer = self.currentVectorLayer()
@@ -324,8 +333,20 @@ class CADPolarArrayMapTool(QgsMapToolEdit):
         canvas_crs = self.canvas.mapSettings().destinationCrs() if self.canvas else QgsProject.instance().crs()
         layer_crs = layer.crs()
         if canvas_crs.isValid() and layer_crs.isValid() and canvas_crs != layer_crs:
-            transform = QgsCoordinateTransform(canvas_crs, layer_crs, QgsProject.instance())
-            search_rect = transform.transformBoundingBox(search_rect)
+            try:
+                transform = QgsCoordinateTransform(
+                    canvas_crs,
+                    layer_crs,
+                    QgsProject.instance(),
+                )
+                search_rect = transform.transformBoundingBox(search_rect)
+            except Exception as error:
+                if self.iface and hasattr(self.iface, "messageBar"):
+                    self.iface.messageBar().pushWarning(
+                        self.tr("Помилка"),
+                        str(error),
+                    )
+                return []
 
         req = layer.getFeatures(QgsFeatureRequest().setFilterRect(search_rect))
         pt_geom = QgsGeometry.fromPointXY(point)
@@ -491,41 +512,33 @@ class CADPolarArrayMapTool(QgsMapToolEdit):
         layer = self.featureLayer
         canvas_crs = self.canvas.mapSettings().destinationCrs() if self.canvas else QgsProject.instance().crs()
         layer_crs = layer.crs()
-        needs_transform = canvas_crs.isValid() and layer_crs.isValid() and canvas_crs != layer_crs
-
-        to_layer = QgsCoordinateTransform(canvas_crs, layer_crs, QgsProject.instance()) if needs_transform else None
-        to_canvas = QgsCoordinateTransform(layer_crs, canvas_crs, QgsProject.instance()) if needs_transform else None
-
-        center_in_layer = to_layer.transform(self.center_point) if to_layer else self.center_point
 
         count = self.widget.feature_count if self.widget else 4
         fill_angle = self.widget.fill_angle if self.widget else 360.0
         step_angle = self.widget.step_angle if (self.widget and self.widget.chk_step.isChecked()) else None
         rotate_features = self.widget.rotate_features if self.widget else True
 
-        # Generate preview geometries in layer CRS, transform to canvas for rubberband
         all_preview_geoms: List[QgsGeometry] = []
-        for feat in self.featureList:
-            orig_geom = feat.geometry()
-            if orig_geom.isEmpty() or orig_geom.isNull():
-                continue
-            copies = GeometryEngine.create_polar_array_geometries(
-                geom=orig_geom,
-                center=center_in_layer,
-                count=count,
-                fill_angle_deg=fill_angle,
-                rotate_features=rotate_features,
-                include_original=False,
-                step_angle_deg=step_angle,
-            )
-            for c in copies:
-                geom_c = QgsGeometry(c)
-                if to_canvas:
-                    try:
-                        geom_c.transform(to_canvas)
-                    except Exception:
-                        pass
-                all_preview_geoms.append(geom_c)
+        try:
+            for feat in self.featureList:
+                orig_geom = feat.geometry()
+                if orig_geom.isEmpty() or orig_geom.isNull():
+                    continue
+                canvas_geom = transform_geometry_copy(orig_geom, layer_crs, canvas_crs)
+                copies = GeometryEngine.create_polar_array_geometries(
+                    geom=canvas_geom,
+                    center=self.center_point,
+                    count=count,
+                    fill_angle_deg=fill_angle,
+                    rotate_features=rotate_features,
+                    include_original=False,
+                    step_angle_deg=step_angle,
+                )
+                all_preview_geoms.extend(copies)
+        except (RuntimeError, TypeError):
+            for rubberband in self.preview_rubberbands:
+                rubberband.reset(layer.geometryType())
+            return
 
         geom_type = layer.geometryType()
         for i, geom_c in enumerate(all_preview_geoms):
@@ -651,47 +664,49 @@ class CADPolarArrayMapTool(QgsMapToolEdit):
 
         canvas_crs = self.canvas.mapSettings().destinationCrs() if self.canvas else QgsProject.instance().crs()
         layer_crs = layer.crs()
-        center_in_layer = self.center_point
-        if canvas_crs.isValid() and layer_crs.isValid() and canvas_crs != layer_crs:
-            transform = QgsCoordinateTransform(canvas_crs, layer_crs, QgsProject.instance())
-            center_in_layer = transform.transform(self.center_point)
 
         count = self.widget.feature_count if self.widget else 4
         fill_angle = self.widget.fill_angle if self.widget else 360.0
         step_angle = self.widget.step_angle if (self.widget and self.widget.chk_step.isChecked()) else None
         rotate_features = self.widget.rotate_features if self.widget else True
 
-        layer.beginEditCommand(self.tr("CAD Polar Array Feature(s)"))
         try:
             new_features: List[QgsFeature] = []
             for feat in self.featureList:
                 orig_geom = feat.geometry()
                 if orig_geom.isEmpty() or orig_geom.isNull():
                     continue
+                canvas_geom = transform_geometry_copy(orig_geom, layer_crs, canvas_crs)
                 copies = GeometryEngine.create_polar_array_geometries(
-                    geom=orig_geom,
-                    center=center_in_layer,
+                    geom=canvas_geom,
+                    center=self.center_point,
                     count=count,
                     fill_angle_deg=fill_angle,
                     rotate_features=rotate_features,
                     include_original=False,
                     step_angle_deg=step_angle,
                 )
-                for geom in copies:
+                for canvas_geometry in copies:
+                    geom = transform_geometry_copy(canvas_geometry, canvas_crs, layer_crs)
                     new_feat = QgsFeature(feat)
                     new_feat.setGeometry(geom)
                     new_features.append(new_feat)
 
-            if new_features:
-                layer.addFeatures(new_features)
-                new_fids = [f.id() for f in new_features if f.id() != 0]
-                if new_fids:
-                    layer.selectByIds(new_fids)
+            if not new_features:
+                return
 
-            layer.endEditCommand()
-        except Exception as err:
-            layer.destroyEditCommand()
+            with checked_edit_command(layer, self.tr("CAD Polar Array Feature(s)")):
+                require_edit_success(
+                    layer.addFeatures(new_features),
+                    self.tr("Не вдалося додати елементи кругового масиву."),
+                )
+
+            new_fids = [feature.id() for feature in new_features if feature.id() != 0]
+            if new_fids:
+                layer.selectByIds(new_fids)
+        except (RuntimeError, TypeError) as err:
             if self.iface:
                 self.iface.messageBar().pushWarning(self.tr("Помилка"), str(err))
+            return
 
         self.reset_state()

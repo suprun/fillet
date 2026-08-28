@@ -2,6 +2,7 @@
 """Test plugin initGui, unload lifecycle, and action enablement based on layer editing mode."""
 
 import os
+import importlib
 import sys
 import unittest
 
@@ -96,6 +97,34 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
         self.plugin = FilletPlugin(self.iface)
         self.plugin.initGui()
         self.assertEqual(len(win.findChildren(QDockWidget, "FilletChamferDockWidget")), 1)
+
+    def test_map_tool_signal_disconnects_on_reload(self):
+        """Unload must remove its mapToolSet callback in QGIS 3 and QGIS 4."""
+        connected_count = canvas.receivers(canvas.mapToolSet)
+        self.assertGreaterEqual(connected_count, 1)
+
+        self.plugin.unload()
+        app.processEvents()
+        disconnected_count = canvas.receivers(canvas.mapToolSet)
+        self.assertLess(disconnected_count, connected_count)
+
+        self.plugin = FilletPlugin(self.iface)
+        self.plugin.initGui()
+        reloaded_count = canvas.receivers(canvas.mapToolSet)
+        self.assertEqual(reloaded_count, connected_count)
+
+    def test_package_import_and_class_factory(self):
+        """The plugin package entry point must construct a plugin instance."""
+        repository_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+        parent_directory = os.path.dirname(repository_root)
+        sys.path.insert(0, parent_directory)
+        try:
+            package = importlib.import_module(os.path.basename(repository_root))
+            instance = package.classFactory(self.iface)
+            self.assertEqual(instance.__class__.__name__, "FilletPlugin")
+            self.assertIs(instance.iface, self.iface)
+        finally:
+            sys.path.remove(parent_directory)
 
     def test_actions_disabled_when_no_layer(self):
         """Actions must be disabled when there is no active layer."""

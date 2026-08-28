@@ -1,42 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    height="24"
    viewBox="0 0 24 24"
    width="24"
    version="1.1"
-   xmlns="http://www.w3.org/2000/svg">
-  <!-- Original shape on the left -->
-  <polygon
-     points="2,19 10,19 9,7 3,11"
-     style="fill:#8cbe8c;fill-opacity:0.4;stroke:#555753;stroke-width:1;stroke-dasharray:1.5,1.5" />
-
-  <!-- Mirrored shape on the right -->
-  <polygon
-     points="22,19 14,19 15,7 21,11"
-     style="fill:#8cbe8c;fill-opacity:0.85;stroke:#204a87;stroke-width:1.5" />
-
-  <!-- Central Mirror Symmetry Axis Line -->
-  <line
-     x1="12"
-     y1="2"
-     x2="12"
-     y2="22"
-     style="stroke:#ce5c00;stroke-width:1.6;stroke-dasharray:2.5,1.5;stroke-linecap:round" />
-
-  <!-- Axis Anchor Points (P1 and P2) -->
-  <circle
-     cx="12"
-     cy="3"
-     r="2"
-     style="fill:#ea580c;stroke:#ffffff;stroke-width:0.8" />
-  <circle
-     cx="12"
-     cy="21"
-     r="2"
-     style="fill:#ea580c;stroke:#ffffff;stroke-width:0.8" />
-
-  <!-- Bidirectional reflection arrows -->
-  <path
-     d="M 6,5 L 8,5 M 16,5 L 18,5"
-     style="stroke:#ce5c00;stroke-width:1.2;stroke-linecap:round" />
+   id="svg16"
+   sodipodi:docname="mActionMirrorCAD.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
+  <metadata
+     id="metadata22">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs20" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2560"
+     inkscape:window-height="1387"
+     id="namedview18"
+     showgrid="true"
+     inkscape:snap-global="false"
+     inkscape:zoom="11.313709"
+     inkscape:cx="3.7948062"
+     inkscape:cy="5.7053463"
+     inkscape:window-x="1912"
+     inkscape:window-y="22"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g14">
+    <inkscape:grid
+       type="xygrid"
+       id="grid852" />
+  </sodipodi:namedview>
+  <g
+     transform="translate(0 -8)"
+     id="g14">
+    <path
+       d="M 9.8165488,16.105062 C 9.3533223,13.79173 7.9860175,11.94078 5.4157771,11.563726 2.8653849,11.18958 -1.1439277,13.761548 1.5015192,17.328429 c 4.3938491,5.924265 0.3982389,6.652462 0.6962372,8.280084 0.3675869,2.007689 2.1439607,3.811245 3.9338546,3.483537 1.6009289,-0.293113 3.1483478,-0.494415 3.8657959,-1.552053 1.3029321,-1.920733 -1.2611727,-2.299407 -0.2745475,-7.002935 0.3144356,-1.499015 0.3716256,-3.044003 0.093689,-4.432 z"
+       id="path2"
+       inkscape:connector-curvature="0"
+       style="fill:#8cbe8c;fill-rule:evenodd;stroke:#41433f;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+    <line
+       x1="12.097679"
+       y1="9.2320614"
+       x2="12.097679"
+       y2="30.330439"
+       style="stroke:#8c8c8c;stroke-width:1.64334798;stroke-linecap:round;stroke-dasharray:2.56773114, 1.54063868000000004;stroke-opacity:1"
+       id="line858" />
+    <path
+       d="m 14.18429,16.105062 c 0.463227,-2.313332 1.830532,-4.164282 4.400772,-4.541336 2.550392,-0.374146 6.559704,2.197822 3.914258,5.764703 -4.393849,5.924265 -0.398239,6.652462 -0.696237,8.280084 -0.367587,2.007689 -2.143961,3.811245 -3.933855,3.483537 -1.600929,-0.293113 -3.148348,-0.494415 -3.865796,-1.552053 -1.302932,-1.920733 1.261173,-2.299407 0.274548,-7.002935 -0.314436,-1.499015 -0.371626,-3.044003 -0.09369,-4.432 z"
+       id="path2-64"
+       inkscape:connector-curvature="0"
+       style="fill:#8cbe8c;fill-rule:evenodd;stroke:#41433f;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+  </g>
 </svg>

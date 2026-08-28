@@ -32,11 +32,21 @@ from qgis.PyQt.QtGui import QColor, QCursor
 
 try:
     from ..core.geometry_engine import GeometryEngine
-    from .gui_utils import confirm_features_in_canvas_extent
+    from .gui_utils import (
+        checked_edit_command,
+        confirm_features_in_canvas_extent,
+        require_edit_success,
+        transform_geometry_copy,
+    )
     from .ortho_angles_canvas_widget import OrthoAnglesCanvasWidget
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
-    from gui.gui_utils import confirm_features_in_canvas_extent
+    from gui.gui_utils import (
+        checked_edit_command,
+        confirm_features_in_canvas_extent,
+        require_edit_success,
+        transform_geometry_copy,
+    )
     from gui.ortho_angles_canvas_widget import OrthoAnglesCanvasWidget
 
 try:
@@ -148,18 +158,17 @@ class CADOrthoAnglesMapTool(QgsMapToolEdit):
 
         canvas_crs = self.canvas.mapSettings().destinationCrs() if self.canvas else QgsProject.instance().crs()
         layer_crs = self.featureLayer.crs()
-        needs_transform = canvas_crs.isValid() and layer_crs.isValid() and canvas_crs != layer_crs
-        to_canvas = QgsCoordinateTransform(layer_crs, canvas_crs, QgsProject.instance()) if needs_transform else None
-
         geoms = []
         for feat in self.featureList:
             g = QgsGeometry(feat.geometry())
             if not g.isEmpty() and not g.isNull():
-                if to_canvas:
-                    try:
-                        g.transform(to_canvas)
-                    except Exception:
-                        pass
+                try:
+                    g = transform_geometry_copy(g, layer_crs, canvas_crs)
+                except Exception:
+                    self.selection_rubberband.reset(
+                        QgsWkbTypes.GeometryType.PolygonGeometry
+                    )
+                    return
                 geoms.append(g)
 
         if geoms:
@@ -223,7 +232,7 @@ class CADOrthoAnglesMapTool(QgsMapToolEdit):
                 if pan_action and hasattr(pan_action, "trigger"):
                     pan_action.trigger()
             except Exception:
-                pass
+                return
 
     def reset_state(self) -> None:
         layer = self.currentVectorLayer()
@@ -288,8 +297,20 @@ class CADOrthoAnglesMapTool(QgsMapToolEdit):
         canvas_crs = self.canvas.mapSettings().destinationCrs() if self.canvas else QgsProject.instance().crs()
         layer_crs = layer.crs()
         if canvas_crs.isValid() and layer_crs.isValid() and canvas_crs != layer_crs:
-            transform = QgsCoordinateTransform(canvas_crs, layer_crs, QgsProject.instance())
-            search_rect = transform.transformBoundingBox(search_rect)
+            try:
+                transform = QgsCoordinateTransform(
+                    canvas_crs,
+                    layer_crs,
+                    QgsProject.instance(),
+                )
+                search_rect = transform.transformBoundingBox(search_rect)
+            except Exception as error:
+                if self.iface and hasattr(self.iface, "messageBar"):
+                    self.iface.messageBar().pushWarning(
+                        self.tr("Помилка"),
+                        str(error),
+                    )
+                return []
 
         req = layer.getFeatures(search_rect)
         pt_geom = QgsGeometry.fromPointXY(point)
@@ -401,16 +422,25 @@ class CADOrthoAnglesMapTool(QgsMapToolEdit):
                 self._update_selection_highlight()
 
             # Transform feature geometry to canvas to find base segment
-            canvas_crs = self.canvas.mapSettings().destinationCrs() if self.canvas else QgsProject.instance().crs()
+            canvas_crs = (
+                self.canvas.mapSettings().destinationCrs()
+                if self.canvas
+                else QgsProject.instance().crs()
+            )
             layer_crs = layer.crs()
-            to_canvas = QgsCoordinateTransform(layer_crs, canvas_crs, QgsProject.instance()) if (canvas_crs.isValid() and layer_crs.isValid() and canvas_crs != layer_crs) else None
-
-            feat_geom = QgsGeometry(self.featureList[0].geometry())
-            if to_canvas:
-                try:
-                    feat_geom.transform(to_canvas)
-                except Exception:
-                    pass
+            try:
+                feat_geom = transform_geometry_copy(
+                    self.featureList[0].geometry(),
+                    layer_crs,
+                    canvas_crs,
+                )
+            except Exception as error:
+                if self.iface and hasattr(self.iface, "messageBar"):
+                    self.iface.messageBar().pushWarning(
+                        self.tr("Помилка"),
+                        str(error),
+                    )
+                return
 
             seg_info = self._find_closest_segment(feat_geom, point)
             if not seg_info:
@@ -442,16 +472,24 @@ class CADOrthoAnglesMapTool(QgsMapToolEdit):
         layer = self.featureLayer or self.currentVectorLayer()
 
         if self.state == self.STATE_SET_BASE_EDGE and self.featureList and layer:
-            canvas_crs = self.canvas.mapSettings().destinationCrs() if self.canvas else QgsProject.instance().crs()
+            canvas_crs = (
+                self.canvas.mapSettings().destinationCrs()
+                if self.canvas
+                else QgsProject.instance().crs()
+            )
             layer_crs = layer.crs()
-            to_canvas = QgsCoordinateTransform(layer_crs, canvas_crs, QgsProject.instance()) if (canvas_crs.isValid() and layer_crs.isValid() and canvas_crs != layer_crs) else None
-
-            feat_geom = QgsGeometry(self.featureList[0].geometry())
-            if to_canvas:
-                try:
-                    feat_geom.transform(to_canvas)
-                except Exception:
-                    pass
+            try:
+                feat_geom = transform_geometry_copy(
+                    self.featureList[0].geometry(),
+                    layer_crs,
+                    canvas_crs,
+                )
+            except Exception:
+                if self.base_edge_rubberband:
+                    self.base_edge_rubberband.reset(
+                        QgsWkbTypes.GeometryType.LineGeometry
+                    )
+                return
 
             seg_info = self._find_closest_segment(feat_geom, point)
             if seg_info and self.base_edge_rubberband:
@@ -472,19 +510,6 @@ class CADOrthoAnglesMapTool(QgsMapToolEdit):
         layer = self.featureLayer
         canvas_crs = self.canvas.mapSettings().destinationCrs() if self.canvas else QgsProject.instance().crs()
         layer_crs = layer.crs()
-        needs_transform = canvas_crs.isValid() and layer_crs.isValid() and canvas_crs != layer_crs
-
-        to_layer = QgsCoordinateTransform(canvas_crs, layer_crs, QgsProject.instance()) if needs_transform else None
-        to_canvas = QgsCoordinateTransform(layer_crs, canvas_crs, QgsProject.instance()) if needs_transform else None
-
-        # Base azimuth in layer CRS
-        p1, p2 = self.base_segment
-        if to_layer:
-            p1_l = to_layer.transform(p1)
-            p2_l = to_layer.transform(p2)
-            base_angle_in_layer = math.atan2(p2_l.y() - p1_l.y(), p2_l.x() - p1_l.x())
-        else:
-            base_angle_in_layer = self.base_angle_rad
 
         tolerance = self.widget.tolerance if self.widget else 15.0
         preserve_area = self.widget.preserve_area if self.widget else True
@@ -492,39 +517,31 @@ class CADOrthoAnglesMapTool(QgsMapToolEdit):
         all_previews: List[QgsGeometry] = []
         all_modified_points: List[QgsPointXY] = []
 
-        for feat in self.featureList:
-            orig_geom = feat.geometry()
-            if orig_geom.isEmpty() or orig_geom.isNull():
-                continue
+        try:
+            for feat in self.featureList:
+                orig_geom = feat.geometry()
+                if orig_geom.isEmpty() or orig_geom.isNull():
+                    continue
+                if GeometryEngine.has_curved_segments(orig_geom):
+                    continue
 
-            ortho_geom = GeometryEngine.orthogonalize_geometry(
-                geom=orig_geom,
-                base_angle_rad=base_angle_in_layer,
-                tolerance_deg=tolerance,
-                preserve_area=preserve_area,
-            )
+                orig_disp = transform_geometry_copy(orig_geom, layer_crs, canvas_crs)
+                ortho_disp = GeometryEngine.orthogonalize_geometry(
+                    geom=orig_disp,
+                    base_angle_rad=self.base_angle_rad,
+                    tolerance_deg=tolerance,
+                    preserve_area=preserve_area,
+                )
+                all_previews.append(ortho_disp)
 
-            # Transform to canvas for display
-            ortho_disp = QgsGeometry(ortho_geom)
-            if to_canvas:
-                try:
-                    ortho_disp.transform(to_canvas)
-                except Exception:
-                    pass
-            all_previews.append(ortho_disp)
-
-            # Find modified vertices for markers
-            orig_disp = QgsGeometry(orig_geom)
-            if to_canvas:
-                try:
-                    orig_disp.transform(to_canvas)
-                except Exception:
-                    pass
-            v_orig = [QgsPointXY(p.x(), p.y()) for p in orig_disp.vertices()]
-            v_ortho = [QgsPointXY(p.x(), p.y()) for p in ortho_disp.vertices()]
-            for vo, vn in zip(v_orig, v_ortho):
-                if math.hypot(vo.x() - vn.x(), vo.y() - vn.y()) > 1e-4:
-                    all_modified_points.append(vn)
+                v_orig = [QgsPointXY(p.x(), p.y()) for p in orig_disp.vertices()]
+                v_ortho = [QgsPointXY(p.x(), p.y()) for p in ortho_disp.vertices()]
+                for vo, vn in zip(v_orig, v_ortho):
+                    if math.hypot(vo.x() - vn.x(), vo.y() - vn.y()) > 1e-4:
+                        all_modified_points.append(vn)
+        except (RuntimeError, TypeError):
+            all_previews = []
+            all_modified_points = []
 
         geom_type = layer.geometryType()
         for i, g in enumerate(all_previews):
@@ -552,48 +569,60 @@ class CADOrthoAnglesMapTool(QgsMapToolEdit):
 
         canvas_crs = self.canvas.mapSettings().destinationCrs() if self.canvas else QgsProject.instance().crs()
         layer_crs = layer.crs()
-        needs_transform = canvas_crs.isValid() and layer_crs.isValid() and canvas_crs != layer_crs
-        to_layer = QgsCoordinateTransform(canvas_crs, layer_crs, QgsProject.instance()) if needs_transform else None
-
-        p1, p2 = self.base_segment
-        if to_layer:
-            p1_l = to_layer.transform(p1)
-            p2_l = to_layer.transform(p2)
-            base_angle_in_layer = math.atan2(p2_l.y() - p1_l.y(), p2_l.x() - p1_l.x())
-        else:
-            base_angle_in_layer = self.base_angle_rad
 
         tolerance = self.widget.tolerance if self.widget else 15.0
         preserve_area = self.widget.preserve_area if self.widget else True
         create_copy = self.widget.create_copy if self.widget else False
 
-        layer.beginEditCommand(self.tr("CAD Ортогоналізація кутів"))
+        if any(GeometryEngine.has_curved_segments(feature.geometry()) for feature in self.featureList):
+            if self.iface and hasattr(self.iface, "messageBar"):
+                self.iface.messageBar().pushWarning(
+                    self.tr("Непідтримувана геометрія"),
+                    self.tr("Операція не підтримує об'єкти з кривими сегментами."),
+                )
+            return
 
-        new_features: List[QgsFeature] = []
-        for feat in self.featureList:
-            orig_geom = feat.geometry()
-            if orig_geom.isEmpty() or orig_geom.isNull():
-                continue
+        try:
+            new_features: List[QgsFeature] = []
+            geometry_changes = []
+            for feat in self.featureList:
+                orig_geom = feat.geometry()
+                if orig_geom.isEmpty() or orig_geom.isNull():
+                    continue
 
-            ortho_geom = GeometryEngine.orthogonalize_geometry(
-                geom=orig_geom,
-                base_angle_rad=base_angle_in_layer,
-                tolerance_deg=tolerance,
-                preserve_area=preserve_area,
-            )
+                canvas_geom = transform_geometry_copy(orig_geom, layer_crs, canvas_crs)
+                ortho_canvas_geom = GeometryEngine.orthogonalize_geometry(
+                    geom=canvas_geom,
+                    base_angle_rad=self.base_angle_rad,
+                    tolerance_deg=tolerance,
+                    preserve_area=preserve_area,
+                )
+                ortho_geom = transform_geometry_copy(ortho_canvas_geom, canvas_crs, layer_crs)
 
-            if create_copy:
-                new_f = QgsFeature(layer.fields())
-                new_f.setAttributes(feat.attributes())
-                new_f.setGeometry(ortho_geom)
-                new_features.append(new_f)
-            else:
-                layer.changeGeometry(feat.id(), ortho_geom)
+                if create_copy:
+                    new_f = QgsFeature(layer.fields())
+                    new_f.setAttributes(feat.attributes())
+                    new_f.setGeometry(ortho_geom)
+                    new_features.append(new_f)
+                else:
+                    geometry_changes.append((feat.id(), ortho_geom))
 
-        if new_features:
-            layer.addFeatures(new_features)
-
-        layer.endEditCommand()
+            with checked_edit_command(layer, self.tr("CAD Ортогоналізація кутів")):
+                if create_copy and new_features:
+                    require_edit_success(
+                        layer.addFeatures(new_features),
+                        self.tr("Не вдалося додати ортогоналізовані копії."),
+                    )
+                else:
+                    for feature_id, ortho_geom in geometry_changes:
+                        require_edit_success(
+                            layer.changeGeometry(feature_id, ortho_geom),
+                            self.tr("Не вдалося змінити геометрію об'єкта."),
+                        )
+        except (RuntimeError, TypeError) as error:
+            if self.iface and hasattr(self.iface, "messageBar"):
+                self.iface.messageBar().pushWarning(self.tr("Помилка"), str(error))
+            return
 
         self.reset_state()
         if self.canvas:

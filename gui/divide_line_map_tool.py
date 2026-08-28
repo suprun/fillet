@@ -10,12 +10,10 @@ from typing import List, Optional
 from qgis.core import (
     Qgis,
     QgsFeature,
-    QgsFeatureRequest,
     QgsGeometry,
     QgsPoint,
     QgsPointLocator,
     QgsPointXY,
-    QgsRectangle,
     QgsVectorLayer,
     QgsWkbTypes,
 )
@@ -34,12 +32,20 @@ try:
     from ..core.geometry_engine import GeometryEngine
     from ..core.snapping_helper import SnappingHelper
     from .divide_line_canvas_widget import DivideLineCanvasWidget, DivideLineMode
-    from .gui_utils import confirm_features_in_canvas_extent
+    from .gui_utils import (
+        checked_edit_command,
+        confirm_features_in_canvas_extent,
+        require_edit_success,
+    )
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
     from core.snapping_helper import SnappingHelper
     from gui.divide_line_canvas_widget import DivideLineCanvasWidget, DivideLineMode
-    from gui.gui_utils import confirm_features_in_canvas_extent
+    from gui.gui_utils import (
+        checked_edit_command,
+        confirm_features_in_canvas_extent,
+        require_edit_success,
+    )
 
 _CrossCursor = getattr(Qt.CursorShape, "CrossCursor", getattr(Qt, "CrossCursor", None))
 _LeftButton = getattr(Qt.MouseButton, "LeftButton", getattr(Qt, "LeftButton", 1))
@@ -165,28 +171,15 @@ class CADDivideLineMapTool(QgsMapToolEdit):
         if not layer or not self.canvas:
             return None
 
-        search_radius = SnappingHelper.get_search_radius_map_units(self.canvas)
-        rect = QgsRectangle(
-            map_point.x() - search_radius,
-            map_point.y() - search_radius,
-            map_point.x() + search_radius,
-            map_point.y() + search_radius,
+        match = SnappingHelper.find_segment_at_position(
+            layer,
+            self.canvas,
+            map_point,
         )
-
-        req = QgsFeatureRequest().setFilterRect(rect).setFlags(QgsFeatureRequest.Flag.ExactIntersect)
-        best_feat = None
-        min_dist = float("inf")
-
-        for feat in layer.getFeatures(req):
-            geom = feat.geometry()
-            if geom.isNull() or geom.isEmpty():
-                continue
-            dist = geom.distance(QgsGeometry.fromPointXY(map_point))
-            if dist < min_dist and dist <= search_radius:
-                min_dist = dist
-                best_feat = feat
-
-        return best_feat
+        if match is None:
+            return None
+        feature = layer.getFeature(match.fid)
+        return feature if feature.isValid() else None
 
     def _update_preview(self, feat: QgsFeature):
         """Draws divided segments and cut markers on the canvas."""
@@ -361,39 +354,44 @@ class CADDivideLineMapTool(QgsMapToolEdit):
                 )
             return
 
-        layer.beginEditCommand(self.tr("CAD Divide Line"))
-        success = True
         try:
-            if separate:
-                # Replace with multiple separate features
-                orig_attrs = feat.attributes()
-                new_feats = []
-                for sub_g in sub_geoms:
-                    new_f = QgsFeature(layer.fields())
-                    new_f.setAttributes(orig_attrs)
-                    new_f.setGeometry(sub_g)
-                    new_feats.append(new_f)
+            with checked_edit_command(layer, self.tr("CAD Divide Line")):
+                if separate:
+                    orig_attrs = feat.attributes()
+                    new_feats = []
+                    for sub_g in sub_geoms:
+                        new_f = QgsFeature(layer.fields())
+                        new_f.setAttributes(orig_attrs)
+                        new_f.setGeometry(sub_g)
+                        new_feats.append(new_f)
 
-                layer.deleteFeature(feat.id())
-                layer.addFeatures(new_feats)
-            else:
-                # Convert to MultiLineString on the existing feature
-                lines = []
-                for sub_g in sub_geoms:
-                    if sub_g.isMultipart():
-                        for p in sub_g.asMultiPolyline():
-                            lines.append(p)
-                    else:
-                        lines.append(sub_g.asPolyline())
-                multi_geom = QgsGeometry.fromMultiPolylineXY(lines)
-                layer.changeGeometry(feat.id(), multi_geom)
-        except Exception:
-            layer.destroyEditCommand()
-            success = False
-            raise
-        finally:
-            if success:
-                layer.endEditCommand()
+                    require_edit_success(
+                        layer.deleteFeature(feat.id()),
+                        "deleteFeature",
+                    )
+                    require_edit_success(
+                        layer.addFeatures(new_feats),
+                        "addFeatures",
+                    )
+                else:
+                    multi_geom = QgsGeometry.collectGeometry(sub_geoms)
+                    if multi_geom.isNull() or multi_geom.isEmpty():
+                        raise RuntimeError("divided geometry is empty")
+                    require_edit_success(
+                        layer.changeGeometry(feat.id(), multi_geom),
+                        "changeGeometry",
+                    )
+        except (RuntimeError, TypeError) as error:
+            if self.iface and hasattr(self.iface, "messageBar"):
+                self.iface.messageBar().pushMessage(
+                    self.tr("CAD Divide Line"),
+                    self.tr("Не вдалося записати зміни: {error}").format(
+                        error=error
+                    ),
+                    level=Qgis.Critical,
+                    duration=5,
+                )
+            return
 
         self.reset_state()
         if self.canvas:

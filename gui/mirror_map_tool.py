@@ -12,6 +12,7 @@ from qgis.core import (
     QgsCoordinateTransform,
     QgsFeature,
     QgsGeometry,
+    QgsMessageLog,
     QgsPoint,
     QgsPointLocator,
     QgsPointXY,
@@ -46,11 +47,19 @@ _ShiftModifier = getattr(Qt.KeyboardModifier, "ShiftModifier", getattr(Qt, "Shif
 
 try:
     from ..core.geometry_engine import GeometryEngine
-    from .gui_utils import confirm_features_in_canvas_extent
+    from .gui_utils import (
+        checked_edit_command,
+        confirm_features_in_canvas_extent,
+        require_edit_success,
+    )
     from .mirror_canvas_widget import MirrorCanvasWidget
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
-    from gui.gui_utils import confirm_features_in_canvas_extent
+    from gui.gui_utils import (
+        checked_edit_command,
+        confirm_features_in_canvas_extent,
+        require_edit_success,
+    )
     from gui.mirror_canvas_widget import MirrorCanvasWidget
 
 
@@ -63,10 +72,16 @@ class MirrorMapTool(QgsMapToolEdit):
     def tr(self, message: str) -> str:
         return QCoreApplication.translate("FilletPlugin", message)
 
-    def __init__(self, canvas: QgsMapCanvas, widget: Optional[MirrorCanvasWidget] = None):
+    def __init__(
+        self,
+        canvas: QgsMapCanvas,
+        widget: Optional[MirrorCanvasWidget] = None,
+        iface=None,
+    ):
         super().__init__(canvas)
         self.canvas = canvas
         self.widget = widget or MirrorCanvasWidget(self.canvas)
+        self.iface = iface
 
         self.state = self.STATE_FIRST_POINT
         self.p1: Optional[QgsPointXY] = None
@@ -344,45 +359,69 @@ class MirrorMapTool(QgsMapToolEdit):
         is_copy = self.widget.is_copy_mode
         cmd_name = self.tr("CAD Дзеркальне копіювання") if is_copy else self.tr("CAD Дзеркальне відображення")
 
-        layer.beginEditCommand(cmd_name)
-        success = True
+        new_features = []
+        try:
+            with checked_edit_command(layer, cmd_name):
+                if is_copy:
+                    for feat in selected_features:
+                        geom = feat.geometry()
+                        if geom and not geom.isEmpty():
+                            mirrored_geom = GeometryEngine.mirror_geometry(
+                                geom,
+                                p1_layer,
+                                p2_layer,
+                            )
+                            if not mirrored_geom or mirrored_geom.isEmpty():
+                                raise RuntimeError("mirror geometry is empty")
+                            new_feat = QgsFeature(feat)
+                            new_feat.setGeometry(mirrored_geom)
+                            new_features.append(new_feat)
+                    if new_features:
+                        require_edit_success(
+                            layer.addFeatures(new_features),
+                            "addFeatures",
+                        )
+                else:
+                    for feat in selected_features:
+                        geom = feat.geometry()
+                        if geom and not geom.isEmpty():
+                            mirrored_geom = GeometryEngine.mirror_geometry(
+                                geom,
+                                p1_layer,
+                                p2_layer,
+                            )
+                            if not mirrored_geom or mirrored_geom.isEmpty():
+                                raise RuntimeError("mirror geometry is empty")
+                            require_edit_success(
+                                layer.changeGeometry(feat.id(), mirrored_geom),
+                                "changeGeometry",
+                            )
+        except (RuntimeError, TypeError) as error:
+            self._show_write_error(error)
+            return
 
         if is_copy:
-            new_features = []
-            for feat in selected_features:
-                geom = feat.geometry()
-                if geom and not geom.isEmpty():
-                    mirrored_geom = GeometryEngine.mirror_geometry(geom, p1_layer, p2_layer)
-                    new_feat = QgsFeature(feat)
-                    new_feat.setGeometry(mirrored_geom)
-                    new_features.append(new_feat)
-
-            if new_features:
-                success = layer.addFeatures(new_features)
-                if success:
-                    new_fids = [f.id() for f in new_features if f.id() != 0]
-                    if new_fids:
-                        layer.selectByIds(new_fids)
-        else:
-            for feat in selected_features:
-                geom = feat.geometry()
-                if geom and not geom.isEmpty():
-                    mirrored_geom = GeometryEngine.mirror_geometry(geom, p1_layer, p2_layer)
-                    res = layer.changeGeometry(feat.id(), mirrored_geom)
-                    if not res:
-                        success = False
-
-        if success:
-            layer.endEditCommand()
-            layer.updateExtents()
-            layer.triggerRepaint()
-            if hasattr(self.canvas.snappingUtils(), "clearAllLocators"):
-                self.canvas.snappingUtils().clearAllLocators()
-            self.canvas.refresh()
-        else:
-            layer.destroyEditCommand()
-
+            new_fids = [feature.id() for feature in new_features if feature.id() != 0]
+            if new_fids:
+                layer.selectByIds(new_fids)
+        layer.updateExtents()
+        layer.triggerRepaint()
+        if hasattr(self.canvas.snappingUtils(), "clearAllLocators"):
+            self.canvas.snappingUtils().clearAllLocators()
+        self.canvas.refresh()
         self.reset_state()
+
+    def _show_write_error(self, error: Exception):
+        message = self.tr("Не вдалося записати зміни: {error}").format(error=error)
+        if self.iface and hasattr(self.iface, "messageBar"):
+            self.iface.messageBar().pushMessage(
+                self.tr("Fillet Toolkit"),
+                message,
+                level=Qgis.Critical,
+                duration=5,
+            )
+        else:
+            QgsMessageLog.logMessage(message, "Fillet Toolkit", Qgis.Critical)
 
     def _handle_step_back(self):
         """Steps back one level or cancels."""

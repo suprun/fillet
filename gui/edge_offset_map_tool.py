@@ -12,6 +12,7 @@ from qgis.core import (
     QgsCoordinateTransform,
     QgsFeature,
     QgsGeometry,
+    QgsMessageLog,
     QgsPoint,
     QgsPointXY,
     QgsProject,
@@ -48,10 +49,12 @@ try:
     from ..core.geometry_engine import GeometryEngine
     from ..core.snapping_helper import SegmentMatch, SnappingHelper
     from .edge_offset_canvas_widget import EdgeOffsetCanvasWidget
+    from .gui_utils import checked_edit_command, require_edit_success
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
     from core.snapping_helper import SegmentMatch, SnappingHelper
     from gui.edge_offset_canvas_widget import EdgeOffsetCanvasWidget
+    from gui.gui_utils import checked_edit_command, require_edit_success
 
 
 class EdgeOffsetMapTool(QgsMapToolEdit):
@@ -66,10 +69,11 @@ class EdgeOffsetMapTool(QgsMapToolEdit):
     def tr(self, message: str) -> str:
         return QCoreApplication.translate("FilletPlugin", message)
 
-    def __init__(self, canvas: QgsMapCanvas, widget: EdgeOffsetCanvasWidget):
+    def __init__(self, canvas: QgsMapCanvas, widget: EdgeOffsetCanvasWidget, iface=None):
         super().__init__(canvas)
         self.canvas = canvas
         self.widget = widget
+        self.iface = iface
 
         self.state = self.STATE_HOVER_EDGE
         self.current_match: Optional[SegmentMatch] = None
@@ -354,6 +358,9 @@ class EdgeOffsetMapTool(QgsMapToolEdit):
 
             if self.state == self.STATE_HOVER_EDGE:
                 if self.current_match:
+                    if GeometryEngine.has_curved_segments(self.current_match.geometry):
+                        self._show_curved_geometry_warning()
+                        return
                     self.state = self.STATE_ADJUSTING_OFFSET
                     self.widget.set_step(EdgeOffsetCanvasWidget.STEP_ADJUST_OFFSET)
                     self.widget.focus_primary_input()
@@ -369,25 +376,58 @@ class EdgeOffsetMapTool(QgsMapToolEdit):
         if not layer or not self.current_match or not self.preview_geom:
             return
 
-        layer.beginEditCommand(self.tr("Зсув ребра"))
-
-        if self.widget.copy_mode:
-            new_feat = QgsFeature(layer.fields())
-            orig_feat = layer.getFeature(self.current_match.fid)
-            if orig_feat.isValid():
-                new_feat.setAttributes(orig_feat.attributes())
-            new_feat.setGeometry(self.preview_geom)
-            layer.addFeature(new_feat)
-        else:
-            layer.changeGeometry(self.current_match.fid, self.preview_geom)
-
-        layer.endEditCommand()
+        try:
+            with checked_edit_command(layer, self.tr("Зсув ребра")):
+                if self.widget.copy_mode:
+                    new_feat = QgsFeature(layer.fields())
+                    orig_feat = layer.getFeature(self.current_match.fid)
+                    if orig_feat.isValid():
+                        new_feat.setAttributes(orig_feat.attributes())
+                    new_feat.setGeometry(self.preview_geom)
+                    require_edit_success(layer.addFeature(new_feat), "addFeature")
+                else:
+                    require_edit_success(
+                        layer.changeGeometry(
+                            self.current_match.fid,
+                            self.preview_geom,
+                        ),
+                        "changeGeometry",
+                    )
+        except (RuntimeError, TypeError) as error:
+            self._show_write_error(error)
+            return
         layer.triggerRepaint()
 
         self._clear_preview()
         self.state = self.STATE_HOVER_EDGE
         self.current_match = None
         self.widget.set_step(EdgeOffsetCanvasWidget.STEP_SELECT_EDGE)
+
+    def _show_write_error(self, error: Exception):
+        message = self.tr("Не вдалося записати зміни: {error}").format(error=error)
+        if self.iface and hasattr(self.iface, "messageBar"):
+            self.iface.messageBar().pushMessage(
+                self.tr("Fillet Toolkit"),
+                message,
+                level=Qgis.Critical,
+                duration=5,
+            )
+        else:
+            QgsMessageLog.logMessage(message, "Fillet Toolkit", Qgis.Critical)
+
+    def _show_curved_geometry_warning(self):
+        message = self.tr(
+            "Ця операція недоступна для геометрій із кривими сегментами."
+        )
+        if self.iface and hasattr(self.iface, "messageBar"):
+            self.iface.messageBar().pushMessage(
+                self.tr("Fillet Toolkit"),
+                message,
+                level=Qgis.Warning,
+                duration=5,
+            )
+        else:
+            QgsMessageLog.logMessage(message, "Fillet Toolkit", Qgis.Warning)
 
     def _cancel_operation(self):
         self._clear_preview()

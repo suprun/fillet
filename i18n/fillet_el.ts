@@ -738,5 +738,57 @@
             <source>Сходинка (Step)</source>
             <translation>Βήμα (Step)</translation>
         </message>
+        <message>
+            <source>Fillet Toolkit</source>
+            <translation>Fillet Toolkit</translation>
+        </message>
+        <message>
+            <source>Не вдалося записати зміни: {error}</source>
+            <translation>Could not write changes: {error}</translation>
+        </message>
+        <message>
+            <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
+            <translation>This operation is unavailable for geometries with curved segments.</translation>
+        </message>
+        <message>
+            <source>Операція не підтримує об'єкти з кривими сегментами.</source>
+            <translation>The operation does not support features with curved segments.</translation>
+        </message>
+        <message>
+            <source>Непідтримувана геометрія</source>
+            <translation>Unsupported geometry</translation>
+        </message>
+        <message>
+            <source>Пропущено об'єктів із кривими сегментами: {}.</source>
+            <translation>Features with curved segments skipped: {}.</translation>
+        </message>
+        <message>
+            <source>Не вдалося додати елементи масиву.</source>
+            <translation>Could not add array items.</translation>
+        </message>
+        <message>
+            <source>Не вдалося додати елементи кругового масиву.</source>
+            <translation>Could not add circular array items.</translation>
+        </message>
+        <message>
+            <source>Не вдалося додати масштабовані копії.</source>
+            <translation>Could not add scaled copies.</translation>
+        </message>
+        <message>
+            <source>Не вдалося додати повернуті копії.</source>
+            <translation>Could not add rotated copies.</translation>
+        </message>
+        <message>
+            <source>Не вдалося додати ортогоналізовані копії.</source>
+            <translation>Could not add orthogonalized copies.</translation>
+        </message>
+        <message>
+            <source>Не вдалося змінити геометрію об'єкта.</source>
+            <translation>Could not change feature geometry.</translation>
+        </message>
+        <message>
+            <source>Помилка</source>
+            <translation>Error</translation>
+        </message>
     </context>
 </TS>

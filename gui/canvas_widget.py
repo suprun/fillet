@@ -565,6 +565,9 @@ class FilletCanvasWidget(QFrame):
         return True
 
     def eventFilter(self, obj, event):
+        if obj == self.canvas and self.isHidden():
+            return super().eventFilter(obj, event)
+
         evt_resize = getattr(QEvent.Type, "Resize", getattr(QEvent, "Resize", None))
         evt_focus_in = getattr(QEvent.Type, "FocusIn", getattr(QEvent, "FocusIn", None))
         evt_key_press = getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", None))
@@ -796,22 +799,6 @@ class FilletCanvasWidget(QFrame):
 
     def _on_chk_always_first_toggled(self, checked: bool):
         QgsSettings().setValue("plugins/fillet/merge_always_first_feature", checked)
-
-    def show_on_canvas(self):
-        """Shows and repositions widget on canvas."""
-        self.reposition_to_default()
-        self.show()
-        self.raise_()
-
-    def _select_all_spin(self, spin: QWidget):
-        if hasattr(spin, "lineEdit") and spin.lineEdit():
-            spin.lineEdit().selectAll()
-        elif hasattr(spin, "selectAll"):
-            spin.selectAll()
-
-    def _select_if_focused(self, spin: QWidget):
-        if spin.hasFocus() or (hasattr(spin, "lineEdit") and spin.lineEdit() and spin.lineEdit().hasFocus()):
-            self._select_all_spin(spin)
 
     def set_two_line_mode(self, enabled: bool):
         """Switches the widget between single-vertex mode and two-line join mode."""

@@ -408,6 +408,9 @@ class DivideLineCanvasWidget(QFrame):
         self.raise_()
 
     def eventFilter(self, obj, event):
+        if obj == self.canvas and self.isHidden():
+            return super().eventFilter(obj, event)
+
         evt_resize = getattr(QEvent.Type, "Resize", getattr(QEvent, "Resize", None))
         evt_key_press = getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", None))
 

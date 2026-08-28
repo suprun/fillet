@@ -32,6 +32,112 @@ class GeometryEngine:
     EPSILON = 1e-8
 
     @staticmethod
+    def has_curved_segments(geom: Optional[QgsGeometry]) -> bool:
+        """Return whether a geometry contains native curved segments."""
+        if not geom or geom.isNull() or geom.isEmpty():
+            return False
+
+        abstract_geom = geom.constGet()
+        if abstract_geom is None:
+            return False
+
+        has_curves = getattr(abstract_geom, "hasCurvedSegments", None)
+        if callable(has_curves):
+            return bool(has_curves())
+
+        return bool(QgsWkbTypes.isCurvedType(geom.wkbType()))
+
+    @staticmethod
+    def _point_with_dimensions(
+        x: float,
+        y: float,
+        has_z: bool = False,
+        z_value: float = 0.0,
+        has_m: bool = False,
+        m_value: float = 0.0,
+    ) -> QgsPoint:
+        """Create a point without dropping its requested Z/M dimensions."""
+        if has_z and has_m:
+            return QgsPoint(x, y, z_value, m_value)
+        if has_z:
+            return QgsPoint(x, y, z_value)
+        if has_m:
+            return QgsPoint(x, y, m=m_value)
+        return QgsPoint(x, y)
+
+    @classmethod
+    def _copy_point(cls, point: Union[QgsPoint, QgsPointXY]) -> QgsPoint:
+        """Copy a point while preserving all available dimensions."""
+        has_z = bool(getattr(point, "is3D", lambda: False)())
+        has_m = bool(getattr(point, "isMeasure", lambda: False)())
+        return cls._point_with_dimensions(
+            point.x(),
+            point.y(),
+            has_z=has_z,
+            z_value=point.z() if has_z else 0.0,
+            has_m=has_m,
+            m_value=point.m() if has_m else 0.0,
+        )
+
+    @classmethod
+    def _interpolate_point_dimensions(
+        cls,
+        p1: Union[QgsPoint, QgsPointXY],
+        p2: Union[QgsPoint, QgsPointXY],
+        x: float,
+        y: float,
+        fraction: Optional[float] = None,
+    ) -> QgsPoint:
+        """Create an XY point with Z/M interpolated along the source segment."""
+        if fraction is None:
+            dx = p2.x() - p1.x()
+            dy = p2.y() - p1.y()
+            length_sq = dx * dx + dy * dy
+            if length_sq < cls.EPSILON * cls.EPSILON:
+                fraction = 0.0
+            else:
+                fraction = ((x - p1.x()) * dx + (y - p1.y()) * dy) / length_sq
+
+        has_z = bool(getattr(p1, "is3D", lambda: False)()) and bool(
+            getattr(p2, "is3D", lambda: False)()
+        )
+        has_m = bool(getattr(p1, "isMeasure", lambda: False)()) and bool(
+            getattr(p2, "isMeasure", lambda: False)()
+        )
+        z_value = p1.z() + fraction * (p2.z() - p1.z()) if has_z else 0.0
+        m_value = p1.m() + fraction * (p2.m() - p1.m()) if has_m else 0.0
+        return cls._point_with_dimensions(
+            x,
+            y,
+            has_z=has_z,
+            z_value=z_value,
+            has_m=has_m,
+            m_value=m_value,
+        )
+
+    @classmethod
+    def _average_dimension_points(
+        cls,
+        point1: QgsPoint,
+        point2: QgsPoint,
+        x: float,
+        y: float,
+    ) -> QgsPoint:
+        """Combine dimensions from two coincident line-intersection results."""
+        has_z = point1.is3D() and point2.is3D()
+        has_m = point1.isMeasure() and point2.isMeasure()
+        z_value = (point1.z() + point2.z()) * 0.5 if has_z else 0.0
+        m_value = (point1.m() + point2.m()) * 0.5 if has_m else 0.0
+        return cls._point_with_dimensions(
+            x,
+            y,
+            has_z=has_z,
+            z_value=z_value,
+            has_m=has_m,
+            m_value=m_value,
+        )
+
+    @staticmethod
     def distance(p1: Union[QgsPoint, QgsPointXY], p2: Union[QgsPoint, QgsPointXY]) -> float:
         """Euclidean distance between two 2D points."""
         dx = p2.x() - p1.x()
@@ -98,8 +204,12 @@ class GeometryEngine:
             radius = tangent_dist * tan_half
 
         # Tangent points
-        t1 = QgsPoint(v.x() + tangent_dist * u1x, v.y() + tangent_dist * u1y)
-        t2 = QgsPoint(v.x() + tangent_dist * u2x, v.y() + tangent_dist * u2y)
+        t1_x = v.x() + tangent_dist * u1x
+        t1_y = v.y() + tangent_dist * u1y
+        t2_x = v.x() + tangent_dist * u2x
+        t2_y = v.y() + tangent_dist * u2y
+        t1 = GeometryEngine._interpolate_point_dimensions(v, p_prev, t1_x, t1_y)
+        t2 = GeometryEngine._interpolate_point_dimensions(v, p_next, t2_x, t2_y)
 
         # Bisector unit vector (points into the angle interior)
         bx, by, blen = GeometryEngine.normalize_vector(u1x + u2x, u1y + u2y)
@@ -115,7 +225,7 @@ class GeometryEngine:
         # M = C - radius * bisector = V + (center_dist - radius) * bisector
         mid_x = cx - radius * bx
         mid_y = cy - radius * by
-        arc_mid = QgsPoint(mid_x, mid_y)
+        arc_mid = GeometryEngine._interpolate_point_dimensions(t1, t2, mid_x, mid_y, 0.5)
 
         return True, t1, arc_mid, t2, tangent_dist
 
@@ -156,8 +266,12 @@ class GeometryEngine:
             if dist2 > len2:
                 dist2 = len2 * 0.9999
 
-        c1 = QgsPoint(v.x() + dist1 * u1x, v.y() + dist1 * u1y)
-        c2 = QgsPoint(v.x() + dist2 * u2x, v.y() + dist2 * u2y)
+        c1_x = v.x() + dist1 * u1x
+        c1_y = v.y() + dist1 * u1y
+        c2_x = v.x() + dist2 * u2x
+        c2_y = v.y() + dist2 * u2y
+        c1 = GeometryEngine._interpolate_point_dimensions(v, p_prev, c1_x, c1_y)
+        c2 = GeometryEngine._interpolate_point_dimensions(v, p_next, c2_x, c2_y)
 
         return True, c1, c2
 
@@ -205,7 +319,11 @@ class GeometryEngine:
 
         d = 2 * (ax * (by - cy) + bx * (cy - ay) + cx * (ay - by))
         if abs(d) < 1e-10:
-            return [QgsPoint(p1.x(), p1.y()), QgsPoint(pm.x(), pm.y()), QgsPoint(p2.x(), p2.y())]
+            return [
+                GeometryEngine._copy_point(p1),
+                GeometryEngine._copy_point(pm),
+                GeometryEngine._copy_point(p2),
+            ]
 
         ux = ((ax * ax + ay * ay) * (by - cy) + (bx * bx + by * by) * (cy - ay) + (cx * cx + cy * cy) * (ay - by)) / d
         uy = ((ax * ax + ay * ay) * (cx - bx) + (bx * bx + by * by) * (ax - cx) + (cx * cx + cy * cy) * (bx - ax)) / d
@@ -230,12 +348,14 @@ class GeometryEngine:
             start_ang = a1
             end_ang = a2_norm - 2 * math.pi
 
-        points = [QgsPoint(p1.x(), p1.y())]
+        points = [GeometryEngine._copy_point(p1)]
         for i in range(1, segments_count):
             t = i / float(segments_count)
             ang = start_ang + t * (end_ang - start_ang)
-            points.append(QgsPoint(ux + r * math.cos(ang), uy + r * math.sin(ang)))
-        points.append(QgsPoint(p2.x(), p2.y()))
+            x = ux + r * math.cos(ang)
+            y = uy + r * math.sin(ang)
+            points.append(GeometryEngine._interpolate_point_dimensions(p1, p2, x, y, t))
+        points.append(GeometryEngine._copy_point(p2))
 
         return points
 
@@ -251,7 +371,12 @@ class GeometryEngine:
         """
         Applies fillet to a vertex of a single curve (QgsLineString).
         """
-        if hasattr(QgsGeometryUtils, "filletVertex") and use_true_curve:
+        if not isinstance(curve, QgsLineString):
+            return None
+
+        curve_wkb = curve.wkbType()
+        has_dimensions = QgsWkbTypes.hasZ(curve_wkb) or QgsWkbTypes.hasM(curve_wkb)
+        if hasattr(QgsGeometryUtils, "filletVertex") and use_true_curve and not has_dimensions:
             try:
                 res = QgsGeometryUtils.filletVertex(curve, vertex_index, radius, 0 if use_true_curve else segments_count)
                 if res is not None:
@@ -323,7 +448,12 @@ class GeometryEngine:
         """
         Applies chamfer to a vertex of a single curve (QgsLineString).
         """
-        if hasattr(QgsGeometryUtils, "chamferVertex"):
+        if not isinstance(curve, QgsLineString):
+            return None
+
+        curve_wkb = curve.wkbType()
+        has_dimensions = QgsWkbTypes.hasZ(curve_wkb) or QgsWkbTypes.hasM(curve_wkb)
+        if hasattr(QgsGeometryUtils, "chamferVertex") and not has_dimensions:
             try:
                 res = QgsGeometryUtils.chamferVertex(curve, vertex_index, dist1, dist2)
                 if res is not None:
@@ -399,6 +529,8 @@ class GeometryEngine:
         Returns the updated QgsGeometry or None if failed.
         """
         if geom.isEmpty() or geom.isNull():
+            return None
+        if cls.has_curved_segments(geom):
             return None
 
         geom_type = geom.type()
@@ -498,6 +630,8 @@ class GeometryEngine:
         Applies chamfer to a specific vertex in any QgsGeometry.
         """
         if geom.isEmpty() or geom.isNull():
+            return None
+        if cls.has_curved_segments(geom):
             return None
 
         geom_type = geom.type()
@@ -716,8 +850,9 @@ class GeometryEngine:
             QgsPointXY(p_next.x(), p_next.y()),
         )
 
-    @staticmethod
+    @classmethod
     def compute_line_intersection(
+        cls,
         p1: Union[QgsPoint, QgsPointXY],
         p2: Union[QgsPoint, QgsPointXY],
         p3: Union[QgsPoint, QgsPointXY],
@@ -738,7 +873,21 @@ class GeometryEngine:
         dx = p3.x() - p1.x()
         dy = p3.y() - p1.y()
         t = (dx * dy2 - dy * dx2) / det
-        return QgsPoint(p1.x() + t * dx1, p1.y() + t * dy1)
+        u = (dx * dy1 - dy * dx1) / det
+        x = p1.x() + t * dx1
+        y = p1.y() + t * dy1
+        point_on_first = cls._interpolate_point_dimensions(p1, p2, x, y, t)
+        point_on_second = cls._interpolate_point_dimensions(p3, p4, x, y, u)
+
+        if point_on_first.is3D() and point_on_second.is3D():
+            return cls._average_dimension_points(point_on_first, point_on_second, x, y)
+        if point_on_first.isMeasure() and point_on_second.isMeasure():
+            return cls._average_dimension_points(point_on_first, point_on_second, x, y)
+        if point_on_first.is3D() or point_on_first.isMeasure():
+            return point_on_first
+        if point_on_second.is3D() or point_on_second.isMeasure():
+            return point_on_second
+        return QgsPoint(x, y)
 
     @classmethod
     def batch_apply_geometry(
@@ -755,6 +904,8 @@ class GeometryEngine:
         Batch applies fillet or chamfer to all corners of all parts and rings in the geometry.
         """
         if geom.isEmpty() or geom.isNull():
+            return None
+        if cls.has_curved_segments(geom):
             return None
 
         geom_type = geom.type()
@@ -945,7 +1096,7 @@ class GeometryEngine:
             new_pts = preserved + [v_sharp]
 
         if new_pts and (new_pts[0].x() != new_pts[-1].x() or new_pts[0].y() != new_pts[-1].y()):
-            new_pts.append(QgsPoint(new_pts[0].x(), new_pts[0].y()))
+            new_pts.append(cls._copy_point(new_pts[0]))
 
         res = QgsLineString()
         for pt in new_pts:
@@ -966,6 +1117,8 @@ class GeometryEngine:
         Returns (new_geometry, v_sharp) or None.
         """
         if geom.isEmpty() or geom.isNull():
+            return None
+        if cls.has_curved_segments(geom):
             return None
 
         geom_type = geom.type()
@@ -1090,6 +1243,8 @@ class GeometryEngine:
         dist2: float = 1.0,
         segments_count: int = 12,
         use_true_curve: bool = False,
+        part1_idx: int = 0,
+        part2_idx: int = 0,
     ) -> Optional[Tuple[QgsGeometry, QgsPoint, QgsPoint, QgsPoint]]:
         """
         Performs CAD Fillet or Chamfer between two line geometries, trimming/extending them
@@ -1099,6 +1254,8 @@ class GeometryEngine:
         """
         if not geom1 or geom1.isEmpty() or not geom2 or geom2.isEmpty():
             return None
+        if cls.has_curved_segments(geom1) or cls.has_curved_segments(geom2):
+            return None
 
         curve1 = geom1.constGet()
         curve2 = geom2.constGet()
@@ -1106,9 +1263,13 @@ class GeometryEngine:
             return None
 
         if isinstance(curve1, QgsMultiLineString):
-            curve1 = curve1.geometryN(0) if curve1.numGeometries() > 0 else None
+            if part1_idx < 0 or part1_idx >= curve1.numGeometries():
+                return None
+            curve1 = curve1.geometryN(part1_idx)
         if isinstance(curve2, QgsMultiLineString):
-            curve2 = curve2.geometryN(0) if curve2.numGeometries() > 0 else None
+            if part2_idx < 0 or part2_idx >= curve2.numGeometries():
+                return None
+            curve2 = curve2.geometryN(part2_idx)
 
         if not isinstance(curve1, QgsLineString) or not isinstance(curve2, QgsLineString):
             return None
@@ -1200,15 +1361,21 @@ class GeometryEngine:
                 tangent_dist = min(radius / tan_half, max_tangent)
                 eff_radius = tangent_dist * tan_half
 
-                t1 = QgsPoint(v.x() + tangent_dist * u1x, v.y() + tangent_dist * u1y)
-                t2 = QgsPoint(v.x() + tangent_dist * u2x, v.y() + tangent_dist * u2y)
+                t1_x = v.x() + tangent_dist * u1x
+                t1_y = v.y() + tangent_dist * u1y
+                t2_x = v.x() + tangent_dist * u2x
+                t2_y = v.y() + tangent_dist * u2y
+                t1 = cls._interpolate_point_dimensions(a1, b1, t1_x, t1_y)
+                t2 = cls._interpolate_point_dimensions(a2, b2, t2_x, t2_y)
 
                 bx, by, blen = cls.normalize_vector(u1x + u2x, u1y + u2y)
                 center_dist = eff_radius / sin_half
                 cx = v.x() + center_dist * bx
                 cy = v.y() + center_dist * by
 
-                arc_mid = QgsPoint(cx - eff_radius * bx, cy - eff_radius * by)
+                arc_mid_x = cx - eff_radius * bx
+                arc_mid_y = cy - eff_radius * by
+                arc_mid = cls._interpolate_point_dimensions(t1, t2, arc_mid_x, arc_mid_y, 0.5)
                 arc_pts = cls.segmentize_arc_3p(t1, arc_mid, t2, segments_count)
         elif mode == "chamfer":
             d1_in = dist1 if dist1 > 0 else 0.0
@@ -1220,8 +1387,12 @@ class GeometryEngine:
             else:
                 d1 = min(d1_in, max_len1 * 0.9999)
                 d2 = min(d2_in, max_len2 * 0.9999)
-                t1 = QgsPoint(v.x() + d1 * u1x, v.y() + d1 * u1y)
-                t2 = QgsPoint(v.x() + d2 * u2x, v.y() + d2 * u2y)
+                t1_x = v.x() + d1 * u1x
+                t1_y = v.y() + d1 * u1y
+                t2_x = v.x() + d2 * u2x
+                t2_y = v.y() + d2 * u2y
+                t1 = cls._interpolate_point_dimensions(a1, b1, t1_x, t1_y)
+                t2 = cls._interpolate_point_dimensions(a2, b2, t2_x, t2_y)
                 arc_pts = [t1, t2]
         else:
             return None
@@ -1321,6 +1492,82 @@ class GeometryEngine:
             res_line.addVertex(pt)
 
         return QgsGeometry(res_line), v, t1, t2
+
+    @classmethod
+    def rebuild_two_line_geometry(
+        cls,
+        geom1: QgsGeometry,
+        part1_idx: int,
+        geom2: QgsGeometry,
+        part2_idx: int,
+        joined_geom: QgsGeometry,
+        same_feature: bool,
+    ) -> Optional[QgsGeometry]:
+        """Rebuild source line geometry around a joined pair of selected parts."""
+        if (
+            not geom1
+            or geom1.isEmpty()
+            or not geom2
+            or geom2.isEmpty()
+            or not joined_geom
+            or joined_geom.isEmpty()
+        ):
+            return None
+        if cls.has_curved_segments(geom1) or cls.has_curved_segments(geom2):
+            return None
+
+        def line_parts(geom: QgsGeometry) -> Optional[List[QgsLineString]]:
+            abstract_geom = geom.constGet()
+            if isinstance(abstract_geom, QgsLineString):
+                return [abstract_geom]
+            if isinstance(abstract_geom, QgsMultiLineString):
+                return [abstract_geom.geometryN(i) for i in range(abstract_geom.numGeometries())]
+            return None
+
+        parts1 = line_parts(geom1)
+        parts2 = parts1 if same_feature else line_parts(geom2)
+        joined_curve = joined_geom.constGet()
+        if (
+            parts1 is None
+            or parts2 is None
+            or not isinstance(joined_curve, QgsLineString)
+            or part1_idx < 0
+            or part1_idx >= len(parts1)
+            or part2_idx < 0
+            or part2_idx >= len(parts2)
+        ):
+            return None
+
+        output_parts: List[QgsLineString] = []
+        if same_feature:
+            selected_parts = {part1_idx, part2_idx}
+            insert_at = min(selected_parts)
+            for index, part in enumerate(parts1):
+                if index == insert_at:
+                    output_parts.append(joined_curve.clone())
+                if index not in selected_parts:
+                    output_parts.append(part.clone())
+        else:
+            for index, part in enumerate(parts1):
+                if index == part1_idx:
+                    output_parts.append(joined_curve.clone())
+                else:
+                    output_parts.append(part.clone())
+            for index, part in enumerate(parts2):
+                if index != part2_idx:
+                    output_parts.append(part.clone())
+
+        if not output_parts:
+            return None
+
+        needs_multi = geom1.isMultipart() or geom2.isMultipart() or len(output_parts) > 1
+        if not needs_multi:
+            return QgsGeometry(output_parts[0])
+
+        multi = QgsMultiLineString()
+        for part in output_parts:
+            multi.addGeometry(part)
+        return QgsGeometry(multi)
 
     @classmethod
     def calculate_bearing(
@@ -1596,6 +1843,8 @@ class GeometryEngine:
         """
         if geom.isNull() or geom.isEmpty():
             return QgsGeometry(geom)
+        if cls.has_curved_segments(geom):
+            return QgsGeometry(geom)
 
         tol_rad = math.radians(max(0.1, min(45.0, tolerance_deg)))
         orig_area = geom.area() if geom.type() == QgsWkbTypes.GeometryType.PolygonGeometry else 0.0
@@ -1615,11 +1864,19 @@ class GeometryEngine:
 
             geom_type = geom.type()
             if geom_type == QgsWkbTypes.GeometryType.PolygonGeometry:
-                poly_list = [g.asPolygon() for g in sub_geoms if not g.isEmpty()]
-                res = QgsGeometry.fromMultiPolygonXY(poly_list)
+                multi_polygon = QgsMultiPolygon()
+                for sub_geom in sub_geoms:
+                    polygon = sub_geom.constGet()
+                    if isinstance(polygon, QgsPolygon):
+                        multi_polygon.addGeometry(polygon.clone())
+                res = QgsGeometry(multi_polygon)
             elif geom_type == QgsWkbTypes.GeometryType.LineGeometry:
-                line_list = [g.asPolyline() for g in sub_geoms if not g.isEmpty()]
-                res = QgsGeometry.fromMultiPolylineXY(line_list)
+                multi_line = QgsMultiLineString()
+                for sub_geom in sub_geoms:
+                    line = sub_geom.constGet()
+                    if isinstance(line, QgsLineString):
+                        multi_line.addGeometry(line.clone())
+                res = QgsGeometry(multi_line)
             else:
                 return QgsGeometry(geom)
 
@@ -1627,51 +1884,63 @@ class GeometryEngine:
                 scale_factor = math.sqrt(orig_area / res.area())
                 centroid = res.centroid().asPoint() if not res.centroid().isEmpty() else None
                 if centroid:
-                    res = cls._scale_geometry_xy(res, centroid, scale_factor)
+                    res = cls.scale_and_rotate_geometry(res, centroid, scale_factor, 0.0)
             return res
 
         # Single part polygon or linestring
         geom_type = geom.type()
         if geom_type == QgsWkbTypes.GeometryType.PolygonGeometry:
-            rings = geom.asPolygon()
-            if not rings:
+            polygon = geom.constGet()
+            if not isinstance(polygon, QgsPolygon) or polygon.exteriorRing() is None:
                 return QgsGeometry(geom)
-            ortho_rings = []
-            for ring in rings:
-                ortho_ring = cls._orthogonalize_ring(ring, base_angle_rad, tol_rad, is_closed=True)
-                ortho_rings.append(ortho_ring)
+            new_polygon = QgsPolygon()
+            exterior = polygon.exteriorRing()
+            exterior_points = [exterior.pointN(i) for i in range(exterior.numPoints())]
+            new_polygon.setExteriorRing(
+                QgsLineString(cls._orthogonalize_ring(exterior_points, base_angle_rad, tol_rad, is_closed=True))
+            )
+            for ring_index in range(polygon.numInteriorRings()):
+                interior = polygon.interiorRing(ring_index)
+                interior_points = [interior.pointN(i) for i in range(interior.numPoints())]
+                new_polygon.addInteriorRing(
+                    QgsLineString(cls._orthogonalize_ring(interior_points, base_angle_rad, tol_rad, is_closed=True))
+                )
 
-            res = QgsGeometry.fromPolygonXY(ortho_rings)
+            res = QgsGeometry(new_polygon)
             if preserve_area and orig_area > cls.EPSILON and res.area() > cls.EPSILON:
                 scale_factor = math.sqrt(orig_area / res.area())
                 centroid = res.centroid().asPoint() if not res.centroid().isEmpty() else None
                 if centroid:
-                    res = cls._scale_geometry_xy(res, centroid, scale_factor)
+                    res = cls.scale_and_rotate_geometry(res, centroid, scale_factor, 0.0)
             return res
 
         elif geom_type == QgsWkbTypes.GeometryType.LineGeometry:
-            polyline = geom.asPolyline()
-            if not polyline or len(polyline) < 2:
+            line = geom.constGet()
+            if not isinstance(line, QgsLineString) or line.numPoints() < 2:
                 return QgsGeometry(geom)
-            is_closed = (polyline[0] == polyline[-1] and len(polyline) >= 4)
+            polyline = [line.pointN(i) for i in range(line.numPoints())]
+            is_closed = line.isClosed() or (
+                len(polyline) >= 4
+                and cls.distance(polyline[0], polyline[-1]) < cls.EPSILON
+            )
             ortho_pts = cls._orthogonalize_ring(polyline, base_angle_rad, tol_rad, is_closed=is_closed)
-            return QgsGeometry.fromPolylineXY(ortho_pts)
+            return QgsGeometry(QgsLineString(ortho_pts))
 
         return QgsGeometry(geom)
 
     @classmethod
     def _orthogonalize_ring(
         cls,
-        pts: List[QgsPointXY],
+        pts: List[QgsPoint],
         base_angle_rad: float,
         tol_rad: float,
         is_closed: bool,
-    ) -> List[QgsPointXY]:
-        """Orthogonalizes a list of QgsPointXY vertices for a closed ring or open polyline."""
+    ) -> List[QgsPoint]:
+        """Orthogonalize XY coordinates while retaining each vertex's Z/M values."""
         if len(pts) < 3:
             return list(pts)
 
-        if is_closed and pts[0] == pts[-1]:
+        if is_closed and cls.distance(pts[0], pts[-1]) < cls.EPSILON:
             pts_work = pts[:-1]
         else:
             pts_work = list(pts)
@@ -1715,36 +1984,54 @@ class GeometryEngine:
             lines.append((a, b, c, mx, my, alpha_adj))
 
         # 2. Reconstruct vertices from adjacent line intersections
-        new_pts: List[QgsPointXY] = []
+        new_pts: List[QgsPoint] = []
         for i in range(n):
             if is_closed:
                 line_prev = lines[(i - 1) % n]
                 line_next = lines[i]
                 pt = cls._intersect_2d_lines(line_prev, line_next, pts_work[i])
-                new_pts.append(pt)
+                new_pts.append(cls._point_at_xy_with_source_dimensions(pt, pts_work[i]))
             else:
                 if i == 0:
                     # Project first vertex onto first line
                     a, b, c, mx, my, _ = lines[0]
                     v = pts_work[0]
                     pt = cls._project_point_to_line(v, a, b, c)
-                    new_pts.append(pt)
+                    new_pts.append(cls._point_at_xy_with_source_dimensions(pt, pts_work[i]))
                 elif i == n - 1:
                     # Project last vertex onto last line
                     a, b, c, mx, my, _ = lines[-1]
                     v = pts_work[-1]
                     pt = cls._project_point_to_line(v, a, b, c)
-                    new_pts.append(pt)
+                    new_pts.append(cls._point_at_xy_with_source_dimensions(pt, pts_work[i]))
                 else:
                     line_prev = lines[i - 1]
                     line_next = lines[i]
                     pt = cls._intersect_2d_lines(line_prev, line_next, pts_work[i])
-                    new_pts.append(pt)
+                    new_pts.append(cls._point_at_xy_with_source_dimensions(pt, pts_work[i]))
 
         if is_closed:
-            new_pts.append(QgsPointXY(new_pts[0]))
+            new_pts.append(cls._copy_point(new_pts[0]))
 
         return new_pts
+
+    @classmethod
+    def _point_at_xy_with_source_dimensions(
+        cls,
+        point_xy: Union[QgsPoint, QgsPointXY],
+        source_point: Union[QgsPoint, QgsPointXY],
+    ) -> QgsPoint:
+        """Move a point in XY while retaining dimensions from its source vertex."""
+        has_z = bool(getattr(source_point, "is3D", lambda: False)())
+        has_m = bool(getattr(source_point, "isMeasure", lambda: False)())
+        return cls._point_with_dimensions(
+            point_xy.x(),
+            point_xy.y(),
+            has_z=has_z,
+            z_value=source_point.z() if has_z else 0.0,
+            has_m=has_m,
+            m_value=source_point.m() if has_m else 0.0,
+        )
 
     @staticmethod
     def _intersect_2d_lines(
@@ -1829,7 +2116,7 @@ class GeometryEngine:
             elif is_3d:
                 return QgsPoint(p.x(), p.y(), z_val)
             elif is_m:
-                return QgsPoint(QgsWkbTypes.Type.PointM, p.x(), p.y(), 0.0, m_val)
+                return QgsPoint(p.x(), p.y(), m=m_val)
             else:
                 return QgsPoint(p.x(), p.y())
 
@@ -1849,7 +2136,7 @@ class GeometryEngine:
         elif is_3d:
             return QgsPoint(mx, my, z_val)
         elif is_m:
-            return QgsPoint(QgsWkbTypes.Type.PointM, mx, my, 0.0, m_val)
+            return QgsPoint(mx, my, m=m_val)
         else:
             return QgsPoint(mx, my)
 
@@ -1891,7 +2178,9 @@ class GeometryEngine:
                 poly.addInteriorRing(m_int)
             return poly
 
-        elif QgsWkbTypes.isMultiType(wkb_type) or abstract_geom.isMultipart():
+        elif QgsWkbTypes.isMultiType(wkb_type) or bool(
+            getattr(abstract_geom, "isMultipart", lambda: False)()
+        ):
             geom_col = abstract_geom.createEmptyWithSameType()
             part_count = abstract_geom.partCount() if hasattr(abstract_geom, "partCount") else abstract_geom.numGeometries()
             for part_idx in range(part_count):
@@ -2010,7 +2299,7 @@ class GeometryEngine:
         elif is_3d:
             return QgsPoint(nx, ny, z_val)
         elif is_m:
-            return QgsPoint(QgsWkbTypes.Type.PointM, nx, ny, 0.0, m_val)
+            return QgsPoint(nx, ny, m=m_val)
         else:
             return QgsPoint(nx, ny)
 
@@ -2052,7 +2341,9 @@ class GeometryEngine:
                 poly.addInteriorRing(sr_int)
             return poly
 
-        elif QgsWkbTypes.isMultiType(wkb_type) or abstract_geom.isMultipart():
+        elif QgsWkbTypes.isMultiType(wkb_type) or bool(
+            getattr(abstract_geom, "isMultipart", lambda: False)()
+        ):
             geom_col = abstract_geom.createEmptyWithSameType()
             part_count = abstract_geom.partCount() if hasattr(abstract_geom, "partCount") else abstract_geom.numGeometries()
             for part_idx in range(part_count):
@@ -2277,8 +2568,20 @@ class GeometryEngine:
             if d_max is not None and abs(distance) > d_max:
                 distance = d_max if distance >= 0 else -d_max
 
-        p1 = QgsPoint(v_i.x() + distance * nx, v_i.y() + distance * ny)
-        p2 = QgsPoint(v_next.x() + distance * nx, v_next.y() + distance * ny)
+        p1 = cls._interpolate_point_dimensions(
+            v_i,
+            v_next,
+            v_i.x() + distance * nx,
+            v_i.y() + distance * ny,
+            0.0,
+        )
+        p2 = cls._interpolate_point_dimensions(
+            v_i,
+            v_next,
+            v_next.x() + distance * nx,
+            v_next.y() + distance * ny,
+            1.0,
+        )
 
         if mode == "step":
             # Insert rectangular step / jog
@@ -2342,7 +2645,10 @@ class GeometryEngine:
             else:
                 # Open polyline last segment (i == num_pts - 2):
                 # Preserve segment length L starting from extended start joint v_prime_i
-                v_prime_next = QgsPoint(v_prime_i.x() + length * ux, v_prime_i.y() + length * uy)
+                v_prime_next = cls._point_at_xy_with_source_dimensions(
+                    QgsPointXY(v_prime_i.x() + length * ux, v_prime_i.y() + length * uy),
+                    v_next,
+                )
         else:
             next_next_idx = (i + 2) % effective_count
             v_after = curve.pointN(next_next_idx)
@@ -2357,7 +2663,10 @@ class GeometryEngine:
                 v_prime_next = cls.compute_line_intersection(p1, p2, v_next, v_after)
                 if v_prime_next is None:
                     v_prime_next = p2
-                v_prime_i = QgsPoint(v_prime_next.x() - length * ux, v_prime_next.y() - length * uy)
+                v_prime_i = cls._point_at_xy_with_source_dimensions(
+                    QgsPointXY(v_prime_next.x() - length * ux, v_prime_next.y() - length * uy),
+                    v_i,
+                )
             else:
                 v_prime_i = p1
                 v_prime_next = p2
@@ -2451,6 +2760,8 @@ class GeometryEngine:
         Works across Polygons, MultiPolygons, LineStrings, and MultiLineStrings.
         """
         if geom.isEmpty() or geom.isNull():
+            return None
+        if cls.has_curved_segments(geom):
             return None
 
         if abs(distance) < cls.EPSILON:
@@ -2973,7 +3284,9 @@ class GeometryEngine:
                     if 1e-6 < ua < 1.0 - 1e-6 and 1e-6 < ub < 1.0 - 1e-6:
                         ix = x1 + ua * (x2 - x1)
                         iy = y1 + ua * (y2 - y1)
-                        inter_pt = QgsPoint(ix, iy)
+                        inter_pt = cls.compute_line_intersection(p1, p2, p3, p4)
+                        if inter_pt is None:
+                            inter_pt = QgsPoint(ix, iy)
                         intersections.append({
                             "part_idx": part_idx,
                             "ring_idx": ring_idx,
@@ -3000,6 +3313,8 @@ class GeometryEngine:
         """
         if not geom or geom.isEmpty() or geom.isNull():
             return geom
+        if cls.has_curved_segments(geom):
+            return QgsGeometry(geom)
 
         curve = cls.get_curve_from_geometry(geom, part_idx, ring_idx)
         if not curve or curve.numPoints() < 4:
@@ -3008,6 +3323,15 @@ class GeometryEngine:
         n = curve.numPoints()
         i = min(seg1_idx, seg2_idx)
         j = max(seg1_idx, seg2_idx)
+
+        dimensioned_intersection = cls.compute_line_intersection(
+            curve.pointN(i),
+            curve.pointN(i + 1),
+            curve.pointN(j),
+            curve.pointN(j + 1),
+        )
+        if dimensioned_intersection is not None:
+            inter_pt = dimensioned_intersection
 
         # Loop 1: 0..i, inter_pt, j+1..n-1
         pts_loop1 = [curve.pointN(k) for k in range(i + 1)] + [inter_pt] + [curve.pointN(k) for k in range(j + 1, n)]
@@ -3073,6 +3397,8 @@ class GeometryEngine:
         """
         if not geom or geom.isEmpty() or geom.isNull():
             return geom, 0
+        if cls.has_curved_segments(geom):
+            return QgsGeometry(geom), 0
 
         dups = cls.find_duplicate_nodes(geom, tolerance)
         intersections = cls.find_self_intersections(geom)
@@ -3167,6 +3493,8 @@ class GeometryEngine:
         """
         if not geom or geom.isEmpty():
             return False
+        if cls.has_curved_segments(geom):
+            return False
 
         abstract_geom = geom.constGet()
         if not abstract_geom:
@@ -3207,6 +3535,8 @@ class GeometryEngine:
         If as_multipart is False, returns a list of individual 2-point QgsGeometry LineStrings.
         """
         if not geom or geom.isEmpty():
+            return []
+        if cls.has_curved_segments(geom):
             return []
 
         segments = []
@@ -3260,6 +3590,8 @@ class GeometryEngine:
         for geom in geometries:
             if not geom or geom.isEmpty():
                 continue
+            if cls.has_curved_segments(geom):
+                return []
             abstract_geom = geom.constGet()
             if not abstract_geom:
                 continue
@@ -3346,7 +3678,7 @@ class GeometryEngine:
 
             # If closed ring within tolerance, snap exact endpoint closure
             if len(current) > 2 and current[0].distance(current[-1]) <= tolerance:
-                current[-1] = QgsPoint(current[0].x(), current[0].y())
+                current[-1] = cls._copy_point(current[0])
 
             joined_chains.append(current)
 

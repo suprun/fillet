@@ -15,6 +15,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from qgis.core import (
     QgsApplication,
     QgsCoordinateReferenceSystem,
+    QgsCoordinateTransform,
     QgsFeature,
     QgsGeometry,
     QgsPoint,
@@ -206,10 +207,16 @@ class TestOrthoAnglesCanvasWidget(unittest.TestCase):
     """Test suite for OrthoAnglesCanvasWidget UI and settings persistence."""
 
     def setUp(self):
+        settings = QgsSettings()
+        settings.setValue("fillet/ortho_angles_preserve_area", True)
+        settings.setValue("fillet/ortho_angles_create_copy", False)
         self.widget = OrthoAnglesCanvasWidget(None)
 
     def tearDown(self):
         self.widget.deleteLater()
+        settings = QgsSettings()
+        settings.remove("fillet/ortho_angles_preserve_area")
+        settings.remove("fillet/ortho_angles_create_copy")
 
     def test_initial_values(self):
         self.assertGreaterEqual(self.widget.tolerance, 1.0)
@@ -327,6 +334,73 @@ class TestCADOrthoAnglesMapTool(unittest.TestCase):
         seg_angle = math.atan2(p2.y() - p1.y(), p2.x() - p1.x())
         diff = (seg_angle - base_angle + math.pi / 4.0) % (math.pi / 2.0) - math.pi / 4.0
         self.assertAlmostEqual(diff, 0.0, places=3)
+
+    def test_preview_and_commit_use_canvas_crs(self):
+        layer = QgsVectorLayer("Polygon?crs=EPSG:4326", "crs_ortho", "memory")
+        source = QgsGeometry.fromPolygonXY([[
+            QgsPointXY(1.0, 45.0),
+            QgsPointXY(1.1, 45.005),
+            QgsPointXY(1.095, 45.1),
+            QgsPointXY(0.998, 45.098),
+            QgsPointXY(1.0, 45.0),
+        ]])
+        feature = QgsFeature(layer.fields())
+        feature.setGeometry(source)
+        layer.dataProvider().addFeatures([feature])
+        layer.startEditing()
+        source_feature = next(layer.getFeatures())
+        self.canvas.setCurrentLayer(layer)
+
+        to_canvas = QgsCoordinateTransform(
+            layer.crs(),
+            self.canvas.mapSettings().destinationCrs(),
+            QgsProject.instance(),
+        )
+        source_canvas = QgsGeometry(source)
+        source_canvas.transform(to_canvas)
+        canvas_ring = source_canvas.asPolygon()[0]
+        base_segment = (canvas_ring[0], canvas_ring[1])
+        base_angle = math.atan2(
+            base_segment[1].y() - base_segment[0].y(),
+            base_segment[1].x() - base_segment[0].x(),
+        )
+        expected = GeometryEngine.orthogonalize_geometry(
+            source_canvas,
+            base_angle_rad=base_angle,
+            tolerance_deg=15.0,
+            preserve_area=False,
+        )
+
+        widget = OrthoAnglesCanvasWidget(self.canvas)
+        widget.chk_preserve_area.setChecked(False)
+        widget.spin_tolerance.setValue(15.0)
+        tool = CADOrthoAnglesMapTool(self.canvas, widget, self.iface)
+        tool.featureLayer = layer
+        tool.featureList = [source_feature]
+        tool.base_segment = base_segment
+        tool.base_angle_rad = base_angle
+        tool.state = CADOrthoAnglesMapTool.STATE_ADJUST
+        tool._update_preview()
+
+        self.assertTrue(tool.preview_rubberbands)
+        preview_first = next(tool.preview_rubberbands[0].asGeometry().vertices())
+        expected_first = next(expected.vertices())
+        self.assertAlmostEqual(preview_first.x(), expected_first.x(), places=3)
+        self.assertAlmostEqual(preview_first.y(), expected_first.y(), places=3)
+
+        tool.commit_orthogonalize()
+        committed = next(layer.getFeatures()).geometry()
+        committed.transform(to_canvas)
+        committed_first = next(committed.vertices())
+        self.assertAlmostEqual(committed_first.x(), expected_first.x(), places=3)
+        self.assertAlmostEqual(committed_first.y(), expected_first.y(), places=3)
+
+        widget.chk_preserve_area.setChecked(True)
+        tool.deactivate()
+        tool.deleteLater()
+        widget.deleteLater()
+        layer.rollBack()
+        self.canvas.setCurrentLayer(self.layer)
 
     def test_click_select_highlights_without_layer_selection(self):
         """Clicking on a feature in STATE_SELECT_FEATURE should highlight it without changing layer selection."""

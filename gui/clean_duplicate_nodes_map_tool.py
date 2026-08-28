@@ -45,8 +45,10 @@ _Key_Escape = getattr(Qt.Key, "Key_Escape", getattr(Qt, "Key_Escape", 0x01000000
 
 try:
     from ..core.geometry_engine import GeometryEngine
+    from .gui_utils import checked_edit_command, require_edit_success
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
+    from gui.gui_utils import checked_edit_command, require_edit_success
 
 
 class CleanDuplicateNodesMapTool(QgsMapToolEdit):
@@ -199,6 +201,12 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
 
     def _update_errors_for_feature(self, feat: QgsFeature, layer: QgsVectorLayer):
         geom = feat.geometry()
+        if GeometryEngine.has_curved_segments(geom):
+            self.duplicate_nodes = []
+            self.self_intersections = []
+            self.dup_markers_rubberband.reset(QgsWkbTypes.GeometryType.PointGeometry)
+            self.inter_markers_rubberband.reset(QgsWkbTypes.GeometryType.PointGeometry)
+            return
         self.duplicate_nodes = GeometryEngine.find_duplicate_nodes(geom, tolerance=self.GEOM_TOLERANCE)
         self.self_intersections = GeometryEngine.find_self_intersections(geom)
 
@@ -221,24 +229,6 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
             map_pt = self.toMapCoordinates(layer, QgsPointXY(pt.x(), pt.y()))
             self.inter_markers_rubberband.addPoint(map_pt, True)
         self.inter_markers_rubberband.show()
-
-    def canvasMoveEvent(self, event: QgsMapMouseEvent):
-        layer = self.current_vector_layer()
-        if not layer:
-            self._clear_visuals()
-            return
-
-        map_pt = self.toMapCoordinates(event.pos())
-        feat = self._identify_feature_at(map_pt, layer)
-
-        if not feat:
-            self._clear_visuals()
-            self.hovered_feature = None
-            self.hovered_layer = None
-            self.duplicate_nodes = []
-            self.self_intersections = []
-            self.active_item = None
-            return
 
     def _find_error_at_pos(self, screen_pos: QPoint, layer: QgsVectorLayer) -> Optional[Tuple[str, Dict]]:
         """Finds if a screen position is within snap tolerance of any duplicate node or self-intersection."""
@@ -310,23 +300,70 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
         orig_feat: QgsFeature,
         parts: List[QgsGeometry],
         command_name: str,
-    ):
+    ) -> bool:
         """Replaces orig_feat geometry with first part, and adds remaining parts as new features."""
         if not parts:
-            return
-        layer.beginEditCommand(command_name)
-        layer.changeGeometry(orig_feat.id(), parts[0])
+            return False
         new_features = []
         for p in parts[1:]:
             new_f = QgsFeature(layer.fields())
             new_f.setAttributes(orig_feat.attributes())
             new_f.setGeometry(p)
             new_features.append(new_f)
-        if new_features:
-            layer.addFeatures(new_features)
-        layer.endEditCommand()
+        try:
+            with checked_edit_command(layer, command_name):
+                require_edit_success(
+                    layer.changeGeometry(orig_feat.id(), parts[0]),
+                    "changeGeometry",
+                )
+                if new_features:
+                    require_edit_success(
+                        layer.addFeatures(new_features),
+                        "addFeatures",
+                    )
+        except (RuntimeError, TypeError) as error:
+            self._show_write_error(error)
+            return False
         layer.triggerRepaint()
         self.canvas.refresh()
+        return True
+
+    def _apply_geometry_change(
+        self,
+        layer: QgsVectorLayer,
+        feature_id: int,
+        geometry: QgsGeometry,
+        command_name: str,
+    ) -> bool:
+        """Apply one checked geometry update without clearing tool state on failure."""
+        try:
+            with checked_edit_command(layer, command_name):
+                require_edit_success(
+                    layer.changeGeometry(feature_id, geometry),
+                    "changeGeometry",
+                )
+        except (RuntimeError, TypeError) as error:
+            self._show_write_error(error)
+            return False
+        layer.triggerRepaint()
+        self.canvas.refresh()
+        return True
+
+    def _show_write_error(self, error: Exception):
+        self._show_message(
+            self.tr("Очищення топології"),
+            self.tr("Не вдалося записати зміни: {error}").format(error=error),
+            getattr(Qgis.MessageLevel, "Critical", getattr(Qgis, "Critical", 2)),
+            duration=5,
+        )
+
+    def _show_curved_geometry_warning(self):
+        self._show_message(
+            self.tr("Очищення топології"),
+            self.tr("Ця операція недоступна для геометрій із кривими сегментами."),
+            getattr(Qgis.MessageLevel, "Warning", getattr(Qgis, "Warning", 1)),
+            duration=5,
+        )
 
     def _execute_clean_all_feature(self, layer: QgsVectorLayer, feat: QgsFeature):
         """
@@ -335,6 +372,9 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
         to split into singlepart features, keep as multipart, or cancel.
         """
         if not layer or not feat or not feat.isValid():
+            return
+        if GeometryEngine.has_curved_segments(feat.geometry()):
+            self._show_curved_geometry_warning()
             return
 
         is_multi_layer = QgsWkbTypes.isMultiType(layer.wkbType())
@@ -376,20 +416,23 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
             clicked_button = msg.clickedButton()
 
             if clicked_button == btn_split:
-                self._apply_split_features(
+                if not self._apply_split_features(
                     layer, feat, parts, self.tr("Очищення та розбиття на окремі об'єкти")
-                )
+                ):
+                    return
                 self._show_message(
                     self.tr("Очищення топології"),
                     self.tr("Об'єкт успішно очищено та розділено на {0} окремих об'єктів.").format(len(parts)),
                     duration=3,
                 )
             elif clicked_button == btn_keep_multi:
-                layer.beginEditCommand(self.tr("Очищення геометрії (MultiPart)"))
-                layer.changeGeometry(feat.id(), cleaned_geom)
-                layer.endEditCommand()
-                layer.triggerRepaint()
-                self.canvas.refresh()
+                if not self._apply_geometry_change(
+                    layer,
+                    feat.id(),
+                    cleaned_geom,
+                    self.tr("Очищення геометрії (MultiPart)"),
+                ):
+                    return
                 self._show_message(
                     self.tr("Очищення топології"),
                     self.tr("Успішно виправлено геометрію об'єкта (усунуто {0} помилок).").format(count),
@@ -400,11 +443,13 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
                 return
         else:
             new_geom = GeometryEngine.coerce_geometry_to_layer(cleaned_geom, layer)
-            layer.beginEditCommand(self.tr("Очищення топологічних помилок"))
-            layer.changeGeometry(feat.id(), new_geom)
-            layer.endEditCommand()
-            layer.triggerRepaint()
-            self.canvas.refresh()
+            if not self._apply_geometry_change(
+                layer,
+                feat.id(),
+                new_geom,
+                self.tr("Очищення топологічних помилок"),
+            ):
+                return
             self._show_message(
                 self.tr("Очищення топології"),
                 self.tr("Успішно виправлено геометрію об'єкта (усунуто {0} помилок).").format(count),
@@ -445,6 +490,10 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
             self.duplicate_nodes = []
             self.self_intersections = []
             self.active_item = None
+            return
+
+        if GeometryEngine.has_curved_segments(feat.geometry()):
+            self._show_curved_geometry_warning()
             return
 
         if not self.hovered_feature or self.hovered_feature.id() != feat.id():
@@ -654,22 +703,26 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
                             feat.geometry(), pt, tolerance=self.GEOM_TOLERANCE
                         )
                         new_geom = GeometryEngine.coerce_geometry_to_layer(new_geom, layer)
-                        layer.beginEditCommand(self.tr("Очищення дубльованих вузлів"))
-                        layer.changeGeometry(feat.id(), new_geom)
-                        layer.endEditCommand()
-                        layer.triggerRepaint()
-                        self.canvas.refresh()
+                        if not self._apply_geometry_change(
+                            layer,
+                            feat.id(),
+                            new_geom,
+                            self.tr("Очищення дубльованих вузлів"),
+                        ):
+                            return
                     elif action_type == "remove_idx":
                         idx_to_remove = data.get("idx")
                         new_geom = GeometryEngine.remove_duplicate_node_at_index(
                             feat.geometry(), part_idx, ring_idx, idx_to_remove
                         )
                         new_geom = GeometryEngine.coerce_geometry_to_layer(new_geom, layer)
-                        layer.beginEditCommand(self.tr("Очищення дубльованих вузлів"))
-                        layer.changeGeometry(feat.id(), new_geom)
-                        layer.endEditCommand()
-                        layer.triggerRepaint()
-                        self.canvas.refresh()
+                        if not self._apply_geometry_change(
+                            layer,
+                            feat.id(),
+                            new_geom,
+                            self.tr("Очищення дубльованих вузлів"),
+                        ):
+                            return
                     elif action_type == "keep_single_idx":
                         keep_idx = data.get("keep_idx")
                         c_indices = data.get("cluster_indices", [])
@@ -677,31 +730,43 @@ class CleanDuplicateNodesMapTool(QgsMapToolEdit):
                             feat.geometry(), part_idx, ring_idx, keep_idx, c_indices
                         )
                         new_geom = GeometryEngine.coerce_geometry_to_layer(new_geom, layer)
-                        layer.beginEditCommand(self.tr("Очищення дубльованих вузлів"))
-                        layer.changeGeometry(feat.id(), new_geom)
-                        layer.endEditCommand()
-                        layer.triggerRepaint()
-                        self.canvas.refresh()
+                        if not self._apply_geometry_change(
+                            layer,
+                            feat.id(),
+                            new_geom,
+                            self.tr("Очищення дубльованих вузлів"),
+                        ):
+                            return
                     elif action_type == "untangle":
                         new_geom = GeometryEngine.untangle_self_intersection(
                             feat.geometry(), part_idx, ring_idx, seg1_idx, seg2_idx, inter_pt, keep_loop=0
                         )
                         new_geom = GeometryEngine.coerce_geometry_to_layer(new_geom, layer)
-                        layer.beginEditCommand(self.tr("Розплутування самоперетину"))
-                        layer.changeGeometry(feat.id(), new_geom)
-                        layer.endEditCommand()
-                        layer.triggerRepaint()
-                        self.canvas.refresh()
+                        if not self._apply_geometry_change(
+                            layer,
+                            feat.id(),
+                            new_geom,
+                            self.tr("Розплутування самоперетину"),
+                        ):
+                            return
                     elif action_type in ("make_valid_multi", "make_valid_single"):
                         new_geom = GeometryEngine.coerce_geometry_to_layer(feat.geometry().makeValid(), layer)
-                        layer.beginEditCommand(self.tr("Виправлення геометрії"))
-                        layer.changeGeometry(feat.id(), new_geom)
-                        layer.endEditCommand()
-                        layer.triggerRepaint()
-                        self.canvas.refresh()
+                        if not self._apply_geometry_change(
+                            layer,
+                            feat.id(),
+                            new_geom,
+                            self.tr("Виправлення геометрії"),
+                        ):
+                            return
                     elif action_type == "split_features":
                         parts = data.get("parts", [])
-                        self._apply_split_features(layer, feat, parts, self.tr("Розділення на окремі об'єкти"))
+                        if not self._apply_split_features(
+                            layer,
+                            feat,
+                            parts,
+                            self.tr("Розділення на окремі об'єкти"),
+                        ):
+                            return
                     elif action_type == "clean_all":
                         self._execute_clean_all_feature(layer, feat)
 

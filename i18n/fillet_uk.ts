@@ -738,5 +738,57 @@
             <source>Сходинка (Step)</source>
             <translation>Сходинка (Step)</translation>
         </message>
+        <message>
+            <source>Fillet Toolkit</source>
+            <translation>Fillet Toolkit</translation>
+        </message>
+        <message>
+            <source>Не вдалося записати зміни: {error}</source>
+            <translation>Не вдалося записати зміни: {error}</translation>
+        </message>
+        <message>
+            <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
+            <translation>Ця операція недоступна для геометрій із кривими сегментами.</translation>
+        </message>
+        <message>
+            <source>Операція не підтримує об'єкти з кривими сегментами.</source>
+            <translation>Операція не підтримує об'єкти з кривими сегментами.</translation>
+        </message>
+        <message>
+            <source>Непідтримувана геометрія</source>
+            <translation>Непідтримувана геометрія</translation>
+        </message>
+        <message>
+            <source>Пропущено об'єктів із кривими сегментами: {}.</source>
+            <translation>Пропущено об'єктів із кривими сегментами: {}.</translation>
+        </message>
+        <message>
+            <source>Не вдалося додати елементи масиву.</source>
+            <translation>Не вдалося додати елементи масиву.</translation>
+        </message>
+        <message>
+            <source>Не вдалося додати елементи кругового масиву.</source>
+            <translation>Не вдалося додати елементи кругового масиву.</translation>
+        </message>
+        <message>
+            <source>Не вдалося додати масштабовані копії.</source>
+            <translation>Не вдалося додати масштабовані копії.</translation>
+        </message>
+        <message>
+            <source>Не вдалося додати повернуті копії.</source>
+            <translation>Не вдалося додати повернуті копії.</translation>
+        </message>
+        <message>
+            <source>Не вдалося додати ортогоналізовані копії.</source>
+            <translation>Не вдалося додати ортогоналізовані копії.</translation>
+        </message>
+        <message>
+            <source>Не вдалося змінити геометрію об'єкта.</source>
+            <translation>Не вдалося змінити геометрію об'єкта.</translation>
+        </message>
+        <message>
+            <source>Помилка</source>
+            <translation>Помилка</translation>
+        </message>
     </context>
 </TS>

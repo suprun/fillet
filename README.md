@@ -6,7 +6,7 @@
   <img src="icon.png" alt="Fillet & Chamfer Logo" width="96" height="96" />
 </p>
 
-**Comprehensive CAD editing suite for QGIS: Interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), and Interactive CAD Rotation Tool, plus instant Batch Fillet & Chamfer Processing for QGIS 3.x & 4.x.**
+**CAD editing toolkit for QGIS with Fillet, Chamfer, Two-Line Merge, Corner Restore, Rotate, Mirror, Scale & Rotate, Edge Offset, Linear and Circular Arrays, Divide, Orthogonalize, Clean/Repair, Explode, and Batch processing.**
 
 [![QGIS Compatibility](https://img.shields.io/badge/QGIS-3.16%20--%204.99-brightgreen.svg?logo=qgis)](https://plugins.qgis.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -28,7 +28,14 @@ The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grad
 3. **Interactive Corner Restoration Tool / Unfillet & Unchamfer (QGIS 3.x & QGIS 4.x)**: A dedicated CAD Two-Edge selection tool allowing you to select two adjacent straight edges, remove intermediate arc chords or bevel segments, and reconstruct the exact sharp intersection corner ($V_{\text{sharp}}$).
 4. **Interactive CAD 3-Point Rotation Tool (QGIS 3.x & QGIS 4.x)**: Precise CAD rotation tool for selected features using interactive 3-step pivot center, reference baseline, and target angle with angle snap presets and copy mode.
 5. **Interactive CAD 2-Point Mirror Tool (QGIS 3.x & QGIS 4.x)**: Interactive CAD mirror tool reflecting selected features across a 2-point symmetry axis line with axis angle snapping (`Free`, `15°`, `45°`, `90° (Ortho)`) and duplicate copy mode.
-6. **Batch Processing Dock Panel (QGIS 3.x & QGIS 4.x)**: A dedicated dock widget to round or bevel all vertices across selected features and complex polygon rings with a single click.
+6. **CAD Scale & Rotate**: Scale and rotate selected features from an origin, reference point, and target point, with exact numeric control and copy mode.
+7. **CAD Edge Offset**: Shift a selected edge in Extend or Step mode while keeping adjacent topology coherent.
+8. **Feature Array and Circular Array**: Create linear copies along a vector or polar copies around an interactive center and baseline.
+9. **Divide / Measure Line**: Split lines by count or fixed length, in separate-feature or multipart form.
+10. **Ortho Angles**: Orthogonalize polygon or line vertices relative to a selected base edge, optionally preserving area or creating a copy.
+11. **Clean & Repair**: Detect duplicate nodes and self-intersections and apply targeted or whole-feature repair.
+12. **Explode Line**: Convert eligible polylines to individual segments or multipart segment collections.
+13. **Batch Processing Dock Panel**: Round or bevel all eligible vertices across selected features and rings with one action.
 
 ---
 
@@ -102,17 +109,26 @@ The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grad
 - If editing is toggled off while a tool is active, the tool automatically unsets and closes on-canvas widgets to prevent unintended changes.
 - Full native Undo/Redo (`Ctrl+Z` / `Ctrl+Y`) transaction support for all interactive and batch operations.
 
+### Geometry dimensions and native curves
+
+- Fillet, Chamfer, Batch, Two-Line, Corner Restore, Edge Offset, Ortho Angles, and Clean/Repair preserve finite Z, M, and ZM ordinates. New points receive values interpolated or extrapolated from their source segments; fillet arc ordinates are interpolated between tangent points.
+- Rotate, Mirror, Scale & Rotate, Feature Array, Circular Array, and Divide preserve native `CircularString`, `CompoundCurve`, and `CurvePolygon` geometry where QGIS supports the corresponding transform or substring.
+- Operations which rebuild topology manually—Fillet/Chamfer, Batch, Two-Line, Corner Restore, Edge Offset, Ortho Angles, Clean/Repair, and Explode—refuse existing curved geometries with a warning instead of silently segmentizing them.
+- Rotate, Scale & Rotate, Circular Array, and Ortho Angles calculate both preview and commit in the map canvas CRS, then transform the accepted result back to the layer CRS.
+
 ---
 
 ## 📦 Compatibility Matrix
 
-| QGIS Version | Platform | UI Framework | Fillet/Chamfer | Corner Restore | CAD Rotate | CAD Mirror | Batch Dock | Test Status |
-| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **QGIS 3.16 LTR** | Windows / Linux / macOS | Qt5 / PyQt5 | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
-| **QGIS 3.28 LTR** | Windows / Linux / macOS | Qt5 / PyQt5 | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
-| **QGIS 3.34 LTR** | Windows / Linux / macOS | Qt5 / PyQt5 | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
-| **QGIS 3.40 LTR** | Windows / Linux / macOS | Qt5 / PyQt5 | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
-| **QGIS 4.0.x** | Windows / Linux / macOS | Qt6 / PyQt6 | *Native QGIS 4* | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ✅ Passed |
+| Tested QGIS build | Test platform | UI framework | Result |
+| :--- | :--- | :--- | :---: |
+| **3.16.16** | Windows | Qt5 / PyQt5 | ✅ Passed |
+| **3.28.2** | Windows | Qt5 / PyQt5 | ✅ Passed |
+| **3.34.10** | Windows | Qt5 / PyQt5 | ✅ Passed |
+| **3.40.4** | Windows | Qt5 / PyQt5 | ✅ Passed |
+| **4.0.2** | Windows | Qt6 / PyQt6 | ✅ Passed |
+
+The declared compatibility range is QGIS 3.16–4.99. Linux and macOS are supported targets, but this release does not claim a completed platform smoke run unless their QGIS Python launchers are supplied explicitly as described below.
 
 ---
 
@@ -171,7 +187,7 @@ The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grad
 
 ## 🧪 Development & Multi-Version Testing
 
-The plugin includes an automated test suite covering geometry precision, plugin lifecycle, translation loading, and settings persistence.
+The automated suite covers geometry and Z/M/ZM precision, multipart Two-Line merges, native-curve policy, CRS-consistent preview/commit, transactional rollback, HUD keyboard routing, plugin lifecycle, package import, translation loading, and settings persistence.
 
 To run automated smoke tests across all installed QGIS versions on your machine:
 
@@ -179,8 +195,17 @@ To run automated smoke tests across all installed QGIS versions on your machine:
 python scripts/smoke_test_all_qgis.py
 ```
 
+Windows QGIS installations are discovered automatically. On Linux, macOS, or a custom installation, pass every tested launcher explicitly so the summary only reports environments that actually ran:
+
+```bash
+python scripts/smoke_test_all_qgis.py \
+  --no-windows-autodiscovery \
+  --qgis-python "QGIS-3.40=/opt/qgis/bin/python-qgis" \
+  --qgis-python "QGIS-4.0=/Applications/QGIS.app/Contents/MacOS/bin/python3"
+```
+
 ### Packaging for Release
-To package a clean, repository-compliant release ZIP without test caches or ignored files:
+To package a clean release ZIP from the explicit runtime manifest (without tests, scripts, translation sources, caches, ignored files, or unrelated repository files):
 
 ```powershell
 python scripts/package_plugin.py

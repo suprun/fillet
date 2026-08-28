@@ -12,6 +12,7 @@ from qgis.core import (
     Qgis,
     QgsFeature,
     QgsGeometry,
+    QgsMessageLog,
     QgsPoint,
     QgsPointXY,
     QgsSettings,
@@ -50,10 +51,12 @@ try:
     from ..core.geometry_engine import GeometryEngine
     from ..core.snapping_helper import SegmentMatch, SnappingHelper
     from .canvas_widget import FilletCanvasWidget
+    from .gui_utils import checked_edit_command, require_edit_success
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
     from core.snapping_helper import SegmentMatch, SnappingHelper
     from gui.canvas_widget import FilletCanvasWidget
+    from gui.gui_utils import checked_edit_command, require_edit_success
 
 
 class _MergeDialogWatcher(QObject):
@@ -418,9 +421,26 @@ class TwoLineMapTool(QgsMapToolEdit):
             dist1=dist1,
             dist2=dist2,
             segments_count=segments,
+            part1_idx=m1.part_idx,
+            part2_idx=m2.part_idx,
         )
         if res:
-            new_geom, v_sharp, t1, t2 = res
+            joined_geom, v_sharp, t1, t2 = res
+            new_geom = GeometryEngine.rebuild_two_line_geometry(
+                m1.geometry,
+                m1.part_idx,
+                m2.geometry,
+                m2.part_idx,
+                joined_geom,
+                same_feature=m1.fid == m2.fid,
+            )
+            if new_geom is None:
+                self.preview_geom = None
+                self.v_sharp = None
+                self.preview_rubberband.reset()
+                self.corner_marker.reset()
+                self.tangent_marker.reset()
+                return
             self.v_sharp = v_sharp
             self.preview_geom = new_geom
 
@@ -488,6 +508,9 @@ class TwoLineMapTool(QgsMapToolEdit):
             map_point = event.mapPoint()
             match = SnappingHelper.find_segment_at_position(layer, self.canvas, map_point)
             if match:
+                if GeometryEngine.has_curved_segments(match.geometry):
+                    self._show_curved_geometry_warning()
+                    return
                 self.first_segment_match = match
                 p1_map = self.toMapCoordinates(layer, match.p1)
                 p2_map = self.toMapCoordinates(layer, match.p2)
@@ -504,6 +527,11 @@ class TwoLineMapTool(QgsMapToolEdit):
 
         elif self.step == self.STEP_SECOND_LINE:
             # Step 2: Select second line
+            if self.current_segment_match and GeometryEngine.has_curved_segments(
+                self.current_segment_match.geometry
+            ):
+                self._show_curved_geometry_warning()
+                return
             if self.current_segment_match and self.preview_geom:
                 # If parameter is locked, commit directly!
                 is_locked = (
@@ -664,7 +692,8 @@ class TwoLineMapTool(QgsMapToolEdit):
         m2 = self.current_segment_match
         new_geom = self.preview_geom
 
-        self._apply_two_line_operation(layer, m1.fid, m2.fid, new_geom)
+        if not self._apply_two_line_operation(layer, m1.fid, m2.fid, new_geom):
+            return
         self._clear_preview()
         self.step = self.STEP_FIRST_LINE
         if self.widget:
@@ -676,27 +705,40 @@ class TwoLineMapTool(QgsMapToolEdit):
         fid1: int,
         fid2: int,
         new_geom: QgsGeometry,
-    ):
+    ) -> bool:
         """Applies the joined geometry to the vector layer with feature merging."""
         if fid1 == fid2:
-            # Intra-feature join: update geometry directly
-            layer.beginEditCommand(self.tr("Скруглення / фаска лінії"))
-            layer.changeGeometry(fid1, new_geom)
-            layer.endEditCommand()
+            try:
+                with checked_edit_command(layer, self.tr("Скруглення / фаска лінії")):
+                    require_edit_success(
+                        layer.changeGeometry(fid1, new_geom),
+                        "changeGeometry",
+                    )
+            except (RuntimeError, TypeError) as error:
+                self._show_write_error(error)
+                return False
             layer.triggerRepaint()
-            return
+            return True
 
         # Separate features: Check settings
         always_first = QgsSettings().value("plugins/fillet/merge_always_first_feature", False, type=bool)
 
         if always_first or not self.iface or not hasattr(self.iface, "mainWindow") or not self.iface.mainWindow():
-            # Apply merge directly: update fid1 and delete fid2
-            layer.beginEditCommand(self.tr("Скруглення / фаска двох ліній з об'єднанням"))
-            layer.changeGeometry(fid1, new_geom)
-            layer.deleteFeature(fid2)
-            layer.endEditCommand()
+            try:
+                with checked_edit_command(
+                    layer,
+                    self.tr("Скруглення / фаска двох ліній з об'єднанням"),
+                ):
+                    require_edit_success(
+                        layer.changeGeometry(fid1, new_geom),
+                        "changeGeometry",
+                    )
+                    require_edit_success(layer.deleteFeature(fid2), "deleteFeature")
+            except (RuntimeError, TypeError) as error:
+                self._show_write_error(error)
+                return False
             layer.triggerRepaint()
-            return
+            return True
 
         # Safe launch of QGIS native merge attributes dialog
         initial_fids = set(layer.allFeatureIds())
@@ -748,25 +790,88 @@ class TwoLineMapTool(QgsMapToolEdit):
                     target_id = fid1 if fid1 in current_fids else fid2
                     delete_id = fid2 if target_id == fid1 else fid1
 
-                layer.beginEditCommand(self.tr("Скруглення / фаска двох ліній з об'єднанням"))
-                if target_id in current_fids:
-                    layer.changeGeometry(target_id, new_geom)
-                if delete_id and delete_id in current_fids:
-                    layer.deleteFeature(delete_id)
-                layer.endEditCommand()
-                layer.removeSelection()
+                try:
+                    with checked_edit_command(
+                        layer,
+                        self.tr("Скруглення / фаска двох ліній з об'єднанням"),
+                    ):
+                        if target_id not in current_fids:
+                            raise RuntimeError("merge target feature is missing")
+                        require_edit_success(
+                            layer.changeGeometry(target_id, new_geom),
+                            "changeGeometry",
+                        )
+                        if delete_id is not None and delete_id in current_fids:
+                            require_edit_success(
+                                layer.deleteFeature(delete_id),
+                                "deleteFeature",
+                            )
+                except (RuntimeError, TypeError) as error:
+                    self._rollback_to_undo_count(layer, initial_undo_count)
+                    self._show_write_error(error)
+                    return False
+                finally:
+                    layer.removeSelection()
                 layer.triggerRepaint()
+                return True
             else:
                 # User cancelled (Cancel): do not modify geometry, layer remains clean
                 layer.removeSelection()
+                return False
         else:
             # Fallback when no GUI merge action exists
-            layer.beginEditCommand(self.tr("Скруглення / фаска двох ліній з об'єднанням"))
-            layer.changeGeometry(fid1, new_geom)
-            layer.deleteFeature(fid2)
-            layer.endEditCommand()
-            layer.removeSelection()
+            try:
+                with checked_edit_command(
+                    layer,
+                    self.tr("Скруглення / фаска двох ліній з об'єднанням"),
+                ):
+                    require_edit_success(
+                        layer.changeGeometry(fid1, new_geom),
+                        "changeGeometry",
+                    )
+                    require_edit_success(layer.deleteFeature(fid2), "deleteFeature")
+            except (RuntimeError, TypeError) as error:
+                self._show_write_error(error)
+                return False
+            finally:
+                layer.removeSelection()
             layer.triggerRepaint()
+            return True
+
+    def _rollback_to_undo_count(self, layer: QgsVectorLayer, initial_count: int):
+        """Undo native merge commands created before a failed geometry update."""
+        stack = layer.undoStack()
+        while stack and stack.count() > initial_count and stack.canUndo():
+            stack.undo()
+
+    def _show_write_error(self, error: Exception):
+        if self.iface and hasattr(self.iface, "messageBar"):
+            self.iface.messageBar().pushMessage(
+                self.tr("Fillet Toolkit"),
+                self.tr("Не вдалося записати зміни: {error}").format(error=error),
+                level=Qgis.Critical,
+                duration=5,
+            )
+        else:
+            QgsMessageLog.logMessage(
+                self.tr("Не вдалося записати зміни: {error}").format(error=error),
+                "Fillet Toolkit",
+                Qgis.Critical,
+            )
+
+    def _show_curved_geometry_warning(self):
+        message = self.tr(
+            "Ця операція недоступна для геометрій із кривими сегментами."
+        )
+        if self.iface and hasattr(self.iface, "messageBar"):
+            self.iface.messageBar().pushMessage(
+                self.tr("Fillet Toolkit"),
+                message,
+                level=Qgis.Warning,
+                duration=5,
+            )
+        else:
+            QgsMessageLog.logMessage(message, "Fillet Toolkit", Qgis.Warning)
 
     def _clear_preview(self):
         self.step = self.STEP_FIRST_LINE

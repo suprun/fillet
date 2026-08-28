@@ -1,3 +1,4 @@
+import argparse
 import glob
 import os
 import subprocess
@@ -22,9 +23,11 @@ TEST_FILES = [
     "tests/test_ortho_angles_tool.py",
 ]
 
-def find_qgis_python_executables():
-    """Finds all available QGIS python launcher scripts on the system."""
+def find_windows_qgis_python_executables():
+    """Find installed Windows QGIS Python launchers."""
     found = []
+    if os.name != "nt":
+        return found
     base_dirs = glob.glob(r"C:\Program Files\QGIS*")
     base_dirs.sort()
     for base in base_dirs:
@@ -36,12 +39,57 @@ def find_qgis_python_executables():
                 break
     return found
 
-def main():
+
+def parse_explicit_launcher(value):
+    """Parse LABEL=PATH supplied for Linux, macOS, or custom installations."""
+    if "=" not in value:
+        raise argparse.ArgumentTypeError("expected LABEL=PATH")
+    name, path = value.split("=", 1)
+    name = name.strip()
+    path = os.path.abspath(os.path.expanduser(path.strip()))
+    if not name or not os.path.isfile(path):
+        raise argparse.ArgumentTypeError(f"launcher does not exist: {path}")
+    return name, path
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(
+        description="Run Fillet Toolkit tests in discovered or explicit QGIS Python environments."
+    )
+    parser.add_argument(
+        "--qgis-python",
+        action="append",
+        default=[],
+        type=parse_explicit_launcher,
+        metavar="LABEL=PATH",
+        help="Explicit QGIS Python launcher; repeat for Linux, macOS, or custom installs.",
+    )
+    parser.add_argument(
+        "--no-windows-autodiscovery",
+        action="store_true",
+        help="Use only launchers passed with --qgis-python.",
+    )
+    args = parser.parse_args(argv)
+
     root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    qgis_versions = find_qgis_python_executables()
+    qgis_versions = list(args.qgis_python)
+    if not args.no_windows_autodiscovery:
+        qgis_versions.extend(find_windows_qgis_python_executables())
+
+    unique_versions = []
+    seen_paths = set()
+    for name, path in qgis_versions:
+        normalized_path = os.path.normcase(os.path.abspath(path))
+        if normalized_path not in seen_paths:
+            unique_versions.append((name, path))
+            seen_paths.add(normalized_path)
+    qgis_versions = unique_versions
 
     if not qgis_versions:
-        print("No QGIS installations found on this system.")
+        print(
+            "No QGIS Python launchers found. On Linux/macOS pass one or more "
+            "--qgis-python LABEL=/path/to/launcher arguments."
+        )
         return 1
 
     print(f"=== Found {len(qgis_versions)} QGIS installations ===")

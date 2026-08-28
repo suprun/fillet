@@ -12,6 +12,7 @@ from typing import Optional
 from qgis.core import (
     Qgis,
     QgsGeometry,
+    QgsMessageLog,
     QgsPointXY,
     QgsVectorLayer,
     QgsWkbTypes,
@@ -36,10 +37,12 @@ try:
     from ..core.geometry_engine import GeometryEngine
     from ..core.snapping_helper import SegmentMatch, SnappingHelper
     from .restore_canvas_widget import RestoreCanvasWidget
+    from .gui_utils import checked_edit_command, require_edit_success
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
     from core.snapping_helper import SegmentMatch, SnappingHelper
     from gui.restore_canvas_widget import RestoreCanvasWidget
+    from gui.gui_utils import checked_edit_command, require_edit_success
 
 
 class RestoreMapTool(QgsMapToolEdit):
@@ -48,10 +51,16 @@ class RestoreMapTool(QgsMapToolEdit):
     def tr(self, message: str) -> str:
         return QCoreApplication.translate("FilletPlugin", message)
 
-    def __init__(self, canvas: QgsMapCanvas, widget: Optional[RestoreCanvasWidget] = None):
+    def __init__(
+        self,
+        canvas: QgsMapCanvas,
+        widget: Optional[RestoreCanvasWidget] = None,
+        iface=None,
+    ):
         super().__init__(canvas)
         self.canvas = canvas
         self.widget = widget or RestoreCanvasWidget(self.canvas)
+        self.iface = iface
 
         self.first_segment_match: Optional[SegmentMatch] = None
         self.current_segment_match: Optional[SegmentMatch] = None
@@ -203,6 +212,11 @@ class RestoreMapTool(QgsMapToolEdit):
         if event.button() == _LeftButton:
             if self.first_segment_match is None:
                 if self.current_segment_match:
+                    if GeometryEngine.has_curved_segments(
+                        self.current_segment_match.geometry
+                    ):
+                        self._show_curved_geometry_warning()
+                        return
                     self.first_segment_match = self.current_segment_match
                     if self.widget:
                         self.widget.set_step(RestoreCanvasWidget.STEP_SECOND_EDGE)
@@ -210,9 +224,15 @@ class RestoreMapTool(QgsMapToolEdit):
                 if self.preview_geom and self.first_segment_match:
                     fid = self.first_segment_match.fid
                     new_geom = self.preview_geom
-                    layer.beginEditCommand(self.tr("Відновлення кута"))
-                    layer.changeGeometry(fid, new_geom)
-                    layer.endEditCommand()
+                    try:
+                        with checked_edit_command(layer, self.tr("Відновлення кута")):
+                            require_edit_success(
+                                layer.changeGeometry(fid, new_geom),
+                                "changeGeometry",
+                            )
+                    except (RuntimeError, TypeError) as error:
+                        self._show_write_error(error)
+                        return
                     self._clear_preview()
 
         elif event.button() == _RightButton:
@@ -238,6 +258,29 @@ class RestoreMapTool(QgsMapToolEdit):
                 self.widget.set_step(RestoreCanvasWidget.STEP_FIRST_EDGE)
         else:
             self._clear_preview()
+
+    def _show_write_error(self, error: Exception):
+        self._show_message(
+            self.tr("Не вдалося записати зміни: {error}").format(error=error),
+            Qgis.Critical,
+        )
+
+    def _show_curved_geometry_warning(self):
+        self._show_message(
+            self.tr("Ця операція недоступна для геометрій із кривими сегментами."),
+            Qgis.Warning,
+        )
+
+    def _show_message(self, message: str, level):
+        if self.iface and hasattr(self.iface, "messageBar"):
+            self.iface.messageBar().pushMessage(
+                self.tr("Fillet Toolkit"),
+                message,
+                level=level,
+                duration=5,
+            )
+        else:
+            QgsMessageLog.logMessage(message, "Fillet Toolkit", level)
 
     def _clear_preview(self):
         self.edge1_rubberband.reset()

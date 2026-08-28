@@ -125,6 +125,20 @@ class TestTranslations(unittest.TestCase):
             QCoreApplication.translate("FilletPlugin", "Завжди використовувати атрибути першого об'єкта"),
             "Always use attributes of first feature"
         )
+        self.assertEqual(
+            QCoreApplication.translate(
+                "FilletPlugin",
+                "Ця операція недоступна для геометрій із кривими сегментами.",
+            ),
+            "This operation is unavailable for geometries with curved segments.",
+        )
+        self.assertEqual(
+            QCoreApplication.translate(
+                "FilletPlugin",
+                "Не вдалося записати зміни: {error}",
+            ),
+            "Could not write changes: {error}",
+        )
 
         QCoreApplication.removeTranslator(translator_en)
 

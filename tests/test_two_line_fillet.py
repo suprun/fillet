@@ -14,6 +14,7 @@ from qgis.core import (
     QgsApplication,
     QgsGeometry,
     QgsLineString,
+    QgsMultiLineString,
     QgsPoint,
     QgsPointXY,
 )
@@ -34,6 +35,13 @@ from gui.two_line_map_tool import TwoLineMapTool
 
 
 class TestTwoLineFillet(unittest.TestCase):
+
+    @staticmethod
+    def make_multiline(*parts):
+        geometry = QgsMultiLineString()
+        for points in parts:
+            geometry.addGeometry(QgsLineString(points))
+        return QgsGeometry(geometry)
 
     def test_orthogonal_fillet(self):
         # Line 1: (0, 10) -> (10, 10)
@@ -761,6 +769,172 @@ class TestTwoLineFillet(unittest.TestCase):
         widget.resetRequested.emit()
         self.assertEqual(tool.step, tool.STEP_FIRST_LINE)
 
+        tool.cleanup()
+
+    def test_multipart_selected_parts_are_rebuilt_without_data_loss(self):
+        unchanged = [QgsPoint(-20, 0), QgsPoint(-10, 0)]
+        horizontal = [QgsPoint(0, 10), QgsPoint(10, 10)]
+        vertical = [QgsPoint(10, 0), QgsPoint(10, 20)]
+        source = self.make_multiline(unchanged, horizontal, vertical)
+
+        result = GeometryEngine.fillet_or_chamfer_two_lines(
+            source,
+            0,
+            QgsPoint(2, 10),
+            source,
+            0,
+            QgsPoint(10, 2),
+            mode="fillet",
+            radius=2.0,
+            part1_idx=1,
+            part2_idx=2,
+        )
+        self.assertIsNotNone(result)
+        joined, _, _, _ = result
+        rebuilt = GeometryEngine.rebuild_two_line_geometry(
+            source,
+            1,
+            source,
+            2,
+            joined,
+            same_feature=True,
+        )
+        self.assertIsNotNone(rebuilt)
+        parts = rebuilt.asGeometryCollection()
+        self.assertEqual(len(parts), 2)
+        self.assertEqual(parts[0].asWkt(), QgsGeometry(QgsLineString(unchanged)).asWkt())
+        self.assertGreater(parts[1].constGet().numPoints(), 3)
+
+        same_part = self.make_multiline(
+            unchanged,
+            [QgsPoint(0, 10), QgsPoint(10, 10), QgsPoint(10, 0)],
+        )
+        same_result = GeometryEngine.fillet_or_chamfer_two_lines(
+            same_part,
+            0,
+            QgsPoint(2, 10),
+            same_part,
+            1,
+            QgsPoint(10, 2),
+            mode="chamfer",
+            dist1=2.0,
+            dist2=2.0,
+            part1_idx=1,
+            part2_idx=1,
+        )
+        self.assertIsNotNone(same_result)
+        same_rebuilt = GeometryEngine.rebuild_two_line_geometry(
+            same_part,
+            1,
+            same_part,
+            1,
+            same_result[0],
+            same_feature=True,
+        )
+        self.assertEqual(len(same_rebuilt.asGeometryCollection()), 2)
+        self.assertEqual(
+            same_rebuilt.asGeometryCollection()[0].asWkt(),
+            QgsGeometry(QgsLineString(unchanged)).asWkt(),
+        )
+
+    def test_two_multipart_features_keep_unselected_parts(self):
+        first_unchanged = [QgsPoint(-20, 0), QgsPoint(-10, 0)]
+        second_unchanged = [QgsPoint(30, 0), QgsPoint(40, 0)]
+        first = self.make_multiline(
+            first_unchanged,
+            [QgsPoint(0, 10), QgsPoint(10, 10)],
+        )
+        second = self.make_multiline(
+            second_unchanged,
+            [QgsPoint(10, 0), QgsPoint(10, 20)],
+        )
+        result = GeometryEngine.fillet_or_chamfer_two_lines(
+            first,
+            0,
+            QgsPoint(2, 10),
+            second,
+            0,
+            QgsPoint(10, 2),
+            mode="fillet",
+            radius=2.0,
+            part1_idx=1,
+            part2_idx=1,
+        )
+        self.assertIsNotNone(result)
+        rebuilt = GeometryEngine.rebuild_two_line_geometry(
+            first,
+            1,
+            second,
+            1,
+            result[0],
+            same_feature=False,
+        )
+        parts = rebuilt.asGeometryCollection()
+        self.assertEqual(len(parts), 3)
+        self.assertEqual(parts[0].asWkt(), QgsGeometry(QgsLineString(first_unchanged)).asWkt())
+        self.assertEqual(parts[2].asWkt(), QgsGeometry(QgsLineString(second_unchanged)).asWkt())
+
+    def test_failed_geometry_write_does_not_delete_second_feature(self):
+        from qgis.core import QgsSettings
+
+        class FailingLayer:
+            def __init__(self):
+                self.events = []
+
+            def beginEditCommand(self, _title):
+                self.events.append("begin")
+
+            def changeGeometry(self, _feature_id, _geometry):
+                self.events.append("change")
+                return False
+
+            def deleteFeature(self, _feature_id):
+                self.events.append("delete")
+                return True
+
+            def endEditCommand(self):
+                self.events.append("end")
+
+            def destroyEditCommand(self):
+                self.events.append("destroy")
+
+        QgsSettings().setValue("plugins/fillet/merge_always_first_feature", True)
+        layer = FailingLayer()
+        tool = TwoLineMapTool(canvas, iface=None)
+        result = tool._apply_two_line_operation(
+            layer,
+            1,
+            2,
+            QgsGeometry.fromPolylineXY(
+                [QgsPointXY(0, 0), QgsPointXY(1, 1)]
+            ),
+        )
+        self.assertFalse(result)
+        self.assertEqual(layer.events, ["begin", "change", "destroy"])
+
+        class DeleteFailingLayer(FailingLayer):
+            def changeGeometry(self, _feature_id, _geometry):
+                self.events.append("change")
+                return True
+
+            def deleteFeature(self, _feature_id):
+                self.events.append("delete")
+                return False
+
+        layer = DeleteFailingLayer()
+        result = tool._apply_two_line_operation(
+            layer,
+            1,
+            2,
+            QgsGeometry.fromPolylineXY(
+                [QgsPointXY(0, 0), QgsPointXY(1, 1)]
+            ),
+        )
+        self.assertFalse(result)
+        self.assertEqual(
+            layer.events,
+            ["begin", "change", "delete", "destroy"],
+        )
         tool.cleanup()
 
 

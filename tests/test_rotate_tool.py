@@ -13,9 +13,11 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from qgis.core import (
     QgsApplication,
     QgsCoordinateReferenceSystem,
+    QgsCoordinateTransform,
     QgsFeature,
     QgsGeometry,
     QgsPointXY,
+    QgsProject,
     QgsVectorLayer,
 )
 from qgis.gui import QgsMapCanvas
@@ -175,6 +177,57 @@ class TestCADRotateTool(unittest.TestCase):
         self.assertAlmostEqual(poly_after[1].y(), 10.0)
 
         layer.rollBack()
+
+    def test_preview_and_commit_use_canvas_crs(self):
+        previous_crs = self.canvas.mapSettings().destinationCrs()
+        canvas_crs = QgsCoordinateReferenceSystem("EPSG:3857")
+        layer_crs = QgsCoordinateReferenceSystem("EPSG:4326")
+        self.canvas.setDestinationCrs(canvas_crs)
+
+        layer = QgsVectorLayer("Polygon?crs=EPSG:4326", "crs_poly", "memory")
+        source = QgsGeometry.fromPolygonXY([[
+            QgsPointXY(1.0, 45.0),
+            QgsPointXY(1.1, 45.0),
+            QgsPointXY(1.1, 45.1),
+            QgsPointXY(1.0, 45.1),
+            QgsPointXY(1.0, 45.0),
+        ]])
+        feature = QgsFeature(layer.fields())
+        feature.setGeometry(source)
+        layer.dataProvider().addFeatures([feature])
+        layer.startEditing()
+        layer.selectAll()
+        self.canvas.setCurrentLayer(layer)
+
+        to_canvas = QgsCoordinateTransform(layer_crs, canvas_crs, QgsProject.instance())
+        pivot = to_canvas.transform(QgsPointXY(0.0, 45.0))
+        expected_canvas = QgsGeometry(source)
+        expected_canvas.transform(to_canvas)
+        expected_canvas = GeometryEngine.rotate_geometry(expected_canvas, pivot, 90.0)
+
+        widget = RotationCanvasWidget(self.canvas)
+        tool = RotateMapTool(self.canvas, widget)
+        tool.pivot_point = pivot
+        tool.current_angle = 90.0
+        tool.state = RotateMapTool.STATE_ROTATING
+        tool._update_preview(90.0)
+
+        preview = tool.preview_rubberband.asGeometry()
+        expected_first = next(expected_canvas.vertices())
+        preview_first = next(preview.vertices())
+        self.assertAlmostEqual(preview_first.x(), expected_first.x(), places=3)
+        self.assertAlmostEqual(preview_first.y(), expected_first.y(), places=3)
+
+        tool.commit_rotation()
+        committed = next(layer.getFeatures()).geometry()
+        committed.transform(to_canvas)
+        committed_first = next(committed.vertices())
+        self.assertAlmostEqual(committed_first.x(), expected_first.x(), places=3)
+        self.assertAlmostEqual(committed_first.y(), expected_first.y(), places=3)
+
+        tool.cleanup()
+        layer.rollBack()
+        self.canvas.setDestinationCrs(previous_crs)
 
     def test_rotate_tool_copy_mode(self):
         layer = QgsVectorLayer("Polygon?crs=EPSG:3857", "temp_poly", "memory")

@@ -8,6 +8,8 @@ Compatible with QGIS 3.16 to 4.x (Qt5 and Qt6).
 import os
 import sys
 import unittest
+from types import SimpleNamespace
+from unittest.mock import patch
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
@@ -29,6 +31,7 @@ app = QgsApplication([], False)
 app.initQgis()
 
 from core.geometry_engine import GeometryEngine
+from core.snapping_helper import SnappingHelper
 from gui.divide_line_canvas_widget import DivideLineCanvasWidget, DivideLineMode
 from gui.divide_line_map_tool import CADDivideLineMapTool
 from plugin import FilletPlugin
@@ -159,6 +162,44 @@ class TestCADDivideLineTool(unittest.TestCase):
         self.assertAlmostEqual(pts[0].x(), 2.5, places=4)
         self.assertAlmostEqual(pts[1].x(), 5.0, places=4)
         self.assertAlmostEqual(pts[2].x(), 7.5, places=4)
+
+    def test_canvas_move_uses_existing_snapping_helper(self):
+        """Hover selection uses the shared segment snapping API without crashing."""
+        self.line_layer.startEditing()
+        feature = QgsFeature()
+        feature.setGeometry(
+            QgsGeometry.fromPolylineXY(
+                [QgsPointXY(0.0, 0.0), QgsPointXY(100.0, 0.0)]
+            )
+        )
+        self.assertTrue(self.line_layer.addFeature(feature))
+        feature = next(self.line_layer.getFeatures())
+        self.canvas.setCurrentLayer(self.line_layer)
+
+        widget = DivideLineCanvasWidget(self.canvas)
+        tool = CADDivideLineMapTool(self.canvas, widget, self.iface)
+        map_point = QgsPointXY(50.0, 0.0)
+        event = SimpleNamespace(mapPoint=lambda: map_point)
+
+        try:
+            with patch.object(
+                SnappingHelper,
+                "find_segment_at_position",
+                return_value=SimpleNamespace(fid=feature.id()),
+            ) as find_segment:
+                tool.canvasMoveEvent(event)
+
+            find_segment.assert_called_once_with(
+                self.line_layer,
+                self.canvas,
+                map_point,
+            )
+            self.assertIsNotNone(tool.hovered_feature)
+            self.assertEqual(tool.hovered_feature.id(), feature.id())
+        finally:
+            tool.deactivate()
+            widget.deleteLater()
+            self.line_layer.rollBack()
 
     def test_widget_modes_and_restoration(self):
         """Test DivideLineCanvasWidget mutual exclusion and value restoration."""

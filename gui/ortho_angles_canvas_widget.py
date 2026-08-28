@@ -406,6 +406,9 @@ class OrthoAnglesCanvasWidget(QFrame):
         self.move(x, y)
 
     def eventFilter(self, obj, event):
+        if obj == self.canvas and self.isHidden():
+            return super().eventFilter(obj, event)
+
         ev_type = event.type()
         resize_type = getattr(QEvent.Type, "Resize", getattr(QEvent, "Resize", 14))
         key_press_type = getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", 6))

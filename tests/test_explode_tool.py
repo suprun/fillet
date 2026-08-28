@@ -32,8 +32,11 @@ from plugin import FilletPlugin
 
 
 class DummyMessageBar:
+    def __init__(self):
+        self.messages = []
+
     def pushMessage(self, title, text, level=None, duration=0):
-        pass
+        self.messages.append((title, text, level, duration))
 
 
 class DummyInterface:
@@ -92,6 +95,7 @@ class TestExplodeTool(unittest.TestCase):
             cls.app.initQgis()
 
     def setUp(self):
+        QgsSettings().remove("FilletPlugin/Explode/SaveAsMultipart")
         self.canvas = QgsMapCanvas()
         self.iface = DummyInterface(self.canvas)
         self.widget = ExplodeCanvasWidget(self.canvas)
@@ -104,6 +108,7 @@ class TestExplodeTool(unittest.TestCase):
             self.widget.deleteLater()
         if self.canvas:
             self.canvas.deleteLater()
+        QgsSettings().remove("FilletPlugin/Explode/SaveAsMultipart")
 
     def test_geometry_engine_can_explode_line(self):
         """Test can_explode_line validation on various line geometries."""
@@ -326,6 +331,7 @@ class TestExplodeTool(unittest.TestCase):
 
         # Total features should now be 4 (3 from f1 + 1 from f2)
         features = list(layer.getFeatures())
+        self.assertTrue(self.iface._msg_bar.messages)
         self.assertEqual(len(features), 4)
         names = [f.attribute("name") for f in features]
         self.assertEqual(names.count("complex"), 3)
