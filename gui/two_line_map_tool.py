@@ -257,11 +257,8 @@ class TwoLineMapTool(QgsMapToolEdit):
         dist = GeometryEngine.distance(self.v_sharp, cursor_pt)
 
         is_geo = layer.crs().isGeographic() if layer and layer.crs().isValid() else False
-        min_limit = 1e-6 if is_geo else 0.0001
-        min_clamp = 1e-6 if is_geo else 0.001
-
         if self.widget.mode == FilletCanvasWidget.MODE_FILLET:
-            rounded_dist = max(min_limit, round(dist, 6 if is_geo else (4 if dist < 1.0 else 3)))
+            rounded_dist = max(0.0, round(dist, 6 if is_geo else (4 if dist < 1.0 else 3)))
             if not self.widget.is_radius_locked:
                 self.widget.set_radius(rounded_dist, block_signals=True)
         else:
@@ -289,7 +286,7 @@ class TwoLineMapTool(QgsMapToolEdit):
             is_eff_linked = self.widget.get_effective_is_linked(shift_pressed)
             if is_eff_linked:
                 # Symmetrical linked chamfer: both distances scale identically
-                rounded_dist = max(min_limit, round(dist, 6 if is_geo else (4 if dist < 1.0 else 3)))
+                rounded_dist = max(0.0, round(dist, 6 if is_geo else (4 if dist < 1.0 else 3)))
                 if not self.widget.is_dist1_locked:
                     self.widget.set_distance1(rounded_dist, block_signals=True)
                 if not self.widget.is_dist2_locked:
@@ -300,8 +297,8 @@ class TwoLineMapTool(QgsMapToolEdit):
                 wy = cursor_pt.y() - self.v_sharp.y()
                 proj1 = wx * u1x + wy * u1y
                 proj2 = wx * u2x + wy * u2y
-                d1 = max(min_clamp, abs(proj1))
-                d2 = max(min_clamp, abs(proj2))
+                d1 = max(0.0, abs(proj1))
+                d2 = max(0.0, abs(proj2))
                 rounded_d1 = round(d1, 6 if is_geo else (4 if d1 < 1.0 else 3))
                 rounded_d2 = round(d2, 6 if is_geo else (4 if d2 < 1.0 else 3))
                 if not self.widget.is_dist1_locked:

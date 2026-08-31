@@ -88,6 +88,53 @@ class TestTwoLineFillet(unittest.TestCase):
         self.assertAlmostEqual(pts[2].x(), 10.0, places=4)
         self.assertAlmostEqual(pts[3].y(), 0.0, places=4)
 
+    def test_zero_size_joins_lines_at_one_sharp_vertex(self):
+        l1 = QgsGeometry(QgsLineString([QgsPoint(0, 10), QgsPoint(10, 10)]))
+        l2 = QgsGeometry(QgsLineString([QgsPoint(10, 0), QgsPoint(10, 20)]))
+
+        for mode in ("fillet", "chamfer"):
+            result = GeometryEngine.fillet_or_chamfer_two_lines(
+                l1,
+                0,
+                QgsPoint(2, 10),
+                l2,
+                0,
+                QgsPoint(10, 2),
+                mode=mode,
+                radius=0.0,
+                dist1=0.0,
+                dist2=0.0,
+            )
+            self.assertIsNotNone(result)
+            geometry, intersection, t1, t2 = result
+            points = geometry.asPolyline()
+            self.assertEqual(len(points), 3)
+            self.assertEqual((points[1].x(), points[1].y()), (10.0, 10.0))
+            self.assertEqual((t1.x(), t1.y()), (intersection.x(), intersection.y()))
+            self.assertEqual((t2.x(), t2.y()), (intersection.x(), intersection.y()))
+
+    def test_two_line_one_sided_zero_chamfer(self):
+        l1 = QgsGeometry(QgsLineString([QgsPoint(0, 10), QgsPoint(10, 10)]))
+        l2 = QgsGeometry(QgsLineString([QgsPoint(10, 0), QgsPoint(10, 20)]))
+
+        result = GeometryEngine.fillet_or_chamfer_two_lines(
+            l1,
+            0,
+            QgsPoint(2, 10),
+            l2,
+            0,
+            QgsPoint(10, 2),
+            mode="chamfer",
+            dist1=0.0,
+            dist2=3.0,
+        )
+        self.assertIsNotNone(result)
+        geometry, intersection, t1, t2 = result
+        points = geometry.asPolyline()
+        self.assertEqual(len(points), 4)
+        self.assertEqual((t1.x(), t1.y()), (intersection.x(), intersection.y()))
+        self.assertEqual((t2.x(), t2.y()), (10.0, 7.0))
+
     def test_extend_short_lines(self):
         # Short lines that do not touch, but their extensions meet at (10, 10)
         l1_short = QgsGeometry(QgsLineString([QgsPoint(0, 10), QgsPoint(5, 10)]))

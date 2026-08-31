@@ -21,6 +21,12 @@ TEST_FILES = [
     "tests/test_explode_tool.py",
     "tests/test_divide_line_tool.py",
     "tests/test_ortho_angles_tool.py",
+    "tests/test_align_feature_tool.py",
+    "tests/test_match_edge_tool.py",
+    "tests/test_array_along_path_tool.py",
+    "tests/test_extract_part_tool.py",
+    "tests/test_subtract_feature_tool.py",
+    "tests/test_clip_feature_tool.py",
 ]
 
 def find_windows_qgis_python_executables():

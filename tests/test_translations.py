@@ -17,6 +17,7 @@ app = QgsApplication([], False)
 app.initQgis()
 
 from scripts.compile_translations import LANGUAGES, STRINGS
+from scripts.research_tools_translations import RESEARCH_STRINGS
 
 
 class TestTranslations(unittest.TestCase):
@@ -32,6 +33,51 @@ class TestTranslations(unittest.TestCase):
             translator = QTranslator()
             loaded = translator.load(qm_path)
             self.assertTrue(loaded, f"Failed to load {qm_path}")
+
+    def test_research_tool_strings_are_present_in_all_catalogs(self):
+        """Every new action, HUD, and message string is emitted to all 40 TS files."""
+        import xml.etree.ElementTree as ET
+
+        self.assertTrue(set(RESEARCH_STRINGS).issubset(STRINGS["FilletPlugin"]))
+        required = set(RESEARCH_STRINGS)
+        for lang in LANGUAGES:
+            ts_path = os.path.join(self.i18n_dir, f"fillet_{lang}.ts")
+            root = ET.parse(ts_path).getroot()
+            sources = {
+                source.text
+                for source in root.findall("./context/message/source")
+                if source.text
+            }
+            self.assertTrue(
+                required.issubset(sources),
+                f"Missing research-tool translations in {lang}",
+            )
+
+    def test_research_tool_english_resolution(self):
+        translator = QTranslator()
+        self.assertTrue(translator.load(os.path.join(self.i18n_dir, "fillet_en.qm")))
+        QCoreApplication.installTranslator(translator)
+        try:
+            self.assertEqual(
+                QCoreApplication.translate(
+                    "FilletPlugin",
+                    "CAD Вирівнювання об'єктів (Align Feature)",
+                ),
+                "CAD Align Feature",
+            )
+            self.assertEqual(
+                QCoreApplication.translate("FilletPlugin", "Весь шлях"),
+                "Whole path",
+            )
+            self.assertEqual(
+                QCoreApplication.translate(
+                    "FilletPlugin",
+                    "M/ZM and curved polygon geometries are not supported",
+                ),
+                "M/ZM and curved polygon geometries are not supported",
+            )
+        finally:
+            QCoreApplication.removeTranslator(translator)
 
     def test_translation_resolution(self):
         # Test German

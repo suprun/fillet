@@ -3,12 +3,15 @@
 Snapping and vertex identification helper for Fillet & Chamfer plugin.
 """
 
-from typing import NamedTuple, Optional
+from typing import NamedTuple, Optional, Sequence, Set, Tuple
 
 from qgis.core import (
+    QgsCoordinateTransform,
+    QgsCsException,
     QgsGeometry,
     QgsPointLocator,
     QgsPointXY,
+    QgsProject,
     QgsTolerance,
     QgsVectorLayer,
     QgsWkbTypes,
@@ -37,6 +40,29 @@ class SegmentMatch(NamedTuple):
     point: QgsPointXY  # closest point projected on the segment
     p1: QgsPointXY  # start vertex of the segment
     p2: QgsPointXY  # end vertex of the segment
+    geometry: QgsGeometry
+
+
+class LayerFeatureMatch(NamedTuple):
+    """Feature identified in a visible layer, with its point in canvas CRS."""
+
+    layer: QgsVectorLayer
+    fid: int
+    point: QgsPointXY
+    geometry: QgsGeometry
+
+
+class LayerSegmentMatch(NamedTuple):
+    """Segment identified in a visible layer, with points in canvas CRS."""
+
+    layer: QgsVectorLayer
+    fid: int
+    part_idx: int
+    ring_idx: int
+    segment_idx: int
+    point: QgsPointXY
+    p1: QgsPointXY
+    p2: QgsPointXY
     geometry: QgsGeometry
 
 
@@ -164,4 +190,212 @@ class SnappingHelper:
                     geometry=geom,
                 )
 
+        return closest_match
+
+    @staticmethod
+    def _transform_point(
+        point: QgsPointXY,
+        source_crs,
+        destination_crs,
+    ) -> QgsPointXY:
+        """Transform a point when both coordinate systems are valid."""
+        if (
+            source_crs.isValid()
+            and destination_crs.isValid()
+            and source_crs != destination_crs
+        ):
+            transform = QgsCoordinateTransform(
+                source_crs,
+                destination_crs,
+                QgsProject.instance(),
+            )
+            transformed = transform.transform(point)
+            return QgsPointXY(transformed.x(), transformed.y())
+        return QgsPointXY(point)
+
+    @classmethod
+    def find_feature_across_visible_layers(
+        cls,
+        canvas: QgsMapCanvas,
+        map_point: QgsPointXY,
+        geometry_types: Optional[Sequence[QgsWkbTypes.GeometryType]] = None,
+        require_editable: bool = False,
+        excluded_features: Optional[Set[Tuple[str, int]]] = None,
+        included_features: Optional[Set[Tuple[str, int]]] = None,
+        included_layer_ids: Optional[Set[str]] = None,
+    ) -> Optional[LayerFeatureMatch]:
+        """Return the closest readable feature under a canvas position."""
+        if not canvas:
+            return None
+        excluded = excluded_features or set()
+        canvas_crs = canvas.mapSettings().destinationCrs()
+        closest_match: Optional[LayerFeatureMatch] = None
+        closest_distance_sq = float("inf")
+
+        for layer in canvas.layers():
+            if not isinstance(layer, QgsVectorLayer) or not layer.isSpatial():
+                continue
+            if included_layer_ids is not None and layer.id() not in included_layer_ids:
+                continue
+            if require_editable and not layer.isEditable():
+                continue
+            if geometry_types is not None and layer.geometryType() not in geometry_types:
+                continue
+            try:
+                layer_point = cls._transform_point(map_point, canvas_crs, layer.crs())
+            except QgsCsException:
+                continue
+            search_radius = QgsTolerance.vertexSearchRadius(
+                layer,
+                canvas.mapSettings(),
+            ) * 1.5
+            search_geom = QgsGeometry.fromPointXY(layer_point)
+            search_rect = search_geom.buffer(search_radius, 4).boundingBox()
+            for feature in layer.getFeatures(search_rect):
+                if (
+                    included_features is not None
+                    and (layer.id(), feature.id()) not in included_features
+                ):
+                    continue
+                if (layer.id(), feature.id()) in excluded:
+                    continue
+                geometry = feature.geometry()
+                if geometry.isNull() or geometry.isEmpty():
+                    continue
+                if (
+                    layer.geometryType() == QgsWkbTypes.GeometryType.PolygonGeometry
+                    and geometry.contains(search_geom)
+                ):
+                    distance = 0.0
+                    matched_layer_point = layer_point
+                else:
+                    distance = geometry.distance(search_geom)
+                    closest_geometry = geometry.nearestPoint(search_geom)
+                    if closest_geometry.isEmpty():
+                        continue
+                    matched_layer_point = QgsPointXY(closest_geometry.asPoint())
+                if distance > search_radius:
+                    continue
+                try:
+                    matched_map_point = cls._transform_point(
+                        matched_layer_point,
+                        layer.crs(),
+                        canvas_crs,
+                    )
+                except QgsCsException:
+                    continue
+                canvas_distance_sq = matched_map_point.sqrDist(map_point)
+                if canvas_distance_sq >= closest_distance_sq:
+                    continue
+                closest_distance_sq = canvas_distance_sq
+                closest_match = LayerFeatureMatch(
+                    layer=layer,
+                    fid=feature.id(),
+                    point=matched_map_point,
+                    geometry=QgsGeometry(geometry),
+                )
+        return closest_match
+
+    @classmethod
+    def find_segment_across_visible_layers(
+        cls,
+        canvas: QgsMapCanvas,
+        map_point: QgsPointXY,
+        excluded_features: Optional[Set[Tuple[str, int]]] = None,
+        included_features: Optional[Set[Tuple[str, int]]] = None,
+        included_layer_ids: Optional[Set[str]] = None,
+        excluded_segments: Optional[Set[Tuple[str, int, int, int, int]]] = None,
+    ) -> Optional[LayerSegmentMatch]:
+        """Return the closest line or polygon segment from visible vector layers."""
+        if not canvas:
+            return None
+        excluded = excluded_features or set()
+        excluded_segment_keys = excluded_segments or set()
+        canvas_crs = canvas.mapSettings().destinationCrs()
+        closest_match: Optional[LayerSegmentMatch] = None
+        closest_distance_sq = float("inf")
+
+        for layer in canvas.layers():
+            if not isinstance(layer, QgsVectorLayer) or not layer.isSpatial():
+                continue
+            if included_layer_ids is not None and layer.id() not in included_layer_ids:
+                continue
+            if layer.geometryType() not in (
+                QgsWkbTypes.GeometryType.LineGeometry,
+                QgsWkbTypes.GeometryType.PolygonGeometry,
+            ):
+                continue
+            try:
+                layer_point = cls._transform_point(map_point, canvas_crs, layer.crs())
+            except QgsCsException:
+                continue
+            search_radius = QgsTolerance.vertexSearchRadius(
+                layer,
+                canvas.mapSettings(),
+            ) * 1.5
+            search_rect = QgsGeometry.fromPointXY(layer_point).buffer(
+                search_radius,
+                4,
+            ).boundingBox()
+            for feature in layer.getFeatures(search_rect):
+                if (
+                    included_features is not None
+                    and (layer.id(), feature.id()) not in included_features
+                ):
+                    continue
+                if (layer.id(), feature.id()) in excluded:
+                    continue
+                geometry = feature.geometry()
+                if geometry.isNull() or geometry.isEmpty():
+                    continue
+                distance_sq, projected, after_vertex, _ = (
+                    geometry.closestSegmentWithContext(layer_point)
+                )
+                if after_vertex <= 0 or distance_sq > search_radius * search_radius:
+                    continue
+                vertex_id = geometry.vertexIdFromVertexNr(after_vertex)[1]
+                segment_idx = max(0, vertex_id.vertex - 1)
+                if (
+                    layer.id(),
+                    feature.id(),
+                    vertex_id.part,
+                    vertex_id.ring,
+                    segment_idx,
+                ) in excluded_segment_keys:
+                    continue
+                start_point = geometry.vertexAt(after_vertex - 1)
+                end_point = geometry.vertexAt(after_vertex)
+                try:
+                    projected_map = cls._transform_point(
+                        QgsPointXY(projected),
+                        layer.crs(),
+                        canvas_crs,
+                    )
+                    start_map = cls._transform_point(
+                        QgsPointXY(start_point),
+                        layer.crs(),
+                        canvas_crs,
+                    )
+                    end_map = cls._transform_point(
+                        QgsPointXY(end_point),
+                        layer.crs(),
+                        canvas_crs,
+                    )
+                except QgsCsException:
+                    continue
+                canvas_distance_sq = projected_map.sqrDist(map_point)
+                if canvas_distance_sq >= closest_distance_sq:
+                    continue
+                closest_distance_sq = canvas_distance_sq
+                closest_match = LayerSegmentMatch(
+                    layer=layer,
+                    fid=feature.id(),
+                    part_idx=vertex_id.part,
+                    ring_idx=vertex_id.ring,
+                    segment_idx=segment_idx,
+                    point=projected_map,
+                    p1=start_map,
+                    p2=end_map,
+                    geometry=QgsGeometry(geometry),
+                )
         return closest_match

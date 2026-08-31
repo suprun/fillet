@@ -5,6 +5,7 @@ Provides core mathematical algorithms for vertex and segment filleting/chamferin
 """
 
 import math
+from enum import Enum
 from typing import Dict, List, Optional, Tuple, Union
 
 from qgis.core import (
@@ -24,6 +25,13 @@ from qgis.core import (
     QgsVertexId,
     QgsWkbTypes,
 )
+
+
+class BooleanOperation(str, Enum):
+    """Supported polygon boolean operations for the shared CAD tool."""
+
+    Subtract = "subtract"
+    Clip = "clip"
 
 
 class GeometryEngine:
@@ -166,7 +174,7 @@ class GeometryEngine:
 
         Returns: (success, t1, arc_mid, t2, tangent_distance)
         """
-        if radius <= 0:
+        if radius < 0:
             return False, None, None, None, 0.0
 
         # Vector from V to P_prev
@@ -194,6 +202,15 @@ class GeometryEngine:
 
         if tan_half < epsilon or sin_half < epsilon:
             return False, None, None, None, 0.0
+
+        if radius == 0:
+            return (
+                True,
+                GeometryEngine._copy_point(v),
+                GeometryEngine._copy_point(v),
+                GeometryEngine._copy_point(v),
+                0.0,
+            )
 
         tangent_dist = radius / tan_half
 
@@ -242,10 +259,8 @@ class GeometryEngine:
         Calculates the 2 chamfer points at vertex v along segments to p_prev and p_next.
         Returns: (success, c1, c2)
         """
-        if dist1 <= 0:
+        if dist1 < 0 or dist2 < 0:
             return False, None, None
-        if dist2 <= 0:
-            dist2 = dist1
 
         u1x, u1y, len1 = GeometryEngine.normalize_vector(p_prev.x() - v.x(), p_prev.y() - v.y())
         u2x, u2y, len2 = GeometryEngine.normalize_vector(p_next.x() - v.x(), p_next.y() - v.y())
@@ -376,7 +391,12 @@ class GeometryEngine:
 
         curve_wkb = curve.wkbType()
         has_dimensions = QgsWkbTypes.hasZ(curve_wkb) or QgsWkbTypes.hasM(curve_wkb)
-        if hasattr(QgsGeometryUtils, "filletVertex") and use_true_curve and not has_dimensions:
+        if (
+            radius > 0
+            and hasattr(QgsGeometryUtils, "filletVertex")
+            and use_true_curve
+            and not has_dimensions
+        ):
             try:
                 res = QgsGeometryUtils.filletVertex(curve, vertex_index, radius, 0 if use_true_curve else segments_count)
                 if res is not None:
@@ -415,6 +435,8 @@ class GeometryEngine:
         success, t1, arc_mid, t2, _ = cls.compute_fillet_points(p_prev, v, p_next, radius)
         if not success or t1 is None or arc_mid is None or t2 is None:
             return None
+        if radius == 0:
+            return curve.clone()
 
         arc_pts = cls.segmentize_arc_3p(t1, arc_mid, t2, segments_count)
 
@@ -453,7 +475,12 @@ class GeometryEngine:
 
         curve_wkb = curve.wkbType()
         has_dimensions = QgsWkbTypes.hasZ(curve_wkb) or QgsWkbTypes.hasM(curve_wkb)
-        if hasattr(QgsGeometryUtils, "chamferVertex") and not has_dimensions:
+        if (
+            dist1 > 0
+            and dist2 > 0
+            and hasattr(QgsGeometryUtils, "chamferVertex")
+            and not has_dimensions
+        ):
             try:
                 res = QgsGeometryUtils.chamferVertex(curve, vertex_index, dist1, dist2)
                 if res is not None:
@@ -492,6 +519,8 @@ class GeometryEngine:
         success, c1, c2 = cls.compute_chamfer_points(p_prev, v, p_next, dist1, dist2)
         if not success or c1 is None or c2 is None:
             return None
+        if dist1 == 0 and dist2 == 0:
+            return curve.clone()
 
         new_pts = []
         if is_closed and (vertex_index == 0 or vertex_index == num_vertices - 1):
@@ -800,8 +829,7 @@ class GeometryEngine:
             if success and t1 and t2:
                 return QgsPointXY(t1.x(), t1.y()), QgsPointXY(t2.x(), t2.y())
         else:
-            d2 = val2 if val2 > 0 else val1
-            success, c1, c2 = cls.compute_chamfer_points(p_prev, v, p_next, val1, d2)
+            success, c1, c2 = cls.compute_chamfer_points(p_prev, v, p_next, val1, val2)
             if success and c1 and c2:
                 return QgsPointXY(c1.x(), c1.y()), QgsPointXY(c2.x(), c2.y())
 
@@ -906,6 +934,19 @@ class GeometryEngine:
         if geom.isEmpty() or geom.isNull():
             return None
         if cls.has_curved_segments(geom):
+            return None
+
+        if mode == "fillet":
+            if radius < 0:
+                return None
+            if radius == 0:
+                return QgsGeometry(geom)
+        elif mode == "chamfer":
+            if dist1 < 0 or dist2 < 0:
+                return None
+            if dist1 == 0 and dist2 == 0:
+                return QgsGeometry(geom)
+        else:
             return None
 
         geom_type = geom.type()
@@ -1352,7 +1393,9 @@ class GeometryEngine:
             return None
 
         if mode == "fillet":
-            if radius <= 0:
+            if radius < 0:
+                return None
+            if radius == 0:
                 t1 = v
                 t2 = v
                 arc_pts = [v]
@@ -1378,9 +1421,11 @@ class GeometryEngine:
                 arc_mid = cls._interpolate_point_dimensions(t1, t2, arc_mid_x, arc_mid_y, 0.5)
                 arc_pts = cls.segmentize_arc_3p(t1, arc_mid, t2, segments_count)
         elif mode == "chamfer":
-            d1_in = dist1 if dist1 > 0 else 0.0
-            d2_in = dist2 if dist2 > 0 else d1_in
-            if d1_in <= 0 and d2_in <= 0:
+            if dist1 < 0 or dist2 < 0:
+                return None
+            d1_in = dist1
+            d2_in = dist2
+            if d1_in == 0 and d2_in == 0:
                 t1 = v
                 t2 = v
                 arc_pts = [v]
@@ -2384,6 +2429,624 @@ class GeometryEngine:
         if sr_abstract:
             return QgsGeometry(sr_abstract)
         return QgsGeometry(geom)
+
+    @classmethod
+    def compute_alignment_transform(
+        cls,
+        source_start: Union[QgsPoint, QgsPointXY],
+        source_end: Union[QgsPoint, QgsPointXY],
+        target_start: Union[QgsPoint, QgsPointXY],
+        target_end: Union[QgsPoint, QgsPointXY],
+        fit: bool = False,
+        flip: bool = False,
+    ) -> Tuple[float, float, float, float]:
+        """Return angle, scale, and translation for two-reference alignment."""
+        source_dx = source_end.x() - source_start.x()
+        source_dy = source_end.y() - source_start.y()
+        target_dx = target_end.x() - target_start.x()
+        target_dy = target_end.y() - target_start.y()
+        source_length = math.hypot(source_dx, source_dy)
+        target_length = math.hypot(target_dx, target_dy)
+        if source_length < cls.EPSILON:
+            raise ValueError("Source reference must have a non-zero length")
+        if target_length < cls.EPSILON:
+            raise ValueError("Target reference must have a non-zero length")
+
+        source_angle = math.atan2(source_dy, source_dx)
+        target_angle = math.atan2(target_dy, target_dx)
+        angle_degrees = math.degrees(target_angle - source_angle)
+        if flip:
+            angle_degrees += 180.0
+        while angle_degrees <= -180.0:
+            angle_degrees += 360.0
+        while angle_degrees > 180.0:
+            angle_degrees -= 360.0
+
+        scale_factor = target_length / source_length if fit else 1.0
+        return (
+            angle_degrees,
+            scale_factor,
+            target_start.x() - source_start.x(),
+            target_start.y() - source_start.y(),
+        )
+
+    @classmethod
+    def apply_similarity_transform(
+        cls,
+        geom: QgsGeometry,
+        origin: Union[QgsPoint, QgsPointXY],
+        angle_degrees_ccw: float,
+        scale_factor: float,
+        translate_x: float,
+        translate_y: float,
+    ) -> QgsGeometry:
+        """Apply a dimension-preserving similarity transform to a geometry clone."""
+        if scale_factor <= cls.EPSILON:
+            raise ValueError("Scale factor must be greater than zero")
+        transformed = cls.scale_and_rotate_geometry(
+            geom,
+            origin,
+            scale_factor,
+            angle_degrees_ccw,
+        )
+        if abs(translate_x) >= cls.EPSILON or abs(translate_y) >= cls.EPSILON:
+            if transformed.translate(translate_x, translate_y) not in (None, 0):
+                raise RuntimeError("Geometry translation failed")
+        return transformed
+
+    @classmethod
+    def compute_match_edge_transform(
+        cls,
+        source_start: Union[QgsPoint, QgsPointXY],
+        source_end: Union[QgsPoint, QgsPointXY],
+        target_start: Union[QgsPoint, QgsPointXY],
+        target_end: Union[QgsPoint, QgsPointXY],
+        collinear: bool = True,
+        flip: bool = False,
+    ) -> Tuple[float, QgsPointXY, float, float]:
+        """Return minimal edge-match rotation, pivot, and optional translation."""
+        source_dx = source_end.x() - source_start.x()
+        source_dy = source_end.y() - source_start.y()
+        target_dx = target_end.x() - target_start.x()
+        target_dy = target_end.y() - target_start.y()
+        if math.hypot(source_dx, source_dy) < cls.EPSILON:
+            raise ValueError("Source edge must have a non-zero length")
+        if math.hypot(target_dx, target_dy) < cls.EPSILON:
+            raise ValueError("Target edge must have a non-zero length")
+
+        angle_degrees = math.degrees(
+            math.atan2(target_dy, target_dx) - math.atan2(source_dy, source_dx)
+        )
+        while angle_degrees <= -180.0:
+            angle_degrees += 360.0
+        while angle_degrees > 180.0:
+            angle_degrees -= 360.0
+        if flip:
+            angle_degrees += 180.0
+            while angle_degrees <= -180.0:
+                angle_degrees += 360.0
+            while angle_degrees > 180.0:
+                angle_degrees -= 360.0
+
+        pivot = QgsPointXY(
+            (source_start.x() + source_end.x()) * 0.5,
+            (source_start.y() + source_end.y()) * 0.5,
+        )
+        if not collinear:
+            return angle_degrees, pivot, 0.0, 0.0
+
+        line_a = target_start.y() - target_end.y()
+        line_b = target_end.x() - target_start.x()
+        line_c = line_a * target_start.x() + line_b * target_start.y()
+        projected = cls._project_point_to_line(pivot, line_a, line_b, line_c)
+        return (
+            angle_degrees,
+            pivot,
+            projected.x() - pivot.x(),
+            projected.y() - pivot.y(),
+        )
+
+    @classmethod
+    def _replace_curve_in_geometry(
+        cls,
+        geom: QgsGeometry,
+        part_idx: int,
+        ring_idx: int,
+        replacement: QgsLineString,
+    ) -> QgsGeometry:
+        """Return a geometry clone with one line part or polygon ring replaced."""
+        geom_type = geom.type()
+        is_multi = geom.isMultipart()
+
+        if geom_type == QgsWkbTypes.GeometryType.LineGeometry:
+            if not is_multi:
+                if part_idx != 0 or ring_idx != 0:
+                    raise ValueError("Source edge index is out of range")
+                return QgsGeometry(replacement.clone())
+
+            multi = geom.constGet()
+            if multi is None or part_idx < 0 or part_idx >= multi.numGeometries():
+                raise ValueError("Source edge index is out of range")
+            new_multi = QgsMultiLineString()
+            for index in range(multi.numGeometries()):
+                line = replacement if index == part_idx else multi.geometryN(index)
+                new_multi.addGeometry(line.clone())
+            return QgsGeometry(new_multi)
+
+        if geom_type != QgsWkbTypes.GeometryType.PolygonGeometry:
+            raise ValueError("Source geometry must be linear or polygonal")
+
+        def replace_ring(poly: QgsPolygon) -> QgsPolygon:
+            if ring_idx < 0 or ring_idx > poly.numInteriorRings():
+                raise ValueError("Source edge index is out of range")
+            new_poly = QgsPolygon()
+            exterior = poly.exteriorRing()
+            if exterior is None:
+                raise ValueError("Source geometry is empty")
+            new_poly.setExteriorRing(
+                replacement.clone() if ring_idx == 0 else exterior.clone()
+            )
+            for interior_index in range(poly.numInteriorRings()):
+                interior = poly.interiorRing(interior_index)
+                new_poly.addInteriorRing(
+                    replacement.clone()
+                    if ring_idx == interior_index + 1
+                    else interior.clone()
+                )
+            return new_poly
+
+        if not is_multi:
+            if part_idx != 0:
+                raise ValueError("Source edge index is out of range")
+            polygon = geom.constGet()
+            if polygon is None:
+                raise ValueError("Source geometry is empty")
+            return QgsGeometry(replace_ring(polygon))
+
+        multi = geom.constGet()
+        if multi is None or part_idx < 0 or part_idx >= multi.numGeometries():
+            raise ValueError("Source edge index is out of range")
+        new_multi = QgsMultiPolygon()
+        for index in range(multi.numGeometries()):
+            polygon = multi.geometryN(index)
+            new_multi.addGeometry(
+                replace_ring(polygon) if index == part_idx else polygon.clone()
+            )
+        return QgsGeometry(new_multi)
+
+    @classmethod
+    def _match_segment_in_curve(
+        cls,
+        curve: QgsLineString,
+        segment_idx: int,
+        target_start: Union[QgsPoint, QgsPointXY],
+        target_end: Union[QgsPoint, QgsPointXY],
+        collinear: bool,
+        flip: bool,
+    ) -> QgsLineString:
+        """Replace one segment support line while retaining all other vertices."""
+        if curve is None or curve.numPoints() < 2:
+            raise ValueError("Source geometry is empty")
+
+        num_points = curve.numPoints()
+        is_closed = curve.isClosed() or (
+            num_points > 2 and curve.pointN(0) == curve.pointN(num_points - 1)
+        )
+        effective_count = num_points - 1 if is_closed else num_points
+        if segment_idx < 0 or segment_idx >= effective_count - (0 if is_closed else 1):
+            raise ValueError("Source edge index is out of range")
+
+        start_index = segment_idx
+        end_index = (segment_idx + 1) % effective_count
+        source_start = curve.pointN(start_index)
+        source_end = curve.pointN(end_index)
+        source_dx = source_end.x() - source_start.x()
+        source_dy = source_end.y() - source_start.y()
+        unit_x, unit_y, source_length = cls.normalize_vector(source_dx, source_dy)
+        if source_length < cls.EPSILON:
+            raise ValueError("Source edge must have a non-zero length")
+
+        target_dx = target_end.x() - target_start.x()
+        target_dy = target_end.y() - target_start.y()
+        target_unit_x, target_unit_y, target_length = cls.normalize_vector(
+            target_dx,
+            target_dy,
+        )
+        if target_length < cls.EPSILON:
+            raise ValueError("Target edge must have a non-zero length")
+        if unit_x * target_unit_x + unit_y * target_unit_y < 0.0:
+            target_unit_x = -target_unit_x
+            target_unit_y = -target_unit_y
+
+        is_terminal = not is_closed and (
+            num_points == 2
+            or segment_idx == 0
+            or segment_idx == num_points - 2
+        )
+        if flip and is_terminal:
+            target_unit_x = -target_unit_x
+            target_unit_y = -target_unit_y
+
+        midpoint = QgsPointXY(
+            (source_start.x() + source_end.x()) * 0.5,
+            (source_start.y() + source_end.y()) * 0.5,
+        )
+        if collinear:
+            line_anchor = QgsPointXY(target_start)
+        else:
+            line_anchor = midpoint
+        line_end = QgsPointXY(
+            line_anchor.x() + target_unit_x,
+            line_anchor.y() + target_unit_y,
+        )
+
+        if not is_closed and num_points == 2:
+            center = midpoint
+            if collinear:
+                along = (
+                    (midpoint.x() - line_anchor.x()) * target_unit_x
+                    + (midpoint.y() - line_anchor.y()) * target_unit_y
+                )
+                center = QgsPointXY(
+                    line_anchor.x() + along * target_unit_x,
+                    line_anchor.y() + along * target_unit_y,
+                )
+            new_start = cls._point_at_xy_with_source_dimensions(
+                QgsPointXY(
+                    center.x() - source_length * 0.5 * target_unit_x,
+                    center.y() - source_length * 0.5 * target_unit_y,
+                ),
+                source_start,
+            )
+            new_end = cls._point_at_xy_with_source_dimensions(
+                QgsPointXY(
+                    center.x() + source_length * 0.5 * target_unit_x,
+                    center.y() + source_length * 0.5 * target_unit_y,
+                ),
+                source_end,
+            )
+        else:
+            if segment_idx > 0:
+                previous = curve.pointN(segment_idx - 1)
+            elif is_closed:
+                previous = curve.pointN(effective_count - 1)
+            else:
+                previous = None
+
+            if end_index < effective_count - 1:
+                following = curve.pointN(end_index + 1)
+            elif is_closed:
+                following = curve.pointN((end_index + 1) % effective_count)
+            else:
+                following = None
+
+            if previous is not None:
+                new_start = cls.compute_line_intersection(
+                    previous,
+                    source_start,
+                    line_anchor,
+                    line_end,
+                )
+                if new_start is None:
+                    raise ValueError(
+                        "Target line does not intersect the adjacent source edge"
+                    )
+            else:
+                new_start = None
+
+            if following is not None:
+                new_end = cls.compute_line_intersection(
+                    line_anchor,
+                    line_end,
+                    source_end,
+                    following,
+                )
+                if new_end is None:
+                    raise ValueError(
+                        "Target line does not intersect the adjacent source edge"
+                    )
+            else:
+                new_end = None
+
+            if new_start is None and new_end is not None:
+                new_start = cls._point_at_xy_with_source_dimensions(
+                    QgsPointXY(
+                        new_end.x() - source_length * target_unit_x,
+                        new_end.y() - source_length * target_unit_y,
+                    ),
+                    source_start,
+                )
+            elif new_end is None and new_start is not None:
+                new_end = cls._point_at_xy_with_source_dimensions(
+                    QgsPointXY(
+                        new_start.x() + source_length * target_unit_x,
+                        new_start.y() + source_length * target_unit_y,
+                    ),
+                    source_end,
+                )
+
+        if new_start is None or new_end is None:
+            raise ValueError("Could not construct the matched source edge")
+        new_dx = new_end.x() - new_start.x()
+        new_dy = new_end.y() - new_start.y()
+        new_length = math.hypot(new_dx, new_dy)
+        if new_length < cls.EPSILON:
+            raise ValueError("Matched source edge would collapse")
+        if new_dx * target_unit_x + new_dy * target_unit_y <= cls.EPSILON:
+            raise ValueError("Matched source edge would reverse")
+
+        new_points = [cls._copy_point(curve.pointN(index)) for index in range(num_points)]
+        new_points[start_index] = new_start
+        new_points[end_index] = new_end
+        if is_closed:
+            if start_index == 0:
+                new_points[num_points - 1] = cls._copy_point(new_start)
+            elif end_index == 0:
+                new_points[num_points - 1] = cls._copy_point(new_end)
+
+        for index in range(1, len(new_points)):
+            if cls.distance(new_points[index - 1], new_points[index]) < cls.EPSILON:
+                raise ValueError("Matched source edge would collapse an adjacent edge")
+
+        result = QgsLineString()
+        for point in new_points:
+            result.addVertex(point)
+        return result
+
+    @classmethod
+    def match_segment_to_reference(
+        cls,
+        geom: QgsGeometry,
+        part_idx: int,
+        ring_idx: int,
+        segment_idx: int,
+        target_start: Union[QgsPoint, QgsPointXY],
+        target_end: Union[QgsPoint, QgsPointXY],
+        collinear: bool = True,
+        flip: bool = False,
+    ) -> QgsGeometry:
+        """Locally make one source segment collinear or parallel to a reference."""
+        if not geom or geom.isNull() or geom.isEmpty():
+            raise ValueError("Source geometry is empty")
+        if geom.type() not in (
+            QgsWkbTypes.GeometryType.LineGeometry,
+            QgsWkbTypes.GeometryType.PolygonGeometry,
+        ):
+            raise ValueError("Source geometry must be linear or polygonal")
+        if cls.has_curved_segments(geom) or QgsWkbTypes.isCurvedType(geom.wkbType()):
+            raise ValueError("Native curved source geometries are not supported")
+        if (
+            geom.type() == QgsWkbTypes.GeometryType.PolygonGeometry
+            and not geom.isGeosValid()
+        ):
+            raise ValueError("Source geometry is invalid")
+
+        curve = cls.get_curve_from_geometry(geom, part_idx, ring_idx)
+        if curve is None or not isinstance(curve, QgsLineString):
+            raise ValueError("Source edge must be a straight segment")
+        replacement = cls._match_segment_in_curve(
+            curve,
+            segment_idx,
+            target_start,
+            target_end,
+            collinear,
+            flip,
+        )
+        result = cls._replace_curve_in_geometry(
+            geom,
+            part_idx,
+            ring_idx,
+            replacement,
+        )
+        if result.isNull() or result.isEmpty():
+            raise ValueError("Matched source geometry is empty")
+        if (
+            result.type() == QgsWkbTypes.GeometryType.PolygonGeometry
+            and not result.isGeosValid()
+        ):
+            raise ValueError("Matched source geometry is invalid")
+        return result
+
+    @classmethod
+    def _path_tangent_angle(cls, path: QgsGeometry, measure: float) -> float:
+        """Return the mathematical tangent angle along increasing path measure."""
+        path_length = path.length()
+        if path_length < cls.EPSILON:
+            raise ValueError("Path must have a non-zero length")
+        clamped_measure = max(0.0, min(path_length, measure))
+        sample_step = max(path_length * 1e-7, cls.EPSILON * 10.0)
+        before_measure = max(0.0, clamped_measure - sample_step)
+        after_measure = min(path_length, clamped_measure + sample_step)
+        if after_measure - before_measure < cls.EPSILON:
+            before_measure = max(0.0, clamped_measure - sample_step * 10.0)
+            after_measure = min(path_length, clamped_measure + sample_step * 10.0)
+
+        before_geom = path.interpolate(before_measure)
+        after_geom = path.interpolate(after_measure)
+        if before_geom.isEmpty() or after_geom.isEmpty():
+            raise ValueError("Could not interpolate the selected path")
+        before = before_geom.asPoint()
+        after = after_geom.asPoint()
+        dx = after.x() - before.x()
+        dy = after.y() - before.y()
+        if math.hypot(dx, dy) < cls.EPSILON:
+            raise ValueError("Could not determine the path tangent")
+        return math.atan2(dy, dx)
+
+    @classmethod
+    def compute_path_placements(
+        cls,
+        path: QgsGeometry,
+        start_measure: float,
+        end_measure: float,
+        distribution_mode: str,
+        value: float,
+        include_start: bool = True,
+        offset: float = 0.0,
+        tangent_orientation: bool = False,
+        reverse: bool = False,
+    ) -> List[Tuple[QgsPointXY, float]]:
+        """Return placement points and relative rotations along a line path."""
+        if not path or path.isNull() or path.isEmpty():
+            return []
+        if path.type() != QgsWkbTypes.GeometryType.LineGeometry:
+            raise ValueError("Array path must be a line geometry")
+
+        path_length = path.length()
+        if path_length < cls.EPSILON:
+            return []
+        start = max(0.0, min(path_length, float(start_measure)))
+        end = max(0.0, min(path_length, float(end_measure)))
+        if reverse:
+            start, end = end, start
+        range_length = abs(end - start)
+        if range_length < cls.EPSILON:
+            return []
+
+        travel_distances: List[float]
+        if distribution_mode == "count":
+            count = int(value)
+            if count < 1:
+                return []
+            if include_start:
+                if count == 1:
+                    travel_distances = [0.0]
+                else:
+                    step = range_length / float(count - 1)
+                    travel_distances = [step * index for index in range(count)]
+            else:
+                step = range_length / float(count)
+                travel_distances = [step * index for index in range(1, count + 1)]
+        elif distribution_mode == "spacing":
+            spacing = float(value)
+            if spacing <= cls.EPSILON:
+                return []
+            travel_distances = [0.0] if include_start else []
+            distance = spacing
+            while distance <= range_length + cls.EPSILON:
+                travel_distances.append(min(distance, range_length))
+                distance += spacing
+        else:
+            raise ValueError("Unsupported path distribution mode")
+
+        if not travel_distances:
+            return []
+
+        direction_sign = 1.0 if end > start else -1.0
+        first_measure = start + direction_sign * travel_distances[0]
+        base_angle = cls._path_tangent_angle(path, first_measure)
+        if direction_sign < 0.0:
+            base_angle += math.pi
+
+        placements: List[Tuple[QgsPointXY, float]] = []
+        for travel_distance in travel_distances:
+            measure = start + direction_sign * travel_distance
+            point_geom = path.interpolate(measure)
+            if point_geom.isEmpty():
+                continue
+            point = point_geom.asPoint()
+            original_tangent = cls._path_tangent_angle(path, measure)
+            placed_x = point.x() - math.sin(original_tangent) * offset
+            placed_y = point.y() + math.cos(original_tangent) * offset
+
+            relative_angle = 0.0
+            if tangent_orientation:
+                effective_tangent = original_tangent
+                if direction_sign < 0.0:
+                    effective_tangent += math.pi
+                relative_angle = math.degrees(effective_tangent - base_angle)
+                while relative_angle <= -180.0:
+                    relative_angle += 360.0
+                while relative_angle > 180.0:
+                    relative_angle -= 360.0
+            placements.append((QgsPointXY(placed_x, placed_y), relative_angle))
+        return placements
+
+    @classmethod
+    def extract_geometry_parts(
+        cls,
+        geom: QgsGeometry,
+        part_indices: List[int],
+    ) -> Tuple[QgsGeometry, List[QgsGeometry]]:
+        """Return the remaining geometry and cloned parts at the given indices."""
+        if not geom or geom.isNull() or geom.isEmpty():
+            return QgsGeometry(geom), []
+        parts = geom.asGeometryCollection() if geom.isMultipart() else [QgsGeometry(geom)]
+        selected = sorted(set(int(index) for index in part_indices))
+        if any(index < 0 or index >= len(parts) for index in selected):
+            raise IndexError("Geometry part index is out of range")
+
+        extracted = [QgsGeometry(parts[index]) for index in selected]
+        remaining = [
+            QgsGeometry(part)
+            for index, part in enumerate(parts)
+            if index not in selected
+        ]
+        if not remaining:
+            remaining_geometry = QgsGeometry()
+        elif len(remaining) == 1:
+            remaining_geometry = remaining[0]
+        else:
+            remaining_geometry = QgsGeometry.collectGeometry(remaining)
+        return remaining_geometry, extracted
+
+    @classmethod
+    def apply_polygon_boolean(
+        cls,
+        target: QgsGeometry,
+        cutters: List[QgsGeometry],
+        operation: Union[str, BooleanOperation],
+    ) -> QgsGeometry:
+        """Apply a safe polygon difference or intersection without layer edits."""
+        try:
+            normalized_operation = BooleanOperation(operation)
+        except ValueError as error:
+            raise ValueError("Unsupported polygon boolean operation") from error
+        if not target or target.isNull() or target.isEmpty():
+            raise ValueError("Target geometry is empty")
+        if target.type() != QgsWkbTypes.GeometryType.PolygonGeometry:
+            raise ValueError("Target geometry must be polygonal")
+        if cls.has_curved_segments(target) or QgsWkbTypes.hasM(target.wkbType()):
+            raise ValueError("M/ZM and curved polygon geometries are not supported")
+        if not target.isGeosValid():
+            raise ValueError("Target geometry is invalid")
+        if not cutters:
+            raise ValueError("At least one cutter is required")
+
+        safe_cutters: List[QgsGeometry] = []
+        for cutter in cutters:
+            if not cutter or cutter.isNull() or cutter.isEmpty():
+                continue
+            if cutter.type() != QgsWkbTypes.GeometryType.PolygonGeometry:
+                raise ValueError("Cutter geometry must be polygonal")
+            if cls.has_curved_segments(cutter) or QgsWkbTypes.hasM(cutter.wkbType()):
+                raise ValueError("M/ZM and curved polygon geometries are not supported")
+            if not cutter.isGeosValid():
+                raise ValueError("Cutter geometry is invalid")
+            safe_cutters.append(QgsGeometry(cutter))
+        if not safe_cutters:
+            raise ValueError("At least one non-empty cutter is required")
+
+        cutter_union = (
+            safe_cutters[0]
+            if len(safe_cutters) == 1
+            else QgsGeometry.unaryUnion(safe_cutters)
+        )
+        if cutter_union.isNull() or not cutter_union.isGeosValid():
+            raise ValueError("Cutter union is invalid")
+        if normalized_operation == BooleanOperation.Subtract:
+            result = target.difference(cutter_union)
+        elif normalized_operation == BooleanOperation.Clip:
+            result = target.intersection(cutter_union)
+
+        if result.isNull():
+            raise RuntimeError("Polygon boolean operation failed")
+        if not result.isEmpty():
+            if result.type() != QgsWkbTypes.GeometryType.PolygonGeometry:
+                return QgsGeometry()
+            if not result.isGeosValid():
+                raise RuntimeError("Polygon boolean result is invalid")
+        return result
 
     @classmethod
     def get_curve_from_geometry(

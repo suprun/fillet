@@ -26,8 +26,14 @@ from qgis.PyQt.QtWidgets import QDockWidget
 
 try:
     from .core.geometry_engine import GeometryEngine
+    from .gui.align_feature_canvas_widget import AlignFeatureCanvasWidget
+    from .gui.align_feature_map_tool import AlignFeatureMapTool
+    from .gui.array_along_path_canvas_widget import ArrayAlongPathCanvasWidget
+    from .gui.array_along_path_map_tool import ArrayAlongPathMapTool
     from .gui.array_canvas_widget import ArrayCanvasWidget
     from .gui.array_map_tool import CADArrayMapTool
+    from .gui.boolean_feature_canvas_widget import BooleanFeatureCanvasWidget
+    from .gui.boolean_feature_map_tool import BooleanFeatureMapTool
     from .gui.canvas_widget import FilletCanvasWidget
     from .gui.clean_duplicate_nodes_map_tool import CleanDuplicateNodesMapTool
     from .gui.divide_line_canvas_widget import DivideLineCanvasWidget
@@ -36,8 +42,12 @@ try:
     from .gui.edge_offset_map_tool import EdgeOffsetMapTool
     from .gui.explode_canvas_widget import ExplodeCanvasWidget
     from .gui.explode_map_tool import ExplodeLineMapTool
+    from .gui.extract_part_canvas_widget import ExtractPartCanvasWidget
+    from .gui.extract_part_map_tool import ExtractPartMapTool
     from .gui.gui_utils import checked_edit_command, require_edit_success
     from .gui.map_tool import FilletMapTool
+    from .gui.match_edge_canvas_widget import MatchEdgeCanvasWidget
+    from .gui.match_edge_map_tool import MatchEdgeMapTool
     from .gui.mirror_canvas_widget import MirrorCanvasWidget
     from .gui.mirror_map_tool import MirrorMapTool
     from .gui.ortho_angles_canvas_widget import OrthoAnglesCanvasWidget
@@ -54,8 +64,14 @@ try:
     from .gui.two_line_map_tool import TwoLineMapTool
 except (ImportError, ValueError):
     from core.geometry_engine import GeometryEngine
+    from gui.align_feature_canvas_widget import AlignFeatureCanvasWidget
+    from gui.align_feature_map_tool import AlignFeatureMapTool
+    from gui.array_along_path_canvas_widget import ArrayAlongPathCanvasWidget
+    from gui.array_along_path_map_tool import ArrayAlongPathMapTool
     from gui.array_canvas_widget import ArrayCanvasWidget
     from gui.array_map_tool import CADArrayMapTool
+    from gui.boolean_feature_canvas_widget import BooleanFeatureCanvasWidget
+    from gui.boolean_feature_map_tool import BooleanFeatureMapTool
     from gui.canvas_widget import FilletCanvasWidget
     from gui.clean_duplicate_nodes_map_tool import CleanDuplicateNodesMapTool
     from gui.divide_line_canvas_widget import DivideLineCanvasWidget
@@ -64,8 +80,12 @@ except (ImportError, ValueError):
     from gui.edge_offset_map_tool import EdgeOffsetMapTool
     from gui.explode_canvas_widget import ExplodeCanvasWidget
     from gui.explode_map_tool import ExplodeLineMapTool
+    from gui.extract_part_canvas_widget import ExtractPartCanvasWidget
+    from gui.extract_part_map_tool import ExtractPartMapTool
     from gui.gui_utils import checked_edit_command, require_edit_success
     from gui.map_tool import FilletMapTool
+    from gui.match_edge_canvas_widget import MatchEdgeCanvasWidget
+    from gui.match_edge_map_tool import MatchEdgeMapTool
     from gui.mirror_canvas_widget import MirrorCanvasWidget
     from gui.mirror_map_tool import MirrorMapTool
     from gui.ortho_angles_canvas_widget import OrthoAnglesCanvasWidget
@@ -95,6 +115,12 @@ class FilletPlugin:
         self._init_translator()
 
         self.action: Optional[QAction] = None
+        self.align_feature_action: Optional[QAction] = None
+        self.match_edge_action: Optional[QAction] = None
+        self.array_along_path_action: Optional[QAction] = None
+        self.extract_part_action: Optional[QAction] = None
+        self.subtract_feature_action: Optional[QAction] = None
+        self.clip_feature_action: Optional[QAction] = None
         self.array_action: Optional[QAction] = None
         self.polar_array_action: Optional[QAction] = None
         self.two_line_action: Optional[QAction] = None
@@ -109,6 +135,18 @@ class FilletPlugin:
         self.ortho_angles_action: Optional[QAction] = None
         self.batch_action: Optional[QAction] = None
         self.map_tool: Optional[FilletMapTool] = None
+        self.align_feature_map_tool: Optional[AlignFeatureMapTool] = None
+        self.align_feature_widget: Optional[AlignFeatureCanvasWidget] = None
+        self.match_edge_map_tool: Optional[MatchEdgeMapTool] = None
+        self.match_edge_widget: Optional[MatchEdgeCanvasWidget] = None
+        self.array_along_path_map_tool: Optional[ArrayAlongPathMapTool] = None
+        self.array_along_path_widget: Optional[ArrayAlongPathCanvasWidget] = None
+        self.extract_part_map_tool: Optional[ExtractPartMapTool] = None
+        self.extract_part_widget: Optional[ExtractPartCanvasWidget] = None
+        self.subtract_feature_map_tool: Optional[BooleanFeatureMapTool] = None
+        self.subtract_feature_widget: Optional[BooleanFeatureCanvasWidget] = None
+        self.clip_feature_map_tool: Optional[BooleanFeatureMapTool] = None
+        self.clip_feature_widget: Optional[BooleanFeatureCanvasWidget] = None
         self.array_map_tool: Optional[CADArrayMapTool] = None
         self.array_widget: Optional[ArrayCanvasWidget] = None
         self.polar_array_map_tool: Optional[CADPolarArrayMapTool] = None
@@ -406,6 +444,131 @@ class FilletPlugin:
         self.ortho_angles_action.setToolTip(self.tr("Інтерактивне вирівнювання кутів будівель і полігонів до прямих кутів (90°) за опорним фасадом"))
         self.ortho_angles_action.triggered.connect(self.toggle_ortho_angles_tool)
 
+        # 7.96. Research CAD tools promoted to production (QGIS 3.x and 4.x)
+        self.align_feature_widget = AlignFeatureCanvasWidget(self.canvas)
+        self.align_feature_widget.hide()
+        self.align_feature_map_tool = AlignFeatureMapTool(
+            self.canvas,
+            self.align_feature_widget,
+            self.iface,
+        )
+        self.align_feature_action = QAction(
+            QIcon(os.path.join(self.plugin_dir, "resources", "icons", "mActionAlignFeature.svg")),
+            self.tr("CAD Вирівнювання об'єктів (Align Feature)"),
+            self.iface.mainWindow(),
+        )
+        self.align_feature_action.setCheckable(True)
+        self.align_feature_action.setObjectName("actionAlignFeatureCAD")
+        self.align_feature_action.setToolTip(
+            self.tr(
+                "Перемістити, повернути або масштабувати всю вибрану групу "
+                "за двома точками чи ребрами"
+            )
+        )
+        self.align_feature_action.triggered.connect(self.toggle_align_feature_tool)
+
+        self.match_edge_widget = MatchEdgeCanvasWidget(self.canvas)
+        self.match_edge_widget.hide()
+        self.match_edge_map_tool = MatchEdgeMapTool(
+            self.canvas,
+            self.match_edge_widget,
+            self.iface,
+        )
+        self.match_edge_action = QAction(
+            QIcon(os.path.join(self.plugin_dir, "resources", "icons", "mActionMatchEdge.svg")),
+            self.tr("CAD Суміщення ребра (Match Edge)"),
+            self.iface.mainWindow(),
+        )
+        self.match_edge_action.setCheckable(True)
+        self.match_edge_action.setObjectName("actionMatchEdgeCAD")
+        self.match_edge_action.setToolTip(
+            self.tr(
+                "Локально виправити одне ребро без переміщення інших вершин об'єкта"
+            )
+        )
+        self.match_edge_action.triggered.connect(self.toggle_match_edge_tool)
+
+        self.array_along_path_widget = ArrayAlongPathCanvasWidget(self.canvas)
+        self.array_along_path_widget.hide()
+        self.array_along_path_map_tool = ArrayAlongPathMapTool(
+            self.canvas,
+            self.array_along_path_widget,
+            self.iface,
+        )
+        self.array_along_path_action = QAction(
+            QIcon(os.path.join(self.plugin_dir, "resources", "icons", "mActionArrayAlongPath.svg")),
+            self.tr("CAD Масив уздовж шляху (Array Along Path)"),
+            self.iface.mainWindow(),
+        )
+        self.array_along_path_action.setCheckable(True)
+        self.array_along_path_action.setObjectName("actionArrayAlongPathCAD")
+        self.array_along_path_action.setToolTip(
+            self.tr("Створення копій вибраної групи вздовж лінійної траєкторії")
+        )
+        self.array_along_path_action.triggered.connect(self.toggle_array_along_path_tool)
+
+        self.extract_part_widget = ExtractPartCanvasWidget(self.canvas)
+        self.extract_part_widget.hide()
+        self.extract_part_map_tool = ExtractPartMapTool(
+            self.canvas,
+            self.extract_part_widget,
+            self.iface,
+        )
+        self.extract_part_action = QAction(
+            QIcon(os.path.join(self.plugin_dir, "resources", "icons", "mActionExtractPart.svg")),
+            self.tr("CAD Вилучення частини (Extract Part)"),
+            self.iface.mainWindow(),
+        )
+        self.extract_part_action.setCheckable(True)
+        self.extract_part_action.setObjectName("actionExtractPartCAD")
+        self.extract_part_action.setToolTip(
+            self.tr("Вилучення або копіювання частин multipart feature")
+        )
+        self.extract_part_action.triggered.connect(self.toggle_extract_part_tool)
+
+        self.subtract_feature_widget = BooleanFeatureCanvasWidget(
+            self.canvas,
+            "subtract",
+        )
+        self.subtract_feature_widget.hide()
+        self.subtract_feature_map_tool = BooleanFeatureMapTool(
+            self.canvas,
+            self.subtract_feature_widget,
+            "subtract",
+            self.iface,
+        )
+        self.subtract_feature_action = QAction(
+            QIcon(os.path.join(self.plugin_dir, "resources", "mAlgorithmDifference.svg")),
+            self.tr("CAD Віднімання об'єкта (Subtract Feature)"),
+            self.iface.mainWindow(),
+        )
+        self.subtract_feature_action.setCheckable(True)
+        self.subtract_feature_action.setObjectName("actionSubtractFeatureCAD")
+        self.subtract_feature_action.setToolTip(
+            self.tr("Віднімання геометрії Cutter від полігона Target")
+        )
+        self.subtract_feature_action.triggered.connect(self.toggle_subtract_feature_tool)
+
+        self.clip_feature_widget = BooleanFeatureCanvasWidget(self.canvas, "clip")
+        self.clip_feature_widget.hide()
+        self.clip_feature_map_tool = BooleanFeatureMapTool(
+            self.canvas,
+            self.clip_feature_widget,
+            "clip",
+            self.iface,
+        )
+        self.clip_feature_action = QAction(
+            QIcon(os.path.join(self.plugin_dir, "resources", "mAlgorithmClip.svg")),
+            self.tr("CAD Обрізання об'єкта (Clip Feature)"),
+            self.iface.mainWindow(),
+        )
+        self.clip_feature_action.setCheckable(True)
+        self.clip_feature_action.setObjectName("actionClipFeatureCAD")
+        self.clip_feature_action.setToolTip(
+            self.tr("Збереження частини полігона Target всередині Cutter")
+        )
+        self.clip_feature_action.triggered.connect(self.toggle_clip_feature_tool)
+
         adv_tb = self.iface.advancedDigitizeToolBar()
 
         # 8. Create interactive Fillet / Chamfer and Array MapTools ONLY in QGIS 3.x (native in QGIS 4.0+)
@@ -520,12 +683,16 @@ class FilletPlugin:
 
         # 10. Position toolbar actions according to standard CAD workflow
         if adv_tb:
-            # 10.1. Polar array tool: після linear array_action, або перед rotate_action
-            if self.array_action:
-                _insert_after_action(self.array_action, self.polar_array_action)
+            # 10.1. Linear Array -> Array Along Path -> Polar Array
+            array_anchor = self.array_action or _find_adv_action(
+                lambda nl, n: "array" in nl and "polar" not in nl
+            )
+            if array_anchor:
+                _insert_after_action(array_anchor, self.array_along_path_action)
             else:
                 _rotate_ref = _find_adv_action(lambda nl, n: "rotatefeature" in nl or n == "mActionRotateFeature" or "rotate" in nl)
-                _insert_before_action(_rotate_ref or self.rotate_action, self.polar_array_action)
+                _insert_before_action(_rotate_ref or self.rotate_action, self.array_along_path_action)
+            _insert_after_action(self.array_along_path_action, self.polar_array_action)
 
             # 10.2. Fillet & Chamfer group: Anchor (Fillet) -> restore_action -> batch_action -> two_line_action (Join lines)
             anchor_act = self.action
@@ -541,6 +708,13 @@ class FilletPlugin:
             rotate_act = _find_adv_action(lambda nl, n: "rotatefeature" in nl or n == "mActionRotateFeature" or "rotate" in nl)
             _insert_after_action(rotate_act, self.rotate_action)
 
+            # 10.35. Move Feature -> Align Feature -> Match Edge
+            move_act = _find_adv_action(
+                lambda nl, n: "movefeature" in nl or n == "mActionMoveFeature"
+            )
+            _insert_after_action(move_act, self.align_feature_action)
+            _insert_after_action(self.align_feature_action, self.match_edge_action)
+
             # 10.4. Scale and Rotate tool: після системного scale feature
             scale_act = _find_adv_action(lambda nl, n: "scalefeature" in nl or n == "mActionScaleFeature" or "scale" in nl)
             _insert_after_action(scale_act, self.scale_rotate_action)
@@ -553,10 +727,13 @@ class FilletPlugin:
             offset_act = _find_adv_action(lambda nl, n: "offsetcurve" in nl or n == "mActionOffsetCurve" or "offset" in nl)
             _insert_after_action(offset_act, self.edge_offset_action)
 
-            # 10.7. Split lines (Explode) and Divide line tools: після стандартної trim/extend feature
+            # 10.7. Explode -> Extract -> Subtract -> Clip -> Divide
             trim_extend_act = _find_adv_action(lambda nl, n: "trimextend" in nl or n == "mActionTrimExtend" or "trim" in nl or "extend" in nl)
             _insert_after_action(trim_extend_act, self.explode_action)
-            _insert_after_action(self.explode_action, self.divide_line_action)
+            _insert_after_action(self.explode_action, self.extract_part_action)
+            _insert_after_action(self.extract_part_action, self.subtract_feature_action)
+            _insert_after_action(self.subtract_feature_action, self.clip_feature_action)
+            _insert_after_action(self.clip_feature_action, self.divide_line_action)
 
             # 10.8. Ortho Angles tool: перед clean duplicate nodes
             _insert_after_action(self.divide_line_action, self.ortho_angles_action)
@@ -564,6 +741,9 @@ class FilletPlugin:
             # 10.9. Clean and repair tool: в кінець тулбара
             adv_tb.addAction(self.clean_duplicates_action)
         else:
+            self.iface.addVectorToolBarIcon(self.align_feature_action)
+            self.iface.addVectorToolBarIcon(self.match_edge_action)
+            self.iface.addVectorToolBarIcon(self.array_along_path_action)
             self.iface.addVectorToolBarIcon(self.polar_array_action)
             self.iface.addVectorToolBarIcon(self.restore_action)
             self.iface.addVectorToolBarIcon(self.batch_action)
@@ -573,10 +753,16 @@ class FilletPlugin:
             self.iface.addVectorToolBarIcon(self.mirror_action)
             self.iface.addVectorToolBarIcon(self.edge_offset_action)
             self.iface.addVectorToolBarIcon(self.explode_action)
+            self.iface.addVectorToolBarIcon(self.extract_part_action)
+            self.iface.addVectorToolBarIcon(self.subtract_feature_action)
+            self.iface.addVectorToolBarIcon(self.clip_feature_action)
             self.iface.addVectorToolBarIcon(self.divide_line_action)
             self.iface.addVectorToolBarIcon(self.ortho_angles_action)
             self.iface.addVectorToolBarIcon(self.clean_duplicates_action)
 
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.align_feature_action)
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.match_edge_action)
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.array_along_path_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.polar_array_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.restore_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.batch_action)
@@ -586,6 +772,9 @@ class FilletPlugin:
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.mirror_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.edge_offset_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.explode_action)
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.extract_part_action)
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.subtract_feature_action)
+        self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.clip_feature_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.divide_line_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.ortho_angles_action)
         self.iface.addPluginToVectorMenu(self.tr("Fillet & Chamfer"), self.clean_duplicates_action)
@@ -624,6 +813,32 @@ class FilletPlugin:
             self.canvas.mapToolSet.disconnect(self.on_map_tool_changed)
         except (TypeError, RuntimeError):
             pass  # nosec B110
+
+        # Clean up research-tool actions as a group.  They all use the same
+        # toolbar/menu lifetime contract and must not survive a plugin reload.
+        research_actions = (
+            ("align_feature_action", self.toggle_align_feature_tool),
+            ("match_edge_action", self.toggle_match_edge_tool),
+            ("array_along_path_action", self.toggle_array_along_path_tool),
+            ("extract_part_action", self.toggle_extract_part_tool),
+            ("subtract_feature_action", self.toggle_subtract_feature_tool),
+            ("clip_feature_action", self.toggle_clip_feature_tool),
+        )
+        for attribute_name, callback in research_actions:
+            research_action = getattr(self, attribute_name)
+            if research_action is None:
+                continue
+            try:
+                research_action.triggered.disconnect(callback)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            if self.iface.advancedDigitizeToolBar():
+                self.iface.advancedDigitizeToolBar().removeAction(research_action)
+            self.iface.removeVectorToolBarIcon(research_action)
+            self.iface.removePluginVectorMenu(self.tr("Fillet & Chamfer"), research_action)
+            research_action.setParent(None)
+            research_action.deleteLater()
+            setattr(self, attribute_name, None)
 
         # 2. Clean up interactive fillet action
         if self.action:
@@ -820,6 +1035,27 @@ class FilletPlugin:
             self.batch_action.setParent(None)
             self.batch_action.deleteLater()
             self.batch_action = None
+
+        research_map_tools = (
+            "align_feature_map_tool",
+            "match_edge_map_tool",
+            "array_along_path_map_tool",
+            "extract_part_map_tool",
+            "subtract_feature_map_tool",
+            "clip_feature_map_tool",
+        )
+        for attribute_name in research_map_tools:
+            research_map_tool = getattr(self, attribute_name)
+            if research_map_tool is None:
+                continue
+            if self.canvas and self.canvas.mapTool() == research_map_tool:
+                self.canvas.unsetMapTool(research_map_tool)
+            if hasattr(research_map_tool, "cleanup"):
+                research_map_tool.cleanup()
+            else:
+                research_map_tool.deactivate()
+            research_map_tool.deleteLater()
+            setattr(self, attribute_name, None)
 
         # 8. Clean up map tools
         if self.map_tool:
@@ -1059,6 +1295,27 @@ class FilletPlugin:
             self.ortho_angles_widget.deleteLater()
             self.ortho_angles_widget = None
 
+        research_widgets = (
+            "align_feature_widget",
+            "match_edge_widget",
+            "array_along_path_widget",
+            "extract_part_widget",
+            "subtract_feature_widget",
+            "clip_feature_widget",
+        )
+        for attribute_name in research_widgets:
+            research_widget = getattr(self, attribute_name)
+            if research_widget is None:
+                continue
+            try:
+                self.canvas.removeEventFilter(research_widget)
+            except (TypeError, RuntimeError):
+                pass  # nosec B110
+            research_widget.hide()
+            research_widget.setParent(None)
+            research_widget.deleteLater()
+            setattr(self, attribute_name, None)
+
         # 10. Clean up settings widget and dock widget
         if self.settings_widget:
             try:
@@ -1112,6 +1369,42 @@ class FilletPlugin:
         else:
             if self.canvas and self.canvas.mapTool() == self.array_map_tool:
                 self.canvas.unsetMapTool(self.array_map_tool)
+
+    def toggle_align_feature_tool(self, checked: bool):
+        if checked and self.align_feature_map_tool:
+            self.canvas.setMapTool(self.align_feature_map_tool)
+        elif self.canvas and self.canvas.mapTool() == self.align_feature_map_tool:
+            self.canvas.unsetMapTool(self.align_feature_map_tool)
+
+    def toggle_match_edge_tool(self, checked: bool):
+        if checked and self.match_edge_map_tool:
+            self.canvas.setMapTool(self.match_edge_map_tool)
+        elif self.canvas and self.canvas.mapTool() == self.match_edge_map_tool:
+            self.canvas.unsetMapTool(self.match_edge_map_tool)
+
+    def toggle_array_along_path_tool(self, checked: bool):
+        if checked and self.array_along_path_map_tool:
+            self.canvas.setMapTool(self.array_along_path_map_tool)
+        elif self.canvas and self.canvas.mapTool() == self.array_along_path_map_tool:
+            self.canvas.unsetMapTool(self.array_along_path_map_tool)
+
+    def toggle_extract_part_tool(self, checked: bool):
+        if checked and self.extract_part_map_tool:
+            self.canvas.setMapTool(self.extract_part_map_tool)
+        elif self.canvas and self.canvas.mapTool() == self.extract_part_map_tool:
+            self.canvas.unsetMapTool(self.extract_part_map_tool)
+
+    def toggle_subtract_feature_tool(self, checked: bool):
+        if checked and self.subtract_feature_map_tool:
+            self.canvas.setMapTool(self.subtract_feature_map_tool)
+        elif self.canvas and self.canvas.mapTool() == self.subtract_feature_map_tool:
+            self.canvas.unsetMapTool(self.subtract_feature_map_tool)
+
+    def toggle_clip_feature_tool(self, checked: bool):
+        if checked and self.clip_feature_map_tool:
+            self.canvas.setMapTool(self.clip_feature_map_tool)
+        elif self.canvas and self.canvas.mapTool() == self.clip_feature_map_tool:
+            self.canvas.unsetMapTool(self.clip_feature_map_tool)
 
     def toggle_polar_array_tool(self, checked: bool):
         if checked:
@@ -1286,6 +1579,22 @@ class FilletPlugin:
             if not is_oa_active and self.ortho_angles_widget:
                 self.ortho_angles_widget.hide()
 
+        research_tool_states = (
+            (self.align_feature_action, self.align_feature_map_tool, self.align_feature_widget),
+            (self.match_edge_action, self.match_edge_map_tool, self.match_edge_widget),
+            (self.array_along_path_action, self.array_along_path_map_tool, self.array_along_path_widget),
+            (self.extract_part_action, self.extract_part_map_tool, self.extract_part_widget),
+            (self.subtract_feature_action, self.subtract_feature_map_tool, self.subtract_feature_widget),
+            (self.clip_feature_action, self.clip_feature_map_tool, self.clip_feature_widget),
+        )
+        for research_action, research_map_tool, research_widget in research_tool_states:
+            if research_action is None:
+                continue
+            is_active = tool == research_map_tool
+            research_action.setChecked(is_active)
+            if not is_active and research_widget:
+                research_widget.hide()
+
     def _on_current_layer_changed(self, layer=None):
         self.update_action_state()
 
@@ -1328,6 +1637,13 @@ class FilletPlugin:
         is_array_editable = bool(is_spatial_vector and layer.isEditable())
         is_line_editable = bool(is_vector and layer.geometryType() == QgsWkbTypes.GeometryType.LineGeometry and layer.isEditable())
         has_selection = bool(layer.selectedFeatureCount() > 0) if is_vector else False
+        is_selected_editable = bool(is_array_editable and has_selection)
+        is_match_edge_enabled = bool(is_editable and has_selection)
+        is_polygon_editable = bool(
+            is_vector
+            and layer.geometryType() == QgsWkbTypes.GeometryType.PolygonGeometry
+            and layer.isEditable()
+        )
         is_rotate_enabled = bool(is_editable and has_selection)
         is_mirror_enabled = bool(is_editable and has_selection)
         is_scale_rotate_enabled = bool(is_editable and has_selection)
@@ -1343,6 +1659,9 @@ class FilletPlugin:
         if is_vector and is_spatial_vector:
             if self.array_widget and hasattr(self.array_widget, "adapt_to_crs"):
                 self.array_widget.adapt_to_crs(layer.crs())
+            if self.array_along_path_widget and hasattr(self.array_along_path_widget, "adapt_to_crs"):
+                canvas_crs = self.canvas.mapSettings().destinationCrs()
+                self.array_along_path_widget.adapt_to_crs(canvas_crs)
 
         if is_vector and is_line_editable:
             if self.explode_widget:
@@ -1389,6 +1708,18 @@ class FilletPlugin:
             self.ortho_angles_action.setEnabled(is_editable)
         if self.batch_action:
             self.batch_action.setEnabled(is_editable)
+        if self.align_feature_action:
+            self.align_feature_action.setEnabled(is_selected_editable)
+        if self.match_edge_action:
+            self.match_edge_action.setEnabled(is_match_edge_enabled)
+        if self.array_along_path_action:
+            self.array_along_path_action.setEnabled(is_selected_editable)
+        if self.extract_part_action:
+            self.extract_part_action.setEnabled(is_array_editable)
+        if self.subtract_feature_action:
+            self.subtract_feature_action.setEnabled(is_polygon_editable)
+        if self.clip_feature_action:
+            self.clip_feature_action.setEnabled(is_polygon_editable)
 
         if self.settings_widget and hasattr(self.settings_widget, "set_editable_state"):
             self.settings_widget.set_editable_state(is_editable)
@@ -1490,6 +1821,39 @@ class FilletPlugin:
                 if self.two_line_action:
                     self.two_line_action.setChecked(False)
 
+        research_tool_enablement = (
+            (is_selected_editable, self.align_feature_map_tool, self.align_feature_widget, self.align_feature_action),
+            (
+                is_match_edge_enabled,
+                self.match_edge_map_tool,
+                self.match_edge_widget,
+                self.match_edge_action,
+            ),
+            (
+                is_selected_editable,
+                self.array_along_path_map_tool,
+                self.array_along_path_widget,
+                self.array_along_path_action,
+            ),
+            (is_array_editable, self.extract_part_map_tool, self.extract_part_widget, self.extract_part_action),
+            (
+                is_polygon_editable,
+                self.subtract_feature_map_tool,
+                self.subtract_feature_widget,
+                self.subtract_feature_action,
+            ),
+            (is_polygon_editable, self.clip_feature_map_tool, self.clip_feature_widget, self.clip_feature_action),
+        )
+        if self.canvas:
+            for is_enabled, research_map_tool, research_widget, research_action in research_tool_enablement:
+                if is_enabled or research_map_tool is None or self.canvas.mapTool() != research_map_tool:
+                    continue
+                self.canvas.unsetMapTool(research_map_tool)
+                if research_widget:
+                    research_widget.hide()
+                if research_action:
+                    research_action.setChecked(False)
+
     def apply_to_selected_features(self):
         """Batch apply fillet or chamfer to all corners of selected features."""
         layer = self.canvas.currentLayer()
@@ -1535,7 +1899,11 @@ class FilletPlugin:
                 continue
 
             new_geom = self._batch_process_geometry(geom, mode, radius, segments, d1, d2)
-            if new_geom and not new_geom.isEmpty():
+            if (
+                new_geom
+                and not new_geom.isEmpty()
+                and new_geom.asWkb() != geom.asWkb()
+            ):
                 geometry_changes.append((fid, new_geom))
 
         try:

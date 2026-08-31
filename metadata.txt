@@ -2,19 +2,36 @@
 name=Fillet & Chamfer for QGIS 3.x (Interactive & Batch)
 qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
-description=Interactive Fillet, Chamfer, Two-Line Merge, Corner Restoration, CAD Rotation, Mirror, Scale, Edge Offset, Feature Array, Ortho Angles & Explode Line suite for QGIS.
-about=Comprehensive CAD editing suite providing interactive Fillet (corner rounding), Chamfer (corner beveling), Two-Line Fillet/Chamfer (Line Merge), Two-Edge Corner Restoration (Unfillet / Unchamfer), Interactive CAD Rotation, CAD Mirror Tool, CAD 3-Point Scale with Rotation Tool, CAD Edge Offset (Parallel Shift) Tool, CAD Feature Array along a line tool, CAD Polar (Circular) Array Tool, CAD Divide / Measure Line Tool, CAD Ortho Angles (orthogonalization of polygon/building corners relative to a reference facade), and CAD Explode Line Tool for QGIS, along with an instant batch fillet and chamfer dock panel for selected vector features across QGIS 3.x and QGIS 4.x.
-version=1.0.0.87
+description=CAD editing suite with Fillet, Chamfer, Align Feature, Match Edge, Array Along Path, Extract Part, Subtract, Clip, transforms, arrays and topology tools for QGIS.
+about=Comprehensive CAD editing suite for QGIS 3.16-4.99 providing Fillet and Chamfer, Two-Line Merge, Corner Restoration, Align Feature, Match Edge, Array Along Path, Extract Part, polygon Subtract and Clip, Rotation, Mirror, Scale with Rotation, Edge Offset, Linear and Polar Arrays, Divide / Measure Line, Ortho Angles, Explode, Clean / Repair and batch processing. Interactive tools use native QGIS snapping, cross-layer CRS handling, atomic edit commands and consistent top-right HUD panels on Qt5 and Qt6.
+version=1.0.0.91
 author=suprun
 email=suprun.serhiy+qgis@gmail.com
 homepage=https://github.com/suprun/fillet
 repository=https://github.com/suprun/fillet
 tracker=https://github.com/suprun/fillet/issues
-tags=cad, editing, fillet, chamfer, unfillet, corner, restore, rotate, rotation, mirror, symmetry, scale, scale-rotate, offset, edge-offset, array, feature-array, polar-array, circular-array, divide, measure, line-division, explode, ortho, orthogonal, orthogonalize, building, squaring, facade, duplicate, nodes, clean, deduplicate, self-intersection, topology, geometry, digitizing, curve, batch, merge, qgis4
+tags=cad, editing, fillet, chamfer, align, match-edge, path-array, extract-part, subtract, difference, clip, intersection, restore, rotate, mirror, scale, offset, array, polar-array, divide, explode, ortho, clean, topology, geometry, digitizing, curve, batch, qgis4
 icon=icon.png
 experimental=False
 deprecated=False
-changelog=1.0.0.87:
+changelog=1.0.0.91:
+    - Added zero-size Fillet and Chamfer values across interactive, Two-Line and batch workflows.
+    - Zero size now creates or preserves one sharp vertex; unlinked zero/positive distances create a one-sided chamfer.
+    - Prevented duplicate corner nodes and redundant batch edit commands for unchanged zero-size results.
+    1.0.0.90:
+    - Redesigned Match Edge as a local Extend/Trim edge reshape that keeps all unrelated vertices and selected features fixed.
+    - Added polygon ring, multipart, terminal LineString, same-feature Target, Z/M/ZM, curve rejection and atomic copy/undo coverage.
+    - Clarified that Align Feature transforms the entire selected group and updated the shared HUD, tooltips and translations.
+    1.0.0.89:
+    - Fixed cross-layer feature hover in Extract Part, Array Along Path, Subtract and Clip on QGIS 3 by using the supported QgsGeometry.nearestPoint API.
+    - Added regression coverage for non-polygon cross-layer feature matching.
+    1.0.0.88:
+    - Added Align Feature and Match Edge with point/edge references, cross-layer snapping, move/copy, fit, flip, parallel and collinear modes.
+    - Added Array Along Path with Count/Spacing, Whole Path/Subrange, offset, reverse traversal and tangent orientation.
+    - Added Extract Part with single/pending move and copy workflows while preserving attributes, Z/M/ZM and native curved parts.
+    - Added atomic polygon Subtract and Clip tools with multi-cutter union, cross-layer CRS handling and safe XY/Z validation.
+    - Added shared top-right HUD styling, Qt5/Qt6 keyboard routing, lifecycle integration, 40-locale catalogs and cross-version tests.
+    1.0.0.87:
     - Updated plugin resources.
     1.0.0.86:
     - Fixed CAD Divide Line hover crashes by using the existing CRS-aware segment snapping API instead of a missing helper method.

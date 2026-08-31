@@ -373,6 +373,43 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
         self.assertGreaterEqual(last_msg[3], 4)
         layer.rollBack()
 
+    def test_batch_zero_size_does_not_create_an_edit_command(self):
+        """An unchanged zero-size batch result must not touch the undo stack."""
+        layer = QgsVectorLayer("Polygon?crs=EPSG:3857", "zero_batch", "memory")
+        feature = QgsFeature()
+        feature.setGeometry(
+            QgsGeometry.fromPolygonXY(
+                [[
+                    QgsPointXY(0, 0),
+                    QgsPointXY(0, 10),
+                    QgsPointXY(10, 10),
+                    QgsPointXY(10, 0),
+                    QgsPointXY(0, 0),
+                ]]
+            )
+        )
+        self.assertTrue(layer.dataProvider().addFeature(feature))
+        layer.startEditing()
+        layer.selectAll()
+        canvas.setCurrentLayer(layer)
+
+        source_wkb = next(layer.getFeatures()).geometry().asWkb()
+        undo_index = layer.undoStack().index()
+
+        self.plugin.settings_widget.mode = self.plugin.settings_widget.MODE_FILLET
+        self.plugin.settings_widget.spin_radius.setValue(0.0)
+        self.plugin.apply_to_selected_features()
+        self.assertEqual(layer.undoStack().index(), undo_index)
+        self.assertEqual(next(layer.getFeatures()).geometry().asWkb(), source_wkb)
+
+        self.plugin.settings_widget.mode = self.plugin.settings_widget.MODE_CHAMFER
+        self.plugin.settings_widget.spin_dist1.setValue(0.0)
+        self.plugin.settings_widget.spin_dist2.setValue(0.0)
+        self.plugin.apply_to_selected_features()
+        self.assertEqual(layer.undoStack().index(), undo_index)
+        self.assertEqual(next(layer.getFeatures()).geometry().asWkb(), source_wkb)
+        layer.rollBack()
+
     def test_toolbar_actions_order(self):
         """Test relative placement of CAD actions in Advanced Digitize toolbar."""
         custom_win = QMainWindow()
@@ -417,6 +454,27 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
         self.assertEqual(actions[actions.index(plugin.batch_action) + 1], plugin.two_line_action)
         # 6. clean_duplicates_action at the end
         self.assertEqual(actions[-1], plugin.clean_duplicates_action)
+        # 7. Move Feature -> Align Feature -> Match Edge
+        self.assertEqual(actions[actions.index(act_move_copy) + 1], plugin.align_feature_action)
+        self.assertEqual(actions[actions.index(plugin.align_feature_action) + 1], plugin.match_edge_action)
+        # 8. Linear Array -> Array Along Path -> Polar Array
+        if plugin.array_action is not None:
+            self.assertEqual(actions[actions.index(plugin.array_action) + 1], plugin.array_along_path_action)
+        self.assertEqual(actions[actions.index(plugin.array_along_path_action) + 1], plugin.polar_array_action)
+        # 9. Explode -> Extract -> Subtract -> Clip -> Divide -> Ortho -> Clean
+        editing_group = [
+            plugin.explode_action,
+            plugin.extract_part_action,
+            plugin.subtract_feature_action,
+            plugin.clip_feature_action,
+            plugin.divide_line_action,
+            plugin.ortho_angles_action,
+            plugin.clean_duplicates_action,
+        ]
+        self.assertEqual(
+            [actions.index(action) for action in editing_group],
+            sorted(actions.index(action) for action in editing_group),
+        )
 
         plugin.unload()
 
@@ -426,6 +484,77 @@ class TestPluginLifecycleAndEditState(unittest.TestCase):
         self.assertIsNotNone(self.plugin.ortho_angles_map_tool)
         self.assertIsNotNone(self.plugin.ortho_angles_widget)
         self.assertFalse(self.plugin.ortho_angles_widget.isVisible())
+
+    def test_research_tools_init_enablement_and_unload(self):
+        """All six tools are initialized once and follow layer capability rules."""
+        action_names = (
+            "align_feature_action",
+            "match_edge_action",
+            "array_along_path_action",
+            "extract_part_action",
+            "subtract_feature_action",
+            "clip_feature_action",
+        )
+        for name in action_names:
+            self.assertIsNotNone(getattr(self.plugin, name))
+
+        layer = QgsVectorLayer("Polygon?crs=EPSG:3857", "target", "memory")
+        feature = QgsFeature(layer.fields())
+        feature.setGeometry(QgsGeometry.fromWkt("POLYGON ((0 0, 2 0, 2 2, 0 2, 0 0))"))
+        layer.dataProvider().addFeature(feature)
+        layer.startEditing()
+        canvas.setCurrentLayer(layer)
+        self.iface.currentLayerChanged.emit(layer)
+        self.assertFalse(self.plugin.align_feature_action.isEnabled())
+        self.assertFalse(self.plugin.match_edge_action.isEnabled())
+        self.assertFalse(self.plugin.array_along_path_action.isEnabled())
+        self.assertTrue(self.plugin.extract_part_action.isEnabled())
+        self.assertTrue(self.plugin.subtract_feature_action.isEnabled())
+        self.assertTrue(self.plugin.clip_feature_action.isEnabled())
+
+        layer.selectAll()
+        self.assertTrue(self.plugin.align_feature_action.isEnabled())
+        self.assertTrue(self.plugin.match_edge_action.isEnabled())
+        self.assertTrue(self.plugin.array_along_path_action.isEnabled())
+        align_tooltip = self.plugin.align_feature_action.toolTip().lower()
+        match_tooltip = self.plugin.match_edge_action.toolTip().lower()
+        self.assertTrue(
+            "всю вибрану групу" in align_tooltip
+            or "entire selected group" in align_tooltip
+        )
+        self.assertTrue(
+            "локально виправити" in match_tooltip
+            or "locally reshape" in match_tooltip
+        )
+
+        point_layer = QgsVectorLayer("Point?crs=EPSG:3857", "points", "memory")
+        point_feature = QgsFeature(point_layer.fields())
+        point_feature.setGeometry(QgsGeometry.fromWkt("POINT (0 0)"))
+        point_layer.dataProvider().addFeature(point_feature)
+        point_layer.startEditing()
+        point_layer.selectAll()
+        canvas.setCurrentLayer(point_layer)
+        self.iface.currentLayerChanged.emit(point_layer)
+        self.assertTrue(self.plugin.align_feature_action.isEnabled())
+        self.assertFalse(self.plugin.match_edge_action.isEnabled())
+        self.assertTrue(self.plugin.array_along_path_action.isEnabled())
+
+        self.plugin.unload()
+        app.processEvents()
+        for name in action_names:
+            self.assertIsNone(getattr(self.plugin, name))
+        for name in (
+            "align_feature_map_tool",
+            "match_edge_map_tool",
+            "array_along_path_map_tool",
+            "extract_part_map_tool",
+            "subtract_feature_map_tool",
+            "clip_feature_map_tool",
+        ):
+            self.assertIsNone(getattr(self.plugin, name))
+        self.plugin = FilletPlugin(self.iface)
+        self.plugin.initGui()
+        layer.rollBack()
 
 
 if __name__ == "__main__":

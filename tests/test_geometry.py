@@ -75,6 +75,60 @@ class TestGeometryEngine(unittest.TestCase):
         self.assertAlmostEqual(c2.x(), 4.0, places=5)
         self.assertAlmostEqual(c2.y(), 0.0, places=5)
 
+    def test_zero_size_keeps_one_sharp_vertex(self):
+        """Zero fillet/chamfer sizes keep the source corner exactly once."""
+        source = QgsGeometry(
+            QgsLineString(
+                [
+                    QgsPoint(0, 10, 10, 100),
+                    QgsPoint(0, 0, 20, 200),
+                    QgsPoint(10, 0, 30, 300),
+                ]
+            )
+        )
+
+        success, t1, arc_mid, t2, tangent_dist = (
+            GeometryEngine.compute_fillet_points(
+                QgsPoint(0, 10, 10, 100),
+                QgsPoint(0, 0, 20, 200),
+                QgsPoint(10, 0, 30, 300),
+                0.0,
+            )
+        )
+        self.assertTrue(success)
+        self.assertEqual(tangent_dist, 0.0)
+        for point in (t1, arc_mid, t2):
+            self.assertEqual((point.x(), point.y()), (0.0, 0.0))
+            self.assertEqual((point.z(), point.m()), (20.0, 200.0))
+
+        fillet = GeometryEngine.apply_fillet_to_geometry(
+            source, 0, 0, 1, radius=0.0, segments_count=8
+        )
+        chamfer = GeometryEngine.apply_chamfer_to_geometry(
+            source, 0, 0, 1, dist1=0.0, dist2=0.0
+        )
+        self.assertEqual(fillet.asWkb(), source.asWkb())
+        self.assertEqual(chamfer.asWkb(), source.asWkb())
+        self.assertEqual(fillet.constGet().numPoints(), 3)
+        self.assertEqual(chamfer.constGet().numPoints(), 3)
+        self.assert_finite_dimensions(fillet)
+        self.assert_finite_dimensions(chamfer)
+
+    def test_one_sided_zero_chamfer_is_literal(self):
+        """An unlinked zero distance creates a one-sided chamfer."""
+        source = QgsGeometry.fromPolylineXY(
+            [QgsPointXY(0, 10), QgsPointXY(0, 0), QgsPointXY(10, 0)]
+        )
+        result = GeometryEngine.apply_chamfer_to_geometry(
+            source, 0, 0, 1, dist1=0.0, dist2=2.0
+        )
+
+        self.assertIsNotNone(result)
+        points = result.asPolyline()
+        self.assertEqual(len(points), 4)
+        self.assertEqual((points[1].x(), points[1].y()), (0.0, 0.0))
+        self.assertEqual((points[2].x(), points[2].y()), (2.0, 0.0))
+
     def test_max_fillet_radius(self):
         """Test calculation of maximum allowed fillet radius."""
         p_prev = QgsPoint(0, 5)
@@ -186,6 +240,27 @@ class TestGeometryEngine(unittest.TestCase):
         )
         fillet_geom = GeometryEngine.batch_process_geometry(geom, mode="fillet", radius=1.0, segments_count=4)
         self.assertIsNotNone(fillet_geom)
+
+    def test_batch_zero_size_returns_unchanged_geometry(self):
+        """Batch zero is an idempotent sharp-corner operation."""
+        source = QgsGeometry.fromPolygonXY(
+            [[
+                QgsPointXY(0, 0),
+                QgsPointXY(0, 10),
+                QgsPointXY(10, 10),
+                QgsPointXY(10, 0),
+                QgsPointXY(0, 0),
+            ]]
+        )
+
+        fillet = GeometryEngine.batch_apply_geometry(
+            source, mode="fillet", radius=0.0
+        )
+        chamfer = GeometryEngine.batch_apply_geometry(
+            source, mode="chamfer", dist1=0.0, dist2=0.0
+        )
+        self.assertEqual(fillet.asWkb(), source.asWkb())
+        self.assertEqual(chamfer.asWkb(), source.asWkb())
     def test_compute_line_intersection(self):
         """Test analytical infinite line intersection."""
         p1 = QgsPoint(0, 10)

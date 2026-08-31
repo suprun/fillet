@@ -17,6 +17,12 @@ app.initQgis()
 
 from gui.canvas_widget import FilletCanvasWidget
 from gui.settings_widget import FilletSettingsWidget
+from gui.align_feature_canvas_widget import AlignFeatureCanvasWidget, AlignReferenceMode
+from gui.array_along_path_canvas_widget import (
+    ArrayAlongPathCanvasWidget,
+    PathDistributionMode,
+    PathRangeMode,
+)
 
 
 class TestSettingsPersistence(unittest.TestCase):
@@ -32,9 +38,44 @@ class TestSettingsPersistence(unittest.TestCase):
         self.settings = QgsSettings()
         # Clean settings prefix
         self.settings.remove("plugins/fillet")
+        self.settings.remove("FilletPlugin/AlignReferenceMode")
+        self.settings.remove("FilletPlugin/PathArrayDistribution")
+        self.settings.remove("FilletPlugin/PathArrayRange")
+        self.settings.remove("FilletPlugin/PathArrayCount")
+        self.settings.remove("FilletPlugin/PathArraySpacing")
+        self.settings.remove("FilletPlugin/PathArrayOffset")
+        self.settings.remove("FilletPlugin/PathArrayIncludeStart")
 
     def tearDown(self):
         self.settings.remove("plugins/fillet")
+        self.settings.remove("FilletPlugin/AlignReferenceMode")
+        self.settings.remove("FilletPlugin/PathArrayDistribution")
+        self.settings.remove("FilletPlugin/PathArrayRange")
+        self.settings.remove("FilletPlugin/PathArrayCount")
+        self.settings.remove("FilletPlugin/PathArraySpacing")
+        self.settings.remove("FilletPlugin/PathArrayOffset")
+        self.settings.remove("FilletPlugin/PathArrayIncludeStart")
+
+    def test_align_and_path_array_settings_persistence(self):
+        align = AlignFeatureCanvasWidget(self.canvas)
+        align.set_reference_mode(AlignReferenceMode.Edges)
+        second_align = AlignFeatureCanvasWidget(self.canvas)
+        self.assertEqual(second_align.reference_mode(), AlignReferenceMode.Edges)
+
+        path = ArrayAlongPathCanvasWidget(self.canvas)
+        path.radio_spacing.setChecked(True)
+        path.radio_subrange.setChecked(True)
+        path.spin_count.setValue(9)
+        path.spin_spacing.setValue(12.5)
+        path.spin_offset.setValue(-3.25)
+        path.chk_include_start.setChecked(False)
+        restored = ArrayAlongPathCanvasWidget(self.canvas)
+        self.assertEqual(restored.distribution_mode(), PathDistributionMode.Spacing)
+        self.assertEqual(restored.range_mode(), PathRangeMode.Subrange)
+        self.assertEqual(restored.count_value(), 9)
+        self.assertAlmostEqual(restored.spacing_value(), 12.5)
+        self.assertAlmostEqual(restored.offset_value(), -3.25)
+        self.assertFalse(restored.include_start())
 
     def test_canvas_widget_persistence(self):
         # 1. Create first widget and change values
@@ -82,6 +123,45 @@ class TestSettingsPersistence(unittest.TestCase):
         self.assertAlmostEqual(sw2.radius, 7.5, places=2)
         self.assertEqual(sw2.segments_count, 16)
 
+    def test_zero_values_persist_across_hud_and_crs_changes(self):
+        canvas_widget = FilletCanvasWidget(self.canvas)
+        canvas_widget.btn_link.setChecked(False)
+        canvas_widget.spin_radius.setValue(0.0)
+        canvas_widget.spin_dist1.setValue(0.0)
+        canvas_widget.spin_dist2.setValue(0.0)
+        canvas_widget._save_settings()
+
+        restored_canvas = FilletCanvasWidget(self.canvas)
+        for crs_auth_id in ("EPSG:4326", "EPSG:3857"):
+            restored_canvas.adapt_to_crs(
+                QgsCoordinateReferenceSystem(crs_auth_id)
+            )
+            self.assertEqual(restored_canvas.spin_radius.minimum(), 0.0)
+            self.assertEqual(restored_canvas.spin_dist1.minimum(), 0.0)
+            self.assertEqual(restored_canvas.spin_dist2.minimum(), 0.0)
+            self.assertEqual(restored_canvas.radius, 0.0)
+            self.assertEqual(restored_canvas.distance1, 0.0)
+            self.assertEqual(restored_canvas.distance2, 0.0)
+
+        settings_widget = FilletSettingsWidget()
+        settings_widget.btn_link.setChecked(False)
+        settings_widget.spin_radius.setValue(0.0)
+        settings_widget.spin_dist1.setValue(0.0)
+        settings_widget.spin_dist2.setValue(0.0)
+        settings_widget._save_settings()
+
+        restored_settings = FilletSettingsWidget()
+        for crs_auth_id in ("EPSG:4326", "EPSG:3857"):
+            restored_settings.adapt_to_crs(
+                QgsCoordinateReferenceSystem(crs_auth_id)
+            )
+            self.assertEqual(restored_settings.spin_radius.minimum(), 0.0)
+            self.assertEqual(restored_settings.spin_dist1.minimum(), 0.0)
+            self.assertEqual(restored_settings.spin_dist2.minimum(), 0.0)
+            self.assertEqual(restored_settings.radius, 0.0)
+            self.assertEqual(restored_settings.distance1, 0.0)
+            self.assertEqual(restored_settings.distance2, 0.0)
+
     def test_mode_switching_value_transfer(self):
         # Canvas widget transfer
         cw = FilletCanvasWidget(self.canvas)
@@ -117,11 +197,13 @@ class TestSettingsPersistence(unittest.TestCase):
         cw = FilletCanvasWidget(self.canvas)
         cw.adapt_to_crs(geo_crs)
         self.assertEqual(cw.spin_radius.decimals(), 6)
-        self.assertAlmostEqual(cw.spin_radius.minimum(), 0.000001, places=6)
+        self.assertEqual(cw.spin_radius.minimum(), 0.0)
+        self.assertAlmostEqual(cw.spin_radius.singleStep(), 0.00005, places=6)
 
         cw.adapt_to_crs(proj_crs)
         self.assertEqual(cw.spin_radius.decimals(), 3)
-        self.assertAlmostEqual(cw.spin_radius.minimum(), 0.001, places=3)
+        self.assertEqual(cw.spin_radius.minimum(), 0.0)
+        self.assertAlmostEqual(cw.spin_radius.singleStep(), 1.0, places=3)
 
         sw = FilletSettingsWidget()
         sw.adapt_to_crs(geo_crs)

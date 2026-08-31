@@ -6346,6 +6346,14 @@ LANGUAGES = [
     "hr", "sr", "ca", "eu", "gl", "nb", "ar", "id", "vi", "th", "hi"
 ]
 
+try:
+    from .research_tools_translations import RESEARCH_STRINGS
+except (ImportError, ValueError):
+    from research_tools_translations import RESEARCH_STRINGS
+
+for source_text, translations in RESEARCH_STRINGS.items():
+    STRINGS["FilletPlugin"].setdefault(source_text, translations)
+
 def elf_hash(source_text: str, comment: str = "") -> int:
     h = 0
     for b in source_text.encode('utf-8'):

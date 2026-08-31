@@ -6,7 +6,7 @@
   <img src="icon.png" alt="Fillet & Chamfer Logo" width="96" height="96" />
 </p>
 
-**CAD editing toolkit for QGIS with Fillet, Chamfer, Two-Line Merge, Corner Restore, Rotate, Mirror, Scale & Rotate, Edge Offset, Linear and Circular Arrays, Divide, Orthogonalize, Clean/Repair, Explode, and Batch processing.**
+**CAD editing toolkit for QGIS with Fillet, Chamfer, Align Feature, Match Edge, Array Along Path, Extract Part, Subtract, Clip, Rotate, Mirror, Scale & Rotate, arrays, topology repair, and batch processing.**
 
 [![QGIS Compatibility](https://img.shields.io/badge/QGIS-3.16%20--%204.99-brightgreen.svg?logo=qgis)](https://plugins.qgis.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -31,11 +31,15 @@ The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grad
 6. **CAD Scale & Rotate**: Scale and rotate selected features from an origin, reference point, and target point, with exact numeric control and copy mode.
 7. **CAD Edge Offset**: Shift a selected edge in Extend or Step mode while keeping adjacent topology coherent.
 8. **Feature Array and Circular Array**: Create linear copies along a vector or polar copies around an interactive center and baseline.
-9. **Divide / Measure Line**: Split lines by count or fixed length, in separate-feature or multipart form.
-10. **Ortho Angles**: Orthogonalize polygon or line vertices relative to a selected base edge, optionally preserving area or creating a copy.
-11. **Clean & Repair**: Detect duplicate nodes and self-intersections and apply targeted or whole-feature repair.
-12. **Explode Line**: Convert eligible polylines to individual segments or multipart segment collections.
-13. **Batch Processing Dock Panel**: Round or bevel all eligible vertices across selected features and rings with one action.
+9. **Align Feature and Match Edge**: Place an entire selected group using point/edge references, or locally reshape one clicked edge without moving the feature's other vertices.
+10. **Array Along Path**: Place an exact count or spaced copies along one clicked path part, with subranges, stable offset side, reverse traversal, and tangent orientation.
+11. **Extract Part**: Move or copy individual or pending sets of native multipart geometry parts while preserving attributes and dimensionality.
+12. **Subtract Feature and Clip Feature**: Apply safe polygon difference/intersection against one or several cross-layer cutters without changing cutter features.
+13. **Divide / Measure Line**: Split lines by count or fixed length, in separate-feature or multipart form.
+14. **Ortho Angles**: Orthogonalize polygon or line vertices relative to a selected base edge, optionally preserving area or creating a copy.
+15. **Clean & Repair**: Detect duplicate nodes and self-intersections and apply targeted or whole-feature repair.
+16. **Explode Line**: Convert eligible polylines to individual segments or multipart segment collections.
+17. **Batch Processing Dock Panel**: Round or bevel all eligible vertices across selected features and rings with one action.
 
 ---
 
@@ -46,8 +50,10 @@ The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grad
 - **Fillet Mode (Corner Rounding)**:
   - Precise circular arc discretization with customizable **Fillet segments** count ($N$ segments = $N+1$ vertices).
   - Clean analytical interpolation ensuring exact tangent intersection with adjacent edges.
+  - Radius `0` keeps or creates a sharp corner represented by one vertex.
 - **Chamfer Mode (Corner Beveling)**:
   - Symmetric beveling ($d_1 = d_2$) or independent dual-distance beveling ($d_1 \neq d_2$) with link toggle.
+  - Distances `0 / 0` create one sharp vertex; an unlinked `0 / positive` pair creates a literal one-sided chamfer.
 - **Lock / Unlock Numeric Mode**:
   - **Locked (Default)**: Click any vertex to instantly apply the exact configured numeric value.
   - **Unlocked**: Move the mouse interactively across the canvas to adjust the radius or distance dynamically in real time.
@@ -62,6 +68,7 @@ The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grad
 ### 2. 🔄 Two-Line Fillet / Chamfer with Feature Merge (QGIS 3.x & QGIS 4.x)
 - Connect any two separate line features or two segments of a closed/open polyline with a fillet curve or chamfer bevel.
 - Automatically calculates infinite ray intersections, shortens or extends line segments, and performs seamless topological feature merging.
+- A zero radius or zero pair of chamfer distances joins the lines at their exact intersection using one sharp vertex.
 - Native integration with QGIS `QgsMergeAttributesDialog` and option to always keep first feature attributes.
 
 ---
@@ -101,6 +108,7 @@ The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grad
 - Supports exterior rings as well as all interior hole rings.
 - **Batch Fillet**: Rounds all corners across selected features with the specified radius and segment count.
 - **Batch Chamfer**: Bevels all corners across selected features with the specified distances.
+- Zero size is accepted consistently; already sharp input remains unchanged and does not create a redundant geometry edit.
 
 ---
 
@@ -109,10 +117,19 @@ The **Fillet & Chamfer for QGIS 3.x** plugin brings a complete suite of CAD-grad
 - If editing is toggled off while a tool is active, the tool automatically unsets and closes on-canvas widgets to prevent unintended changes.
 - Full native Undo/Redo (`Ctrl+Z` / `Ctrl+Y`) transaction support for all interactive and batch operations.
 
+### Cross-layer alignment, path, part, and polygon tools
+
+- **Align Feature** moves or copies the entire selected group using point (`S1 → S2 → T1 → T2`) or edge references. `Shift` fits scale, `Ctrl` creates copies, and `F` flips orientation.
+- **Match Edge** locally rebuilds one clicked straight edge. A click makes it collinear with Target; `Shift` makes it parallel through the old midpoint, `Ctrl` creates an adjusted copy, and `F` reverses terminal LineString orientation. Adjacent edges are extended or trimmed while every other vertex and selected feature stays fixed.
+- **Array Along Path** uses a manual group anchor and only the clicked line/multiline part. The HUD controls Count/Spacing, Whole path/Subrange, offset, and inclusion of the start; `Shift` enables tangent orientation and `Ctrl` reverses traversal.
+- **Extract Part** moves a clicked part, copies with `Ctrl`, and builds a pending set with `Shift`; press `Enter` to apply the set.
+- **Subtract Feature / Clip Feature** use a shared Target/Cutter workflow. `Shift` accumulates cutters, `Enter` applies their union, and `Ctrl` keeps Target active for a continuous session. Version 1 supports valid XY/Z Polygon and MultiPolygon geometries; M/ZM and native curves are rejected without editing data.
+- All six tools use visible-layer snapping, canvas/layer CRS transforms, one atomic QGIS edit command per result, and native Undo/Redo.
+
 ### Geometry dimensions and native curves
 
 - Fillet, Chamfer, Batch, Two-Line, Corner Restore, Edge Offset, Ortho Angles, and Clean/Repair preserve finite Z, M, and ZM ordinates. New points receive values interpolated or extrapolated from their source segments; fillet arc ordinates are interpolated between tangent points.
-- Rotate, Mirror, Scale & Rotate, Feature Array, Circular Array, and Divide preserve native `CircularString`, `CompoundCurve`, and `CurvePolygon` geometry where QGIS supports the corresponding transform or substring.
+- Rotate, Mirror, Scale & Rotate, Align Feature, Match Edge, Array Along Path, Extract Part, Feature Array, Circular Array, and Divide preserve native `CircularString`, `CompoundCurve`, and `CurvePolygon` geometry where QGIS supports the corresponding transform or substring.
 - Operations which rebuild topology manually—Fillet/Chamfer, Batch, Two-Line, Corner Restore, Edge Offset, Ortho Angles, Clean/Repair, and Explode—refuse existing curved geometries with a warning instead of silently segmentizing them.
 - Rotate, Scale & Rotate, Circular Array, and Ortho Angles calculate both preview and commit in the map canvas CRS, then transform the accepted result back to the layer CRS.
 

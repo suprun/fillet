@@ -30,6 +30,7 @@
 
 - `core/geometry_engine.py` — головний файл математики геометрії (~150 КБ). Містить алгоритми:
   - скруглення кутів (Fillet) та фаски (Chamfer);
+  - єдину zero-size семантику: гострий кут з одним вузлом та односторонню фаску для незв'язаних `0 / positive` відстаней;
   - злиття двох ліній (Two-Line Fillet/Chamfer);
   - відновлення гострих кутів (Unfillet / Unchamfer);
   - паралельний зсув ребер (Edge Offset у режимах Extend та Step);
@@ -40,7 +41,8 @@
   - ортогоналізація кутів будівель відносно фасаду (Ortho Angles);
   - очищення дублікатів вузлів та усунення самоперетинів (Clean Duplicate Nodes / Untangle);
   - робота з Z/M/ZM координатами та політиками кривих (CompoundCurve/CircularString).
-- `core/snapping_helper.py` — інтеграція із системою прив'язки QGIS (point/segment snapping, `QgsSnapIndicator`, трансформації CRS).
+  - similarity-трансформації Align Feature, локальну Extend/Trim-перебудову Match Edge, розміщення вздовж Path, вилучення multipart-частин і безпечні polygon Difference/Intersection.
+- `core/snapping_helper.py` — інтеграція із системою прив'язки QGIS (point/segment snapping, `QgsSnapIndicator`, міжшарові `LayerFeatureMatch` / `LayerSegmentMatch`, трансформації CRS та виключення source features або конкретних source segments).
 - `core/constants.py` — глобальні константи режимів, кольори гумових стрічок (RubberBand) та налаштування за замовчуванням.
 
 ---
@@ -51,6 +53,7 @@
 
 - `gui/gui_utils.py` — допоміжні утиліти UI, завантаження іконок, DPI-масштабування, стиль панелей QGIS.
 - `gui/settings_widget.py` — бічна панель (DockWidget) пакетної обробки (Batch Fillet & Chamfer).
+- `gui/cad_canvas_widget.py` — спільна компактна top-right HUD-основа нових CAD-інструментів із Qt5/Qt6 keyboard routing.
 - **Fillet & Chamfer (класичний):**
   - `gui/map_tool.py` — базовий та інтерактивний інструмент скруглення кутів полігонів/ліній.
   - `gui/canvas_widget.py` — HUD-панель налаштування радіуса та фаски.
@@ -88,12 +91,17 @@
   - `gui/ortho_angles_canvas_widget.py` — HUD толерантності кута та збереження площі.
 - **Clean Duplicate Nodes:**
   - `gui/clean_duplicate_nodes_map_tool.py` — пошук та усунення дублікатів вершин і вузлів самоперетинів.
+- **Align Feature:** `gui/align_feature_map_tool.py`, `gui/align_feature_canvas_widget.py` — point/edge вирівнювання вибраної групи з move/copy/fit/flip.
+- **Match Edge:** `gui/match_edge_map_tool.py`, `gui/match_edge_canvas_widget.py` — локальна parallel/collinear перебудова одного clicked edge зі збереженням решти вершин.
+- **Array Along Path:** `gui/array_along_path_map_tool.py`, `gui/array_along_path_canvas_widget.py` — Count/Spacing, Whole/Subrange, offset, reverse і tangent orientation для вибраної частини Path.
+- **Extract Part:** `gui/extract_part_map_tool.py`, `gui/extract_part_canvas_widget.py` — move/copy multipart-частин із pending-набором та локальною історією команд.
+- **Subtract / Clip Feature:** `gui/boolean_feature_map_tool.py`, `gui/boolean_feature_canvas_widget.py` — спільний параметризований Target/Cutter workflow для Difference та Intersection.
 
 ---
 
-## 4. `research/` — Дослідження та специфікації майбутніх інструментів
+## 4. `research/` — Дослідження та специфікації інструментів
 
-Директорія містить аналітику, архітектурні концепції та специфікації для проектування нових CAD-інструментів:
+Директорія зберігає вихідну аналітику й специфікації інструментів, реалізованих у runtime-модулях `core/` та `gui/`:
 
 - `align_feature_ctrl_shift_qgis_tool.md` — дослідження інструмента вирівнювання об'єктів (Align Feature) за опорними точками/ребрами.
 - `array_along_path_qgis_tool.md` — специфікація тиражування об'єктів вздовж складних криволінійних траєкторій (Array along path).
@@ -109,7 +117,9 @@
 - `tests/test_plugin_lifecycle.py` — тести життєвого циклу плагіна (`initGui`/`unload`), меню, відсутності витоків пам'яті.
 - `tests/test_settings_persistence.py` — збереження параметрів у `QgsSettings`.
 - `tests/test_translations.py` — валідність завантаження файлів перекладу `.qm`.
-- `tests/test_*_tool.py` — ізольовані тести для кожного CAD-інструмента (array, clean duplicates, divide line, edge offset, explode, mirror, ortho angles, polar array, rotate, scale rotate, two-line fillet).
+- `tests/test_align_feature_tool.py`, `tests/test_match_edge_tool.py`, `tests/test_array_along_path_tool.py`, `tests/test_extract_part_tool.py`, `tests/test_subtract_feature_tool.py`, `tests/test_clip_feature_tool.py` — окремі крос-версійні тести шести реалізованих research-інструментів.
+- `tests/research_tool_test_utils.py` — мінімальні спільні QGIS mocks/helpers нових test-модулів.
+- `tests/test_*_tool.py` — ізольовані тести інших CAD-інструментів (array, clean duplicates, divide line, edge offset, explode, mirror, ortho angles, polar array, rotate, scale rotate, two-line fillet).
 
 ---
 
@@ -119,6 +129,7 @@
 - `scripts/sync_to_profiles.py` — синхронізація плагіна у профілі QGIS3 та QGIS4 (`%APPDATA%/QGIS/...`).
 - `scripts/smoke_test_all_qgis.py` — крос-версійний запуск тестів у всіх знайдених версіях QGIS (Windows).
 - `scripts/compile_translations.py` — компіляція `.ts` $\rightarrow$ `.qm`.
+- `scripts/research_tools_translations.py` — джерела локалізації нових action/HUD/message strings із генерацією в усі 40 каталогів.
 - `scripts/add_*_translations.py` — допоміжні генератори перекладів нових інструментів для всіх 40 мов.
 
 ---
