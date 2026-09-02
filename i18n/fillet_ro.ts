@@ -363,6 +363,10 @@ Rezultatul reparării conține mai multe părți ({0}). Alegeți cum să salvaț
             <translation>Racordare / Teșire a două linii (Îmbinare)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Unire două linii prin racordare sau teșire&lt;/b&gt;&lt;br&gt;&lt;br&gt;Țineți apăsat Alt pentru a comuta racordare/teșire.&lt;br&gt;&lt;br&gt;Țineți apăsat Shift pentru distanțe egale.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Uniți două linii prin racordare sau teșire și îmbinați entitățile</translation>
         </message>
@@ -393,6 +397,10 @@ Rezultatul reparării conține mai multe părți ({0}). Alegeți cum să salvaț
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Instrument Racordare / Teșire</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Creare racordări și teșiri&lt;/b&gt;&lt;br&gt;&lt;br&gt;Țineți apăsat Alt pentru a comuta racordare/teșire.&lt;br&gt;&lt;br&gt;Țineți apăsat Shift для distanțe egale.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -744,11 +752,11 @@ Rezultatul reparării conține mai multe părți ({0}). Alegeți cum să salvaț
         </message>
         <message>
             <source>Не вдалося записати зміни: {error}</source>
-            <translation>Could not write changes: {error}</translation>
+            <translation>Nu s-au putut salva modificările: {error}</translation>
         </message>
         <message>
             <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
-            <translation>This operation is unavailable for geometries with curved segments.</translation>
+            <translation>Această operațiune nu este disponibilă pentru geometrii cu segmente curbe.</translation>
         </message>
         <message>
             <source>Операція не підтримує об'єкти з кривими сегментами.</source>
@@ -760,7 +768,7 @@ Rezultatul reparării conține mai multe părți ({0}). Alegeți cum să salvaț
         </message>
         <message>
             <source>Пропущено об'єктів із кривими сегментами: {}.</source>
-            <translation>Features with curved segments skipped: {}.</translation>
+            <translation>Entități cu segmente curbe omise: {}.</translation>
         </message>
         <message>
             <source>Не вдалося додати елементи масиву.</source>
@@ -784,11 +792,23 @@ Rezultatul reparării conține mai multe părți ({0}). Alegeți cum să salvaț
         </message>
         <message>
             <source>Не вдалося змінити геометрію об'єкта.</source>
-            <translation>Could not change feature geometry.</translation>
+            <translation>Nu s-a putut modifica geometria entității.</translation>
         </message>
         <message>
             <source>Помилка</source>
-            <translation>Error</translation>
+            <translation>Eroare</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Aplică pe toate colțurile</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Distanțe legate (d1 = d2), sau țineți apăsat Shift</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Distanțe separate (d1 ≠ d2), sau țineți apăsat Shift</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

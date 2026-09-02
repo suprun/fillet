@@ -363,6 +363,10 @@
             <translation>Στρογγυλοποίηση / Λοξότμηση δύο γραμμών (Συγχώνευση)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Σύνδεση δύο γραμμών με στρογγυλοποίηση ή λοξότμηση&lt;/b&gt;&lt;br&gt;&lt;br&gt;Κρατήστε πατημένο το Alt για εναλλαγή.&lt;br&gt;&lt;br&gt;Κρατήστε πατημένο το Shift για ίσες αποστάσεις.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Σύνδεση δύο γραμμών με στρογγυλοποίηση ή λοξότμηση και συγχώνευση οντοτήτων</translation>
         </message>
@@ -393,6 +397,10 @@
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Εργαλείο Στρογγυλοποίησης / Λοξότμησης</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Δημιουργία στρογγυλοποιήσεων και λοξοτμήσεων&lt;/b&gt;&lt;br&gt;&lt;br&gt;Κρατήστε πατημένο το Alt για εναλλαγή.&lt;br&gt;&lt;br&gt;Κρατήστε πατημένο το Shift για ίσες αποστάσεις.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -744,11 +752,11 @@
         </message>
         <message>
             <source>Не вдалося записати зміни: {error}</source>
-            <translation>Could not write changes: {error}</translation>
+            <translation>Αποτυχία καταχώρησης αλλαγών: {error}</translation>
         </message>
         <message>
             <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
-            <translation>This operation is unavailable for geometries with curved segments.</translation>
+            <translation>Αυτή η λειτουργία δεν είναι διαθέσιμη για γεωμετρίες με καμπύλα τμήματα.</translation>
         </message>
         <message>
             <source>Операція не підтримує об'єкти з кривими сегментами.</source>
@@ -760,7 +768,7 @@
         </message>
         <message>
             <source>Пропущено об'єктів із кривими сегментами: {}.</source>
-            <translation>Features with curved segments skipped: {}.</translation>
+            <translation>Παραλείφθηκαν οντότητες με καμπύλα τμήματα: {}.</translation>
         </message>
         <message>
             <source>Не вдалося додати елементи масиву.</source>
@@ -784,11 +792,23 @@
         </message>
         <message>
             <source>Не вдалося змінити геометрію об'єкта.</source>
-            <translation>Could not change feature geometry.</translation>
+            <translation>Αποτυχία τροποποίησης της γεωμετρίας της οντότητας.</translation>
         </message>
         <message>
             <source>Помилка</source>
-            <translation>Error</translation>
+            <translation>Σφάλμα</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Εφαρμογή σε όλες τις γωνίες</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Αποστάσεις συνδεδεμένες (d1 = d2), ή κρατήστε πατημένο το Shift</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Αποστάσεις ανεξάρτητες (d1 ≠ d2), ή κρατήστε πατημένο το Shift</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

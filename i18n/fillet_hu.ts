@@ -363,6 +363,10 @@ A javítás eredménye több részt tartalmaz ({0}). Válassza ki a mentési mó
             <translation>Kétvonalas lekerekítés / letörés (Összevonás)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Két vonal összekötése lekerekítéssel vagy letöréssel&lt;/b&gt;&lt;br&gt;&lt;br&gt;Tartsa lenyomva az Alt billentyűt a váltáshoz.&lt;br&gt;&lt;br&gt;Tartsa lenyomva a Shift billentyűt az egyenlő távolságokhoz.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Két vonal összekötése lekerekítéssel vagy letöréssel és elemek összevonása</translation>
         </message>
@@ -393,6 +397,10 @@ A javítás eredménye több részt tartalmaz ({0}). Válassza ki a mentési mó
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Lekerekítés / Letörés eszköz</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Lekerekítések és letörések létrehozása&lt;/b&gt;&lt;br&gt;&lt;br&gt;Tartsa lenyomva az Alt billentyűt a váltáshoz.&lt;br&gt;&lt;br&gt;Tartsa lenyomva a Shift billentyűt az egyenlő távolságokhoz.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -744,11 +752,11 @@ A javítás eredménye több részt tartalmaz ({0}). Válassza ki a mentési mó
         </message>
         <message>
             <source>Не вдалося записати зміни: {error}</source>
-            <translation>Could not write changes: {error}</translation>
+            <translation>Nem sikerült menteni a módosításokat: {error}</translation>
         </message>
         <message>
             <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
-            <translation>This operation is unavailable for geometries with curved segments.</translation>
+            <translation>Ez a művelet nem érhető el görbe szakaszokat tartalmazó geometriák esetén.</translation>
         </message>
         <message>
             <source>Операція не підтримує об'єкти з кривими сегментами.</source>
@@ -760,7 +768,7 @@ A javítás eredménye több részt tartalmaz ({0}). Válassza ki a mentési mó
         </message>
         <message>
             <source>Пропущено об'єктів із кривими сегментами: {}.</source>
-            <translation>Features with curved segments skipped: {}.</translation>
+            <translation>Görbe szakaszokat tartalmazó elemek kihagyva: {}.</translation>
         </message>
         <message>
             <source>Не вдалося додати елементи масиву.</source>
@@ -784,11 +792,23 @@ A javítás eredménye több részt tartalmaz ({0}). Válassza ki a mentési mó
         </message>
         <message>
             <source>Не вдалося змінити геометрію об'єкта.</source>
-            <translation>Could not change feature geometry.</translation>
+            <translation>Nem sikerült módosítani az elem geometriáját.</translation>
         </message>
         <message>
             <source>Помилка</source>
-            <translation>Error</translation>
+            <translation>Hiba</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Alkalmazás minden sarokra</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Távolságok láncolva (d1 = d2), vagy tartsa lenyomva a Shift billentyűt</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Távolságok különállók (d1 ≠ d2), vagy tartsa lenyomva a Shift billentyűt</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

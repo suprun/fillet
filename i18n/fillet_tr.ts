@@ -363,6 +363,10 @@ Onarım sonucu birden fazla parça ({0}) içeriyor. Kaydetme yöntemini seçin:<
             <translation>İki Çizgili Yuvarlat / Pah Kır (Birleştir)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;İki çizgiyi yuvarlatma veya pah ile birleştirin&lt;/b&gt;&lt;br&gt;&lt;br&gt;Yuvarlatma/pah geçişi için Alt tuşunu basılı tutun.&lt;br&gt;&lt;br&gt;Eşit mesafeler için Shift tuşunu basılı tutun.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>İki çizgiyi yuvarlatma veya pah ile bağlayın ve detayları birleştirin</translation>
         </message>
@@ -393,6 +397,10 @@ Onarım sonucu birden fazla parça ({0}) içeriyor. Kaydetme yöntemini seçin:<
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Yuvarlat / Pah Kır Aracı</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Yuvarlatma ve pah oluşturun&lt;/b&gt;&lt;br&gt;&lt;br&gt;Yuvarlatma/pah geçişi için Alt tuşunu basılı tutun.&lt;br&gt;&lt;br&gt;Eşit mesafeler için Shift tuşunu basılı tutun.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -744,11 +752,11 @@ Onarım sonucu birden fazla parça ({0}) içeriyor. Kaydetme yöntemini seçin:<
         </message>
         <message>
             <source>Не вдалося записати зміни: {error}</source>
-            <translation>Could not write changes: {error}</translation>
+            <translation>Değişiklikler kaydedilemedi: {error}</translation>
         </message>
         <message>
             <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
-            <translation>This operation is unavailable for geometries with curved segments.</translation>
+            <translation>Bu işlem eğri segmentlere sahip geometriler için kullanılamaz.</translation>
         </message>
         <message>
             <source>Операція не підтримує об'єкти з кривими сегментами.</source>
@@ -760,7 +768,7 @@ Onarım sonucu birden fazla parça ({0}) içeriyor. Kaydetme yöntemini seçin:<
         </message>
         <message>
             <source>Пропущено об'єктів із кривими сегментами: {}.</source>
-            <translation>Features with curved segments skipped: {}.</translation>
+            <translation>Eğri segmentlere sahip detaylar atlandı: {}.</translation>
         </message>
         <message>
             <source>Не вдалося додати елементи масиву.</source>
@@ -784,11 +792,23 @@ Onarım sonucu birden fazla parça ({0}) içeriyor. Kaydetme yöntemini seçin:<
         </message>
         <message>
             <source>Не вдалося змінити геометрію об'єкта.</source>
-            <translation>Could not change feature geometry.</translation>
+            <translation>Detay geometrisi değiştirilemedi.</translation>
         </message>
         <message>
             <source>Помилка</source>
-            <translation>Error</translation>
+            <translation>Hata</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Tüm köşelere uygula</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Mesafeler bağlı (d1 = d2) veya Shift tuşunu basılı tutun</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Mesafeler ayrı (d1 ≠ d2) veya Shift tuşunu basılı tutun</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

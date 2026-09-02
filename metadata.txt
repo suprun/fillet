@@ -2,216 +2,27 @@
 name=Fillet & Chamfer for QGIS 3.x (Interactive & Batch)
 qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
-description=CAD editing suite with Fillet, Chamfer, Align Feature, Match Edge, Array Along Path, Extract Part, Subtract, Clip, transforms, arrays and topology tools for QGIS.
-about=Comprehensive CAD editing suite for QGIS 3.16-4.99 providing Fillet and Chamfer, Two-Line Merge, Corner Restoration, Align Feature, Match Edge, Array Along Path, Extract Part, polygon Subtract and Clip, Rotation, Mirror, Scale with Rotation, Edge Offset, Linear and Polar Arrays, Divide / Measure Line, Ortho Angles, Explode, Clean / Repair and batch processing. Interactive tools use native QGIS snapping, cross-layer CRS handling, atomic edit commands and consistent top-right HUD panels on Qt5 and Qt6.
-version=1.0.0.91
+description=CAD Fillet & Chamfer suite with Interactive vertex rounding, Two-Line merge, Corner Restoration, and Batch processing for QGIS.
+about=Dedicated CAD Fillet & Chamfer toolkit for QGIS 3.16-4.99 providing interactive vertex rounding/chamfering, Two-Line merge with attribute preservation, Two-Edge Corner Restoration (Unfillet/Unchamfer), and Batch Fillet & Chamfer processing. Fully supports QGIS snapping, metric/geographic CRS units, Z/M coordinates, atomic undo/redo, and top-right HUD panels on Qt5 and Qt6.
+version=1.0.0.103
 author=suprun
 email=suprun.serhiy+qgis@gmail.com
 homepage=https://github.com/suprun/fillet
 repository=https://github.com/suprun/fillet
 tracker=https://github.com/suprun/fillet/issues
-tags=cad, editing, fillet, chamfer, align, match-edge, path-array, extract-part, subtract, difference, clip, intersection, restore, rotate, mirror, scale, offset, array, polar-array, divide, explode, ortho, clean, topology, geometry, digitizing, curve, batch, qgis4
+tags=cad, editing, fillet, chamfer, two-line, merge, restore, unfillet, unchamfer, batch, topology, geometry, digitizing, qgis4
 icon=icon.png
 experimental=False
 deprecated=False
-changelog=1.0.0.91:
-    - Added zero-size Fillet and Chamfer values across interactive, Two-Line and batch workflows.
-    - Zero size now creates or preserves one sharp vertex; unlinked zero/positive distances create a one-sided chamfer.
-    - Prevented duplicate corner nodes and redundant batch edit commands for unchanged zero-size results.
-    1.0.0.90:
-    - Redesigned Match Edge as a local Extend/Trim edge reshape that keeps all unrelated vertices and selected features fixed.
-    - Added polygon ring, multipart, terminal LineString, same-feature Target, Z/M/ZM, curve rejection and atomic copy/undo coverage.
-    - Clarified that Align Feature transforms the entire selected group and updated the shared HUD, tooltips and translations.
-    1.0.0.89:
-    - Fixed cross-layer feature hover in Extract Part, Array Along Path, Subtract and Clip on QGIS 3 by using the supported QgsGeometry.nearestPoint API.
-    - Added regression coverage for non-polygon cross-layer feature matching.
-    1.0.0.88:
-    - Added Align Feature and Match Edge with point/edge references, cross-layer snapping, move/copy, fit, flip, parallel and collinear modes.
-    - Added Array Along Path with Count/Spacing, Whole Path/Subrange, offset, reverse traversal and tangent orientation.
-    - Added Extract Part with single/pending move and copy workflows while preserving attributes, Z/M/ZM and native curved parts.
-    - Added atomic polygon Subtract and Clip tools with multi-cutter union, cross-layer CRS handling and safe XY/Z validation.
-    - Added shared top-right HUD styling, Qt5/Qt6 keyboard routing, lifecycle integration, 40-locale catalogs and cross-version tests.
-    1.0.0.87:
-    - Updated plugin resources.
-    1.0.0.86:
-    - Fixed CAD Divide Line hover crashes by using the existing CRS-aware segment snapping API instead of a missing helper method.
-    - Added a regression test for Divide Line canvas mouse-move selection.
-    1.0.0.85:
-    - Made Two-Line Fillet/Chamfer multipart-aware and atomic, preserving all unselected parts and delaying feature deletion until the merged geometry is accepted.
-    - Preserved finite Z/M/ZM ordinates across topology operations and added safe native-curve preservation or explicit rejection according to each tool's curve policy.
-    - Unified canvas-CRS preview and commit for Rotate, Scale & Rotate, Polar Array, and Ortho Angles; fixed hidden HUD Escape routing and QGIS 4 mapToolSet cleanup.
-    - Added checked edit transactions, cross-version regressions, explicit runtime packaging, accurate smoke-runner reporting, and release documentation.
-    1.0.0.84:
-    - Fixed Escape key step-back and tool deactivation in CAD Ortho Angles and CAD Polar Array by unifying event filtering across canvas, HUD panel, spinboxes, and line edits, and ensuring robust integer key code handling and clean Pan tool activation upon tool exit.
-    1.0.0.83:
-    - Fixed batch fillet/chamfer NameError by adding missing GeometryEngine import to package try block in plugin.py.
-    - Updated CAD Ortho Angles and CAD Polar Array click selection to visually highlight chosen features via dedicated rubberbands instead of modifying layer selection state.
-    1.0.0.81:
-    - Fixed NameError in initGui by adding missing relative imports for OrthoAnglesCanvasWidget and CADOrthoAnglesMapTool when running as installed QGIS plugin package.
-    1.0.0.80:
-    - Added CAD Ortho Angles tool: interactive orthogonalization of building footprints and polygon/polyline corners (90° right angles) relative to a clicked reference facade/wall edge.
-    - Features floating HUD canvas panel with angle tolerance spinbox (1°-45°), tolerance lock button, presets/history menu, preserve area toggle (centroid-based scaling), create copy toggle, and vertex displacement marker visualization.
-    1.0.0.79:
-    - Fixed guide line gap and angle desynchronization when rotating past 360° and reversing direction. Unified radius ray with arc angle so visual guides and feature copies are 100% synchronized in both CW and CCW directions.
-    1.0.0.78:
-    - Implemented 4-step CAD workflow for Polar Array: Select Feature(s) -> Set Center -> Specify 0° Baseline Direction -> Rotate Array with seamless real-time angle synchronization and full-circle sweep.
-    1.0.0.77:
-    - Added 0° baseline reference ray (indigo dashed line) to CAD Polar Array preview.
-    - Clamped angle accumulation strictly to [-360°, +360°] with subtle 360° magnetic snap to prevent over-winding and eliminate 355° jump.
-    1.0.0.76:
-    - Added lock and preset/history menu buttons to both Step Angle and Fill Angle rows on the CAD Polar Array HUD panel.
-    - Implemented step-back and clean tool deactivation for the Escape key and right-click across all CAD Polar Array states.
-    1.0.0.75:
-    - Enhanced CAD Polar Array tool: 3-step workflow (Select Feature -> Center Point -> Angle/Confirm), distinct individual rubberbands for each copy, amber cross center marker, fill angle lock button, and step angle presets & recent values popup menu.
-    1.0.0.74:
-    - Fixed rotation angle tracking across CAD Rotate, Scale & Rotate, and Polar Array tools to prevent guide line flip and allow smooth continuous rotation past 180° up to 360°.
-    1.0.0.73:
-    - Added CAD Divide / Measure Line tool (CADDivideLineMapTool) with floating top-right HUD panel, interactive segment preview, alternating segment coloring, equal parts count vs fixed step length, reverse direction, and single vs multipart output.
-    - Updated HUD canvas panel styling and top-right pinned placement for Polar Array and Divide Line tools.
-    1.0.0.72:
-    - Added CAD Polar (Circular) Feature Array tool (CADPolarArrayMapTool) with floating HUD panel, interactive rubberband preview, snapping, angle step/fill angle control, and feature rotation.
-    1.0.0.71:
-    - Redesigned plugin icon based on standard QGIS Advanced Digitizing CAD tool with transparent background and stylish PRO badge.
-    1.0.0.70:
-    - Updated advanced digitizing toolbar action ordering according to user layout: Explode after Trim/Extend, Two-Line Fillet/Chamfer after Batch Fillet/Chamfer, Scale & Rotate after Scale Feature, Edge Offset after Offset Curve, Mirror before Simplify Feature, Clean & Repair at end.
-    - Restored standard QGIS theme appearance for "Explode selected lines" push button in HUD canvas widget.
-    1.0.0.69:
-    - Added single-segment (2-point line) explosion prevention with messageBar strip notifications for click and batch modes in ExplodeLineMapTool.
-    1.0.0.68:
-    - Fixed vertex iteration in ExplodeLineMapTool hover preview using cross-version geom.vertices() iterator.
-    1.0.0.67:
-    - Fixed package-relative import in ExplodeLineMapTool to ensure proper plugin loading within QGIS.
-    - Added CAD Explode Line map tool with floating HUD panel supporting 2-point segment splitting and optional MultiLineString preservation.
-    1.0.0.65:
-    - Added project system snapping support during dimension adjustment (STATE_ADJUSTING & STEP_SET_RADIUS) across Fillet and Two-Line Fillet/Chamfer map tools with native QgsSnapIndicator.
-    - Implemented global Escape key cancellation and step rollback across all CAD HUD canvas widgets (Fillet, Two-Line, Rotate, Scale & Rotate, Mirror, Edge Offset) via eventFilter pass-through.
-    1.0.0.64:
-    - Restored user-configured values in Feature Count and Spacing spinboxes upon re-enabling checkboxes.
-    - Added canvas extent confirmation dialog when selected features to copy are outside map view on Step 1.
-    1.0.0.63:
-    - Fixed argument ordering in canvas extent verification call inside CAD Array map tool commit method.
-    1.0.0.62:
-    - Converted Feature Array settings widget from modal dialog to pinned CAD HUD canvas panel matching plugin style, with interdependent Feature Count and Spacing checkboxes.
-    1.0.0.61:
-    - Added CAD 'Copy features in an Array along a line' interactive tool (Feature Array Backport for QGIS 3.16-3.44) supporting FeatureCount, FeatureSpacing, and FeatureCountAndSpacing modes with live preview and multi-selection.
-    - Excluded duplicate tool addition in QGIS 4.+ to use native system implementation.
-    1.0.0.60:
-    - Filtered duplicate node markers that coincide with self-intersections to eliminate double marker drawing and magenta fringe artifacts.
-    1.0.0.59:
-    - Fixed Live Preview for 'Clean all duplicates and errors' to show full multi-part geometries without truncation.
-    - Added QGIS messageBar auto-dismissing strip notification upon feature geometry cleanup (Variant A).
-    1.0.0.58:
-    - Unified 'Clean all duplicates and errors in feature' menu action with body-click flow, including SinglePart layer MultiPart resolution dialog.
-    1.0.0.57:
-    - Applied high-contrast neon magenta duplicate node markers (16px, 3px stroke) and ultra-bright neon green self-intersection markers (16px, 3px stroke).
-    - Added hollow outline circle (24px, 2px stroke) on hover encircling issue point.
-    1.0.0.56:
-    - Applied standard QGIS topology markers: red crosses for duplicate nodes and bright green crosses for self-intersections.
-    - Added hollow outline circle on hover without fill encircling the issue point.
-    1.0.0.55:
-    - Re-styled duplicate node markers to high-visibility emerald green with 3px line stroke.
-    - Enlarged active hover halo (24px) and prominent white target cross (16px) for distinct visual feedback.
-    1.0.0.54:
-    - Fixed cross line stroke width (set crisp 2px line width with proper setIconSize) for clean rendering.
-    - Fixed AttributeError when switching to raster layers (safe disconnect on QgsVectorLayer only).
-    1.0.0.53:
-    - Added standard QGIS topological crosses with dynamic halo-target hover highlighting (Variant 1.2).
-    - Added full support for multi-duplicate node clusters (N >= 3) with individual node retention actions (Variant 2.A).
-    1.0.0.52:
-    - Fixed hit testing and state reset on menu dismissal to prevent re-opening node menu when clicking outside.
-    1.0.0.51:
-    - Added full 40-language translations for all 22 UI strings of Clean Duplicate Nodes and topology repair tools.
-    1.0.0.50:
-    - Fixed merge_duplicate_nodes_at_point to strictly preserve existing self-intersections without inadvertent GEOS validation and trimming.
-    1.0.0.49:
-    - Enhanced merge_duplicate_nodes_at_point to cleanly collapse all consecutive duplicates at a vertex in one click regardless of multiplicity (3+ duplicates).
-    1.0.0.48:
-    - Added standard system prompt when clicking feature in singlepart layer with multi-part result (Split into SinglePart vs Keep as MultiPart).
-    1.0.0.47:
-    - Maintained constant crosshair cursor on hover; added SinglePart/MultiPart layer safety and instant body-click micro-menu for multi-part resolution.
-    1.0.0.46:
-    - Added self-intersection detection and resolution (untangle / make valid), native system context menu, and removed HUD panel for Clean Duplicate Nodes tool.
-    1.0.0.45:
-    - Added CAD Clean Duplicate Nodes Tool with feature hover highlighting, one-click cleanup, and context menu with live preview.
-    1.0.0.44:
-    - Added standard QGIS confirmation prompt when selected features are outside visible map view for Rotate, Mirror, and Scale & Rotate tools.
-    1.0.0.43:
-    - Added automatic deduplication and dissolution of collapsed duplicate vertices when an edge is offset to an adjacent node in Extend mode.
-    1.0.0.42:
-    - Added interactive and geometric offset distance clamping in Extend mode when reaching blocking adjacent nodes or apex limits.
-    1.0.0.41:
-    - Fixed open polyline terminal segments in Extend mode to preserve segment length from extended joints and avoid flipped/truncated stubs.
-    1.0.0.40:
-    - Updated Step mode for open polylines to avoid perpendicular end caps on terminal segments and verified 100% translation coverage across all 40 supported languages.
-    1.0.0.39:
-    - Added step indicator hints on Edge Offset HUD panel and enabled edge-to-apex corner collapse when edge length reduces to zero in Extend mode.
-    1.0.0.38:
-    - Unified Edge Offset HUD panel appearance and top-right placement, added self-intersection & bowtie prevention in Extend mode, and integrated QGIS system map snapping.
-    1.0.0.37:
-    - Added interactive CAD Edge Offset (Parallel Shift) tool with Extend (CAD stretch) and Step (jog) modes, Shift key mode inversion, HUD widget, live rubberband preview, and copy mode.
-    1.0.0.36:
-    - Added dynamic Shift key inversion for Chamfer to force equal-distance (isosceles) beveling when unlinked or allow asymmetrical beveling when linked.
-    1.0.0.35:
-    - Unified angle snap options to [5°, 15°, 30°, 45°, 90°] across all CAD tools and added horizontal separator above Save copy checkbox.
-    1.0.0.34:
-    - Redesigned CAD snapping HUD layout (parameter header row and horizontal Free/Angle radio buttons with compact dropdown) and added real-time Shift key dynamic visual inversion.
-    1.0.0.33:
-    - Added radio button selection for Free vs Angle Snap modes with dynamic dropdown enablement and Shift key snap inversion across Rotation, Mirror, and Scale-with-Rotation CAD tools.
-    1.0.0.32:
-    - Added interactive CAD 3-Point Scale with Rotation tool with floating HUD widget, scale and angle locks, angle snap presets, duplicate copy mode, and complete multi-language localization.
-    1.0.0.31:
-    - Unified tab-order navigation, persistent keyboard focus, automatic text selection, and direct numeric keystroke redirection across Two-Line Fillet/Chamfer, Rotation, and Mirror tools.
-    1.0.0.30:
-    - Fixed Two-Line Fillet/Chamfer to strictly clamp tangent and chamfer distances to selected segment endpoints, preventing overshoot and backwards loops in complex polylines.
-    1.0.0.29:
-    - Fixed baseline guide line rendering and CRS handling in CAD Rotation Tool.
-    1.0.0.28:
-    - Fixed missing Key_Return/Key_Enter constants and added automatic snapping point locator cache invalidation after Mirror and Rotation operations.
-    1.0.0.27:
-    - Unified system snapping, numeric axis angle input, tab-order navigation, and focus text auto-selection in CAD Mirror and Rotation tools.
-    1.0.0.26:
-    - Integrated interactive CAD 2-Point Mirror Tool with floating HUD, axis angle snap presets (Free, 15, 45, 90 Ortho), and duplicate copy mode.
-    1.0.0.25:
-    - Positioned CAD Rotate tool action in 4th place on Advanced Digitize toolbar next to native Rotate Feature.
-    1.0.0.24:
-    - Integrated interactive CAD 3-Point Rotation Tool with floating CAD HUD, angle snap presets, and duplicate copy mode into toolkit.
-    1.0.0.23:
-    - Unified live preview color scheme with polygon tool: Blue (#2563EB) for Fillet and Emerald Green (#059669) for Chamfer.
-    1.0.0.22:
-    - Implemented cyclic topological ring traversal for closed polylines, fixing corner seam doubling across all orientations (CW/CCW).
-    1.0.0.21:
-    - Fixed topological chain assembly for intermediate polyline segments, preserving multi-point curve bends without 1D distortion.
-    - Eliminated redundant intermediate endpoint vertices when lines are extended to the tangent touch points.
-    - Disabled 'Remove feature from selection' button in QgsMergeAttributesDialog during Two-Line merge execution.
-    1.0.0.20:
-    - Added direct eventFilter dialog result interception to guarantee feature creation after merge attribute confirmation even with default values.
-    1.0.0.19:
-    - Fixed critical multipart geometry incompatibility error on singlepart line layers by using QgsMergeAttributesDialog.
-    - Added automatic feature deletion of the second line and robust undoStack tracking upon merge confirmation.
-    1.0.0.18:
-    - Guaranteed merged feature geometry application after confirming QGIS native Merge Selected Features dialog.
-    - Added automatic clamping of fillet and chamfer to the physical line lengths to prevent overshoot on short segments.
-    - Implemented full 2D cursor drag projection for Chamfer mode (supporting both synchronized linked and independent unlinked distances).
-    1.0.0.17:
-    - Reused FilletCanvasWidget for Two-Line Fillet/Chamfer map tool with 3-step interactive cursor radius/chamfer drag.
-    - Added on-canvas merge attribute checkbox and removed duplicate checkbox from batch dock panel.
-    - Added safe cancellation handling for QGIS native Merge Features dialog to prevent unconfirmed layer changes.
-    1.0.0.16:
-    - Fixed TypeError in toMapCoordinates conversion for intersection marker in Two-Line Fillet map tool.
-    1.0.0.15:
-    - Added Two-Line Fillet and Chamfer CAD Map Tool with feature merging (mActionTwoLineFillet) for line vector layers.
-    - Integrated CAD step-by-step HUD guidance and live rubberband intersection preview for two separate lines.
-    - Support for native QGIS merge attributes dialog or direct attribute preservation based on user setting.
-    - Full localization across 40 languages and cross-version support for QGIS 3.16 to 4.99.
-    1.0.0.14:
-    - Fixed complete translation resolution across 40 languages for the batch settings dock panel.
-    - Added dynamic auto-sizing and repositioning to Corner Restoration HUD panel to ensure hints are never clipped.
-    1.0.0.13:
-    - Added floating CAD HUD step-by-step hints and step-back workflow for Two-Edge Corner Restoration (Unfillet / Unchamfer) tool.
-    - Added auto-dismissal timers (4-5s duration) to all QGIS message bar notification strips.
-    - Removed drop shadow effects from floating canvas widgets to match native QGIS flat CAD panel styling.
-    - Pinned floating canvas HUD panels firmly to the top-right corner of the canvas.
-    - Fixed English and non-Ukrainian UI translations for all CAD actions, toolbar buttons, tooltips, and canvas HUD widgets with QgsApplication.locale() discovery.
+changelog=1.0.0.103:
+    - Dedicated CAD Fillet & Chamfer suite focused on polygon & line corner operations, Two-Line merge, and Corner Restoration (Unfillet/Unchamfer).
+    - Fixed all Qt6 / PyQt6 / QGIS 4.0 scoped enum compatibility warnings for Qgis.MessageLevel.
+    - Combined Fillet/Chamfer and Corner Restoration tools into a unified drop-down menu on the Advanced Digitizing toolbar for QGIS < 4.
+    - Added 'Apply to all corners' batch action directly to the floating FilletCanvasWidget HUD for selected features.
+    - Added temporary Alt-key mode toggle between Fillet and Chamfer with synchronized controls and interactive previews.
+    - Added Shift-key distance linking/inversion for Chamfer with real-time preview and click-commit synchronization.
+    - Styled toolbar action tooltips matching standard native QGIS multi-line layout with paragraph spacing across all 40 supported locales.
+    - Zero-size fillet/chamfer semantics, finite Z/M/ZM coordinate preservation, and atomic undo/redo.
     1.0.0.12:
     - Restricted numeric stepper inputs to digits only and normalized decimal separator (dot/comma) handling across canvas HUD and batch panel.
     - Added interactive CAD Two-Edge Corner Restoration tool (Unfillet / Unchamfer) with real-time intersection preview.

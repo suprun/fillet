@@ -363,6 +363,10 @@
             <translation>تسطيح / شطب خطين (دمج)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;إنشاء شرائح وشطب&lt;/b&gt;&lt;br&gt;&lt;br&gt;اضغط مع الاستمرار على Alt للتبديل بين الشريحة/الشطب.&lt;br&gt;&lt;br&gt;اضغط مع الاستمرار على Shift للمسافات المتساوية.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>ربط خطين بتسطيح أو شطب ودمج المعالم</translation>
         </message>
@@ -393,6 +397,10 @@
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>أداة التسطيح / الشطب</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;ربط خطين بشريحة أو شطب&lt;/b&gt;&lt;br&gt;&lt;br&gt;اضغط مع الاستمرار على Alt للتبديل بين الشريحة/الشطب.&lt;br&gt;&lt;br&gt;اضغط مع الاستمرار على Shift للمسافات المتساوية.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -744,11 +752,11 @@
         </message>
         <message>
             <source>Не вдалося записати зміни: {error}</source>
-            <translation>Could not write changes: {error}</translation>
+            <translation>فشل في حفظ التغييرات: {error}</translation>
         </message>
         <message>
             <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
-            <translation>This operation is unavailable for geometries with curved segments.</translation>
+            <translation>هذه العملية غير متاحة للهندسات ذات المقاطع المنحنية.</translation>
         </message>
         <message>
             <source>Операція не підтримує об'єкти з кривими сегментами.</source>
@@ -760,7 +768,7 @@
         </message>
         <message>
             <source>Пропущено об'єктів із кривими сегментами: {}.</source>
-            <translation>Features with curved segments skipped: {}.</translation>
+            <translation>تم تخطي المعالم ذات المقاطع المنحنية: {}.</translation>
         </message>
         <message>
             <source>Не вдалося додати елементи масиву.</source>
@@ -784,11 +792,23 @@
         </message>
         <message>
             <source>Не вдалося змінити геометрію об'єкта.</source>
-            <translation>Could not change feature geometry.</translation>
+            <translation>فشل في تعديل هندسة المعلم.</translation>
         </message>
         <message>
             <source>Помилка</source>
-            <translation>Error</translation>
+            <translation>خطأ</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>تطبيق على جميع الزوايا</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>المسافات مرتبطة (d1 = d2)، أو اضغط باستمرار على Shift</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>المسافات منفصلة (d1 ≠ d2)، أو اضغط باستمرار على Shift</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

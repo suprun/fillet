@@ -11,22 +11,6 @@ TEST_FILES = [
     "tests/test_translations.py",
     "tests/test_settings_persistence.py",
     "tests/test_two_line_fillet.py",
-    "tests/test_rotate_tool.py",
-    "tests/test_mirror_tool.py",
-    "tests/test_scale_rotate_tool.py",
-    "tests/test_edge_offset_tool.py",
-    "tests/test_clean_duplicate_nodes_tool.py",
-    "tests/test_array_tool.py",
-    "tests/test_polar_array_tool.py",
-    "tests/test_explode_tool.py",
-    "tests/test_divide_line_tool.py",
-    "tests/test_ortho_angles_tool.py",
-    "tests/test_align_feature_tool.py",
-    "tests/test_match_edge_tool.py",
-    "tests/test_array_along_path_tool.py",
-    "tests/test_extract_part_tool.py",
-    "tests/test_subtract_feature_tool.py",
-    "tests/test_clip_feature_tool.py",
 ]
 
 def find_windows_qgis_python_executables():

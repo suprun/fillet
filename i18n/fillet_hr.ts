@@ -363,6 +363,10 @@ Rezultat popravka sadrži više dijelova ({0}). Odaberite način spremanja:</tra
             <translation>Zaobljenje / Zakošenje dviju linija (Spoji)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Spajanje dviju linija zaobljenjem ili zakošenjem&lt;/b&gt;&lt;br&gt;&lt;br&gt;Držite Alt za prebacivanje zaobljenja/zakošenja.&lt;br&gt;&lt;br&gt;Držite Shift za jednake udaljenosti.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Spojite dvije linije zaobljenjem ili zakošenjem i spojite objekte</translation>
         </message>
@@ -393,6 +397,10 @@ Rezultat popravka sadrži više dijelova ({0}). Odaberite način spremanja:</tra
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Alat za zaobljenje / zakošenje</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Izrada zaobljenja i zakošenja&lt;/b&gt;&lt;br&gt;&lt;br&gt;Držite Alt za prebacivanje zaobljenja/zakošenja.&lt;br&gt;&lt;br&gt;Držite Shift za jednake udaljenosti.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -744,11 +752,11 @@ Rezultat popravka sadrži više dijelova ({0}). Odaberite način spremanja:</tra
         </message>
         <message>
             <source>Не вдалося записати зміни: {error}</source>
-            <translation>Could not write changes: {error}</translation>
+            <translation>Spremanje promjena nije uspjelo: {error}</translation>
         </message>
         <message>
             <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
-            <translation>This operation is unavailable for geometries with curved segments.</translation>
+            <translation>Ova radnja nije dostupna za geometrije sa zakrivljenim segmentima.</translation>
         </message>
         <message>
             <source>Операція не підтримує об'єкти з кривими сегментами.</source>
@@ -760,7 +768,7 @@ Rezultat popravka sadrži više dijelova ({0}). Odaberite način spremanja:</tra
         </message>
         <message>
             <source>Пропущено об'єктів із кривими сегментами: {}.</source>
-            <translation>Features with curved segments skipped: {}.</translation>
+            <translation>Preskočeni objekti sa zakrivljenim segmentima: {}.</translation>
         </message>
         <message>
             <source>Не вдалося додати елементи масиву.</source>
@@ -784,11 +792,23 @@ Rezultat popravka sadrži više dijelova ({0}). Odaberite način spremanja:</tra
         </message>
         <message>
             <source>Не вдалося змінити геометрію об'єкта.</source>
-            <translation>Could not change feature geometry.</translation>
+            <translation>Izmjena geometrije objekta nije uspjela.</translation>
         </message>
         <message>
             <source>Помилка</source>
-            <translation>Error</translation>
+            <translation>Pogreška</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Primijeni na sve kutove</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Udaljenosti povezane (d1 = d2), ili držite Shift</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Udaljenosti razdvojene (d1 ≠ d2), ili držite Shift</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

@@ -52,6 +52,9 @@ class FilletSettingsWidget(QWidget):
             os.path.dirname(os.path.dirname(__file__)), "resources", "icons"
         )
         self.setWindowTitle(self.tr("Параметри Fillet / Chamfer"))
+        self._base_mode = self.MODE_FILLET
+        self._alt_pressed = False
+        self._is_updating_alt_override = False
         self._init_ui()
 
     def _get_icon(self, name: str) -> QIcon:
@@ -82,10 +85,10 @@ class FilletSettingsWidget(QWidget):
     def _update_link_icon(self):
         if self.btn_link.isChecked():
             self.btn_link.setIcon(self._get_rotated_icon("mActionLink.svg", 90, 32))
-            self.btn_link.setToolTip(self.tr("Відстані зв'язані (d1 = d2)"))
+            self.btn_link.setToolTip(self.tr("Відстані зв'язані (d1 = d2), або утримуйте Shift"))
         else:
             self.btn_link.setIcon(self._get_rotated_icon("mActionUnlink.svg", 90, 32))
-            self.btn_link.setToolTip(self.tr("Відстані роздільні (d1 ≠ d2)"))
+            self.btn_link.setToolTip(self.tr("Відстані роздільні (d1 ≠ d2), або утримуйте Shift"))
 
     def _init_ui(self):
         main_layout = QVBoxLayout(self)
@@ -334,6 +337,7 @@ class FilletSettingsWidget(QWidget):
         try:
             s = QgsSettings()
             mode = s.value("plugins/fillet/batch_mode", self.MODE_FILLET, type=str)
+            self._base_mode = mode
             if mode == self.MODE_CHAMFER:
                 self.radio_chamfer.setChecked(True)
             else:
@@ -355,10 +359,10 @@ class FilletSettingsWidget(QWidget):
             self._is_loading = False
 
     def _save_settings(self):
-        if getattr(self, "_is_loading", False):
+        if getattr(self, "_is_loading", False) or getattr(self, "_is_updating_alt_override", False):
             return
         s = QgsSettings()
-        s.setValue("plugins/fillet/batch_mode", self.mode)
+        s.setValue("plugins/fillet/batch_mode", getattr(self, "_base_mode", self.mode))
         s.setValue("plugins/fillet/batch_radius", self.spin_radius.value())
         s.setValue("plugins/fillet/batch_segments", self.spin_segments.value())
         s.setValue("plugins/fillet/batch_dist1", self.spin_dist1.value())
@@ -373,6 +377,10 @@ class FilletSettingsWidget(QWidget):
 
     def _on_mode_changed(self):
         mode = self.mode
+        if not getattr(self, "_is_loading", False) and not getattr(self, "_is_updating_alt_override", False):
+            self._base_mode = mode
+            self._alt_pressed = False
+
         if not getattr(self, "_is_loading", False):
             if mode == self.MODE_FILLET:
                 self.spin_radius.setValue(self.spin_dist1.value())
@@ -384,6 +392,37 @@ class FilletSettingsWidget(QWidget):
         self._update_stacked_index()
         self._save_settings()
         self.parametersChanged.emit()
+
+    def set_alt_override(self, alt_pressed: bool):
+        """Temporarily inverts Fillet/Chamfer mode on Alt press/release."""
+        if getattr(self, "_alt_pressed", False) == alt_pressed:
+            return
+        self._alt_pressed = alt_pressed
+        base = getattr(self, "_base_mode", self.MODE_FILLET)
+        if alt_pressed:
+            target_mode = self.MODE_CHAMFER if base == self.MODE_FILLET else self.MODE_FILLET
+        else:
+            target_mode = base
+
+        self._is_updating_alt_override = True
+        try:
+            if target_mode == self.MODE_CHAMFER:
+                self.radio_chamfer.setChecked(True)
+            else:
+                self.radio_fillet.setChecked(True)
+            self._update_stacked_index()
+        finally:
+            self._is_updating_alt_override = False
+        self.parametersChanged.emit()
+
+    def set_ctrl_override(self, ctrl_pressed: bool):
+        """Compatibility alias for set_alt_override."""
+        self.set_alt_override(ctrl_pressed)
+
+    def get_effective_mode(self, alt_pressed: bool = False) -> str:
+        """Returns effective mode taking into account Alt key inversion."""
+        self.set_alt_override(alt_pressed)
+        return self.mode
 
     def _on_link_toggled(self, checked: bool):
         self._update_link_icon()

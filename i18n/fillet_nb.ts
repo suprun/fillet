@@ -363,6 +363,10 @@ Reparasjonsresultatet inneholder flere deler ({0}). Velg hvordan resultatet skal
             <translation>Tolinjers avrunding / avfasing (Slå sammen)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Koble sammen to linjer med avrunding eller avfasing&lt;/b&gt;&lt;br&gt;&lt;br&gt;Hold Alt for å veksle avrunding/avfasing.&lt;br&gt;&lt;br&gt;Hold Shift for like avstander.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Koble sammen to linjer med avrunding eller avfasing og slå sammen objekter</translation>
         </message>
@@ -393,6 +397,10 @@ Reparasjonsresultatet inneholder flere deler ({0}). Velg hvordan resultatet skal
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Avrundings- / avfasingsverktøy</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Lag avrundinger og avfasninger&lt;/b&gt;&lt;br&gt;&lt;br&gt;Hold Alt for å veksle avrunding/avfasing.&lt;br&gt;&lt;br&gt;Hold Shift for like avstander.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -744,11 +752,11 @@ Reparasjonsresultatet inneholder flere deler ({0}). Velg hvordan resultatet skal
         </message>
         <message>
             <source>Не вдалося записати зміни: {error}</source>
-            <translation>Could not write changes: {error}</translation>
+            <translation>Kunne ikke lagre endringer: {error}</translation>
         </message>
         <message>
             <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
-            <translation>This operation is unavailable for geometries with curved segments.</translation>
+            <translation>Denne operasjonen er ikke tilgjengelig for geometrier med buede segmenter.</translation>
         </message>
         <message>
             <source>Операція не підтримує об'єкти з кривими сегментами.</source>
@@ -760,7 +768,7 @@ Reparasjonsresultatet inneholder flere deler ({0}). Velg hvordan resultatet skal
         </message>
         <message>
             <source>Пропущено об'єктів із кривими сегментами: {}.</source>
-            <translation>Features with curved segments skipped: {}.</translation>
+            <translation>Hoppet over objekter med buede segmenter: {}.</translation>
         </message>
         <message>
             <source>Не вдалося додати елементи масиву.</source>
@@ -784,11 +792,23 @@ Reparasjonsresultatet inneholder flere deler ({0}). Velg hvordan resultatet skal
         </message>
         <message>
             <source>Не вдалося змінити геометрію об'єкта.</source>
-            <translation>Could not change feature geometry.</translation>
+            <translation>Kunne ikke endre objektets geometri.</translation>
         </message>
         <message>
             <source>Помилка</source>
-            <translation>Error</translation>
+            <translation>Feil</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Bruk på alle hjørner</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Avstander koblet (d1 = d2), eller hold Shift</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Avstander separate (d1 ≠ d2), eller hold Shift</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

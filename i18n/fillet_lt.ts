@@ -363,6 +363,10 @@ Taisymo rezultate yra kelios dalys ({0}). Pasirinkite, kaip išsaugoti:</transla
             <translation>Dviejų linijų užapvalinimas / nusklembimas (Sujungti)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Sujungti dvi linijas užapvalinimu arba nusklembimu&lt;/b&gt;&lt;br&gt;&lt;br&gt;Laikykite Alt režimui perjungti.&lt;br&gt;&lt;br&gt;Laikykite Shift lygiems atstumams.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Sujunkite dvi linijas užapvalinimu arba nusklembimu ir sujunkite objektus</translation>
         </message>
@@ -393,6 +397,10 @@ Taisymo rezultate yra kelios dalys ({0}). Pasirinkite, kaip išsaugoti:</transla
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Užapvalinimo / nusklembimo įrankis</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Kurti užapvalinimus ir nusklembus&lt;/b&gt;&lt;br&gt;&lt;br&gt;Laikykite Alt režimui perjungti.&lt;br&gt;&lt;br&gt;Laikykite Shift lygiems atstumams.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -744,11 +752,11 @@ Taisymo rezultate yra kelios dalys ({0}). Pasirinkite, kaip išsaugoti:</transla
         </message>
         <message>
             <source>Не вдалося записати зміни: {error}</source>
-            <translation>Could not write changes: {error}</translation>
+            <translation>Nepavyko išsaugoti pakeitimų: {error}</translation>
         </message>
         <message>
             <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
-            <translation>This operation is unavailable for geometries with curved segments.</translation>
+            <translation>Ši operacija negalima geometrijoms su kreivais segmentais.</translation>
         </message>
         <message>
             <source>Операція не підтримує об'єкти з кривими сегментами.</source>
@@ -760,7 +768,7 @@ Taisymo rezultate yra kelios dalys ({0}). Pasirinkite, kaip išsaugoti:</transla
         </message>
         <message>
             <source>Пропущено об'єктів із кривими сегментами: {}.</source>
-            <translation>Features with curved segments skipped: {}.</translation>
+            <translation>Praleisti objektai su kreivais segmentais: {}.</translation>
         </message>
         <message>
             <source>Не вдалося додати елементи масиву.</source>
@@ -784,11 +792,23 @@ Taisymo rezultate yra kelios dalys ({0}). Pasirinkite, kaip išsaugoti:</transla
         </message>
         <message>
             <source>Не вдалося змінити геометрію об'єкта.</source>
-            <translation>Could not change feature geometry.</translation>
+            <translation>Nepavyko pakeisti objekto geometrijos.</translation>
         </message>
         <message>
             <source>Помилка</source>
-            <translation>Error</translation>
+            <translation>Klaida</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Taikyti visiems kampams</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Atstumai susieti (d1 = d2), arba laikykite Shift</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Atstumai atskiri (d1 ≠ d2), arba laikykite Shift</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

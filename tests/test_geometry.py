@@ -350,14 +350,8 @@ class TestGeometryEngine(unittest.TestCase):
             radius=2.0,
             segments_count=8,
         )
-        offset = GeometryEngine.offset_segment(source, 0, 0, 0, 1.0)
-        orthogonalized = GeometryEngine.orthogonalize_geometry(
-            source,
-            base_angle_rad=0.0,
-            tolerance_deg=45.0,
-        )
 
-        for result in (fillet, chamfer, batch, offset, orthogonalized):
+        for result in (fillet, chamfer, batch):
             self.assertIsNotNone(result)
             self.assert_finite_dimensions(result)
 
@@ -374,23 +368,6 @@ class TestGeometryEngine(unittest.TestCase):
         self.assertTrue(intersection.isMeasure())
         self.assert_finite_dimensions(restored_geometry)
 
-        duplicate_source = QgsGeometry(
-            QgsLineString(
-                [
-                    QgsPoint(0, 0, 1, 10),
-                    QgsPoint(5, 0, 2, 20),
-                    QgsPoint(5, 0, 2, 20),
-                    QgsPoint(10, 0, 3, 30),
-                ]
-            )
-        )
-        cleaned, cleaned_count = GeometryEngine.clean_all_topology_errors(
-            duplicate_source,
-            tolerance=1e-8,
-        )
-        self.assertGreater(cleaned_count, 0)
-        self.assert_finite_dimensions(cleaned)
-
     def test_curves_are_preserved_or_rejected_by_policy(self):
         curved = QgsGeometry.fromWkt(
             "COMPOUNDCURVE (CIRCULARSTRING (0 0, 5 5, 10 0), "
@@ -402,65 +379,6 @@ class TestGeometryEngine(unittest.TestCase):
         )
         self.assertTrue(GeometryEngine.has_curved_segments(curved))
         self.assertTrue(GeometryEngine.has_curved_segments(curve_polygon))
-
-        allowed = [
-            GeometryEngine.rotate_geometry(curved, QgsPointXY(0, 0), 30.0),
-            GeometryEngine.mirror_geometry(
-                curved,
-                QgsPointXY(0, -1),
-                QgsPointXY(0, 1),
-            ),
-            GeometryEngine.scale_and_rotate_geometry(
-                curved,
-                QgsPointXY(0, 0),
-                2.0,
-                15.0,
-            ),
-        ]
-        allowed.extend(
-            GeometryEngine.create_polar_array_geometries(
-                curved,
-                QgsPointXY(0, 0),
-                count=3,
-                fill_angle_deg=360.0,
-            )
-        )
-        allowed.extend(
-            GeometryEngine.divide_line_geometries(curved, count=2)
-        )
-        self.assertTrue(allowed)
-        self.assertTrue(
-            all(GeometryEngine.has_curved_segments(result) for result in allowed)
-        )
-        for source in (curve_polygon,):
-            transformed = [
-                GeometryEngine.rotate_geometry(source, QgsPointXY(0, 0), 30.0),
-                GeometryEngine.mirror_geometry(
-                    source,
-                    QgsPointXY(0, -1),
-                    QgsPointXY(0, 1),
-                ),
-                GeometryEngine.scale_and_rotate_geometry(
-                    source,
-                    QgsPointXY(0, 0),
-                    2.0,
-                    15.0,
-                ),
-            ]
-            transformed.extend(
-                GeometryEngine.create_polar_array_geometries(
-                    source,
-                    QgsPointXY(0, 0),
-                    count=3,
-                    fill_angle_deg=360.0,
-                )
-            )
-            self.assertTrue(
-                all(
-                    GeometryEngine.has_curved_segments(result)
-                    for result in transformed
-                )
-            )
 
         self.assertIsNone(
             GeometryEngine.apply_fillet_to_geometry(
@@ -484,16 +402,6 @@ class TestGeometryEngine(unittest.TestCase):
         self.assertIsNone(
             GeometryEngine.batch_apply_geometry(curved, mode="fillet", radius=1.0)
         )
-        self.assertIsNone(GeometryEngine.offset_segment(curved, 0, 0, 0, 1.0))
-        self.assertEqual(
-            GeometryEngine.orthogonalize_geometry(curved, 0.0).asWkt(),
-            curved.asWkt(),
-        )
-        cleaned, count = GeometryEngine.clean_all_topology_errors(curved)
-        self.assertEqual(count, 0)
-        self.assertEqual(cleaned.asWkt(), curved.asWkt())
-        self.assertFalse(GeometryEngine.can_explode_line(curved))
-        self.assertEqual(GeometryEngine.explode_line(curved), [])
 
 
 if __name__ == "__main__":

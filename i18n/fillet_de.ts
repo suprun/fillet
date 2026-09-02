@@ -363,6 +363,10 @@ Das Reparaturergebnis enthält mehrere Teile ({0}). Wählen Sie die Speicheropti
             <translation>Zwei-Linien-Abrundung / Fase (Merge)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Verbinden zweier Linien mit Abrundung oder Fase&lt;/b&gt;&lt;br&gt;&lt;br&gt;Alt halten zum Umschalten von Abrundung/Fase.&lt;br&gt;&lt;br&gt;Umschalt für gleiche Abstände.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Verbinden zweier Linien mit Abrundung oder Fase und Zusammenführen der Objekte</translation>
         </message>
@@ -393,6 +397,10 @@ Das Reparaturergebnis enthält mehrere Teile ({0}). Wählen Sie die Speicheropti
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Fillet / Chamfer Werkzeug</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Erstellen von Abrundungen und Fasen&lt;/b&gt;&lt;br&gt;&lt;br&gt;Alt halten zum Umschalten von Abrundung/Fase.&lt;br&gt;&lt;br&gt;Umschalt für gleiche Abstände.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -744,11 +752,11 @@ Das Reparaturergebnis enthält mehrere Teile ({0}). Wählen Sie die Speicheropti
         </message>
         <message>
             <source>Не вдалося записати зміни: {error}</source>
-            <translation>Could not write changes: {error}</translation>
+            <translation>Änderungen konnten nicht gespeichert werden: {error}</translation>
         </message>
         <message>
             <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
-            <translation>This operation is unavailable for geometries with curved segments.</translation>
+            <translation>Diese Operation ist für Geometrien mit gekrümmten Segmenten nicht verfügbar.</translation>
         </message>
         <message>
             <source>Операція не підтримує об'єкти з кривими сегментами.</source>
@@ -760,7 +768,7 @@ Das Reparaturergebnis enthält mehrere Teile ({0}). Wählen Sie die Speicheropti
         </message>
         <message>
             <source>Пропущено об'єктів із кривими сегментами: {}.</source>
-            <translation>Features with curved segments skipped: {}.</translation>
+            <translation>Objekte mit gekrümmten Segmenten übersprungen: {}.</translation>
         </message>
         <message>
             <source>Не вдалося додати елементи масиву.</source>
@@ -784,11 +792,23 @@ Das Reparaturergebnis enthält mehrere Teile ({0}). Wählen Sie die Speicheropti
         </message>
         <message>
             <source>Не вдалося змінити геометрію об'єкта.</source>
-            <translation>Could not change feature geometry.</translation>
+            <translation>Objektgeometrie konnte nicht geändert werden.</translation>
         </message>
         <message>
             <source>Помилка</source>
-            <translation>Error</translation>
+            <translation>Fehler</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Auf alle Ecken anwenden</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Abstände verknüpft (d1 = d2), oder Umschalt halten</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Abstände getrennt (d1 ≠ d2), oder Umschalt halten</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

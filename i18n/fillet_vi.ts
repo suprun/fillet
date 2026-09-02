@@ -363,6 +363,10 @@ Kết quả sửa chữa chứa nhiều phần ({0}). Chọn cách lưu kết qu
             <translation>Bo tròn / Vát góc hai đường (Hợp nhất)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Tạo bo tròn và vát góc&lt;/b&gt;&lt;br&gt;&lt;br&gt;Giữ Alt để chuyển đổi bo tròn/vát góc.&lt;br&gt;&lt;br&gt;Giữ Shift cho khoảng cách bằng nhau.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Nối hai đường bằng bo tròn hoặc vát góc và hợp nhất đối tượng</translation>
         </message>
@@ -393,6 +397,10 @@ Kết quả sửa chữa chứa nhiều phần ({0}). Chọn cách lưu kết qu
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Công cụ Bo tròn / Vát góc</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Nối hai đường bằng bo tròn hoặc vát góc&lt;/b&gt;&lt;br&gt;&lt;br&gt;Giữ Alt để chuyển đổi bo tròn/vát góc.&lt;br&gt;&lt;br&gt;Giữ Shift cho khoảng cách bằng nhau.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -744,11 +752,11 @@ Kết quả sửa chữa chứa nhiều phần ({0}). Chọn cách lưu kết qu
         </message>
         <message>
             <source>Не вдалося записати зміни: {error}</source>
-            <translation>Could not write changes: {error}</translation>
+            <translation>Không thể lưu các thay đổi: {error}</translation>
         </message>
         <message>
             <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
-            <translation>This operation is unavailable for geometries with curved segments.</translation>
+            <translation>Thao tác này không khả dụng cho các hình học có phân đoạn cong.</translation>
         </message>
         <message>
             <source>Операція не підтримує об'єкти з кривими сегментами.</source>
@@ -760,7 +768,7 @@ Kết quả sửa chữa chứa nhiều phần ({0}). Chọn cách lưu kết qu
         </message>
         <message>
             <source>Пропущено об'єктів із кривими сегментами: {}.</source>
-            <translation>Features with curved segments skipped: {}.</translation>
+            <translation>Đã bỏ qua các đối tượng có phân đoạn cong: {}.</translation>
         </message>
         <message>
             <source>Не вдалося додати елементи масиву.</source>
@@ -784,11 +792,23 @@ Kết quả sửa chữa chứa nhiều phần ({0}). Chọn cách lưu kết qu
         </message>
         <message>
             <source>Не вдалося змінити геометрію об'єкта.</source>
-            <translation>Could not change feature geometry.</translation>
+            <translation>Không thể sửa đổi hình học của đối tượng.</translation>
         </message>
         <message>
             <source>Помилка</source>
-            <translation>Error</translation>
+            <translation>Lỗi</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Áp dụng cho tất cả các góc</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Khoảng cách được liên kết (d1 = d2), hoặc giữ Shift</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Khoảng cách riêng biệt (d1 ≠ d2), hoặc giữ Shift</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

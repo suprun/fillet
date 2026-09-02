@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 from typing import Optional
 
@@ -5,7 +6,6 @@ from qgis.core import QgsCoordinateReferenceSystem, QgsSettings
 from qgis.gui import QgsDoubleSpinBox, QgsMapCanvas, QgsSpinBox
 from qgis.PyQt.QtCore import QCoreApplication, QEvent, QPoint, QRegularExpression, QSize, Qt, QTimer, pyqtSignal
 from qgis.PyQt.QtGui import (
-    QColor,
     QCursor,
     QFont,
     QIcon,
@@ -17,10 +17,10 @@ from qgis.PyQt.QtWidgets import (
     QButtonGroup,
     QCheckBox,
     QFrame,
-    QGraphicsDropShadowEffect,
     QGridLayout,
     QHBoxLayout,
     QLabel,
+    QPushButton,
     QRadioButton,
     QSizePolicy,
     QStackedWidget,
@@ -42,6 +42,7 @@ class FilletCanvasWidget(QFrame):
     modeChanged = pyqtSignal(str)
     commitRequested = pyqtSignal()
     resetRequested = pyqtSignal()
+    applyToSelectedRequested = pyqtSignal()
 
     MODE_FILLET = constants.MODE_FILLET
     MODE_CHAMFER = constants.MODE_CHAMFER
@@ -60,6 +61,9 @@ class FilletCanvasWidget(QFrame):
         self._is_two_line_mode = False
         self._icons_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources", "icons")
         self._last_focused_spin = None
+        self._base_mode = self.MODE_FILLET
+        self._alt_pressed = False
+        self._is_updating_alt_override = False
         self._base_is_linked = True
         self._shift_pressed = False
         self._is_updating_shift_override = False
@@ -265,6 +269,14 @@ class FilletCanvasWidget(QFrame):
 
         main_layout.addWidget(self.stacked_controls)
 
+        # Button for applying fillet/chamfer to all corners of selected features
+        self.btn_apply_selected = QPushButton(self.tr("Застосувати до всіх кутів"), self)
+        self.btn_apply_selected.setIcon(self._get_icon("mActionChamferFilletBatch.svg"))
+        self.btn_apply_selected.setToolTip(self.tr("Застосувати скруглення або фаску до всіх вершин виділених об'єктів"))
+        self.btn_apply_selected.setEnabled(False)
+        self.btn_apply_selected.clicked.connect(self.applyToSelectedRequested.emit)
+        main_layout.addWidget(self.btn_apply_selected)
+
         # Checkbox for two-line merge attribute handling (hidden by default)
         self.chk_always_first = QCheckBox(self.tr("Завжди використовувати атрибути першого об'єкта"), self)
         self.chk_always_first.setToolTip(self.tr("При об'єднанні двох ліній автоматично зберігати атрибути першого об'єкта без показу діалогу QGIS"))
@@ -348,16 +360,17 @@ class FilletCanvasWidget(QFrame):
     def _update_link_icon(self):
         if self.btn_link.isChecked():
             self.btn_link.setIcon(self._get_rotated_icon("mActionLink.svg", 90, 32))
-            self.btn_link.setToolTip(self.tr("Відстані зв'язані (d1 = d2)"))
+            self.btn_link.setToolTip(self.tr("Відстані зв'язані (d1 = d2), або утримуйте Shift"))
         else:
             self.btn_link.setIcon(self._get_rotated_icon("mActionUnlink.svg", 90, 32))
-            self.btn_link.setToolTip(self.tr("Відстані роздільні (d1 ≠ d2)"))
+            self.btn_link.setToolTip(self.tr("Відстані роздільні (d1 ≠ d2), або утримуйте Shift"))
 
     def _load_settings(self):
         self._is_loading = True
         try:
             s = QgsSettings()
             mode = s.value("plugins/fillet/mode", self.MODE_FILLET, type=str)
+            self._base_mode = mode
             if mode == self.MODE_CHAMFER:
                 self.radio_chamfer.setChecked(True)
             else:
@@ -383,10 +396,14 @@ class FilletCanvasWidget(QFrame):
             self._is_loading = False
 
     def _save_settings(self):
-        if getattr(self, "_is_loading", False) or getattr(self, "_is_updating_shift_override", False):
+        if (
+            getattr(self, "_is_loading", False)
+            or getattr(self, "_is_updating_shift_override", False)
+            or getattr(self, "_is_updating_alt_override", False)
+        ):
             return
         s = QgsSettings()
-        s.setValue("plugins/fillet/mode", self.mode)
+        s.setValue("plugins/fillet/mode", getattr(self, "_base_mode", self.mode))
         s.setValue("plugins/fillet/radius", self.spin_radius.value())
         s.setValue("plugins/fillet/lock_radius", self.btn_lock_radius.isChecked())
         s.setValue("plugins/fillet/segments", self.spin_segments.value())
@@ -402,6 +419,10 @@ class FilletCanvasWidget(QFrame):
         is_fillet = mode == self.MODE_FILLET
         is_chamfer = mode == self.MODE_CHAMFER
 
+        if not getattr(self, "_is_loading", False) and not getattr(self, "_is_updating_alt_override", False):
+            self._base_mode = mode
+            self._alt_pressed = False
+
         # Transfer value between primary inputs (Radius <-> Distance 1)
         if not getattr(self, "_is_loading", False):
             if is_fillet:
@@ -415,6 +436,38 @@ class FilletCanvasWidget(QFrame):
         self.modeChanged.emit(mode)
         self.parametersChanged.emit()
         self.focus_primary_input()
+
+    def set_alt_override(self, alt_pressed: bool):
+        """Temporarily inverts Fillet/Chamfer mode on Alt press/release."""
+        if getattr(self, "_alt_pressed", False) == alt_pressed:
+            return
+        self._alt_pressed = alt_pressed
+        base = getattr(self, "_base_mode", self.MODE_FILLET)
+        if alt_pressed:
+            target_mode = self.MODE_CHAMFER if base == self.MODE_FILLET else self.MODE_FILLET
+        else:
+            target_mode = base
+
+        self._is_updating_alt_override = True
+        try:
+            if target_mode == self.MODE_CHAMFER:
+                self.radio_chamfer.setChecked(True)
+            else:
+                self.radio_fillet.setChecked(True)
+            self._update_mode_visibility(target_mode)
+        finally:
+            self._is_updating_alt_override = False
+        self.modeChanged.emit(target_mode)
+        self.parametersChanged.emit()
+
+    def set_ctrl_override(self, ctrl_pressed: bool):
+        """Compatibility alias for set_alt_override."""
+        self.set_alt_override(ctrl_pressed)
+
+    def get_effective_mode(self, alt_pressed: bool = False) -> str:
+        """Returns effective mode taking into account Alt key inversion."""
+        self.set_alt_override(alt_pressed)
+        return self.mode
 
     def _update_mode_visibility(self, mode: str):
         idx = 0 if mode == self.MODE_FILLET else 1
@@ -586,8 +639,11 @@ class FilletCanvasWidget(QFrame):
         elif event.type() == evt_key_press:
             key = event.key()
             key_shift = getattr(Qt.Key, "Key_Shift", getattr(Qt, "Key_Shift", 0x01000020))
+            key_alt = getattr(Qt.Key, "Key_Alt", getattr(Qt, "Key_Alt", 0x01000023))
             if key == key_shift:
                 self.set_shift_override(True)
+            elif key == key_alt:
+                self.set_alt_override(True)
 
             key_tab = getattr(Qt.Key, "Key_Tab", getattr(Qt, "Key_Tab", 0x01000001))
             key_backtab = getattr(Qt.Key, "Key_Backtab", getattr(Qt, "Key_Backtab", 0x01000002))
@@ -618,8 +674,11 @@ class FilletCanvasWidget(QFrame):
         elif event.type() == evt_key_release:
             key = event.key()
             key_shift = getattr(Qt.Key, "Key_Shift", getattr(Qt, "Key_Shift", 0x01000020))
+            key_alt = getattr(Qt.Key, "Key_Alt", getattr(Qt, "Key_Alt", 0x01000023))
             if key == key_shift:
                 self.set_shift_override(False)
+            elif key == key_alt:
+                self.set_alt_override(False)
 
         return super().eventFilter(obj, event)
 
@@ -800,16 +859,22 @@ class FilletCanvasWidget(QFrame):
     def _on_chk_always_first_toggled(self, checked: bool):
         QgsSettings().setValue("plugins/fillet/merge_always_first_feature", checked)
 
+    def set_apply_selected_enabled(self, enabled: bool):
+        """Enables or disables the batch apply button based on layer selection state."""
+        self.btn_apply_selected.setEnabled(enabled)
+
     def set_two_line_mode(self, enabled: bool):
         """Switches the widget between single-vertex mode and two-line join mode."""
         self._is_two_line_mode = enabled
         if enabled:
             self.chk_always_first.show()
             self.lbl_step.show()
+            self.btn_apply_selected.hide()
             self.set_step(1)
         else:
             self.chk_always_first.hide()
             self.lbl_step.hide()
+            self.btn_apply_selected.show()
         self.reposition_to_default()
 
     def set_step(self, step: int):

@@ -363,6 +363,10 @@ Le résultat de la réparation contient plusieurs parties ({0}). Choisissez comm
             <translation>Congé / Chanfrein de deux lignes (Fusion)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Joindre deux lignes avec congé ou chanfrein&lt;/b&gt;&lt;br&gt;&lt;br&gt;Maintenez Alt pour basculer congé/chanfrein.&lt;br&gt;&lt;br&gt;Maintenez Maj pour distances égales.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Joindre deux lignes avec congé ou chanfrein et fusionner les entités</translation>
         </message>
@@ -393,6 +397,10 @@ Le résultat de la réparation contient plusieurs parties ({0}). Choisissez comm
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Outil Fillet / Chamfer</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Créer des congés et des chanfreins&lt;/b&gt;&lt;br&gt;&lt;br&gt;Maintenez Alt pour basculer congé/chanfrein.&lt;br&gt;&lt;br&gt;Maintenez Maj pour distances égales.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -744,11 +752,11 @@ Le résultat de la réparation contient plusieurs parties ({0}). Choisissez comm
         </message>
         <message>
             <source>Не вдалося записати зміни: {error}</source>
-            <translation>Could not write changes: {error}</translation>
+            <translation>Impossible d'enregistrer les modifications : {error}</translation>
         </message>
         <message>
             <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
-            <translation>This operation is unavailable for geometries with curved segments.</translation>
+            <translation>Cette opération n'est pas disponible pour les géométries avec des segments courbes.</translation>
         </message>
         <message>
             <source>Операція не підтримує об'єкти з кривими сегментами.</source>
@@ -760,7 +768,7 @@ Le résultat de la réparation contient plusieurs parties ({0}). Choisissez comm
         </message>
         <message>
             <source>Пропущено об'єктів із кривими сегментами: {}.</source>
-            <translation>Features with curved segments skipped: {}.</translation>
+            <translation>Entités avec segments courbes ignorées : {}.</translation>
         </message>
         <message>
             <source>Не вдалося додати елементи масиву.</source>
@@ -784,11 +792,23 @@ Le résultat de la réparation contient plusieurs parties ({0}). Choisissez comm
         </message>
         <message>
             <source>Не вдалося змінити геометрію об'єкта.</source>
-            <translation>Could not change feature geometry.</translation>
+            <translation>Impossible de modifier la géométrie de l'entité.</translation>
         </message>
         <message>
             <source>Помилка</source>
-            <translation>Error</translation>
+            <translation>Erreur</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Appliquer à tous les coins</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Distances liées (d1 = d2), ou maintenez Maj</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Distances séparées (d1 ≠ d2), ou maintenez Maj</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

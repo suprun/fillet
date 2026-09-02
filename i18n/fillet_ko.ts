@@ -363,6 +363,10 @@
             <translation>2선 필렛 / 챔퍼 (병합)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;필렛 또는 챔퍼로 두 선 연결&lt;/b&gt;&lt;br&gt;&lt;br&gt;Alt를 길게 눌러 필렛/챔퍼 전환.&lt;br&gt;&lt;br&gt;Shift로 동일 거리.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>필렛 또는 챔퍼로 두 선을 연결하고 피처 병합</translation>
         </message>
@@ -393,6 +397,10 @@
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>필렛 / 챔퍼 도구</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;필렛 및 챔퍼 생성&lt;/b&gt;&lt;br&gt;&lt;br&gt;Alt를 길게 눌러 필렛/챔퍼 전환.&lt;br&gt;&lt;br&gt;Shift로 동일 거리.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -744,11 +752,11 @@
         </message>
         <message>
             <source>Не вдалося записати зміни: {error}</source>
-            <translation>Could not write changes: {error}</translation>
+            <translation>변경사항을 커밋하지 못했습니다: {error}</translation>
         </message>
         <message>
             <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
-            <translation>This operation is unavailable for geometries with curved segments.</translation>
+            <translation>이 작업은 곡선 세그먼트가 있는 지오메트리에는 사용할 수 없습니다.</translation>
         </message>
         <message>
             <source>Операція не підтримує об'єкти з кривими сегментами.</source>
@@ -760,7 +768,7 @@
         </message>
         <message>
             <source>Пропущено об'єктів із кривими сегментами: {}.</source>
-            <translation>Features with curved segments skipped: {}.</translation>
+            <translation>곡선 세그먼트가 있는 피처 건너뜀: {}.</translation>
         </message>
         <message>
             <source>Не вдалося додати елементи масиву.</source>
@@ -784,11 +792,23 @@
         </message>
         <message>
             <source>Не вдалося змінити геометрію об'єкта.</source>
-            <translation>Could not change feature geometry.</translation>
+            <translation>피처 지오메트리를 수정하지 못했습니다.</translation>
         </message>
         <message>
             <source>Помилка</source>
-            <translation>Error</translation>
+            <translation>오류</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>모든 모서리에 적용</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>거리 연결됨 (d1 = d2) 또는 Shift 누르기</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>거리 개별 설정 (d1 ≠ d2) 또는 Shift 누르기</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

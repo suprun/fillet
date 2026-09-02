@@ -363,6 +363,10 @@ El resultat de la reparació conté diverses parts ({0}). Trieu com desar el res
             <translation>Arrodoniment / Xamfrà de dues línies (Fusiona)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Uneix dues línies amb arrodoniment o xamfrà&lt;/b&gt;&lt;br&gt;&lt;br&gt;Manteniu premut Alt per commutar arrodoniment/xamfrà.&lt;br&gt;&lt;br&gt;Manteniu premut Shift per a distàncies iguals.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Uneix dues línies amb arrodoniment o xamfrà i fusiona les entitats</translation>
         </message>
@@ -393,6 +397,10 @@ El resultat de la reparació conté diverses parts ({0}). Trieu com desar el res
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Eina d'arrodoniment / xamfrà</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Crea arrodoniments i xamfrans&lt;/b&gt;&lt;br&gt;&lt;br&gt;Manteniu premut Alt per commutar arrodoniment/xamfrà.&lt;br&gt;&lt;br&gt;Manteniu premut Shift per a distàncies iguals.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -744,11 +752,11 @@ El resultat de la reparació conté diverses parts ({0}). Trieu com desar el res
         </message>
         <message>
             <source>Не вдалося записати зміни: {error}</source>
-            <translation>Could not write changes: {error}</translation>
+            <translation>No s'han pogut desar els canvis: {error}</translation>
         </message>
         <message>
             <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
-            <translation>This operation is unavailable for geometries with curved segments.</translation>
+            <translation>Aquesta operació no està disponible per a geometries amb segments corbs.</translation>
         </message>
         <message>
             <source>Операція не підтримує об'єкти з кривими сегментами.</source>
@@ -760,7 +768,7 @@ El resultat de la reparació conté diverses parts ({0}). Trieu com desar el res
         </message>
         <message>
             <source>Пропущено об'єктів із кривими сегментами: {}.</source>
-            <translation>Features with curved segments skipped: {}.</translation>
+            <translation>S'han omès els elements amb segments corbs: {}.</translation>
         </message>
         <message>
             <source>Не вдалося додати елементи масиву.</source>
@@ -784,11 +792,23 @@ El resultat de la reparació conté diverses parts ({0}). Trieu com desar el res
         </message>
         <message>
             <source>Не вдалося змінити геометрію об'єкта.</source>
-            <translation>Could not change feature geometry.</translation>
+            <translation>No s'ha pogut modificar la geometria de l'element.</translation>
         </message>
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Aplica a tots els cantons</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Distàncies enllaçades (d1 = d2), o manteniu Majús</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Distàncies separades (d1 ≠ d2), o manteniu Majús</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

@@ -363,6 +363,10 @@ O resultado da correção contém várias partes ({0}). Escolha como salvar o re
             <translation>Concordância / Chanfro de duas linhas (Mesclar)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Unir duas linhas com concordância ou chanfro&lt;/b&gt;&lt;br&gt;&lt;br&gt;Mantenha Alt para alternar concordância/chanfro.&lt;br&gt;&lt;br&gt;Mantenha Shift para distâncias iguais.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Unir duas linhas com concordância ou chanfro e mesclar feições</translation>
         </message>
@@ -393,6 +397,10 @@ O resultado da correção contém várias partes ({0}). Escolha como salvar o re
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Ferramenta Fillet / Chamfer</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Criar concordâncias e chanfros&lt;/b&gt;&lt;br&gt;&lt;br&gt;Mantenha Alt para alternar concordância/chanfro.&lt;br&gt;&lt;br&gt;Mantenha Shift para distâncias iguais.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -744,11 +752,11 @@ O resultado da correção contém várias partes ({0}). Escolha como salvar o re
         </message>
         <message>
             <source>Не вдалося записати зміни: {error}</source>
-            <translation>Could not write changes: {error}</translation>
+            <translation>Não foi possível salvar as alterações: {error}</translation>
         </message>
         <message>
             <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
-            <translation>This operation is unavailable for geometries with curved segments.</translation>
+            <translation>Esta operação não está disponível para geometrias com segmentos curvos.</translation>
         </message>
         <message>
             <source>Операція не підтримує об'єкти з кривими сегментами.</source>
@@ -760,7 +768,7 @@ O resultado da correção contém várias partes ({0}). Escolha como salvar o re
         </message>
         <message>
             <source>Пропущено об'єктів із кривими сегментами: {}.</source>
-            <translation>Features with curved segments skipped: {}.</translation>
+            <translation>Feições com segmentos curvos ignoradas: {}.</translation>
         </message>
         <message>
             <source>Не вдалося додати елементи масиву.</source>
@@ -784,11 +792,23 @@ O resultado da correção contém várias partes ({0}). Escolha como salvar o re
         </message>
         <message>
             <source>Не вдалося змінити геометрію об'єкта.</source>
-            <translation>Could not change feature geometry.</translation>
+            <translation>Não foi possível modificar a geometria da feição.</translation>
         </message>
         <message>
             <source>Помилка</source>
-            <translation>Error</translation>
+            <translation>Erro</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Aplicar a todos os cantos</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Distâncias vinculadas (d1 = d2), ou mantenha Shift</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Distâncias separadas (d1 ≠ d2), ou mantenha Shift</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

@@ -363,6 +363,10 @@ Korjaustulos sisältää useita osia ({0}). Valitse tallennustapa:</translation>
             <translation>Kahden viivan pyöristys / viiste (Yhdistä)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Yhdistä kaksi viivaa pyöristyksellä tai viisteellä&lt;/b&gt;&lt;br&gt;&lt;br&gt;Pidä Alt painettuna vaihtaaksesi pyöristystä/viistettä.&lt;br&gt;&lt;br&gt;Pidä Shift yhtä suurille etäisyyksille.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Yhdistä kaksi viivaa pyöristyksellä tai viisteellä ja sulauta kohteet</translation>
         </message>
@@ -393,6 +397,10 @@ Korjaustulos sisältää useita osia ({0}). Valitse tallennustapa:</translation>
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Pyöristys / Viiste -työkalu</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Luo pyöristyksiä ja viisteitä&lt;/b&gt;&lt;br&gt;&lt;br&gt;Pidä Alt painettuna vaihtaaksesi pyöristystä/viistettä.&lt;br&gt;&lt;br&gt;Pidä Shift yhtä suurille etäisyyksille.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -744,11 +752,11 @@ Korjaustulos sisältää useita osia ({0}). Valitse tallennustapa:</translation>
         </message>
         <message>
             <source>Не вдалося записати зміни: {error}</source>
-            <translation>Could not write changes: {error}</translation>
+            <translation>Muutosten tallentaminen epäonnistui: {error}</translation>
         </message>
         <message>
             <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
-            <translation>This operation is unavailable for geometries with curved segments.</translation>
+            <translation>Tämä toiminto ei ole käytettävissä geometrioille, joissa on kaarevia segmenttejä.</translation>
         </message>
         <message>
             <source>Операція не підтримує об'єкти з кривими сегментами.</source>
@@ -760,7 +768,7 @@ Korjaustulos sisältää useita osia ({0}). Valitse tallennustapa:</translation>
         </message>
         <message>
             <source>Пропущено об'єктів із кривими сегментами: {}.</source>
-            <translation>Features with curved segments skipped: {}.</translation>
+            <translation>Ohitettu kohteet, joissa on kaarevia segmenttejä: {}.</translation>
         </message>
         <message>
             <source>Не вдалося додати елементи масиву.</source>
@@ -784,11 +792,23 @@ Korjaustulos sisältää useita osia ({0}). Valitse tallennustapa:</translation>
         </message>
         <message>
             <source>Не вдалося змінити геометрію об'єкта.</source>
-            <translation>Could not change feature geometry.</translation>
+            <translation>Kohteen geometrian muokkaaminen epäonnistui.</translation>
         </message>
         <message>
             <source>Помилка</source>
-            <translation>Error</translation>
+            <translation>Virhe</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Käytä kaikkiin kulmiin</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Etäisyydet linkitetty (d1 = d2), tai pidä Shift painettuna</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Erilliset etäisyydet (d1 ≠ d2), tai pidä Shift painettuna</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

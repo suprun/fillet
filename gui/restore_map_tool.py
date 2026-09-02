@@ -262,13 +262,13 @@ class RestoreMapTool(QgsMapToolEdit):
     def _show_write_error(self, error: Exception):
         self._show_message(
             self.tr("Не вдалося записати зміни: {error}").format(error=error),
-            Qgis.Critical,
+            Qgis.MessageLevel.Critical,
         )
 
     def _show_curved_geometry_warning(self):
         self._show_message(
             self.tr("Ця операція недоступна для геометрій із кривими сегментами."),
-            Qgis.Warning,
+            Qgis.MessageLevel.Warning,
         )
 
     def _show_message(self, message: str, level):

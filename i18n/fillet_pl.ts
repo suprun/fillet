@@ -363,6 +363,10 @@ Wynik naprawy zawiera wiele części ({0}). Wybierz sposób zapisu:</translation
             <translation>Zaokrąglenie / Fazowanie dwóch linii (Połącz)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Połącz dwie linie zaokrągleniem lub ścięciem&lt;/b&gt;&lt;br&gt;&lt;br&gt;Przytrzymaj Alt, aby przełączyć zaokrąglenie/ścięcie.&lt;br&gt;&lt;br&gt;Przytrzymaj Shift dla równych odległości.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Połącz dwie linie zaokrągleniem lub fazowaniem i scal obiekty</translation>
         </message>
@@ -393,6 +397,10 @@ Wynik naprawy zawiera wiele części ({0}). Wybierz sposób zapisu:</translation
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Narzędzie Fillet / Chamfer</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Tworzenie zaokrągleń i ścięć&lt;/b&gt;&lt;br&gt;&lt;br&gt;Przytrzymaj Alt, aby przełączyć zaokrąglenie/ścięcie.&lt;br&gt;&lt;br&gt;Przytrzymaj Shift dla równych odległości.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -744,11 +752,11 @@ Wynik naprawy zawiera wiele części ({0}). Wybierz sposób zapisu:</translation
         </message>
         <message>
             <source>Не вдалося записати зміни: {error}</source>
-            <translation>Could not write changes: {error}</translation>
+            <translation>Nie udało się zapisać zmian: {error}</translation>
         </message>
         <message>
             <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
-            <translation>This operation is unavailable for geometries with curved segments.</translation>
+            <translation>Ta operacja nie jest dostępna dla geometrii z zakrzywionymi segmentami.</translation>
         </message>
         <message>
             <source>Операція не підтримує об'єкти з кривими сегментами.</source>
@@ -760,7 +768,7 @@ Wynik naprawy zawiera wiele części ({0}). Wybierz sposób zapisu:</translation
         </message>
         <message>
             <source>Пропущено об'єктів із кривими сегментами: {}.</source>
-            <translation>Features with curved segments skipped: {}.</translation>
+            <translation>Pominięto obiekty z zakrzywionymi segmentami: {}.</translation>
         </message>
         <message>
             <source>Не вдалося додати елементи масиву.</source>
@@ -784,11 +792,23 @@ Wynik naprawy zawiera wiele części ({0}). Wybierz sposób zapisu:</translation
         </message>
         <message>
             <source>Не вдалося змінити геометрію об'єкта.</source>
-            <translation>Could not change feature geometry.</translation>
+            <translation>Nie udało się zmienić geometrii obiektu.</translation>
         </message>
         <message>
             <source>Помилка</source>
-            <translation>Error</translation>
+            <translation>Błąd</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Zastosuj do wszystkich narożników</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Odległości powiązane (d1 = d2), lub przytrzymaj Shift</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Odległości rozdzielne (d1 ≠ d2), lub przytrzymaj Shift</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

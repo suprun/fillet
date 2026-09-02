@@ -363,6 +363,10 @@ Konponketaren emaitzak hainbat zati ({0}) ditu. Aukeratu gordetzeko modua:</tran
             <translation>Bi lerroko biribiltzea / xaflaketa (Batu)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Lotu bi lerro biribiltze edo xaflaketarekin&lt;/b&gt;&lt;br&gt;&lt;br&gt;Eutsi Alt biribiltzea/xaflaketa txandakatzeko.&lt;br&gt;&lt;br&gt;Eutsi Shift distantzia berdinetarako.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Lotu bi lerro biribiltze edo xaflaketarekin eta batu elementuak</translation>
         </message>
@@ -393,6 +397,10 @@ Konponketaren emaitzak hainbat zati ({0}) ditu. Aukeratu gordetzeko modua:</tran
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Biribiltze / xaflaketa tresna</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Sortu biribiltzeak eta xaflaketak&lt;/b&gt;&lt;br&gt;&lt;br&gt;Eutsi Alt biribiltzea/xaflaketa txandakatzeko.&lt;br&gt;&lt;br&gt;Eutsi Shift distantzia berdinetarako.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -744,11 +752,11 @@ Konponketaren emaitzak hainbat zati ({0}) ditu. Aukeratu gordetzeko modua:</tran
         </message>
         <message>
             <source>Не вдалося записати зміни: {error}</source>
-            <translation>Could not write changes: {error}</translation>
+            <translation>Ezin izan dira aldaketak gorde: {error}</translation>
         </message>
         <message>
             <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
-            <translation>This operation is unavailable for geometries with curved segments.</translation>
+            <translation>Eragiketa hau ez dago erabilgarri segmentu kurbatuak dituzten geometrietarako.</translation>
         </message>
         <message>
             <source>Операція не підтримує об'єкти з кривими сегментами.</source>
@@ -760,7 +768,7 @@ Konponketaren emaitzak hainbat zati ({0}) ditu. Aukeratu gordetzeko modua:</tran
         </message>
         <message>
             <source>Пропущено об'єктів із кривими сегментами: {}.</source>
-            <translation>Features with curved segments skipped: {}.</translation>
+            <translation>Segmentu kurbatuak dituzten entitateak saltatu dira: {}.</translation>
         </message>
         <message>
             <source>Не вдалося додати елементи масиву.</source>
@@ -784,11 +792,23 @@ Konponketaren emaitzak hainbat zati ({0}) ditu. Aukeratu gordetzeko modua:</tran
         </message>
         <message>
             <source>Не вдалося змінити геометрію об'єкта.</source>
-            <translation>Could not change feature geometry.</translation>
+            <translation>Ezin izan da elementuaren geometria aldatu.</translation>
         </message>
         <message>
             <source>Помилка</source>
-            <translation>Error</translation>
+            <translation>Errorea</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Aplikatu izkina guztiei</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Distantzia lotuak (d1 = d2), edo eutsi Shift</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Distantzia bananduak (d1 ≠ d2), edo eutsi Shift</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

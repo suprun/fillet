@@ -363,6 +363,10 @@
             <translation>दो-रेखा फिलेट / चैम्फर (मर्ज)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;फिलेट या चैम्फर के साथ दो रेखाओं को जोड़ें&lt;/b&gt;&lt;br&gt;&lt;br&gt;फिलेट/चैम्फर स्विच करने के लिए Alt दबाए रखें।&lt;br&gt;&lt;br&gt;समान दूरी के लिए Shift।</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>फिलेट या चैम्फर के साथ दो रेखाओं को जोड़ें और सुविधाओं को मर्ज करें</translation>
         </message>
@@ -393,6 +397,10 @@
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>फिलेट / चैम्फर टूल</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;फिलेट और चैम्फर बनाएं&lt;/b&gt;&lt;br&gt;&lt;br&gt;फिलेट/चैम्फर स्विच करने के लिए Alt दबाए रखें।&lt;br&gt;&lt;br&gt;समान दूरी के लिए Shift।</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -744,11 +752,11 @@
         </message>
         <message>
             <source>Не вдалося записати зміни: {error}</source>
-            <translation>Could not write changes: {error}</translation>
+            <translation>परिवर्तन सहेजने में विफल: {error}</translation>
         </message>
         <message>
             <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
-            <translation>This operation is unavailable for geometries with curved segments.</translation>
+            <translation>यह ऑपरेशन घुमावदार खंडों वाली ज्यामिति के लिए उपलब्ध नहीं है।</translation>
         </message>
         <message>
             <source>Операція не підтримує об'єкти з кривими сегментами.</source>
@@ -760,7 +768,7 @@
         </message>
         <message>
             <source>Пропущено об'єктів із кривими сегментами: {}.</source>
-            <translation>Features with curved segments skipped: {}.</translation>
+            <translation>घुमावदार खंडों वाले फ़ीचर्स को छोड़ दिया गया: {}. </translation>
         </message>
         <message>
             <source>Не вдалося додати елементи масиву.</source>
@@ -784,11 +792,23 @@
         </message>
         <message>
             <source>Не вдалося змінити геометрію об'єкта.</source>
-            <translation>Could not change feature geometry.</translation>
+            <translation>फ़ीचर ज्यामिति को संशोधित करने में विफल।</translation>
         </message>
         <message>
             <source>Помилка</source>
-            <translation>Error</translation>
+            <translation>त्रुटि</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>सभी कोनों पर लागू करें</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>दूरियां जुड़ी हुई (d1 = d2), या Shift दबाकर रखें</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>अलग-अलग दूरियां (d1 ≠ d2), या Shift दबाकर रखें</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

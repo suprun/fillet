@@ -363,6 +363,10 @@ O resultado da reparación contén varias partes ({0}). Escolla como gardar o re
             <translation>Arredondamento / Chafrán de dúas liñas (Combinar)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Unir dúas liñas con arredondamento ou chafrán&lt;/b&gt;&lt;br&gt;&lt;br&gt;Manteña premido Alt para alternar arredondamento/chafrán.&lt;br&gt;&lt;br&gt;Manteña premido Shift para distancias iguais.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Unir dúas liñas con arredondamento ou chafrán e combinar elementos</translation>
         </message>
@@ -393,6 +397,10 @@ O resultado da reparación contén varias partes ({0}). Escolla como gardar o re
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Ferramenta de arredondamento / chafrán</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Crear arredondamentos e chafráns&lt;/b&gt;&lt;br&gt;&lt;br&gt;Manteña premido Alt para alternar arredondamento/chafrán.&lt;br&gt;&lt;br&gt;Manteña premido Shift para distancias iguais.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -744,11 +752,11 @@ O resultado da reparación contén varias partes ({0}). Escolla como gardar o re
         </message>
         <message>
             <source>Не вдалося записати зміни: {error}</source>
-            <translation>Could not write changes: {error}</translation>
+            <translation>Non foi posíbel gardar os cambios: {error}</translation>
         </message>
         <message>
             <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
-            <translation>This operation is unavailable for geometries with curved segments.</translation>
+            <translation>Esta operación non está dispoñíbel para xeometrías con segmentos curvos.</translation>
         </message>
         <message>
             <source>Операція не підтримує об'єкти з кривими сегментами.</source>
@@ -760,7 +768,7 @@ O resultado da reparación contén varias partes ({0}). Escolla como gardar o re
         </message>
         <message>
             <source>Пропущено об'єктів із кривими сегментами: {}.</source>
-            <translation>Features with curved segments skipped: {}.</translation>
+            <translation>Entidades con segmentos curvos omitidas: {}.</translation>
         </message>
         <message>
             <source>Не вдалося додати елементи масиву.</source>
@@ -784,11 +792,23 @@ O resultado da reparación contén varias partes ({0}). Escolla como gardar o re
         </message>
         <message>
             <source>Не вдалося змінити геометрію об'єкта.</source>
-            <translation>Could not change feature geometry.</translation>
+            <translation>Non foi posíbel modificar a xeometría da entidade.</translation>
         </message>
         <message>
             <source>Помилка</source>
-            <translation>Error</translation>
+            <translation>Erro</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Aplicar a todas as esquinas</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Distancias vinculadas (d1 = d2), ou manteña Maiús</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Distancias separadas (d1 ≠ d2), ou manteña Maiús</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

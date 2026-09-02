@@ -17,12 +17,6 @@ app.initQgis()
 
 from gui.canvas_widget import FilletCanvasWidget
 from gui.settings_widget import FilletSettingsWidget
-from gui.align_feature_canvas_widget import AlignFeatureCanvasWidget, AlignReferenceMode
-from gui.array_along_path_canvas_widget import (
-    ArrayAlongPathCanvasWidget,
-    PathDistributionMode,
-    PathRangeMode,
-)
 
 
 class TestSettingsPersistence(unittest.TestCase):
@@ -36,46 +30,10 @@ class TestSettingsPersistence(unittest.TestCase):
 
     def setUp(self):
         self.settings = QgsSettings()
-        # Clean settings prefix
         self.settings.remove("plugins/fillet")
-        self.settings.remove("FilletPlugin/AlignReferenceMode")
-        self.settings.remove("FilletPlugin/PathArrayDistribution")
-        self.settings.remove("FilletPlugin/PathArrayRange")
-        self.settings.remove("FilletPlugin/PathArrayCount")
-        self.settings.remove("FilletPlugin/PathArraySpacing")
-        self.settings.remove("FilletPlugin/PathArrayOffset")
-        self.settings.remove("FilletPlugin/PathArrayIncludeStart")
 
     def tearDown(self):
         self.settings.remove("plugins/fillet")
-        self.settings.remove("FilletPlugin/AlignReferenceMode")
-        self.settings.remove("FilletPlugin/PathArrayDistribution")
-        self.settings.remove("FilletPlugin/PathArrayRange")
-        self.settings.remove("FilletPlugin/PathArrayCount")
-        self.settings.remove("FilletPlugin/PathArraySpacing")
-        self.settings.remove("FilletPlugin/PathArrayOffset")
-        self.settings.remove("FilletPlugin/PathArrayIncludeStart")
-
-    def test_align_and_path_array_settings_persistence(self):
-        align = AlignFeatureCanvasWidget(self.canvas)
-        align.set_reference_mode(AlignReferenceMode.Edges)
-        second_align = AlignFeatureCanvasWidget(self.canvas)
-        self.assertEqual(second_align.reference_mode(), AlignReferenceMode.Edges)
-
-        path = ArrayAlongPathCanvasWidget(self.canvas)
-        path.radio_spacing.setChecked(True)
-        path.radio_subrange.setChecked(True)
-        path.spin_count.setValue(9)
-        path.spin_spacing.setValue(12.5)
-        path.spin_offset.setValue(-3.25)
-        path.chk_include_start.setChecked(False)
-        restored = ArrayAlongPathCanvasWidget(self.canvas)
-        self.assertEqual(restored.distribution_mode(), PathDistributionMode.Spacing)
-        self.assertEqual(restored.range_mode(), PathRangeMode.Subrange)
-        self.assertEqual(restored.count_value(), 9)
-        self.assertAlmostEqual(restored.spacing_value(), 12.5)
-        self.assertAlmostEqual(restored.offset_value(), -3.25)
-        self.assertFalse(restored.include_start())
 
     def test_canvas_widget_persistence(self):
         # 1. Create first widget and change values
@@ -187,7 +145,6 @@ class TestSettingsPersistence(unittest.TestCase):
         sw.radio_fillet.setChecked(True)
         self.assertAlmostEqual(sw.spin_radius.value(), 45.0, places=2)
 
-
     def test_crs_adaptation(self):
         # Geographic CRS (degrees)
         geo_crs = QgsCoordinateReferenceSystem("EPSG:4326")
@@ -223,8 +180,13 @@ class TestSettingsPersistence(unittest.TestCase):
         self.assertIsNotNone(val_double)
         # Check validation states
         res, _, _ = val_double.validate("12.34", 0)
-        self.assertIn(res, (QValidator.State.Acceptable if hasattr(QValidator, "State") else QValidator.Acceptable,
-                            QValidator.State.Intermediate if hasattr(QValidator, "State") else QValidator.Intermediate))
+        self.assertIn(
+            res,
+            (
+                QValidator.State.Acceptable if hasattr(QValidator, "State") else QValidator.Acceptable,
+                QValidator.State.Intermediate if hasattr(QValidator, "State") else QValidator.Intermediate,
+            ),
+        )
         res, _, _ = val_double.validate("abc", 0)
         self.assertEqual(res, QValidator.State.Invalid if hasattr(QValidator, "State") else QValidator.Invalid)
 
@@ -232,16 +194,41 @@ class TestSettingsPersistence(unittest.TestCase):
         val_int = cw.spin_segments.lineEdit().validator()
         self.assertIsNotNone(val_int)
         res, _, _ = val_int.validate("16", 0)
-        self.assertIn(res, (QValidator.State.Acceptable if hasattr(QValidator, "State") else QValidator.Acceptable,
-                            QValidator.State.Intermediate if hasattr(QValidator, "State") else QValidator.Intermediate))
+        self.assertIn(
+            res,
+            (
+                QValidator.State.Acceptable if hasattr(QValidator, "State") else QValidator.Acceptable,
+                QValidator.State.Intermediate if hasattr(QValidator, "State") else QValidator.Intermediate,
+            ),
+        )
         res, _, _ = val_int.validate("12.5", 0)
         self.assertEqual(res, QValidator.State.Invalid if hasattr(QValidator, "State") else QValidator.Invalid)
 
         # 3. Test key filtering on canvas widget
-        key_a = QKeyEvent(getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", None)), Qt.Key.Key_A if hasattr(Qt, "Key") else Qt.Key_A, Qt.KeyboardModifier.NoModifier if hasattr(Qt, "KeyboardModifier") else Qt.NoModifier, "a")
-        key_5 = QKeyEvent(getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", None)), Qt.Key.Key_5 if hasattr(Qt, "Key") else Qt.Key_5, Qt.KeyboardModifier.NoModifier if hasattr(Qt, "KeyboardModifier") else Qt.NoModifier, "5")
-        key_dot = QKeyEvent(getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", None)), Qt.Key.Key_Period if hasattr(Qt, "Key") else Qt.Key_Period, Qt.KeyboardModifier.NoModifier if hasattr(Qt, "KeyboardModifier") else Qt.NoModifier, ".")
-        key_comma = QKeyEvent(getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", None)), Qt.Key.Key_Comma if hasattr(Qt, "Key") else Qt.Key_Comma, Qt.KeyboardModifier.NoModifier if hasattr(Qt, "KeyboardModifier") else Qt.NoModifier, ",")
+        key_a = QKeyEvent(
+            getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", None)),
+            Qt.Key.Key_A if hasattr(Qt, "Key") else Qt.Key_A,
+            Qt.KeyboardModifier.NoModifier if hasattr(Qt, "KeyboardModifier") else Qt.NoModifier,
+            "a",
+        )
+        key_5 = QKeyEvent(
+            getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", None)),
+            Qt.Key.Key_5 if hasattr(Qt, "Key") else Qt.Key_5,
+            Qt.KeyboardModifier.NoModifier if hasattr(Qt, "KeyboardModifier") else Qt.NoModifier,
+            "5",
+        )
+        key_dot = QKeyEvent(
+            getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", None)),
+            Qt.Key.Key_Period if hasattr(Qt, "Key") else Qt.Key_Period,
+            Qt.KeyboardModifier.NoModifier if hasattr(Qt, "KeyboardModifier") else Qt.NoModifier,
+            ".",
+        )
+        key_comma = QKeyEvent(
+            getattr(QEvent.Type, "KeyPress", getattr(QEvent, "KeyPress", None)),
+            Qt.Key.Key_Comma if hasattr(Qt, "Key") else Qt.Key_Comma,
+            Qt.KeyboardModifier.NoModifier if hasattr(Qt, "KeyboardModifier") else Qt.NoModifier,
+            ",",
+        )
 
         # Letters must be blocked (returns True)
         self.assertTrue(cw._handle_spin_key_press(cw.spin_radius, key_a))
@@ -260,6 +247,89 @@ class TestSettingsPersistence(unittest.TestCase):
         cw.spin_radius.lineEdit().selectAll()
         self.assertTrue(cw._handle_spin_key_press(cw.spin_radius, key_comma))
 
+    def test_alt_mode_override(self):
+        """Tests temporary mode inversion on Alt hold and release."""
+        # 1. Canvas Widget
+        cw = FilletCanvasWidget(self.canvas)
+        cw.radio_fillet.setChecked(True)
+        cw._save_settings()
+
+        self.assertEqual(cw.mode, FilletCanvasWidget.MODE_FILLET)
+        self.assertTrue(cw.radio_fillet.isChecked())
+        self.assertFalse(cw.radio_chamfer.isChecked())
+
+        # Press Alt -> Chamfer
+        cw.set_alt_override(True)
+        self.assertEqual(cw.mode, FilletCanvasWidget.MODE_CHAMFER)
+        self.assertFalse(cw.radio_fillet.isChecked())
+        self.assertTrue(cw.radio_chamfer.isChecked())
+
+        # Saving while Alt is held must preserve base MODE_FILLET
+        cw._save_settings()
+        s = QgsSettings()
+        self.assertEqual(s.value("plugins/fillet/mode", type=str), FilletCanvasWidget.MODE_FILLET)
+
+        # Release Alt -> Fillet restored
+        cw.set_alt_override(False)
+        self.assertEqual(cw.mode, FilletCanvasWidget.MODE_FILLET)
+        self.assertTrue(cw.radio_fillet.isChecked())
+        self.assertFalse(cw.radio_chamfer.isChecked())
+
+        # Switch base to Chamfer
+        cw.radio_chamfer.setChecked(True)
+        cw._save_settings()
+        self.assertEqual(cw.mode, FilletCanvasWidget.MODE_CHAMFER)
+
+        # Press Alt -> Fillet
+        cw.set_alt_override(True)
+        self.assertEqual(cw.mode, FilletCanvasWidget.MODE_FILLET)
+        self.assertTrue(cw.radio_fillet.isChecked())
+        self.assertFalse(cw.radio_chamfer.isChecked())
+
+        # Release Alt -> Chamfer restored
+        cw.set_alt_override(False)
+        self.assertEqual(cw.mode, FilletCanvasWidget.MODE_CHAMFER)
+        self.assertTrue(cw.radio_chamfer.isChecked())
+
+        # 2. Settings Widget
+        sw = FilletSettingsWidget()
+        sw.radio_fillet.setChecked(True)
+        sw._save_settings()
+
+        self.assertEqual(sw.mode, FilletSettingsWidget.MODE_FILLET)
+        sw.set_alt_override(True)
+        self.assertEqual(sw.mode, FilletSettingsWidget.MODE_CHAMFER)
+        self.assertTrue(sw.radio_chamfer.isChecked())
+
+        sw.set_alt_override(False)
+        self.assertEqual(sw.mode, FilletSettingsWidget.MODE_FILLET)
+        self.assertTrue(sw.radio_fillet.isChecked())
+
+    def test_shift_override_persistence_and_sync(self):
+        """Tests temporary link state inversion on Shift hold and release."""
+        cw = FilletCanvasWidget(self.canvas)
+        cw.mode = FilletCanvasWidget.MODE_CHAMFER
+        cw.btn_link.setChecked(False)
+        cw._save_settings()
+
+        self.assertFalse(cw.is_linked)
+        self.assertFalse(cw.btn_link.isChecked())
+
+        # Press Shift -> Links distances
+        self.assertTrue(cw.get_effective_is_linked(True))
+        self.assertTrue(cw.btn_link.isChecked())
+
+        # Saving while Shift is held must preserve unlinked base state
+        cw._save_settings()
+        s = QgsSettings()
+        self.assertFalse(s.value("plugins/fillet/equal_dist", type=bool))
+
+        # Release Shift -> Restores unlinked base state
+        self.assertFalse(cw.get_effective_is_linked(False))
+        self.assertFalse(cw.btn_link.isChecked())
+
+
+
 
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(TestSettingsPersistence)
@@ -267,4 +337,3 @@ if __name__ == "__main__":
     result = runner.run(suite)
     app.exitQgis()
     sys.exit(0 if result.wasSuccessful() else 1)
-

@@ -363,6 +363,10 @@
             <translation>ลบมุมมน / ลบมุมเหลี่ยม 2 เส้น (รวม)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;สร้างมุมมนและมุมเหลี่ยม&lt;/b&gt;&lt;br&gt;&lt;br&gt;กด Alt ค้างไว้เพื่อสลับมุมมน/มุมเหลี่ยม&lt;br&gt;&lt;br&gt;กด Shift สำหรับระยะทางที่เท่ากัน</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>เชื่อมต่อ 2 เส้นด้วยการลบมุมมนหรือเหลี่ยมและรวมฟีเจอร์</translation>
         </message>
@@ -393,6 +397,10 @@
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>เครื่องมือลบมุมมน / ลบมุมเหลี่ยม</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;สร้างมุมมนและมุมเหลี่ยม&lt;/b&gt;&lt;br&gt;&lt;br&gt;กด Alt ค้างไว้เพื่อสลับมุมมน/มุมเหลี่ยม&lt;br&gt;&lt;br&gt;กด Shift สำหรับระยะทางที่เท่ากัน</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -744,11 +752,11 @@
         </message>
         <message>
             <source>Не вдалося записати зміни: {error}</source>
-            <translation>Could not write changes: {error}</translation>
+            <translation>ไม่สามารถบันทึกการเปลี่ยนแปลง: {error}</translation>
         </message>
         <message>
             <source>Ця операція недоступна для геометрій із кривими сегментами.</source>
-            <translation>This operation is unavailable for geometries with curved segments.</translation>
+            <translation>การดำเนินการนี้ไม่พร้อมใช้งานสำหรับรูปทรงเรขาคณิตที่มีส่วนโค้ง</translation>
         </message>
         <message>
             <source>Операція не підтримує об'єкти з кривими сегментами.</source>
@@ -760,7 +768,7 @@
         </message>
         <message>
             <source>Пропущено об'єктів із кривими сегментами: {}.</source>
-            <translation>Features with curved segments skipped: {}.</translation>
+            <translation>ข้ามฟีเจอร์ที่มีส่วนโค้ง: {}</translation>
         </message>
         <message>
             <source>Не вдалося додати елементи масиву.</source>
@@ -784,11 +792,23 @@
         </message>
         <message>
             <source>Не вдалося змінити геометрію об'єкта.</source>
-            <translation>Could not change feature geometry.</translation>
+            <translation>ไม่สามารถแก้ไขเรขาคณิตของฟีเจอร์ได้</translation>
         </message>
         <message>
             <source>Помилка</source>
-            <translation>Error</translation>
+            <translation>ข้อผิดพลาด</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>นำไปใช้กับทุกมุม</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>เชื่อมโยงระยะทาง (d1 = d2) หรือกด Shift ค้างไว้</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>แยกการตั้งค่าระยะทาง (d1 ≠ d2) หรือกด Shift ค้างไว้</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

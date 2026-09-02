@@ -16,8 +16,7 @@ from qgis.PyQt.QtCore import QCoreApplication, QTranslator
 app = QgsApplication([], False)
 app.initQgis()
 
-from scripts.compile_translations import LANGUAGES, STRINGS
-from scripts.research_tools_translations import RESEARCH_STRINGS
+from scripts.compile_translations import LANGUAGES
 
 
 class TestTranslations(unittest.TestCase):
@@ -33,51 +32,6 @@ class TestTranslations(unittest.TestCase):
             translator = QTranslator()
             loaded = translator.load(qm_path)
             self.assertTrue(loaded, f"Failed to load {qm_path}")
-
-    def test_research_tool_strings_are_present_in_all_catalogs(self):
-        """Every new action, HUD, and message string is emitted to all 40 TS files."""
-        import xml.etree.ElementTree as ET
-
-        self.assertTrue(set(RESEARCH_STRINGS).issubset(STRINGS["FilletPlugin"]))
-        required = set(RESEARCH_STRINGS)
-        for lang in LANGUAGES:
-            ts_path = os.path.join(self.i18n_dir, f"fillet_{lang}.ts")
-            root = ET.parse(ts_path).getroot()
-            sources = {
-                source.text
-                for source in root.findall("./context/message/source")
-                if source.text
-            }
-            self.assertTrue(
-                required.issubset(sources),
-                f"Missing research-tool translations in {lang}",
-            )
-
-    def test_research_tool_english_resolution(self):
-        translator = QTranslator()
-        self.assertTrue(translator.load(os.path.join(self.i18n_dir, "fillet_en.qm")))
-        QCoreApplication.installTranslator(translator)
-        try:
-            self.assertEqual(
-                QCoreApplication.translate(
-                    "FilletPlugin",
-                    "CAD Вирівнювання об'єктів (Align Feature)",
-                ),
-                "CAD Align Feature",
-            )
-            self.assertEqual(
-                QCoreApplication.translate("FilletPlugin", "Весь шлях"),
-                "Whole path",
-            )
-            self.assertEqual(
-                QCoreApplication.translate(
-                    "FilletPlugin",
-                    "M/ZM and curved polygon geometries are not supported",
-                ),
-                "M/ZM and curved polygon geometries are not supported",
-            )
-        finally:
-            QCoreApplication.removeTranslator(translator)
 
     def test_translation_resolution(self):
         # Test German
@@ -102,91 +56,89 @@ class TestTranslations(unittest.TestCase):
 
         self.assertEqual(
             QCoreApplication.translate("FilletPlugin", "Відновлення кутів (Unfillet / Unchamfer)"),
-            "Corner Restoration (Unfillet / Unchamfer)"
+            "Corner Restoration (Unfillet / Unchamfer)",
         )
         self.assertEqual(
             QCoreApplication.translate("FilletPlugin", "1. Вкажіть перше ребро кута"),
-            "1. Specify first corner edge"
+            "1. Specify first corner edge",
         )
         self.assertEqual(
             QCoreApplication.translate("FilletPlugin", "2. Вкажіть суміжне друге ребро"),
-            "2. Specify adjacent second edge"
+            "2. Specify adjacent second edge",
         )
 
         # Test Dock Panel translations in English
         self.assertEqual(
             QCoreApplication.translate("FilletPlugin", "Параметри Fillet / Chamfer"),
-            "Fillet / Chamfer Settings"
+            "Fillet / Chamfer Settings",
         )
         self.assertEqual(
             QCoreApplication.translate("FilletPlugin", "Режим операції"),
-            "Operation Mode"
+            "Operation Mode",
         )
         self.assertEqual(
             QCoreApplication.translate("FilletPlugin", "Радіус (R):"),
-            "Radius (R):"
+            "Radius (R):",
         )
         self.assertEqual(
             QCoreApplication.translate("FilletPlugin", "Кількість сегментів дуги:"),
-            "Arc segments count:"
+            "Arc segments count:",
         )
         self.assertEqual(
             QCoreApplication.translate("FilletPlugin", "Параметри фаски"),
-            "Chamfer Parameters"
+            "Chamfer Parameters",
         )
         self.assertEqual(
             QCoreApplication.translate("FilletPlugin", "Відстань 1 (d1):"),
-            "Distance 1 (d1):"
+            "Distance 1 (d1):",
         )
         self.assertEqual(
             QCoreApplication.translate("FilletPlugin", "Відстань 2 (d2):"),
-            "Distance 2 (d2):"
+            "Distance 2 (d2):",
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Відстані зв'язані (d1 = d2), або утримуйте Shift"),
+            "Distances linked (d1 = d2), or hold Shift",
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Відстані роздільні (d1 ≠ d2), або утримуйте Shift"),
+            "Distances separate (d1 ≠ d2), or hold Shift",
         )
         self.assertEqual(
             QCoreApplication.translate("FilletPlugin", "Застосувати до виділених об'єктів"),
-            "Apply to Selected Features"
+            "Apply to Selected Features",
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Застосувати до всіх кутів"),
+            "Apply to all corners",
         )
         self.assertEqual(
             QCoreApplication.translate("FilletPlugin", "Застосувати скруглення або фаску до всіх вершин виділених об'єктів"),
-            "Apply fillet or chamfer to all vertices of selected features"
-        )
-        self.assertEqual(
-            QCoreApplication.translate("FilletPlugin", "Для пакетної обробки шар має бути у режимі редагування та містити виділені об'єкти"),
-            "For batch processing, layer must be editable and contain selected features"
+            "Apply fillet or chamfer to all vertices of selected features",
         )
 
-        self.assertEqual(
-            QCoreApplication.translate("FilletPlugin", "Скруглення / фаска двох ліній (Merge)"),
-            "Two-Line Fillet / Chamfer (Merge)"
-        )
-        self.assertEqual(
-            QCoreApplication.translate("FilletPlugin", "1. Вкажіть першу лінію"),
-            "1. Specify first line"
-        )
-        self.assertEqual(
-            QCoreApplication.translate("FilletPlugin", "2. Вкажіть другу лінію"),
-            "2. Specify second line"
-        )
-        self.assertEqual(
-            QCoreApplication.translate("FilletPlugin", "Завжди використовувати атрибути першого об'єкта"),
-            "Always use attributes of first feature"
-        )
-        self.assertEqual(
-            QCoreApplication.translate(
-                "FilletPlugin",
-                "Ця операція недоступна для геометрій із кривими сегментами.",
-            ),
-            "This operation is unavailable for geometries with curved segments.",
-        )
-        self.assertEqual(
-            QCoreApplication.translate(
-                "FilletPlugin",
-                "Не вдалося записати зміни: {error}",
-            ),
-            "Could not write changes: {error}",
-        )
+        # Test Spanish
+        es_qm = os.path.join(self.i18n_dir, "fillet_es.qm")
+        translator_es = QTranslator()
+        self.assertTrue(translator_es.load(es_qm))
+        QCoreApplication.installTranslator(translator_es)
 
-        QCoreApplication.removeTranslator(translator_en)
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Параметри Fillet / Chamfer"),
+            "Parámetros de Fillet / Chamfer",
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Режим операції"),
+            "Modo de operación",
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Застосувати до виділених об'єктів"),
+            "Aplicar a las entidades seleccionadas",
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Застосувати до всіх кутів"),
+            "Aplicar a todas las esquinas",
+        )
 
         # Test French
         fr_qm = os.path.join(self.i18n_dir, "fillet_fr.qm")
@@ -194,13 +146,28 @@ class TestTranslations(unittest.TestCase):
         self.assertTrue(translator_fr.load(fr_qm))
         QCoreApplication.installTranslator(translator_fr)
 
-        res_fr = QCoreApplication.translate("FilletPlugin", "Режим операції")
-        self.assertEqual(res_fr, "Mode d'opération")
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Параметри Fillet / Chamfer"),
+            "Paramètres Fillet / Chamfer",
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Режим операції"),
+            "Mode d'opération",
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Застосувати до виділених об'єктів"),
+            "Appliquer aux entités sélectionnées",
+        )
+        self.assertEqual(
+            QCoreApplication.translate("FilletPlugin", "Застосувати до всіх кутів"),
+            "Appliquer à tous les coins",
+        )
 
+        QCoreApplication.removeTranslator(translator_es)
+        QCoreApplication.removeTranslator(translator_en)
         QCoreApplication.removeTranslator(translator_fr)
 
     def test_restore_hud_autosizing(self):
-        from qgis.gui import QgsMapCanvas
         from gui.restore_canvas_widget import RestoreCanvasWidget
 
         canvas = QgsMapCanvas()
@@ -230,7 +197,6 @@ class TestTranslations(unittest.TestCase):
             canvas.deleteLater()
 
     def test_two_line_hud_autosizing(self):
-        from qgis.gui import QgsMapCanvas
         from gui.canvas_widget import FilletCanvasWidget
 
         canvas = QgsMapCanvas()
@@ -261,164 +227,6 @@ class TestTranslations(unittest.TestCase):
             widget.mode = FilletCanvasWidget.MODE_CHAMFER
             widget.set_step(3)
             self.assertEqual(widget.lbl_step.text(), "3. Specify chamfer or click to confirm")
-        finally:
-            QCoreApplication.removeTranslator(translator_en)
-            canvas.deleteLater()
-
-    def test_rotation_hud_translations_and_autosizing(self):
-        from qgis.gui import QgsMapCanvas
-        from gui.rotation_canvas_widget import RotationCanvasWidget
-
-        canvas = QgsMapCanvas()
-        canvas.resize(800, 600)
-
-        en_qm = os.path.join(self.i18n_dir, "fillet_en.qm")
-        translator_en = QTranslator()
-        self.assertTrue(translator_en.load(en_qm))
-        QCoreApplication.installTranslator(translator_en)
-
-        try:
-            hud = RotationCanvasWidget(canvas)
-            hud.set_step(RotationCanvasWidget.STEP_PIVOT)
-            self.assertEqual(hud.lbl_step.text(), "1. Specify center pivot")
-            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
-            self.assertEqual(hud.x() + hud.width(), canvas.width())
-
-            hud.set_step(RotationCanvasWidget.STEP_REFERENCE)
-            self.assertEqual(hud.lbl_step.text(), "2. Specify reference baseline")
-            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
-            self.assertEqual(hud.x() + hud.width(), canvas.width())
-
-            hud.set_step(RotationCanvasWidget.STEP_ROTATING)
-            self.assertEqual(hud.lbl_step.text(), "3. Specify rotation angle")
-            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
-            self.assertEqual(hud.x() + hud.width(), canvas.width())
-
-            self.assertEqual(
-                QCoreApplication.translate("FilletPlugin", "CAD Обертання (Rotate)"),
-                "CAD Rotate"
-            )
-            self.assertEqual(
-                QCoreApplication.translate("FilletPlugin", "Кут (Angle):"),
-                "Angle:"
-            )
-            self.assertEqual(
-                QCoreApplication.translate("FilletPlugin", "Крок кута:"),
-                "Snap step:"
-            )
-            self.assertEqual(
-                QCoreApplication.translate("FilletPlugin", "Вільний (Free)"),
-                "Free"
-            )
-            self.assertEqual(
-                QCoreApplication.translate("FilletPlugin", "Зберегти копію (Copy)"),
-                "Save copy (Copy)"
-            )
-        finally:
-            QCoreApplication.removeTranslator(translator_en)
-            canvas.deleteLater()
-
-    def test_mirror_hud_translations_and_autosizing(self):
-        """Verify CAD Mirror HUD step texts, labels, and auto-sizing in English."""
-        from gui.mirror_canvas_widget import MirrorCanvasWidget
-
-        canvas = QgsMapCanvas()
-        canvas.resize(800, 600)
-
-        en_qm = os.path.join(self.i18n_dir, "fillet_en.qm")
-        translator_en = QTranslator()
-        self.assertTrue(translator_en.load(en_qm))
-        QCoreApplication.installTranslator(translator_en)
-
-        try:
-            hud = MirrorCanvasWidget(canvas)
-            hud.set_step(MirrorCanvasWidget.STEP_FIRST_POINT)
-            self.assertEqual(hud.lbl_step.text(), "1. Specify first axis point")
-            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
-            self.assertEqual(hud.x() + hud.width(), canvas.width())
-
-            hud.set_step(MirrorCanvasWidget.STEP_SECOND_POINT)
-            self.assertEqual(hud.lbl_step.text(), "2. Specify second axis point")
-            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
-            self.assertEqual(hud.x() + hud.width(), canvas.width())
-
-            self.assertEqual(
-                QCoreApplication.translate("FilletPlugin", "CAD Дзеркало (Mirror)"),
-                "CAD Mirror"
-            )
-            self.assertEqual(
-                QCoreApplication.translate("FilletPlugin", "Кут осі:"),
-                "Axis angle:"
-            )
-            self.assertEqual(
-                QCoreApplication.translate("FilletPlugin", "Блокувати кут осі / інтерактивне обрання"),
-                "Lock axis angle / interactive pick"
-            )
-            self.assertEqual(
-                QCoreApplication.translate("FilletPlugin", "Прив'язка осі:"),
-                "Axis snap:"
-            )
-            self.assertEqual(
-                QCoreApplication.translate("FilletPlugin", "90° (Орто)"),
-                "90° (Ortho)"
-            )
-            self.assertEqual(
-                QCoreApplication.translate("FilletPlugin", "CAD Дзеркальне відображення"),
-                "CAD Mirror"
-            )
-            self.assertEqual(
-                QCoreApplication.translate("FilletPlugin", "CAD Дзеркальне копіювання"),
-                "CAD Mirror Copy"
-            )
-        finally:
-            QCoreApplication.removeTranslator(translator_en)
-            canvas.deleteLater()
-
-    def test_scale_rotate_hud_translations_and_autosizing(self):
-        """Verify CAD Scale & Rotate HUD step texts, labels, and auto-sizing in English."""
-        from gui.scale_rotate_canvas_widget import ScaleRotateCanvasWidget
-
-        canvas = QgsMapCanvas()
-        canvas.resize(800, 600)
-
-        en_qm = os.path.join(self.i18n_dir, "fillet_en.qm")
-        translator_en = QTranslator()
-        self.assertTrue(translator_en.load(en_qm))
-        QCoreApplication.installTranslator(translator_en)
-
-        try:
-            hud = ScaleRotateCanvasWidget(canvas)
-            hud.set_step(ScaleRotateCanvasWidget.STEP_ORIGIN)
-            self.assertEqual(hud.lbl_step.text(), "1. Click origin pivot point")
-            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
-            self.assertEqual(hud.x() + hud.width(), canvas.width())
-
-            hud.set_step(ScaleRotateCanvasWidget.STEP_REFERENCE)
-            self.assertEqual(hud.lbl_step.text(), "2. Click reference base point")
-            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
-            self.assertEqual(hud.x() + hud.width(), canvas.width())
-
-            hud.set_step(ScaleRotateCanvasWidget.STEP_TARGET)
-            self.assertEqual(hud.lbl_step.text(), "3. Click target scale & angle")
-            self.assertGreaterEqual(hud.width(), hud.lbl_step.sizeHint().width())
-            self.assertEqual(hud.x() + hud.width(), canvas.width())
-
-            self.assertEqual(
-                QCoreApplication.translate("FilletPlugin", "CAD Масштаб та Обертання (Scale & Rotate)"),
-                "CAD Scale & Rotate"
-            )
-            self.assertEqual(
-                QCoreApplication.translate("FilletPlugin", "Масштаб (Scale):"),
-                "Scale:"
-            )
-            self.assertEqual(
-                QCoreApplication.translate("FilletPlugin", "Блокувати масштаб / вільний розрахунок"),
-                "Lock scale / free interactive calculation"
-            )
-            self.assertEqual(
-                QCoreApplication.translate("FilletPlugin", "Кут:"),
-                "Angle:"
-            )
         finally:
             QCoreApplication.removeTranslator(translator_en)
             canvas.deleteLater()
