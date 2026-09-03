@@ -363,6 +363,10 @@ Onarım sonucu birden fazla parça ({0}) içeriyor. Kaydetme yöntemini seçin:<
             <translation>İki Çizgili Yuvarlat / Pah Kır (Birleştir)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;İki çizgiyi yuvarlatma veya pah ile birleştirin&lt;/b&gt;&lt;br&gt;&lt;br&gt;Yuvarlatma/pah geçişi için Alt tuşunu basılı tutun.&lt;br&gt;&lt;br&gt;Eşit mesafeler için Shift tuşunu basılı tutun.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>İki çizgiyi yuvarlatma veya pah ile bağlayın ve detayları birleştirin</translation>
         </message>
@@ -393,6 +397,10 @@ Onarım sonucu birden fazla parça ({0}) içeriyor. Kaydetme yöntemini seçin:<
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Yuvarlat / Pah Kır Aracı</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Yuvarlatma ve pah oluşturun&lt;/b&gt;&lt;br&gt;&lt;br&gt;Yuvarlatma/pah geçişi için Alt tuşunu basılı tutun.&lt;br&gt;&lt;br&gt;Eşit mesafeler için Shift tuşunu basılı tutun.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -789,6 +797,18 @@ Onarım sonucu birden fazla parça ({0}) içeriyor. Kaydetme yöntemini seçin:<
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Tüm köşelere uygula</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Mesafeler bağlı (d1 = d2) veya Shift tuşunu basılı tutun</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Mesafeler ayrı (d1 ≠ d2) veya Shift tuşunu basılı tutun</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

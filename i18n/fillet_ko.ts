@@ -363,6 +363,10 @@
             <translation>2선 필렛 / 챔퍼 (병합)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;필렛 또는 챔퍼로 두 선 연결&lt;/b&gt;&lt;br&gt;&lt;br&gt;Alt를 길게 눌러 필렛/챔퍼 전환.&lt;br&gt;&lt;br&gt;Shift로 동일 거리.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>필렛 또는 챔퍼로 두 선을 연결하고 피처 병합</translation>
         </message>
@@ -393,6 +397,10 @@
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>필렛 / 챔퍼 도구</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;필렛 및 챔퍼 생성&lt;/b&gt;&lt;br&gt;&lt;br&gt;Alt를 길게 눌러 필렛/챔퍼 전환.&lt;br&gt;&lt;br&gt;Shift로 동일 거리.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -789,6 +797,18 @@
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>모든 모서리에 적용</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>거리 연결됨 (d1 = d2) 또는 Shift 누르기</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>거리 개별 설정 (d1 ≠ d2) 또는 Shift 누르기</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

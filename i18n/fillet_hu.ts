@@ -363,6 +363,10 @@ A javítás eredménye több részt tartalmaz ({0}). Válassza ki a mentési mó
             <translation>Kétvonalas lekerekítés / letörés (Összevonás)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Két vonal összekötése lekerekítéssel vagy letöréssel&lt;/b&gt;&lt;br&gt;&lt;br&gt;Tartsa lenyomva az Alt billentyűt a váltáshoz.&lt;br&gt;&lt;br&gt;Tartsa lenyomva a Shift billentyűt az egyenlő távolságokhoz.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Két vonal összekötése lekerekítéssel vagy letöréssel és elemek összevonása</translation>
         </message>
@@ -393,6 +397,10 @@ A javítás eredménye több részt tartalmaz ({0}). Válassza ki a mentési mó
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Lekerekítés / Letörés eszköz</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Lekerekítések és letörések létrehozása&lt;/b&gt;&lt;br&gt;&lt;br&gt;Tartsa lenyomva az Alt billentyűt a váltáshoz.&lt;br&gt;&lt;br&gt;Tartsa lenyomva a Shift billentyűt az egyenlő távolságokhoz.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -789,6 +797,18 @@ A javítás eredménye több részt tartalmaz ({0}). Válassza ki a mentési mó
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Alkalmazás minden sarokra</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Távolságok láncolva (d1 = d2), vagy tartsa lenyomva a Shift billentyűt</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Távolságok különállók (d1 ≠ d2), vagy tartsa lenyomva a Shift billentyűt</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

@@ -363,6 +363,10 @@ O resultado da reparación contén varias partes ({0}). Escolla como gardar o re
             <translation>Arredondamento / Chafrán de dúas liñas (Combinar)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Unir dúas liñas con arredondamento ou chafrán&lt;/b&gt;&lt;br&gt;&lt;br&gt;Manteña premido Alt para alternar arredondamento/chafrán.&lt;br&gt;&lt;br&gt;Manteña premido Shift para distancias iguais.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Unir dúas liñas con arredondamento ou chafrán e combinar elementos</translation>
         </message>
@@ -393,6 +397,10 @@ O resultado da reparación contén varias partes ({0}). Escolla como gardar o re
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Ferramenta de arredondamento / chafrán</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Crear arredondamentos e chafráns&lt;/b&gt;&lt;br&gt;&lt;br&gt;Manteña premido Alt para alternar arredondamento/chafrán.&lt;br&gt;&lt;br&gt;Manteña premido Shift para distancias iguais.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -789,6 +797,18 @@ O resultado da reparación contén varias partes ({0}). Escolla como gardar o re
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Aplicar a todas as esquinas</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Distancias vinculadas (d1 = d2), ou manteña Maiús</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Distancias separadas (d1 ≠ d2), ou manteña Maiús</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

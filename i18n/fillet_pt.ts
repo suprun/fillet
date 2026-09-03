@@ -363,6 +363,10 @@ O resultado da correção contém várias partes ({0}). Escolha como guardar o r
             <translation>Concordância / Chanfro de duas linhas (Mesclar)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Unir duas linhas com concordância ou chanfro&lt;/b&gt;&lt;br&gt;&lt;br&gt;Mantenha Alt para alternar concordância/chanfro.&lt;br&gt;&lt;br&gt;Mantenha Shift para distâncias iguais.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Unir duas linhas com concordância ou chanfro e mesclar feições</translation>
         </message>
@@ -393,6 +397,10 @@ O resultado da correção contém várias partes ({0}). Escolha como guardar o r
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Ferramenta Fillet / Chamfer</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Criar concordâncias e chanfros&lt;/b&gt;&lt;br&gt;&lt;br&gt;Mantenha Alt para alternar concordância/chanfro.&lt;br&gt;&lt;br&gt;Mantenha Shift para distâncias iguais.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -789,6 +797,18 @@ O resultado da correção contém várias partes ({0}). Escolha como guardar o r
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Aplicar a todos os cantos</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Distâncias vinculadas (d1 = d2), ou mantenha Shift</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Distâncias separadas (d1 ≠ d2), ou mantenha Shift</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

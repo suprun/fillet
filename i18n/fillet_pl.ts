@@ -363,6 +363,10 @@ Wynik naprawy zawiera wiele części ({0}). Wybierz sposób zapisu:</translation
             <translation>Zaokrąglenie / Fazowanie dwóch linii (Połącz)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Połącz dwie linie zaokrągleniem lub ścięciem&lt;/b&gt;&lt;br&gt;&lt;br&gt;Przytrzymaj Alt, aby przełączyć zaokrąglenie/ścięcie.&lt;br&gt;&lt;br&gt;Przytrzymaj Shift dla równych odległości.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Połącz dwie linie zaokrągleniem lub fazowaniem i scal obiekty</translation>
         </message>
@@ -393,6 +397,10 @@ Wynik naprawy zawiera wiele części ({0}). Wybierz sposób zapisu:</translation
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Narzędzie Fillet / Chamfer</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Tworzenie zaokrągleń i ścięć&lt;/b&gt;&lt;br&gt;&lt;br&gt;Przytrzymaj Alt, aby przełączyć zaokrąglenie/ścięcie.&lt;br&gt;&lt;br&gt;Przytrzymaj Shift dla równych odległości.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -789,6 +797,18 @@ Wynik naprawy zawiera wiele części ({0}). Wybierz sposób zapisu:</translation
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Zastosuj do wszystkich narożników</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Odległości powiązane (d1 = d2), lub przytrzymaj Shift</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Odległości rozdzielne (d1 ≠ d2), lub przytrzymaj Shift</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

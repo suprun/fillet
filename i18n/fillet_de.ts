@@ -363,6 +363,10 @@ Das Reparaturergebnis enthält mehrere Teile ({0}). Wählen Sie die Speicheropti
             <translation>Zwei-Linien-Abrundung / Fase (Merge)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Verbinden zweier Linien mit Abrundung oder Fase&lt;/b&gt;&lt;br&gt;&lt;br&gt;Alt halten zum Umschalten von Abrundung/Fase.&lt;br&gt;&lt;br&gt;Umschalt für gleiche Abstände.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Verbinden zweier Linien mit Abrundung oder Fase und Zusammenführen der Objekte</translation>
         </message>
@@ -393,6 +397,10 @@ Das Reparaturergebnis enthält mehrere Teile ({0}). Wählen Sie die Speicheropti
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Fillet / Chamfer Werkzeug</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Erstellen von Abrundungen und Fasen&lt;/b&gt;&lt;br&gt;&lt;br&gt;Alt halten zum Umschalten von Abrundung/Fase.&lt;br&gt;&lt;br&gt;Umschalt für gleiche Abstände.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -789,6 +797,18 @@ Das Reparaturergebnis enthält mehrere Teile ({0}). Wählen Sie die Speicheropti
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Auf alle Ecken anwenden</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Abstände verknüpft (d1 = d2), oder Umschalt halten</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Abstände getrennt (d1 ≠ d2), oder Umschalt halten</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

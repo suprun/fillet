@@ -363,6 +363,10 @@ Korjaustulos sisältää useita osia ({0}). Valitse tallennustapa:</translation>
             <translation>Kahden viivan pyöristys / viiste (Yhdistä)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Yhdistä kaksi viivaa pyöristyksellä tai viisteellä&lt;/b&gt;&lt;br&gt;&lt;br&gt;Pidä Alt painettuna vaihtaaksesi pyöristystä/viistettä.&lt;br&gt;&lt;br&gt;Pidä Shift yhtä suurille etäisyyksille.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Yhdistä kaksi viivaa pyöristyksellä tai viisteellä ja sulauta kohteet</translation>
         </message>
@@ -393,6 +397,10 @@ Korjaustulos sisältää useita osia ({0}). Valitse tallennustapa:</translation>
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Pyöristys / Viiste -työkalu</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Luo pyöristyksiä ja viisteitä&lt;/b&gt;&lt;br&gt;&lt;br&gt;Pidä Alt painettuna vaihtaaksesi pyöristystä/viistettä.&lt;br&gt;&lt;br&gt;Pidä Shift yhtä suurille etäisyyksille.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -789,6 +797,18 @@ Korjaustulos sisältää useita osia ({0}). Valitse tallennustapa:</translation>
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Käytä kaikkiin kulmiin</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Etäisyydet linkitetty (d1 = d2), tai pidä Shift painettuna</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Erilliset etäisyydet (d1 ≠ d2), tai pidä Shift painettuna</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

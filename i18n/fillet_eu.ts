@@ -363,6 +363,10 @@ Konponketaren emaitzak hainbat zati ({0}) ditu. Aukeratu gordetzeko modua:</tran
             <translation>Bi lerroko biribiltzea / xaflaketa (Batu)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Lotu bi lerro biribiltze edo xaflaketarekin&lt;/b&gt;&lt;br&gt;&lt;br&gt;Eutsi Alt biribiltzea/xaflaketa txandakatzeko.&lt;br&gt;&lt;br&gt;Eutsi Shift distantzia berdinetarako.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Lotu bi lerro biribiltze edo xaflaketarekin eta batu elementuak</translation>
         </message>
@@ -393,6 +397,10 @@ Konponketaren emaitzak hainbat zati ({0}) ditu. Aukeratu gordetzeko modua:</tran
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Biribiltze / xaflaketa tresna</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Sortu biribiltzeak eta xaflaketak&lt;/b&gt;&lt;br&gt;&lt;br&gt;Eutsi Alt biribiltzea/xaflaketa txandakatzeko.&lt;br&gt;&lt;br&gt;Eutsi Shift distantzia berdinetarako.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -789,6 +797,18 @@ Konponketaren emaitzak hainbat zati ({0}) ditu. Aukeratu gordetzeko modua:</tran
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Aplikatu izkina guztiei</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Distantzia lotuak (d1 = d2), edo eutsi Shift</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Distantzia bananduak (d1 ≠ d2), edo eutsi Shift</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

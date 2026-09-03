@@ -363,6 +363,10 @@ Reparationsresultatet innehåller flera delar ({0}). Välj hur resultatet ska sp
             <translation>Tvålinjers avrundning / fasning (Sammanfoga)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Foga samman två linjer med avrundning eller fasning&lt;/b&gt;&lt;br&gt;&lt;br&gt;Håll Alt för att växla avrundning/fasning.&lt;br&gt;&lt;br&gt;Håll Shift för lika avstånd.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Foga samman två linjer med avrundning eller fasning och slå samman objekt</translation>
         </message>
@@ -393,6 +397,10 @@ Reparationsresultatet innehåller flera delar ({0}). Välj hur resultatet ska sp
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Verktyg för avrundning / fasning</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Skapa avrundningar och fasningar&lt;/b&gt;&lt;br&gt;&lt;br&gt;Håll Alt för att växla avrundning/fasning.&lt;br&gt;&lt;br&gt;Håll Shift för lika avstånd.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -789,6 +797,18 @@ Reparationsresultatet innehåller flera delar ({0}). Välj hur resultatet ska sp
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Tillämpa på alla hörn</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Avstånd länkade (d1 = d2), eller håll Shift</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Avstånd separerade (d1 ≠ d2), eller håll Shift</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

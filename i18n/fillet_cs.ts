@@ -363,6 +363,10 @@ Výsledek opravy obsahuje více částí ({0}). Vyberte způsob uložení:</tran
             <translation>Zaoblení / Zkosení dvou linií (Sloučit)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Spojení dvou linií zaoblením nebo zkosením&lt;/b&gt;&lt;br&gt;&lt;br&gt;Podržte Alt pro přepnutí zaoblení/zkosení.&lt;br&gt;&lt;br&gt;Podržte Shift pro stejné vzdálenosti.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Spojit dvě linie zaoblením nebo zkosením a sloučit prvky</translation>
         </message>
@@ -393,6 +397,10 @@ Výsledek opravy obsahuje více částí ({0}). Vyberte způsob uložení:</tran
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Nástroj Zaoblení / Zkosení</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Vytváření zaoblení a zkosení&lt;/b&gt;&lt;br&gt;&lt;br&gt;Podržte Alt pro přepnutí zaoblení/zkosení.&lt;br&gt;&lt;br&gt;Podržte Shift pro stejné vzdálenosti.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -789,6 +797,18 @@ Výsledek opravy obsahuje více částí ({0}). Vyberte způsob uložení:</tran
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Použít na všechny rohy</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Vzdálenosti svázány (d1 = d2), nebo podržte Shift</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Vzdálenosti oddělené (d1 ≠ d2), nebo podržte Shift</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

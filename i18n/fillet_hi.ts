@@ -363,6 +363,10 @@
             <translation>दो-रेखा फिलेट / चैम्फर (मर्ज)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;फिलेट या चैम्फर के साथ दो रेखाओं को जोड़ें&lt;/b&gt;&lt;br&gt;&lt;br&gt;फिलेट/चैम्फर स्विच करने के लिए Alt दबाए रखें।&lt;br&gt;&lt;br&gt;समान दूरी के लिए Shift।</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>फिलेट या चैम्फर के साथ दो रेखाओं को जोड़ें और सुविधाओं को मर्ज करें</translation>
         </message>
@@ -393,6 +397,10 @@
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>फिलेट / चैम्फर टूल</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;फिलेट और चैम्फर बनाएं&lt;/b&gt;&lt;br&gt;&lt;br&gt;फिलेट/चैम्फर स्विच करने के लिए Alt दबाए रखें।&lt;br&gt;&lt;br&gt;समान दूरी के लिए Shift।</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -789,6 +797,18 @@
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>सभी कोनों पर लागू करें</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>दूरियां जुड़ी हुई (d1 = d2), या Shift दबाकर रखें</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>अलग-अलग दूरियां (d1 ≠ d2), या Shift दबाकर रखें</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

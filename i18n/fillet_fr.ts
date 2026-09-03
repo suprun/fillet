@@ -363,6 +363,10 @@ Le résultat de la réparation contient plusieurs parties ({0}). Choisissez comm
             <translation>Congé / Chanfrein de deux lignes (Fusion)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Joindre deux lignes avec congé ou chanfrein&lt;/b&gt;&lt;br&gt;&lt;br&gt;Maintenez Alt pour basculer congé/chanfrein.&lt;br&gt;&lt;br&gt;Maintenez Maj pour distances égales.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Joindre deux lignes avec congé ou chanfrein et fusionner les entités</translation>
         </message>
@@ -393,6 +397,10 @@ Le résultat de la réparation contient plusieurs parties ({0}). Choisissez comm
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Outil Fillet / Chamfer</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Créer des congés et des chanfreins&lt;/b&gt;&lt;br&gt;&lt;br&gt;Maintenez Alt pour basculer congé/chanfrein.&lt;br&gt;&lt;br&gt;Maintenez Maj pour distances égales.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -789,6 +797,18 @@ Le résultat de la réparation contient plusieurs parties ({0}). Choisissez comm
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Appliquer à tous les coins</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Distances liées (d1 = d2), ou maintenez Maj</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Distances séparées (d1 ≠ d2), ou maintenez Maj</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

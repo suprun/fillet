@@ -363,6 +363,10 @@ Labojuma rezultāts satur vairākas daļas ({0}). Izvēlieties, kā saglabāt:</
             <translation>Divu līniju noapaļošana / nolīdzināšana (Apvienot)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Savienot divas līnijas ar noapaļojumu vai nolīdzinājumu&lt;/b&gt;&lt;br&gt;&lt;br&gt;Turiet Alt, lai pārslēgtu režīmu.&lt;br&gt;&lt;br&gt;Turiet Shift vienādiem attālumiem.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Savienojiet divas līnijas ar noapaļošanu vai nolīdzināšanu un apvienojiet objektus</translation>
         </message>
@@ -393,6 +397,10 @@ Labojuma rezultāts satur vairākas daļas ({0}). Izvēlieties, kā saglabāt:</
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Noapaļošanas / nolīdzināšanas rīks</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Veidot noapaļojumus un nolīdzinājumus&lt;/b&gt;&lt;br&gt;&lt;br&gt;Turiet Alt, lai pārslēgtu režīmu.&lt;br&gt;&lt;br&gt;Turiet Shift vienādiem attālumiem.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -789,6 +797,18 @@ Labojuma rezultāts satur vairākas daļas ({0}). Izvēlieties, kā saglabāt:</
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Lietot visiem stūriem</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Attālumi saistīti (d1 = d2), vai turiet Shift</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Attālumi atsevišķi (d1 ≠ d2), vai turiet Shift</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

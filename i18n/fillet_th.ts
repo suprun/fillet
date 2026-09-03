@@ -363,6 +363,10 @@
             <translation>ลบมุมมน / ลบมุมเหลี่ยม 2 เส้น (รวม)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;สร้างมุมมนและมุมเหลี่ยม&lt;/b&gt;&lt;br&gt;&lt;br&gt;กด Alt ค้างไว้เพื่อสลับมุมมน/มุมเหลี่ยม&lt;br&gt;&lt;br&gt;กด Shift สำหรับระยะทางที่เท่ากัน</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>เชื่อมต่อ 2 เส้นด้วยการลบมุมมนหรือเหลี่ยมและรวมฟีเจอร์</translation>
         </message>
@@ -393,6 +397,10 @@
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>เครื่องมือลบมุมมน / ลบมุมเหลี่ยม</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;สร้างมุมมนและมุมเหลี่ยม&lt;/b&gt;&lt;br&gt;&lt;br&gt;กด Alt ค้างไว้เพื่อสลับมุมมน/มุมเหลี่ยม&lt;br&gt;&lt;br&gt;กด Shift สำหรับระยะทางที่เท่ากัน</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -789,6 +797,18 @@
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>นำไปใช้กับทุกมุม</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>เชื่อมโยงระยะทาง (d1 = d2) หรือกด Shift ค้างไว้</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>แยกการตั้งค่าระยะทาง (d1 ≠ d2) หรือกด Shift ค้างไว้</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

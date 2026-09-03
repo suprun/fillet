@@ -363,6 +363,10 @@
             <translation>Закръгляване / Фаска на две линии (Обединяване)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Свързване на две линии със закръгляване или фаска&lt;/b&gt;&lt;br&gt;&lt;br&gt;Задръжте Alt за превключване закръгление/фаска.&lt;br&gt;&lt;br&gt;Задръжте Shift за равни разстояния.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Свързване на две линии със закръгляване или фаска и обединяване на обектите</translation>
         </message>
@@ -393,6 +397,10 @@
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Инструмент Закръгляване / Фаска</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Създаване на закръгления и фаски&lt;/b&gt;&lt;br&gt;&lt;br&gt;Задръжте Alt за превключване закръгление/фаска.&lt;br&gt;&lt;br&gt;Задръжте Shift за равни разстояния.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -789,6 +797,18 @@
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Приложи към всички ъгли</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Свързани разстояния (d1 = d2), или задръжте Shift</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Разделни разстояния (d1 ≠ d2), или задръжте Shift</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

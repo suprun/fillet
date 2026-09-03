@@ -363,6 +363,10 @@ Rezultat popravila vsebuje več delov ({0}). Izberite način shranjevanja:</tran
             <translation>Zaokrožitev / Posneti rob dveh črt (Združi)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Poveži dve črti z zaokrožitvijo ali posnetim robom&lt;/b&gt;&lt;br&gt;&lt;br&gt;Držite Alt za preklop zaokrožitev/rob.&lt;br&gt;&lt;br&gt;Držite Shift za enaki razdalji.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Povežite dve črti z zaokrožitvijo ali posnetim robom in združite objekte</translation>
         </message>
@@ -393,6 +397,10 @@ Rezultat popravila vsebuje več delov ({0}). Izberite način shranjevanja:</tran
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Orodje za zaokrožitev / posneti rob</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Ustvari zaokrožitve in posnete robove&lt;/b&gt;&lt;br&gt;&lt;br&gt;Držite Alt za preklop zaokrožitev/rob.&lt;br&gt;&lt;br&gt;Držite Shift za enaki razdalji.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -789,6 +797,18 @@ Rezultat popravila vsebuje več delov ({0}). Izberite način shranjevanja:</tran
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Uveljavi na vseh vogalih</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Razdalje povezane (d1 = d2), ali držite Shift</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Razdalje ločene (d1 ≠ d2), ali držite Shift</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

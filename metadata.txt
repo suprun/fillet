@@ -4,7 +4,7 @@ qgisMinimumVersion=3.16
 qgisMaximumVersion=4.99
 description=CAD editing suite with Fillet, Chamfer, Align Feature, Match Edge, Array Along Path, Extract Part, Subtract, Clip, transforms, arrays and topology tools for QGIS.
 about=Comprehensive CAD editing suite for QGIS 3.16-4.99 providing Fillet and Chamfer, Two-Line Merge, Corner Restoration, Align Feature, Match Edge, Array Along Path, Extract Part, polygon Subtract and Clip, Rotation, Mirror, Scale with Rotation, Edge Offset, Linear and Polar Arrays, Divide / Measure Line, Ortho Angles, Explode, Clean / Repair and batch processing. Interactive tools use native QGIS snapping, cross-layer CRS handling, atomic edit commands and consistent top-right HUD panels on Qt5 and Qt6.
-version=1.0.0.91
+version=1.0.0.92
 author=suprun
 email=suprun.serhiy+qgis@gmail.com
 homepage=https://github.com/suprun/fillet
@@ -14,7 +14,13 @@ tags=cad, editing, fillet, chamfer, align, match-edge, path-array, extract-part,
 icon=icon.png
 experimental=False
 deprecated=False
-changelog=1.0.0.91:
+changelog=1.0.0.92:
+    - Added 'Apply to all corners' batch action directly to the floating FilletCanvasWidget HUD for selected features.
+    - Added temporary Alt-key mode toggle between Fillet and Chamfer with synchronized controls and interactive previews.
+    - Added Shift-key distance linking/inversion for Chamfer with real-time preview and click-commit synchronization.
+    - Fixed all Qt6 / PyQt6 / QGIS 4.0 scoped enum compatibility warnings for Qgis.MessageLevel in Fillet, Chamfer, Two-Line and Corner Restoration tools.
+    - Styled Fillet & Chamfer toolbar action tooltips matching standard native QGIS multi-line layout with paragraph spacing across all 40 supported locales.
+    1.0.0.91:
     - Added zero-size Fillet and Chamfer values across interactive, Two-Line and batch workflows.
     - Zero size now creates or preserves one sharp vertex; unlinked zero/positive distances create a one-sided chamfer.
     - Prevented duplicate corner nodes and redundant batch edit commands for unchanged zero-size results.

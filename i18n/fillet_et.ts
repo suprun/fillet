@@ -363,6 +363,10 @@ Paranduse tulemus sisaldab mitut osa ({0}). Valige salvestamise viis:</translati
             <translation>Kahe joone ümardamine / faasimine (Ühenda)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Ühenda kaks joont ümardamise või faasimisega&lt;/b&gt;&lt;br&gt;&lt;br&gt;Hoia Alt režiimi vahetamiseks.&lt;br&gt;&lt;br&gt;Hoia Shift võrdsete vahemaade jaoks.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Ühendage kaks joont ümardamise või faasimisega ja liitke objektid</translation>
         </message>
@@ -393,6 +397,10 @@ Paranduse tulemus sisaldab mitut osa ({0}). Valige salvestamise viis:</translati
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Ümardamise / faasimise tööriist</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Loo ümardusi ja faase&lt;/b&gt;&lt;br&gt;&lt;br&gt;Hoia Alt režiimi vahetamiseks.&lt;br&gt;&lt;br&gt;Hoia Shift võrdsete vahemaade jaoks.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -789,6 +797,18 @@ Paranduse tulemus sisaldab mitut osa ({0}). Valige salvestamise viis:</translati
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Rakenda kõigile nurkadele</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Vahemaad seotud (d1 = d2), või hoidke Shift</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Vahemaad eraldi (d1 ≠ d2), või hoidke Shift</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

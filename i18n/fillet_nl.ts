@@ -363,6 +363,10 @@ Het reparatieresultaat bevat meerdere delen ({0}). Kies hoe u wilt opslaan:</tra
             <translation>Twee-lijnen afronding / afschuining (Samenvoegen)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Twee lijnen verbinden met afronding of afschuining&lt;/b&gt;&lt;br&gt;&lt;br&gt;Houd Alt ingedrukt om te schakelen tussen afronding/afschuining.&lt;br&gt;&lt;br&gt;Houd Shift voor gelijke afstanden.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Twee lijnen verbinden met afronding of afschuining en objecten samenvoegen</translation>
         </message>
@@ -393,6 +397,10 @@ Het reparatieresultaat bevat meerdere delen ({0}). Kies hoe u wilt opslaan:</tra
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Fillet / Chamfer Gereedschap</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Afrondingen en afschuiningen maken&lt;/b&gt;&lt;br&gt;&lt;br&gt;Houd Alt ingedrukt om te schakelen tussen afronding/afschuining.&lt;br&gt;&lt;br&gt;Houd Shift voor gelijke afstanden.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -789,6 +797,18 @@ Het reparatieresultaat bevat meerdere delen ({0}). Kies hoe u wilt opslaan:</tra
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Toepassen op alle hoeken</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Afstanden gekoppeld (d1 = d2), of houd Shift ingedrukt</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Afstanden gescheiden (d1 ≠ d2), of houd Shift ingedrukt</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

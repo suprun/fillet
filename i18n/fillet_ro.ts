@@ -363,6 +363,10 @@ Rezultatul reparării conține mai multe părți ({0}). Alegeți cum să salvaț
             <translation>Racordare / Teșire a două linii (Îmbinare)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Unire două linii prin racordare sau teșire&lt;/b&gt;&lt;br&gt;&lt;br&gt;Țineți apăsat Alt pentru a comuta racordare/teșire.&lt;br&gt;&lt;br&gt;Țineți apăsat Shift pentru distanțe egale.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Uniți două linii prin racordare sau teșire și îmbinați entitățile</translation>
         </message>
@@ -393,6 +397,10 @@ Rezultatul reparării conține mai multe părți ({0}). Alegeți cum să salvaț
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Instrument Racordare / Teșire</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Creare racordări și teșiri&lt;/b&gt;&lt;br&gt;&lt;br&gt;Țineți apăsat Alt pentru a comuta racordare/teșire.&lt;br&gt;&lt;br&gt;Țineți apăsat Shift для distanțe egale.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -789,6 +797,18 @@ Rezultatul reparării conține mai multe părți ({0}). Alegeți cum să salvaț
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Aplică pe toate colțurile</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Distanțe legate (d1 = d2), sau țineți apăsat Shift</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Distanțe separate (d1 ≠ d2), sau țineți apăsat Shift</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

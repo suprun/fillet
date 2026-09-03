@@ -363,6 +363,10 @@ The repair result contains multiple parts ({0}). Choose how to save the result:<
             <translation>Two-Line Fillet / Chamfer (Merge)</translation>
         </message>
         <message>
+            <source>&lt;b&gt;З'єднання двох ліній скругленням або фаскою&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Connect two lines with fillet or chamfer&lt;/b&gt;&lt;br&gt;&lt;br&gt;Hold Alt to toggle fillet/chamfer.&lt;br&gt;&lt;br&gt;Hold Shift for equal distances.</translation>
+        </message>
+        <message>
             <source>З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів</source>
             <translation>Join two lines with fillet or chamfer and merge features</translation>
         </message>
@@ -393,6 +397,10 @@ The repair result contains multiple parts ({0}). Choose how to save the result:<
         <message>
             <source>Інструмент Fillet / Chamfer</source>
             <translation>Fillet / Chamfer Tool</translation>
+        </message>
+        <message>
+            <source>&lt;b&gt;Створення скруглень та фасок&lt;/b&gt;&lt;br&gt;&lt;br&gt;Утримуйте Alt для перемикання скруглення/фаски.&lt;br&gt;&lt;br&gt;Утримуйте Shift для рівних відстаней.</source>
+            <translation>&lt;b&gt;Create fillets and chamfers&lt;/b&gt;&lt;br&gt;&lt;br&gt;Hold Alt to toggle fillet/chamfer.&lt;br&gt;&lt;br&gt;Hold Shift for equal distances.</translation>
         </message>
         <message>
             <source>Інструмент для створення скруглень (Fillet) та фасок (Chamfer)</source>
@@ -789,6 +797,18 @@ The repair result contains multiple parts ({0}). Choose how to save the result:<
         <message>
             <source>Помилка</source>
             <translation>Error</translation>
+        </message>
+        <message>
+            <source>Застосувати до всіх кутів</source>
+            <translation>Apply to all corners</translation>
+        </message>
+        <message>
+            <source>Відстані зв'язані (d1 = d2), або утримуйте Shift</source>
+            <translation>Distances linked (d1 = d2), or hold Shift</translation>
+        </message>
+        <message>
+            <source>Відстані роздільні (d1 ≠ d2), або утримуйте Shift</source>
+            <translation>Distances separate (d1 ≠ d2), or hold Shift</translation>
         </message>
         <message>
             <source>CAD Вирівнювання об'єктів (Align Feature)</source>

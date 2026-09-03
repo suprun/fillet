@@ -267,6 +267,7 @@ class FilletPlugin:
         # 4. Create shared canvas widget for Fillet/Chamfer tools
         self.canvas_widget = FilletCanvasWidget(self.canvas)
         self.canvas_widget.hide()
+        self.canvas_widget.applyToSelectedRequested.connect(self.apply_to_selected_features)
 
         # 5. Create interactive Two-Line Fillet/Chamfer CAD Map Tool (available in QGIS 3.x and QGIS 4.x)
         self.two_line_map_tool = TwoLineMapTool(
@@ -283,7 +284,11 @@ class FilletPlugin:
         )
         self.two_line_action.setCheckable(True)
         self.two_line_action.setObjectName("actionTwoLineFillet")
-        self.two_line_action.setToolTip(self.tr("З'єднання двох ліній скругленням або фаскою з об'єднанням об'єктів"))
+        self.two_line_action.setToolTip(
+            self.tr(
+                "<b>З'єднання двох ліній скругленням або фаскою</b><br><br>Утримуйте Alt для перемикання скруглення/фаски.<br><br>Утримуйте Shift для рівних відстаней."
+            )
+        )
         self.two_line_action.triggered.connect(self.toggle_two_line_tool)
 
         # 6. Create interactive CAD 3-Point Rotation Map Tool (available in QGIS 3.x and QGIS 4.x)
@@ -588,7 +593,11 @@ class FilletPlugin:
             )
             self.action.setCheckable(True)
             self.action.setObjectName("actionFilletChamfer")
-            self.action.setToolTip(self.tr("Інструмент для створення скруглень (Fillet) та фасок (Chamfer)"))
+            self.action.setToolTip(
+                self.tr(
+                    "<b>Створення скруглень та фасок</b><br><br>Утримуйте Alt для перемикання скруглення/фаски.<br><br>Утримуйте Shift для рівних відстаней."
+                )
+            )
             self.action.triggered.connect(self.toggle_tool)
 
             if adv_tb:
@@ -1721,6 +1730,9 @@ class FilletPlugin:
         if self.clip_feature_action:
             self.clip_feature_action.setEnabled(is_polygon_editable)
 
+        if self.canvas_widget and hasattr(self.canvas_widget, "set_apply_selected_enabled"):
+            self.canvas_widget.set_apply_selected_enabled(bool(is_editable and has_selection))
+
         if self.settings_widget and hasattr(self.settings_widget, "set_editable_state"):
             self.settings_widget.set_editable_state(is_editable)
 
@@ -1876,13 +1888,28 @@ class FilletPlugin:
             )
             return
 
-        mode = self.settings_widget.mode
-        radius = self.settings_widget.radius
-        segments = self.settings_widget.segments_count
-        d1 = self.settings_widget.distance1
-        d2 = self.settings_widget.distance2
+        # Read parameters from canvas_widget (if visible/available) or settings_widget (dock panel in QGIS 4)
+        if self.canvas_widget and (not self.settings_widget or not (self.dock_widget and self.dock_widget.isVisible())):
+            mode = self.canvas_widget.mode
+            radius = self.canvas_widget.radius
+            segments = self.canvas_widget.segments_count
+            d1 = self.canvas_widget.distance1
+            d2 = self.canvas_widget.distance2
+        elif self.settings_widget:
+            mode = self.settings_widget.mode
+            radius = self.settings_widget.radius
+            segments = self.settings_widget.segments_count
+            d1 = self.settings_widget.distance1
+            d2 = self.settings_widget.distance2
+        else:
+            return
 
-        if mode == FilletSettingsWidget.MODE_CHAMFER:
+        is_chamfer = mode in (
+            getattr(FilletSettingsWidget, "MODE_CHAMFER", "chamfer"),
+            getattr(FilletCanvasWidget, "MODE_CHAMFER", "chamfer"),
+            "chamfer",
+        )
+        if is_chamfer:
             cmd_title = self.tr("Пакетна фаска")
         else:
             cmd_title = self.tr("Пакетне скруглення")
