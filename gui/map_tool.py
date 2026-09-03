@@ -41,6 +41,8 @@ _Key_Escape = getattr(Qt.Key, "Key_Escape", getattr(Qt, "Key_Escape", 0x01000000
 _Key_Tab = getattr(Qt.Key, "Key_Tab", getattr(Qt, "Key_Tab", 0x01000001))
 _Key_Space = getattr(Qt.Key, "Key_Space", getattr(Qt, "Key_Space", 0x20))
 _Key_Shift = getattr(Qt.Key, "Key_Shift", getattr(Qt, "Key_Shift", 0x01000020))
+_Key_Control = getattr(Qt.Key, "Key_Control", getattr(Qt, "Key_Control", 0x01000021))
+_Key_Alt = getattr(Qt.Key, "Key_Alt", getattr(Qt, "Key_Alt", 0x01000023))
 _ShiftModifier = getattr(Qt.KeyboardModifier, "ShiftModifier", getattr(Qt, "ShiftModifier", 0x02000000))
 
 try:
@@ -238,10 +240,13 @@ class FilletMapTool(QgsMapToolEdit):
             if not is_on_panel:
                 self.widget.focus_primary_input()
 
-    def _update_values_from_point(self, layer: QgsVectorLayer, map_point: QgsPointXY, shift_pressed: bool = False):
+    def _update_values_from_point(self, layer: QgsVectorLayer, map_point: QgsPointXY, shift_pressed: Optional[bool] = None):
         """Calculates distance/radius from cursor point and updates active parameters in HUD widget."""
         if not self.current_match or not isinstance(self.widget, FilletCanvasWidget):
             return
+
+        if shift_pressed is None:
+            shift_pressed = getattr(self.widget, "_shift_pressed", False)
 
         is_geo = layer.crs().isGeographic() if layer and layer.crs().isValid() else False
         layer_point = self.toLayerCoordinates(layer, map_point)
@@ -303,6 +308,9 @@ class FilletMapTool(QgsMapToolEdit):
             if isinstance(self.widget, FilletCanvasWidget)
             else FilletCanvasWidget.MODE_FILLET
         )
+        shift_pressed = bool(event.modifiers() & _ShiftModifier) or (
+            isinstance(self.widget, FilletCanvasWidget) and getattr(self.widget, "_shift_pressed", False)
+        )
 
         if event.button() == _LeftButton:
             if self.state == self.STATE_HOVER:
@@ -322,7 +330,7 @@ class FilletMapTool(QgsMapToolEdit):
                     else:
                         self.state = self.STATE_ADJUSTING
                         # Calculate value directly from cursor position at first click
-                        self._update_values_from_point(layer, map_point)
+                        self._update_values_from_point(layer, map_point, shift_pressed=shift_pressed)
                         self._update_preview()
 
             elif self.state == self.STATE_ADJUSTING:
@@ -332,7 +340,7 @@ class FilletMapTool(QgsMapToolEdit):
                 else:
                     map_point = event.mapPoint()
                 if self.current_match and isinstance(self.widget, FilletCanvasWidget):
-                    self._update_values_from_point(layer, map_point)
+                    self._update_values_from_point(layer, map_point, shift_pressed=shift_pressed)
                     self._update_preview()
                 # Second click commits the modification (Two-step CAD workflow)
                 self._commit_change()
@@ -494,13 +502,13 @@ class FilletMapTool(QgsMapToolEdit):
     def _show_write_error(self, error: Exception):
         self._show_message(
             self.tr("Не вдалося записати зміни: {error}").format(error=error),
-            Qgis.Critical,
+            Qgis.MessageLevel.Critical,
         )
 
     def _show_curved_geometry_warning(self):
         self._show_message(
             self.tr("Ця операція недоступна для геометрій із кривими сегментами."),
-            Qgis.Warning,
+            Qgis.MessageLevel.Warning,
         )
 
     def _show_message(self, message: str, level):
@@ -521,7 +529,6 @@ class FilletMapTool(QgsMapToolEdit):
 
     def keyPressEvent(self, event):
         key = event.key()
-
         # If user types digits or math symbols before first click or while hovering, redirect to numeric stepper
         if event.text() and (event.text().isdigit() or event.text() in ".-+," or key == _Key_Backspace):
             if isinstance(self.widget, FilletCanvasWidget):
@@ -541,12 +548,10 @@ class FilletMapTool(QgsMapToolEdit):
                         QApplication.sendEvent(focused, event)
                     event.accept()
                     return
-
         if key in (_Key_Return, _Key_Enter):
             # Commit with Enter
             self._commit_change()
             event.accept()
-
         elif key == _Key_Escape:
             # Cancel with Escape
             self._cancel_operation()
@@ -586,6 +591,16 @@ class FilletMapTool(QgsMapToolEdit):
                         self._update_values_from_point(layer, self.last_mouse_point, shift_pressed=True)
                         self._update_preview()
 
+        elif key == _Key_Alt:
+            if isinstance(self.widget, FilletCanvasWidget):
+                self.widget.set_alt_override(True)
+                if self.state == self.STATE_ADJUSTING and getattr(self, "last_mouse_point", None):
+                    layer = self.current_vector_layer()
+                    if layer:
+                        shift = getattr(self.widget, "_shift_pressed", False)
+                        self._update_values_from_point(layer, self.last_mouse_point, shift_pressed=shift)
+                        self._update_preview()
+
         else:
             super().keyPressEvent(event)
 
@@ -598,6 +613,15 @@ class FilletMapTool(QgsMapToolEdit):
                     layer = self.current_vector_layer()
                     if layer:
                         self._update_values_from_point(layer, self.last_mouse_point, shift_pressed=False)
+                        self._update_preview()
+        elif key == _Key_Alt:
+            if isinstance(self.widget, FilletCanvasWidget):
+                self.widget.set_alt_override(False)
+                if self.state == self.STATE_ADJUSTING and getattr(self, "last_mouse_point", None):
+                    layer = self.current_vector_layer()
+                    if layer:
+                        shift = getattr(self.widget, "_shift_pressed", False)
+                        self._update_values_from_point(layer, self.last_mouse_point, shift_pressed=shift)
                         self._update_preview()
         super().keyReleaseEvent(event)
 
